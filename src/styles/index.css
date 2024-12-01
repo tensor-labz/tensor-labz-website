@@ -1,0 +1,22 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Italianno&family=Merienda:wght@300..900&family=Yatra+One&display=swap');
+*{
+    padding: 0;
+margin: 0;
+}
+.about-us{
+    background-image: url('../asserts/images/page/HeroBackground.jpg');
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+.logo-text{
+    font-family: "Yatra One", system-ui;
+}
+.follow-us{
+    font-family: "Italianno", cursive;
+
+}
