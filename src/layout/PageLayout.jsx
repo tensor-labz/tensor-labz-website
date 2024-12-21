@@ -8,6 +8,5 @@ export default function PageLayout({children,id='',className="",title=''}) {
         {title}
         </PageTitle>}
 {children}
-    </section>
   )
 }
