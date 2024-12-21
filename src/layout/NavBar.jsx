@@ -1,4 +1,5 @@
 import React, { memo } from 'react'
+import NavData from './../data/NavData';
 
 function NavBar() {
     return (
