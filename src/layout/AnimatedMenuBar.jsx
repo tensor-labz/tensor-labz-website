@@ -5,9 +5,9 @@ function AnimatedMenuBar({open}) {
     return (
       <AnimatePresence>
         {open && (<motion.div
-        initial={{opacity:0}}
-        animate={{opacity:1}}
-        exit={{opacity:0}}
+        initial={{opacity:0,y:-100}}
+        animate={{opacity:1,y:0}}
+        exit={{opacity:0,y:-100}}
         className='absolute top-20 left-0 w-full h-screen z-20'
         >
 
