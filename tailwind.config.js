@@ -8,6 +8,9 @@ module.exports = {
   ],
   theme: {
     extend: { 
+      fontFamily:{
+playfair:["playfair","Display","serif"]
+      },
       colors:{
         secondary:'#ff8901',
         primary:"#0911eb"
