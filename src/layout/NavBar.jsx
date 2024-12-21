@@ -1,6 +1,6 @@
 import React, { memo } from 'react'
 import NavData from './../data/NavData';
-import { FaDumbbell } from 'react-icons/fa6';
+import { FaCube } from 'react-icons/fa6';
 
 function NavBar() {
     return (
@@ -10,7 +10,7 @@ function NavBar() {
             
         {/* logo section */}
         <div className="text-2xl flex items-center gap-2 font-bold py-8">
-            <FaDumbbell />
+            <FaCube />
             <p> Tensor</p>
             <p>Lab</p>
         </div>
