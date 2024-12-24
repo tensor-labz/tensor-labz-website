@@ -1,10 +1,18 @@
-import React, { memo } from 'react'
-import HomeHero from '../components/Hero/HomeHero'
+import React from 'react'
+import Services from './section/Services'
+import HomeSection from './section/Home'
+import AboutUs from './section/AboutUs'
+import ContactUs from './section/ContactUs'
+import ScrollProgress from '../components/core/ScrollProgress'
 
-function Home() {
-    return (
-<HomeHero/>
-    )
+export default function Home() {
+  return (
+    <>
+    <ScrollProgress/>
+     <HomeSection/>
+ <Services/>
+ <AboutUs/>
+ <ContactUs/>
+    </>
+  )
 }
-
-export default memo(Home)

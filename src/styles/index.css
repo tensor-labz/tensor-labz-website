@@ -1,8 +1,7 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair:ital,opsz,wght@0,5..1200,300..900;1,5..1200,300..900&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
+@import url('https://fonts.googleapis.com/css2?family=Italianno&family=Merienda:wght@300..900&family=Yatra+One&display=swap');
 *{
 padding: 0;
 margin: 0;
@@ -10,11 +9,18 @@ box-sizing: border-box;
 }
 #app{
     position: relative;
-    overflow-x: hidden;
 }
+.about-us{
+    background-image: url('../asserts/images/page/HeroBackground.jpg');
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+.logo-text{
+    font-family: "Yatra One", system-ui;
+}
+.follow-us{
+    font-family: "Italianno", cursive;
 
-@layer components {
-    .primary-btn {
-        @apply bg-primary text-white font-semibold py-3 px-6 rounded-md hover:scale-110 duration-300 ;
-    }
 }

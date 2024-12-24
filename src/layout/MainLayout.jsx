@@ -1,15 +1,18 @@
-import React, { memo } from 'react'
-import NavBar from './NavBar'
+import React from 'react'
+import Header from './Header'
+import GoToTop from '../components/layout/Comp_GoToTop'
+import Footer from './Footer'
 import { Outlet } from 'react-router-dom'
 
-function MainLayout() {
-    return (
-      <>
-  <NavBar/>
-  <Outlet/>
-      </>
-          
-    )
+export default function MainLayout() {
+  return (
+    <>
+     <Header/>
+  <main className='scroll-smooth transition-all duration-700'>
+ <GoToTop/>
+<Outlet/>
+  </main>
+   <Footer/> 
+    </>
+  )
 }
-
-export default memo(MainLayout)
