@@ -1,0 +1,70 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Typography */
+.h{
+  @apply md:font-bold font-semibold;  
+}
+.h1{
+    @apply  text-6xl md:text-8xl h;
+}
+
+.h2{
+    @apply  text-4xl md:text-6xl h;
+}
+.h3{
+    @apply  text-3xl md:text-4xl h;
+}
+.h4{
+    @apply  text-2xl md:text-3xl h;
+}
+.h5{
+    @apply  text-xl md:text-2xl h;
+}
+.h6{
+    @apply  text-base md:text-lg h;
+}
+.hero{
+    @apply text-6xl md:text-8xl font-extrabold;
+}
+.p{
+    @apply md:text-base;
+}
+/* Components */
+@layer components {
+    /* Common styles for all buttons */
+    .btn {
+      @apply px-4 py-2 font-medium rounded shadow inline-flex items-center justify-center transition-all duration-150 ease-in-out;
+    }
+  
+    /* Primary button */
+    .btn-normal {
+      @apply bg-blue-500 text-white border border-blue-600 hover:bg-blue-600 hover:border-blue-700;
+    }
+  
+    /* Outline button */
+    .btn-outline {
+      @apply bg-transparent border border-gray-500 text-gray-500 hover:bg-gray-100 hover:text-gray-700;
+    }
+  
+    /* Small button */
+    .btn-small {
+      @apply text-sm px-2 py-1;
+    }
+  
+    /* Transparent button */
+    .btn-transparent {
+      @apply bg-transparent text-blue-500 hover:text-blue-700;
+    }
+  
+    /* Danger button */
+    .btn-danger {
+      @apply bg-red-500 text-white border border-red-600 hover:bg-red-600 hover:border-red-700;
+    }
+  
+    /* Disabled button */
+    .btn-disabled {
+      @apply bg-gray-300 text-gray-500 border border-gray-400 cursor-not-allowed opacity-50;
+    }
+  }
