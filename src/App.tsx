@@ -1,6 +1,5 @@
 
 import HeaderHelment from './base/Head'
-import React from 'react'
 function App() {
 
   return (

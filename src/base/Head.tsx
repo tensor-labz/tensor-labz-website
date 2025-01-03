@@ -1,4 +1,3 @@
-import React from 'react';
 import appData from '../data/app_data';
 import { Helmet } from 'react-helmet';
 // Define the props for the HeaderHelment component
