@@ -19,7 +19,7 @@ interface HeaderHelmentProps {
 // Define the HeaderHelment component
 export default function HeaderHelment({ title,description,keywords,logo,og,twitter }: HeaderHelmentProps) {
   // Merge the keywords from the appData and the keywords passed as props
-  const keywordContent = [...appData.keywords,...keywords??[]].join(",")??"";
+  const keywordContent = [...(keywords??appData.keywords)].join(",")??"";
   // Return the Helmet component with the title, description and keywords
   return (
     <Helmet>
@@ -51,8 +51,6 @@ export default function HeaderHelment({ title,description,keywords,logo,og,twitt
       <meta name='twitter:image:height' content='630' />
       <meta name='twitter:domain' content=".tec" />
       <meta name='twitter:url' content={window.location.href} />
-      <meta name='twitter:label1' content='Written by' />
-      <meta name='twitter:data1' content={appData.author} />
     </Helmet>
   );
 }
