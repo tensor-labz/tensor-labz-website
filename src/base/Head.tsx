@@ -6,10 +6,10 @@ interface HeaderHelmentProps {
   description?: string;
   keywords?:Array<string>;
   logo?:string;
-  og?:{
+  og:{
     title?:string;
     description?:string;
-    image?:string;
+    image:string;
   },
   twitter?:{
     card?:string;
@@ -32,11 +32,10 @@ export default function HeaderHelment({ title,description,keywords,logo,og,twitt
       {/* Open Graph */}
       <meta name='og:title' content={og?.title??appData.title} />
       <meta name='og:description' content={og?.description??appData.description} />
-      <meta name='og:image' content={og?.image??logo} />
+      <meta name='og:image' content={og.image??logo} />
       <meta name='og:type' content='website' />
       <meta name='og:url' content={window.location.href} />
-      <meta name='og:site_name' content={appData.title} />
-      <meta name='og:locale' content='en_US' />
+      <meta name="og:site_name" content={appData.title} />
      <meta name='og:image:width' content='1200' />
      <meta name='og:image:height' content='630' />
      {/* Twitter */}
