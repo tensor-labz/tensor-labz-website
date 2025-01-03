@@ -15,10 +15,6 @@
 
     /* Add these for absolute imports */
     "baseUrl": "src", // Root directory for relative imports
-    "paths": {
-      "@/*": ["src/*"] // Map @ to src folder
-    },
-
     /* Linting */
     "strict": true,
     "noUnusedLocals": true,

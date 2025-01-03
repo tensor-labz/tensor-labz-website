@@ -1,7 +1,11 @@
+
+import HeaderHelment from './base/Head'
+import React from 'react'
 function App() {
 
   return (
     <>
+ <HeaderHelment title='Home' />
      <h1 className='h1'>hhgfhfgfg</h1>
      <h1 className='h2'>hhgfhfgfg</h1>
      <h1 className='h3'>hhgfhfgfg</h1>
