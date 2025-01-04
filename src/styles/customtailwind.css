@@ -4,7 +4,7 @@
 
 /* Typography */
 .h{
-  @apply md:font-bold font-semibold;  
+  @apply md:font-bold font-semibold text-blue-900;  
 }
 .h1{
     @apply  text-6xl md:text-8xl h;

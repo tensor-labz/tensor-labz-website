@@ -25,7 +25,7 @@ const Section = forwardRef<HTMLElement, SectionProps>((
     <motion.section
       ref={sectionRef}
       id={id}
-      className={`${className} min-h-screen flex items-center`}
+      className={`${className} min-h-screen`}
       initial={initial}
       whileInView={whileInView}
       exit={exit}
