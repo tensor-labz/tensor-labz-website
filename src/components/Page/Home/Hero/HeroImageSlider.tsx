@@ -29,7 +29,7 @@ export default function HeroImageSlider() {
         rotateY: -10, // Added slight rotation for a more 3D effect on exit
       }}
       transition={{
-        duration: 2, // Smooth transition duration
+        duration: 2.3, // Smooth transition duration
         ease: "easeInOut", // Use easeInOut for smooth acceleration and deceleration
       }}
       className="w-full relative overflow-hidden mx-auto"

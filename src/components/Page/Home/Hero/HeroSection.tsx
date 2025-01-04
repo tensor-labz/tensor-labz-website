@@ -62,7 +62,7 @@ const HeroSection = () => {
       ></motion.div>
 
       {/* Hero Content Start */}
-      <div className="flex flex-col justify-center lg:w-7/12 w-full z-20 relative font-serif">
+      <div className="flex lg:flex-col flex-col-reverse justify-center lg:w-7/12 w-full z-20 relative font-serif">
         <motion.h1
           custom={0} // Pass index for stagger effect
           initial={{ opacity: 0, x: -50 }}
@@ -71,14 +71,14 @@ const HeroSection = () => {
         >
           {home.hero.title}
         </motion.h1>
-        <motion.p
+        {/* <motion.p
           custom={1} // Pass index for stagger effect
           initial={{ opacity: 0, x: -50 }}
           animate={textControls}
           className="mt-4 lg:text-xl text-lg lg:text-justify text-center text-gray-600 dark:text-gray-300"
         >
          {home.hero.subtitle}
-        </motion.p>
+        </motion.p> */}
         <motion.div initial={{ opacity: 0,x: -50  }} animate={textControls} className="mt-6">
           <HeroKeyPoint/>
         </motion.div>
