@@ -5,6 +5,7 @@ import Section from "../../../../components/resuable/Section";
 import HeroContextProvider from "../../../../contexts/HeroContext";
 import HeroImageSlider from "./HeroImageSlider";
 import HeroKeyPoint from "./HeroKeyPoint";
+import { home } from "../../../../data/page_data";
 
 const HeroSection = () => {
   // Intersection Observer to detect when the section is in view
@@ -68,7 +69,7 @@ const HeroSection = () => {
           animate={textControls}
           className="hero"
         >
-          Scroll to see the magic
+          {home.hero.title}
         </motion.h1>
         <motion.p
           custom={1} // Pass index for stagger effect
@@ -76,7 +77,7 @@ const HeroSection = () => {
           animate={textControls}
           className="mt-4 lg:text-xl text-lg lg:text-justify text-center text-gray-600 dark:text-gray-300"
         >
-          Watch as the curved container fades in and transitions to a brighter gradient!
+         {home.hero.subtitle}
         </motion.p>
         <motion.div initial={{ opacity: 0,x: -50  }} animate={textControls} className="mt-6">
           <HeroKeyPoint/>

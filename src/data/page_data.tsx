@@ -4,8 +4,8 @@ import productdevelopement from "../assets/images/Page/Home/Hero/product_develop
 
 export const home={
     hero:{
-        title:"Welcome to my portfolio",
-        subtitle:"I am a full stack developer gdfgdg fdgdfgfdg dfgdfgdf",
+        title:"Pioneering Sustainable Solutions with Advanced Engineering and Technology",
+        subtitle:"Our commitment is to provide sustainable, impactful technologies that address the challenges of today and tomorrow.",
         slider:[
             {
                 img:three_printer,
