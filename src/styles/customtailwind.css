@@ -26,7 +26,7 @@
     @apply  text-base md:text-lg h;
 }
 .hero{
-    @apply text-6xl md:text-8xl font-extrabold;
+    @apply text-4xl md:text-left text-center md:text-6xl font-bold md:font-extrabold leading-tight bg-gradient-to-tr from-blue-500 via-sky-900 to-blue-800 bg-clip-text text-transparent pt-4;
 }
 .p{
     @apply md:text-base;
