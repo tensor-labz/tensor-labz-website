@@ -1,4 +1,5 @@
 import user from '../assets/images/Page/Home/Review/user.jpg';
+import { SocialMediaType } from '../base/type/SocialMedia.d';
 const ReveiwData = [
     {
         name:"ThanuMahee",
@@ -9,15 +10,15 @@ const ReveiwData = [
         org:"Google",
         social:[
             {
-                name:"Facebook",
+                name:SocialMediaType.Facebook,
                 link:"#"
             },
             {
-                name:"Instagram",
+                name:SocialMediaType.Instagram,
                 link:"#"
             },
             {
-                name:"Twitter",
+                name:SocialMediaType.Twitter,
                 link:"#"
             }
         ]
@@ -31,15 +32,15 @@ const ReveiwData = [
         org:"Google",
         social:[
             {
-                name:"Facebook",
+                name:SocialMediaType.Facebook,
                 link:"#"
             },
             {
-                name:"Instagram",
+                name:SocialMediaType.Instagram,
                 link:"#"
             },
             {
-                name:"Twitter",
+                name:SocialMediaType.Twitter,
                 link:"#"
             }
         ]
@@ -53,15 +54,15 @@ const ReveiwData = [
         org:"Google",
         social:[
             {
-                name:"Facebook",
+                name:SocialMediaType.Facebook,
                 link:"#"
             },
             {
-                name:"Instagram",
+                name:SocialMediaType.Instagram,
                 link:"#"
             },
             {
-                name:"Twitter",
+                name:SocialMediaType.Twitter,
                 link:"#"
             }
         ]
@@ -75,15 +76,15 @@ const ReveiwData = [
         org:"Google",
         social:[
             {
-                name:"Facebook",
+                name:SocialMediaType.Facebook,
                 link:"#"
             },
             {
-                name:"Instagram",
+                name:SocialMediaType.Instagram,
                 link:"#"
             },
             {
-                name:"Twitter",
+                name:SocialMediaType.Twitter,
                 link:"#"
             }
         ]
@@ -97,15 +98,15 @@ const ReveiwData = [
         org:"Google",
         social:[
             {
-                name:"Facebook",
+                name:SocialMediaType.Facebook,
                 link:"#"
             },
             {
-                name:"Instagram",
+                name:SocialMediaType.Instagram,
                 link:"#"
             },
             {
-                name:"Twitter",
+                name:SocialMediaType.Twitter,
                 link:"#"
             }
         ]
@@ -119,15 +120,15 @@ const ReveiwData = [
         org:"Google",
         social:[
             {
-                name:"Facebook",
+                name:SocialMediaType.Facebook,
                 link:"#"
             },
             {
-                name:"Instagram",
+                name:SocialMediaType.Instagram,
                 link:"#"
             },
             {
-                name:"Twitter",
+                name:SocialMediaType.Twitter,
                 link:"#"
             }
         ]
@@ -141,13 +142,163 @@ const ReveiwData = [
         org:"Google",
         social:[
             {
-                name:"Facebook",
+                name:SocialMediaType.Facebook,
                 link:"#"
             },
             {
-                name:"Instagram",
+                name:SocialMediaType.Instagram,
+                link:"#"
+            },
+        ]
+    },
+    {
+        name:"ThanuMahee",
+        review:"I am very happy with the service and the quality of the product. I will definitely recommend this to my friends and family.",
+        rating:4.3,
+        profile:user,
+        comment_at:"2021-09-12",
+        org:"Google",
+        social:[
+            {
+                name:SocialMediaType.Facebook,
+                link:"#"
+            },
+            {
+                name:SocialMediaType.Instagram,
+                link:"#"
+            },
+            {
+                name:SocialMediaType.Twitter,
                 link:"#"
             }
+        ]
+    },
+    {
+        name:"ThanuMahee",
+        review:"I am very happy with the service and the quality of the product. I will definitely recommend this to my friends and family.",
+        rating:4.3,
+        profile:user,
+        comment_at:"2021-09-12",
+        org:"Google",
+        social:[
+            {
+                name:SocialMediaType.Facebook,
+                link:"#"
+            },
+            {
+                name:SocialMediaType.Instagram,
+                link:"#"
+            },
+            {
+                name:SocialMediaType.Twitter,
+                link:"#"
+            }
+        ]
+    },
+    {
+        name:"ThanuMahee",
+        review:"I am very happy with the service and the quality of the product. I will definitely recommend this to my friends and family.",
+        rating:4.67,
+        profile:user,
+        comment_at:"2021-09-12",
+        org:"Google",
+        social:[
+            {
+                name:SocialMediaType.Facebook,
+                link:"#"
+            },
+            {
+                name:SocialMediaType.Instagram,
+                link:"#"
+            },
+            {
+                name:SocialMediaType.Twitter,
+                link:"#"
+            }
+        ]
+    },
+    {
+        name:"ThanuMahee",
+        review:"I am very happy with the service and the quality of the product. I will definitely recommend this to my friends and family.",
+        rating:4.3,
+        profile:user,
+        comment_at:"2021-09-12",
+        org:"Google",
+        social:[
+            {
+                name:SocialMediaType.Facebook,
+                link:"#"
+            },
+            {
+                name:SocialMediaType.Instagram,
+                link:"#"
+            },
+            {
+                name:SocialMediaType.Twitter,
+                link:"#"
+            }
+        ]
+    },
+    {
+        name:"ThanuMahee",
+        review:"I am very happy with the service and the quality of the product. I will definitely recommend this to my friends and family.",
+        rating:4.3,
+        profile:user,
+        comment_at:"2021-09-12",
+        org:"Google",
+        social:[
+            {
+                name:SocialMediaType.Facebook,
+                link:"#"
+            },
+            {
+                name:SocialMediaType.Instagram,
+                link:"#"
+            },
+            {
+                name:SocialMediaType.Twitter,
+                link:"#"
+            }
+        ]
+    },
+    {
+        name:"ThanuMahee",
+        review:"I am very happygfhfghfghgfh with the servicgfhghghgfhf ghghg ghgfhgfhfghfhfghe and the quality of the proghfghgfhfghfghduct. I will definitely recommend this to my friends and family.",
+        rating:4.3,
+        profile:user,
+        comment_at:"2021-09-12",
+        org:"Google",
+        social:[
+            {
+                name:SocialMediaType.Facebook,
+                link:"#"
+            },
+            {
+                name:SocialMediaType.Instagram,
+                link:"#"
+            },
+            {
+                name:SocialMediaType.Twitter,
+                link:"#"
+            }
+        ]
+    },
+    {
+        name:"ThanuMahee",
+        review:"I am very happy with the service and the quality of ththythghgfhfghfghgfhgfhfghfghfghgfhfghgfhgfhgfe product. I will definitely recommend this to my friends and family.",
+        rating:4.75,
+        profile:user,
+        comment_at:"2021-09-12",
+        org:"Google",
+        social:[
+            {
+                name:SocialMediaType.Facebook,
+                link:"#"
+            },
+            {
+                name:SocialMediaType.Instagram,
+                link:"#"
+            },
         ]
     }
 ]

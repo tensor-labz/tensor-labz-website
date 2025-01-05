@@ -33,7 +33,19 @@ export default {
           xl: '5rem',
         },
       },
-      
+      animation: {
+        "border-shine": "shine 1s ease-out",
+      },
+      keyframes: {
+        shine: {
+          "0%": { borderColor: "transparent" },
+          "50%": { borderColor: "light-blue" },
+          "100%": { borderColor: "transparent" },
+        },
+      },
+      spacing: {
+        "perspective": "1000px",
+      },
     },
   },
   plugins: [],
