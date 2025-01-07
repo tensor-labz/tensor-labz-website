@@ -1,7 +1,8 @@
 // Define a specific type for social media names
+import { FaFacebookF, FaInstagram, FaLinkedinIn, FaTwitter } from "react-icons/fa";
 export type SocialType = "Facebook" | "Instagram" | "twitter" | "linkedIn";
 
-import { FaFacebookF, FaInstagram, FaLinkedinIn, FaTwitter } from "react-icons/fa";
+
 const socialIcon: Record<SocialType, JSX.Element> = {
   Facebook: <FaFacebookF />,
   Instagram: <FaInstagram />,
