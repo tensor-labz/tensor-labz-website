@@ -10,7 +10,7 @@ export default function ReveiwSection() {
 
 
   return (
-    <Section className="container py-4">
+    <Section className="container py-4 min-h-screen">
       {/* Review Section Header */}
       <h1 className={`h3 pb-8`}>Reviews</h1>
       <ReveiwSlider/>

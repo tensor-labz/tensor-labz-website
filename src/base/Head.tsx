@@ -1,21 +1,8 @@
 import appData from '../data/app_data';
 import { Helmet } from 'react-helmet';
-// Define the props for the HeaderHelment component
-type HeaderHelmentProps= {
-  title: string;
-  description?: string;
-  keywords?:Array<string>;
-  logo?:string;
-  og?:{
-    title?:string;
-    description?:string;
-    image?:string;
-  },
-  twitter?:{
-    card?:string;
+import HeaderHelmentProps from './type/HeaderHelmentProps.d';
 
-  }
-}
+
 // Define the HeaderHelment component
 export default function HeaderHelment({ title,description,keywords,logo,og,twitter }: HeaderHelmentProps) {
   // Merge the keywords from the appData and the keywords passed as props

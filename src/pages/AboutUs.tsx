@@ -1,10 +1,16 @@
+import Section from "../components/resuable/Section";
 import Page from "../components/resuable/Page";
 
 
 export default function AboutUs() {
   return (
-    <Page>
-        <h1>About Us</h1>
+    <Page HeadProps={{title:"AboutUs"}}>
+        <Section className='sticky'>
+          <div>
+          <h1>fggdgdg</h1>
+          </div>
+
+        </Section>
     </Page>
   )
 }

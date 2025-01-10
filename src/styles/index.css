@@ -1,1 +1,6 @@
 @import "./customtailwind.css";
+#root{
+    position: relative;
+    padding: 0;
+    margin: 0;
+}

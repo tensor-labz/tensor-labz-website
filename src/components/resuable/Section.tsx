@@ -1,6 +1,7 @@
 import { motion, MotionProps } from "framer-motion";
 import { forwardRef } from "react";
 
+
 type SectionProps = MotionProps & {
   children: React.ReactNode;
   id?: string;
@@ -21,11 +22,12 @@ const Section = forwardRef<HTMLElement, SectionProps>((
   },
   sectionRef
 ) => {
+
   return (
     <motion.section
       ref={sectionRef}
       id={id}
-      className={`${className} min-h-screen`}
+      className={className}
       initial={initial}
       whileInView={whileInView}
       exit={exit}
