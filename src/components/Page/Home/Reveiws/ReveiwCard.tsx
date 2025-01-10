@@ -1,7 +1,7 @@
-import { motion } from "framer-motion";
 import RatingStarts from "./RatingStarts";
 import { Link } from "react-router-dom";
 import socialIcon, { SocialType } from "../../../../base/type/SocialMedia.d";
+import Card from "../../../../components/resuable/Card";
 
 // Define the type for the review card props
 type ReveiwCardProps = {
@@ -25,13 +25,7 @@ export default function ReveiwCard({
   social,
 }: ReveiwCardProps) {
   return (
-    <motion.div
-      initial={{ opacity: 0, x: -50 }} // Start off-screen
-      whileInView={{ opacity: 1, x: 0 }} // Animate to center
-      viewport={{ once: true, amount: 0.1 }} // Trigger animation when 10% of the card is visible
-      transition={{ duration: 0.6, ease: "easeOut" }}
-      className="relative flex justify-between rounded-lg shadow-lg shadow-blue-100 gap-x-6 group overflow-hidden"
-    >
+    <Card className="group relative flex justify-between rounded-lg shadow-lg shadow-blue-100 gap-x-6 overflow-hidden">
       {/* Animated Border */}
       <div className="absolute inset-0 border-2 border-transparent rounded-lg group-hover:border-blue-400 group-hover:animate-border-shine pointer-events-none"></div>
 
@@ -60,6 +54,6 @@ export default function ReveiwCard({
           -{name}-
         </h4>
       </div>
-    </motion.div>
+    </Card>
   );
 }
