@@ -11,12 +11,12 @@ export default function ServiceCard({title,text,icon}:ServiceCardProps) {
 
   {/* Service Image */}
   <div className="w-full overflow-hidden">
-    <img src={icon} alt="Service" className="w-32 mx-auto h-32 object-cover" />
+    <img src={icon} alt="Service" className="md:w-28 h-14 w-14 mx-auto md:h-28 object-cover" />
   </div>
   {/* Service Details */}
-  <div className="w-full p-2 text-center">
-    <h3 className="text-2xl font-semibold text-blue-900">{title}</h3>
-    <p className="text-slate-400">
+  <div className="w-full p-2 ">
+    <h3 className="md:text-2xl text-center text-lg font-semibold text-blue-900">{title}</h3>
+    <p className="text-slate-400 md:text-base text-sm">
       {text.slice(0, 150)}
       {text.length > 150 && "..."}
     </p>
