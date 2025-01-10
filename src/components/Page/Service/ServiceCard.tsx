@@ -1,9 +1,9 @@
-
+import {motion } from "framer-motion";
 
 export default function ServiceCard() {
   return (
-    <div>
-      
-    </div>
+    <motion.div>
+
+    </motion.div>
   )
 }

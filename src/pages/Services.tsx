@@ -1,11 +1,11 @@
 import Section from "../components/resuable/Section";
 import Page from "../components/resuable/Page";
-import { useInView } from "react-intersection-observer";
+// import { useInView } from "react-intersection-observer";
 import { useEffect } from "react";
 import { motion, useAnimation } from 'framer-motion';
 
 export default function Services() {
-  const [ref, inView] = useInView({ threshold: 0.3 });
+  // const [ref, inView] = useInView({ threshold: 0.3 });
   const controls=useAnimation()
   useEffect(()=>{
     controls.start({
@@ -17,7 +17,9 @@ export default function Services() {
   },[])
   return (
     <Page HeadProps={{title:"Services"}}>
-      <Section ref={ref}>
+      <Section 
+      // ref={ref}
+      >
         <motion.div initial={{ opacity: 0 }}
         animate={controls}>
         <h1>Hi</h1>
