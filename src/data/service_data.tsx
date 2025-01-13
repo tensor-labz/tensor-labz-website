@@ -10,6 +10,7 @@ const servicesData:Array<ServiceCardProps> = [
         title: "3D Printing",
         slug: "3d-printing",
         text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla id felis auctor, ultricies purus in, tincidunt nunc. Nulla facilisi. Nullam nec nunc nec nunc.",
+        home:true
     },
     {
         id: 2,
@@ -17,6 +18,7 @@ const servicesData:Array<ServiceCardProps> = [
         title: "CAD Modeling",
         slug: "cad-modeling",
         text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla id felis auctor, ultricies purus in, tincidunt nunc. Nulla facilisi. Nullam nec nunc nec nunc.",
+        home:true
     },
     {
         id: 3,
@@ -24,6 +26,7 @@ const servicesData:Array<ServiceCardProps> = [
         title: "Internet of Things",
         slug: "internet-of-things",
         text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla id felis auctor, ultricies purus in, tincidunt nunc. Nulla facilisi. Nullam nec nunc nec nunc.",
+        home:true
     },
     {
         id: 4,
@@ -31,6 +34,7 @@ const servicesData:Array<ServiceCardProps> = [
         title: "PCB Design",
         slug: "pcb-design",
         text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla id felis auctor, ultricies purus in, tincidunt nunc. Nulla facilisi. Nullam nec nunc nec nunc.",
+        home:true
     },
     ];
 export default servicesData;

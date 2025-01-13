@@ -3,5 +3,6 @@ export type ServiceCardProps = {
     text: string,
 icon: string,
     id: number,
-    slug:string
+    slug:string,
+    home?:boolean
 }

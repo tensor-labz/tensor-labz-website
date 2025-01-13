@@ -17,7 +17,7 @@ const Section = forwardRef<HTMLElement, SectionProps>((
     whileInView = { opacity: 1, y: 0 },
     exit = { opacity: 0, y: 150 },
     transition = { duration: 0.5, ease: "easeOut" },
-    viewport = { once: true, amount: 0.4 },
+    viewport = { once: true, amount: 0.3 },
     ...rest
   },
   sectionRef
