@@ -2,8 +2,8 @@ import Page from "../components/resuable/Page";
 import { useEffect } from "react";
 import { useAnimation } from 'framer-motion';
 import ServiceProvider from "../contexts/ServiceContext";
-import ServiceHero from "../components/Page/Service/Hero/ServiceHero";
-import TabBar from "../components/Page/Service/Tabs/TabBar";
+// import ServiceHero from "../components/Page/Service/Hero/ServiceHero";
+// import TabBar from "../components/Page/Service/Tabs/TabBar";
 
 export default function Services() {
   const controls=useAnimation()
@@ -20,6 +20,7 @@ export default function Services() {
 <ServiceProvider>
 {/* <ServiceHero/> */}
 {/* <TabBar/> */}
+<h1>Hi</h1>
 </ServiceProvider>
     </Page>
   )
