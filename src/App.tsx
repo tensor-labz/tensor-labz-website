@@ -3,7 +3,7 @@ import AppRoutes from './routes/Approutes'
 import HeaderHelment from './base/Head'
 import { BrowserRouter } from "react-router-dom";
 import DeviceContextProvider from './contexts/DeviceContext';
-import Footer from './base/layout/Footer';
+import Footer from './components/layout/Footer';
 function App() {
 
   return (
