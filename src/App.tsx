@@ -1,16 +1,18 @@
 
 import AppRoutes from './routes/Approutes'
-import HeaderHelment from './base/Head'
 import { BrowserRouter } from "react-router-dom";
 import DeviceContextProvider from './contexts/DeviceContext';
 import Footer from './components/layout/Footer';
+import Header from './components/layout/Header';
+import { memo } from 'react';
 function App() {
 
   return (
     <>
     <DeviceContextProvider>
- <HeaderHelment title='Home' />
+      
  <BrowserRouter>
+ <Header/>
      <AppRoutes />
      </BrowserRouter>
      <Footer/>
@@ -19,4 +21,4 @@ function App() {
   )
 }
 
-export default App
+export default memo(App)

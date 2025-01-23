@@ -6,6 +6,7 @@ import HeroContextProvider from "../../../../contexts/HeroContext";
 import HeroImageSlider from "./HeroImageSlider";
 import HeroKeyPoint from "./HeroKeyPoint";
 import { home } from "../../../../data/page_data";
+import bg from "../../../../assets/images/Page/Home/Hero/b1.webp"
 
 const HeroSection = () => {
   // Intersection Observer to detect when the section is in view
@@ -20,7 +21,8 @@ const HeroSection = () => {
       // Animate the curve container
       controls.start({
         opacity: 1,
-        background: "linear-gradient(to top right, #66ccff 0%, #ffffff 25%)",
+        // background: "linear-gradient(to top right, #66ccff 0%, #ffffff 25%)",
+        backgroundImage:`url('${bg}')`,
         transition: { duration: 0.8, ease: "easeInOut" },
       });
 
