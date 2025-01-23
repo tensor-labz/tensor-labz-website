@@ -1,4 +1,4 @@
-import { NavLink, NavLinkProps } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import navData from "../../data/nav_data";
 import { useDeviceContext } from "../../contexts/DeviceContext";
 
@@ -8,7 +8,7 @@ export default function NavBar() {
   return (
     <nav className='md:flex hidden items-center gap-x-8 bg-transparent'>
         {navData.map((navitem,index)=>(
-            <NavLink  to={navitem.to}>
+            <NavLink  to={navitem.to} key={index}>
               <span className='md:text-lg lg:text-2xl font-bold text-blue-900 transition-all duration-500 ease-out bg-transparent hover:bg-gradient-to-b from-white via-blue-50 to-blue-200 p-2  relative inline-block rounded-full'>
 {navitem.icon}
               </span>
