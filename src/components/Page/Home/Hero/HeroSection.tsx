@@ -22,7 +22,9 @@ const HeroSection = () => {
       controls.start({
         opacity: 1,
         // background: "linear-gradient(to top right, #66ccff 0%, #ffffff 25%)",
-        backgroundImage:`url('${bg}')`,
+        background:`url('${bg}')`,
+        backgroundPosition:'center',
+backgroundSize:"cover",
         transition: { duration: 0.8, ease: "easeInOut" },
       });
 
