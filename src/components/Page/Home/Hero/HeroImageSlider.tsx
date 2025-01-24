@@ -1,44 +1,69 @@
+import React, { memo } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useHeroContext } from "../../../../contexts/HeroContext";
-import { motion } from "framer-motion";
 
-export default function HeroImageSlider() {
+
+
+// Memoized component with performance optimizations
+const HeroImageSlider: React.FC = memo(() => {
   const { currentSlide, slider } = useHeroContext();
 
+  // Animation variants for consistent and reusable animations
+  const imageVariants = {
+    initial: {
+      opacity: 0,
+      scale: 0.95,
+      x: -100,
+      rotateY: 10,
+      zIndex: 1
+    },
+    animate: {
+      opacity: 1,
+      scale: 1,
+      x: 0,
+      rotateY: 0,
+      zIndex: 2,
+      transition: {
+        duration: 2.3,
+        ease: "easeInOut"
+      }
+    },
+    exit: {
+      opacity: 0,
+      scale: 1.1,
+      x: 100,
+      rotateY: -10,
+      zIndex: 1,
+      transition: {
+        duration: 2.3,
+        ease: "easeInOut"
+      }
+    }
+  };
+
   return (
-    <motion.div
-      key={currentSlide}
-      initial={{
-        opacity: 0,
-        scale: 0.95, // Slightly reduced scale for the entry of the image
-        x: -100, // Image starts from the left (entering from the left)
-        zIndex: 1, // Ensure the current image is behind the new one
-        rotateY: 10, // Added slight rotation for a 3D effect on entry
-      }}
-      animate={{
-        opacity: 1, // Fade in the image
-        scale: 1, // Image reaches its full size
-        x: 0, // Image moves to the center
-        zIndex: 2, // Ensure this image is on top during the transition
-        rotateY: 0, // Reset the rotation to a neutral position
-      }}
-      exit={{
-        opacity: 0, // Fade out the image
-        scale: 1.1, // Slightly increase the scale as it "moves away"
-        x: 100, // Move the previous image to the right (opposite direction of entry)
-        zIndex: 1, // Lower the zIndex to push the previous image behind
-        rotateY: -10, // Added slight rotation for a more 3D effect on exit
-      }}
-      transition={{
-        duration: 2.3, // Smooth transition duration
-        ease: "easeInOut", // Use easeInOut for smooth acceleration and deceleration
-      }}
-      className="w-full relative overflow-hidden mx-auto"
-    >
-      <img
-        src={slider.img}
-        alt={`Hero Image ${slider.title}`}
-        className="w-full h-full object-cover"
-      />
-    </motion.div>
+    <AnimatePresence mode="wait">
+      <motion.div
+        key={currentSlide}
+        variants={imageVariants}
+        initial="initial"
+        animate="animate"
+        exit="exit"
+        className="w-full h-full relative overflow-hidden"
+      >
+        <motion.img
+          src={slider.img}
+          alt={`Hero Image ${slider.title}`}
+          className="w-full h-full object-cover"
+          loading="lazy"
+          draggable={false}
+        />
+      </motion.div>
+    </AnimatePresence>
   );
-}
+});
+
+// Add display name for better debugging
+HeroImageSlider.displayName = 'HeroImageSlider';
+
+export default HeroImageSlider;
