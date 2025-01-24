@@ -1,41 +1,96 @@
-import { memo } from 'react';
-import { FaFacebookF, FaLinkedinIn, FaInstagram } from 'react-icons/fa';
-import logo from "../../assets/images/logo.png"
-function Footer() {
+import React, { memo } from 'react';
+import { motion } from 'framer-motion';
+import { FaFacebookF, FaLinkedinIn, FaInstagram, FaTwitter, FaGithub } from 'react-icons/fa';
+import logo from "../../assets/images/logo.png";
+
+const Footer = () => {
+  const socialLinks = [
+    { icon: FaFacebookF, href: "https://facebook.com/tensorlabz", color: "text-blue-500 hover:text-blue-600" },
+    { icon: FaLinkedinIn, href: "https://linkedin.com/company/tensorlabz", color: "text-blue-400 hover:text-blue-500" },
+    { icon: FaInstagram, href: "https://instagram.com/tensorlabz", color: "text-blue-300 hover:text-blue-400" },
+    { icon: FaTwitter, href: "https://twitter.com/tensorlabz", color: "text-blue-200 hover:text-blue-300" },
+    { icon: FaGithub, href: "https://github.com/tensorlabz", color: "text-blue-100 hover:text-blue-200" }
+  ];
+
+  const footerLinks = [
+    { title: "Services", links: ["Web Development", "Mobile Apps", "Cloud Solutions"] },
+    { title: "Company", links: ["About Us", "Careers", "Contact"] },
+    { title: "Resources", links: ["Blog", "Case Studies", "White Papers"] }
+  ];
+
   return (
-    <footer className="bg-gradient-to-br from-blue-500 via-white to-gray-100 text-blue-50 py-6 border-t-2 border-blue-300">
-      <div className="max-w-screen-xl mx-auto px-6">
-        <div className="flex flex-col md:flex-row justify-center md:justify-between items-center">
-          {/* Company Info */}
-          <div className="mb-6 md:mb-0 md:text-justify text-center flex flex-col items-center lg:items-start justify-center lg:justify-start">
-            <img src={logo} loading='lazy' alt='tensor labz logo' className='object-center h-12' />
-            <p className="text-blue-800 mt-1">Building innovative solutions for a digital world.</p>
-          </div>
+    <footer className="bg-blue-50 text-blue-900 py-12 border-t-2 border-blue-200">
+      <div className="max-w-screen-xl mx-auto px-6 grid md:grid-cols-4 gap-8">
+        {/* Company Info */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="col-span-full md:col-span-1 flex flex-col items-center md:items-start"
+        >
+          <img 
+            src={logo} 
+            alt='Tensor Labz Logo' 
+            className='h-16 w-auto object-contain mb-4' 
+            loading='lazy'
+          />
+          <p className="text-blue-700 text-center md:text-left max-w-xs">
+            Transforming digital landscapes through innovative software solutions.
+          </p>
+        </motion.div>
 
-       
+        {/* Footer Links */}
+        {footerLinks.map((section, index) => (
+          <motion.div
+            key={section.title}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: index * 0.2 }}
+            className="flex flex-col items-center md:items-start"
+          >
+            <h4 className="font-bold text-lg mb-4 text-blue-800">{section.title}</h4>
+            {section.links.map((link) => (
+              <a 
+                key={link} 
+                href="#" 
+                className="text-blue-600 hover:text-blue-800 transition-colors mb-2"
+              >
+                {link}
+              </a>
+            ))}
+          </motion.div>
+        ))}
 
-          {/* Social Media Links */}
-          <div className="flex gap-8">
-            {[
-              [ <FaFacebookF />,"https://facebook.com"],
-              [ <FaLinkedinIn />,"https://facebook.com"],
-              [ <FaInstagram />,"https://facebook.com"],
-            ].map(([Icon,link],index)=>(<a key={index} href={link as string} target="_blank" rel="noopener noreferrer" className="text-blue-600 text-xl hover:text-blue-800">
-             {Icon}
-            </a>))
-            }
-            
-           
-          </div>
-        </div>
+        {/* Social Media Links */}
+        <motion.div 
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+          className="col-span-full md:col-span-1 flex justify-center md:justify-end items-center space-x-6"
+        >
+          {socialLinks.map(({ icon: Icon, href, color }) => (
+            <a 
+              key={href} 
+              href={href} 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className={`text-2xl ${color} transition-transform hover:scale-110`}
+            >
+              <Icon />
+            </a>
+          ))}
+        </motion.div>
 
         {/* Copyright */}
-        <div className="mt-8 border-t border-gray-400 pt-4 text-center">
-          <p className="text-blue-800">&copy; {new Date().getFullYear()} <strong className='text-blue-600'>Tensor Labz</strong>. All rights reserved.</p>
+        <div className="col-span-full border-t border-blue-200 pt-6 mt-6 text-center">
+          <p className="text-blue-700">
+            &copy; {new Date().getFullYear()} <span className="font-bold text-blue-900">Tensor Labz</span>. 
+            All rights reserved.
+          </p>
         </div>
       </div>
     </footer>
   );
 }
 
-export default memo(Footer)
+export default memo(Footer);
