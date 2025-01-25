@@ -6,11 +6,13 @@ import ProjectData from "../../../../data/project_data";
 import LatestBanner from "../../../../assets/vedio/Home/topProducts/topProductBanner.mp4";
 import { useDeviceContext } from "../../../../contexts/DeviceContext";
 import TopProductTitle from "./TopProducttitle";
+import MobileTopCarousel from "./MobileTopCarsaole";
 
 const LatestProductSection: React.FC = memo(() => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const device = useDeviceContext();
   const islarge=useMemo(()=>device==="lg" || device==="2xl" || device==="xl",[device])
+  const isMobile=useMemo(()=>device==="xs" || device==="sm" ,[device])
   const topProjects = ProjectData.filter((project) => project.isTop).slice(0, islarge?3:2);
 
 
@@ -53,7 +55,7 @@ const LatestProductSection: React.FC = memo(() => {
   }, [topProjects.length]);
 
   return (
-    <Section className="min-h-screen lg:container realtive  flex flex-col items-center justify-center">
+    <Section className="min-h-screen  lg:container realtive  flex flex-col items-center justify-center">
       <motion.div
         className="flex lg:flex-row flex-col gap-8 w-full h-full relative"
         initial="hidden"
@@ -92,7 +94,7 @@ const LatestProductSection: React.FC = memo(() => {
         )} 
 
         {/* Vertical Scrolling Projects */}
-        <motion.div className="flex lg:w-3/5 w-full flex-col gap-6 h-full overflow-hidden lg:p-0 px-8 py-4">
+        {isMobile?(<MobileTopCarousel/>):(  <motion.div className="flex lg:w-3/5 w-full flex-col gap-6 h-full overflow-hidden lg:p-0 px-8 py-4">
           <AnimatePresence>
             {topProjects
               .slice(currentIndex, currentIndex + (islarge?3:2))
@@ -110,7 +112,8 @@ const LatestProductSection: React.FC = memo(() => {
                 </motion.div>
               ))}
           </AnimatePresence>
-        </motion.div>
+        </motion.div>)}
+      
       </motion.div>
     </Section>
   );

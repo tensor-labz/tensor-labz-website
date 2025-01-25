@@ -34,6 +34,7 @@ const LatestProductCard: React.FC<projectProps> = memo(({ id }) => {
       animation={customAnimation}
       className={`
         flex flex-col items-center 
+        
         bg-white border border-gray-200 
         rounded-lg shadow 
         ${safeid % 2 !== 0 ? "md:flex-row-reverse self-end" : "md:flex-row self-start"}
@@ -49,11 +50,10 @@ const LatestProductCard: React.FC<projectProps> = memo(({ id }) => {
       <div className="w-full md:w-48">
         <img 
           className="
-            object-cover 
+            md:object-cover object-center
             w-full 
-            h-[450px] 
-            md:h-auto 
-            md:w-full 
+            h-[250px] 
+            md:h-auto  
             rounded-t-lg 
             md:rounded-none 
             md:rounded-s-lg
