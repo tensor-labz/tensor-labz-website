@@ -1,17 +1,16 @@
 import React, { memo } from 'react';
-import { motion, MotionProps, Variants } from 'framer-motion';
+import { motion, HTMLMotionProps } from 'framer-motion';
 
 // Enhanced type definition for more precise prop typing
-interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
+interface CardProps extends HTMLMotionProps<'div'> {
   children: React.ReactNode;
-  onClick?: () => void;
   animation?: {
-    initial?: MotionProps['initial'];
-    whileHover?: MotionProps['whileHover'];
-    whileTap?: MotionProps['whileTap'];
-    transition?: MotionProps['transition'];
-    viewport?: MotionProps['viewport'];
-    whileInView?: MotionProps['whileInView'];
+    initial?: HTMLMotionProps<'div'>['initial'];
+    whileHover?: HTMLMotionProps<'div'>['whileHover'];
+    whileTap?: HTMLMotionProps<'div'>['whileTap'];
+    transition?: HTMLMotionProps<'div'>['transition'];
+    viewport?: HTMLMotionProps<'div'>['viewport'];
+    whileInView?: HTMLMotionProps<'div'>['whileInView'];
   };
 }
 
@@ -37,7 +36,6 @@ const defaultAnimationVariants: CardProps['animation'] = {
 const Card: React.FC<CardProps> = memo(({
   children, 
   className = '', 
-  onClick, 
   animation = defaultAnimationVariants,
   ...rest
 }) => {
@@ -49,7 +47,6 @@ const Card: React.FC<CardProps> = memo(({
 
   return (
     <motion.div
-      onClick={onClick}
       initial={mergedAnimation.initial}
       whileHover={mergedAnimation.whileHover}
       whileTap={mergedAnimation.whileTap}
