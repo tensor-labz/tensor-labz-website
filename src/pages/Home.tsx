@@ -10,7 +10,7 @@ export default function Home() {
        <HeroSection />
        <ServiceSection />
        <LatestProductSection/>
-       <ReveiwSection />
+       {/* <ReveiwSection /> */}
        
     </Page>
   )

@@ -1,19 +1,56 @@
-import HeaderHelmentProps from "../../base/type/HeaderHelmentProps.d";
+import React, { memo } from 'react';
+import { motion, MotionProps } from 'framer-motion';
 import HeaderHelment from "../../base/Head";
-import { motion } from "motion/react";
-type PageProps = {
-    children: React.ReactNode;
-    HeadProps:HeaderHelmentProps
+import  HeaderHelmentProps  from "../../base/type/HeaderHelmentProps.d";
+
+// Refined type definition with clearer interfaces
+interface PageProps extends MotionProps {
+  children: React.ReactNode;
+  HeadProps: HeaderHelmentProps;
+  className?: string;
 }
 
-export default function Page({children,HeadProps }: PageProps) {
+// Memoized Page component with optimized motion configuration
+const Page: React.FC<PageProps> = memo(({ 
+  children, 
+  HeadProps, 
+  className = '', 
+  ...motionProps 
+}) => {
+  // Standard page transition animations
+  const pageVariants = {
+    initial: { 
+      opacity: 0,
+      width: 0 
+    },
+    animate: { 
+      opacity: 1,
+      width: "100%",
+      transition: { duration: 0.3 }
+    },
+    exit: { 
+      opacity: 0,
+      x: typeof window !== 'undefined' ? window.innerWidth : 0,
+      transition: { duration: 0.4 }
+    }
+  };
+
   return (
     <>
-  <HeaderHelment {...HeadProps}/>
-      <motion.main initial={{ opacity: 0,width:0 }} animate={{ opacity: 1,width:"100%",transition:{duration:0.2} }} exit={{ opacity: 0,x:window.innerWidth,transition:{duration:0.3} }} className="min-h-screen relative min-w-full">
-{children}
-   </motion.main>
+      <HeaderHelment {...HeadProps} />
+      <motion.main 
+        initial="initial"
+        animate="animate"
+        exit="exit"
+        variants={pageVariants}
+        className={`min-h-screen relative min-w-full ${className}`}
+        {...motionProps}
+      >
+        {children}
+      </motion.main>
     </>
- 
-  )
-}
+  );
+});
+
+Page.displayName = 'Page';
+export default Page;
