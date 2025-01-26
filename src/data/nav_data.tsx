@@ -4,7 +4,7 @@ import { FaGear } from "react-icons/fa6";
 const navData=[
     {
         nav:"Home",
-        to:"#",
+        to:"/",
         icon:<FaHome/>
     },
     {
