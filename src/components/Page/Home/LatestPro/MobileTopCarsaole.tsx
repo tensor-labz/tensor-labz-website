@@ -2,16 +2,18 @@ import React, { memo, useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import ProjectData from "../../../../data/project_data";
 import LatestProductCard from "./LatestProductCard";
+import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
 
 const MobileTopCarousel: React.FC = memo(() => {
   const topProjects = ProjectData.filter((project) => project.isTop);
   const [currentIndex, setCurrentIndex] = useState(0);
 
+  const goNext=()=>setCurrentIndex((prev) => (prev + 1) % topProjects.length);
+  const goPrev=()=>setCurrentIndex((prev) => prev>0?prev--:topProjects.length);
   // Auto-slide functionality
   useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % topProjects.length);
-    }, 7000); // Change every 5 seconds
+    const interval = setInterval(
+      goNext, 7000); // Change every 5 seconds
     return () => clearInterval(interval);
   }, [topProjects.length]);
 
@@ -23,7 +25,7 @@ const MobileTopCarousel: React.FC = memo(() => {
   };
 
   return (
-    <div className="relative flex flex-col items-center w-full max-w-md mx-auto">
+    <div className="relative flex flex-col justify-center items-center w-full">
       {/* Carousel Container */}
       <div className="overflow-hidden w-full relative">
         <AnimatePresence initial={false} mode="wait">
@@ -42,6 +44,16 @@ const MobileTopCarousel: React.FC = memo(() => {
             </motion.div>
           )}
         </AnimatePresence>
+        {[{
+          icon:<FaAngleLeft/>,
+          position:"left-1",
+          onClick:goPrev
+        },{
+          icon:<FaAngleRight/>,
+          position:"right-1",
+          onClick:goNext
+        }].map((navi,index)=>(<button onClick={navi.onClick} className={`hover:text-white text-slate-300 absolute bg-transparent hover:bg-blue-900  top-1/2 p-1 rounded-full cursor-pointer ${navi.position}`} key={`navi${index}`}>{navi.icon}</button>))
+          }
       </div>
 
       {/* Indicators */}

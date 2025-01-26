@@ -81,7 +81,7 @@ const LatestProductSection: React.FC = memo(() => {
           </div>
         </motion.div>):(
           <>
-         <h3 className="text-2xl text-center font-bold w-full text-slate-50 py-4">Our Top Insights</h3>
+         <h3 className="text-2xl text-center font-bold w-full text-slate-50 py-3">Our Top Insights</h3>
             <video
             src={LatestBanner}
             className="object-cover object-center w-full rounded-md h-[600px] absolute top-0 left-0 z-[-30]"

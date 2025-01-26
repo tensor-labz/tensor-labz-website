@@ -34,7 +34,6 @@ const LatestProductCard: React.FC<projectProps> = memo(({ id }) => {
       animation={customAnimation}
       className={`
         flex flex-col items-center 
-        
         bg-white border border-gray-200 
         rounded-lg shadow 
         ${safeid % 2 !== 0 ? "md:flex-row-reverse self-end" : "md:flex-row self-start"}
@@ -68,7 +67,8 @@ const LatestProductCard: React.FC<projectProps> = memo(({ id }) => {
       <div className="flex flex-col justify-between p-4 leading-normal">
         <h5 className="
           mb-2 
-          text-2xl 
+          xs:text-2xl 
+          text-xl
           font-bold 
           tracking-tight 
           text-gray-900 
@@ -86,6 +86,7 @@ const LatestProductCard: React.FC<projectProps> = memo(({ id }) => {
           dark:text-gray-400
           transition-colors 
           duration-300
+          xs:text-base
         ">
           Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.
         </p>
