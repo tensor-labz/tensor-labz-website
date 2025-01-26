@@ -4,6 +4,7 @@ import logo from '../../assets/images/logo.png';
 
 import useScroll from '../../base/hooks/useScroll';
 import NavBar from './NavBar';
+import MobileNavigation from './MobileNavigation';
 
 // Header Component
 const Header: React.FC<{ className?: string }> = memo(({ className = '' }) => {
@@ -34,6 +35,7 @@ const Header: React.FC<{ className?: string }> = memo(({ className = '' }) => {
         className="md:h-12 h-8 object-contain"
       />
       <NavBar />
+      <MobileNavigation/>
     </motion.header>
   );
 });
