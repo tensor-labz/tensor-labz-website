@@ -1,12 +1,39 @@
-import React from 'react';
+import React, { memo } from 'react';
 import Section from "../components/resuable/Section";
 import Page from "../components/resuable/Page";
+import bg from "../assets/vedio/Aboutus/bg.mp4";
 
-export default function AboutUs() {
+interface AboutUsSectionProps {
+  title: string;
+  description: string;
+}
+
+const AboutUsSectionItem = memo(({ title, description }: AboutUsSectionProps) => (
+  <div className="bg-blue-900/30 backdrop-blur-sm p-6 rounded-xl">
+    <h3 className="text-2xl font-semibold text-blue-50 mb-3">{title}</h3>
+    <p className="text-blue-100">{description}</p>
+  </div>
+));
+
+const AboutUs: React.FC = memo(() => {
+  const sectionData = [
+    {
+      title: "Mission",
+      description: "Empowering businesses through innovative technology and strategic digital transformation."
+    },
+    {
+      title: "Vision", 
+      description: "To be the leading digital partner that turns complex challenges into seamless technological solutions."
+    },
+    {
+      title: "Values",
+      description: "Innovation, integrity, collaboration, and continuous learning drive everything we do."
+    }
+  ];
+
   return (
     <Page HeadProps={{title:"About Us"}}>
       <div className="relative h-screen w-full overflow-hidden">
-        {/* Video Background */}
         <video 
           autoPlay 
           loop 
@@ -14,7 +41,7 @@ export default function AboutUs() {
           playsInline 
           className="absolute z-0 w-full h-full object-cover brightness-50"
         >
-          <source src="/path/to/professional-background.mp4" type="video/mp4" />
+          <source src={bg} type="video/mp4" />
         </video>
 
         <Section className="relative z-10 flex items-center justify-center h-full">
@@ -27,28 +54,20 @@ export default function AboutUs() {
             </p>
             
             <div className="grid md:grid-cols-3 gap-6 text-center">
-              <div className="bg-blue-900/30 backdrop-blur-sm p-6 rounded-xl">
-                <h3 className="text-2xl font-semibold text-blue-50 mb-3">Mission</h3>
-                <p className="text-blue-100">
-                  Empowering businesses through innovative technology and strategic digital transformation.
-                </p>
-              </div>
-              <div className="bg-blue-900/30 backdrop-blur-sm p-6 rounded-xl">
-                <h3 className="text-2xl font-semibold text-blue-50 mb-3">Vision</h3>
-                <p className="text-blue-100">
-                  To be the leading digital partner that turns complex challenges into seamless technological solutions.
-                </p>
-              </div>
-              <div className="bg-blue-900/30 backdrop-blur-sm p-6 rounded-xl">
-                <h3 className="text-2xl font-semibold text-blue-50 mb-3">Values</h3>
-                <p className="text-blue-100">
-                  Innovation, integrity, collaboration, and continuous learning drive everything we do.
-                </p>
-              </div>
+              {sectionData.map((section, index) => (
+                <AboutUsSectionItem 
+                  key={index} 
+                  title={section.title} 
+                  description={section.description} 
+                />
+              ))}
             </div>
           </div>
         </Section>
       </div>
     </Page>
   );
-}
+});
+
+AboutUs.displayName = 'AboutUs';
+export default AboutUs;
