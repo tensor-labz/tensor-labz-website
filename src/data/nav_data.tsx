@@ -1,4 +1,4 @@
-import { FaHome, FaPhone } from "react-icons/fa";
+import { FaHome, FaInfo, FaPhone } from "react-icons/fa";
 import { FaGear } from "react-icons/fa6";
 
 const navData=[
@@ -8,18 +8,18 @@ const navData=[
         icon:<FaHome/>
     },
     {
-        nav:"Home",
+        nav:"Insigts",
         to:"#",
         icon:<FaGear/>
     },
     {
-        nav:"Home",
-        to:"#",
-        icon:<FaHome/>
+        nav:"About Us",
+        to:"/about-us",
+        icon:<FaInfo/>
     },
     {
-        nav:"Home",
-        to:"#",
+        nav:"Contact Us",
+        to:"contact-us",
         icon:<FaPhone/>
     }
 ]

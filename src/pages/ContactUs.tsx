@@ -1,10 +1,212 @@
+import React, { memo } from 'react';
+import { motion } from 'framer-motion';
+import { IconType } from 'react-icons';
+import { 
+  MdEmail, 
+  MdPhone, 
+  MdLocationOn,
+  MdBusinessCenter 
+} from 'react-icons/md';
+import { 
+  FaWhatsapp, 
+  FaLinkedin, 
+  FaTwitter, 
+  FaFacebook, 
+  FaInstagram, 
+  FaYoutube 
+} from 'react-icons/fa';
 import Page from "../components/resuable/Page";
 
+// Define a type for contact info
+type ContactInfoType = {
+  title: string;
+  value: string;
+  icon: IconType;
+  linkType?: 'email' | 'phone' | 'whatsapp' | 'default';
+};
 
-export default function ContactUs() {
+// Contact Info Component
+const ContactInfoItem = memo(({ 
+  icon: Icon, 
+  title, 
+  value, 
+  link, 
+  linkType = 'default',
+}: {
+  icon: IconType;
+  title: string;
+  value: string;
+  link?: string;
+  linkType?: 'email' | 'phone' | 'whatsapp' | 'default';
+}) => {
+  const getLinkHref = () => {
+    switch(linkType) {
+      case 'email': return `mailto:${link || ''}`;
+      case 'phone': return `tel:${link || ''}`;
+      case 'whatsapp': return `https://wa.me/${(link || '').replace(/\D/g, '')}`;
+      default: return link || '#';
+    }
+  };
+
   return (
-    <Page HeadProps={{title:"ContactUs"}}>
-        <h1>Contact Us</h1>
+    <motion.div 
+      initial={{ opacity: 0, y: 50 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      className="bg-white border border-blue-100 rounded-2xl p-6 flex items-center space-x-6 
+      hover:shadow-xl hover:border-blue-200 transition-all duration-300 group"
+    >
+      <div className="bg-blue-50 p-3 rounded-full group-hover:bg-blue-100 transition-colors">
+        <Icon className="w-10 h-10 text-blue-600 group-hover:text-blue-700" />
+      </div>
+      <div className="flex-grow">
+        <h3 className="text-lg font-semibold text-blue-900 mb-1">{title}</h3>
+        {link ? (
+          <a 
+            href={getLinkHref()}
+            target={linkType === 'whatsapp' ? '_blank' : undefined}
+            rel={linkType === 'whatsapp' ? 'noopener noreferrer' : undefined}
+            className="text-blue-700 hover:text-blue-900 transition-colors text-sm"
+          >
+            {value}
+          </a>
+        ) : (
+          <p className="text-gray-600 text-sm">{value}</p>
+        )}
+      </div>
+    </motion.div>
+  );
+});
+
+// Social Media Links Component
+const SocialMediaLinks = memo(() => {
+  const socialLinks = [
+    { 
+      icon: FaLinkedin, 
+      href: "https://www.linkedin.com/company/innovatetech",
+      color: "text-blue-600 hover:text-blue-800"
+    },
+    { 
+      icon: FaFacebook, 
+      href: "https://www.facebook.com/innovatetech",
+      color: "text-blue-700 hover:text-blue-900"
+    },
+    { 
+      icon: FaInstagram, 
+      href: "https://www.instagram.com/innovatetech",
+      color: "text-pink-600 hover:text-pink-800"
+    },
+    { 
+      icon: FaYoutube, 
+      href: "https://www.youtube.com/c/innovatetech",
+      color: "text-red-600 hover:text-red-800"
+    },
+    { 
+      icon: FaTwitter, 
+      href: "https://twitter.com/innovatetech",
+      color: "text-blue-400 hover:text-blue-600"
+    }
+  ];
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ delay: 0.6 }}
+      className="flex justify-center space-x-6 mt-10"
+    >
+      <h3 className="text-xl font-semibold text-blue-900 mr-6 self-center">
+        Follow Us
+      </h3>
+      {socialLinks.map((social, index) => (
+        <a
+          key={index}
+          href={social.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={`${social.color} transition-colors duration-300 transform hover:scale-110`}
+        >
+          <social.icon className="w-8 h-8" />
+        </a>
+      ))}
+    </motion.div>
+  );
+});
+
+const ContactUs: React.FC = memo(() => {
+  const contactInfo: Record<string, ContactInfoType> = {
+    email: {
+      title: "Corporate Email",
+      value: "info@innovatetech.solutions",
+      icon: MdEmail,
+      linkType: 'email'
+    },
+    phone: {
+      title: "Main Office Line",
+      value: "+1 (650) 123-4567",
+      icon: MdPhone,
+      linkType: 'phone'
+    },
+    whatsapp: {
+      title: "Business WhatsApp",
+      value: "+1 (650) 987-6543",
+      icon: FaWhatsapp,
+      linkType: 'whatsapp'
+    },
+    address: {
+      title: "Headquarters",
+      value: "Innovation Tower, 456 Tech Boulevard, Silicon Valley, CA 94000",
+      icon: MdLocationOn
+    },
+    corporate: {
+      title: "Corporate Entity",
+      value: "InnovateTech Solutions Inc.",
+      icon: MdBusinessCenter
+    }
+  };
+
+  return (
+    <Page HeadProps={{title:"Contact Us"}}>
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white flex items-center justify-center p-6">
+        <div className="max-w-4xl w-full space-y-10">
+          <motion.h1 
+            initial={{ opacity: 0, y: -50 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-5xl font-bold text-center text-blue-900 mb-12"
+          >
+            Contact InnovateTech
+          </motion.h1>
+          
+          <div className="grid md:grid-cols-2 gap-8">
+            {Object.entries(contactInfo).map(([key, info]) => (
+              <ContactInfoItem 
+                key={key}
+                icon={info.icon}
+                title={info.title}
+                value={info.value}
+                link={info.value}
+                linkType={info.linkType}
+              />
+            ))}
+          </div>
+
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.5 }}
+            className="text-center"
+          >
+            <p className="text-blue-900 italic text-xl max-w-2xl mx-auto font-light">
+              "Bridging innovation and technology to transform your business challenges into breakthrough solutions."
+            </p>
+          </motion.div>
+
+          <SocialMediaLinks />
+        </div>
+      </div>
     </Page>
-  )
-}
+  );
+});
+
+ContactUs.displayName = 'ContactUs';
+export default ContactUs;
