@@ -39,13 +39,18 @@ const ServiceSection: React.FC = memo(() => {
   };
 
   return (
-    <Section title="What We Offer" subtitle="Innovative solutions tailored to your digital transformation needs.">
+    <Section>
+      <div className='px-4 sm:text-justify text-center mb-4'>
+      <h1 className="sm:text-4xl text-xl sm:font-bold font-semibold text-blue-900">What We Offer</h1>
+      <h3 className="sm:text-lg text-base text-gray-500">Innovative solutions tailored to your digital transformation needs.</h3>
+      </div>
+      
       <motion.div
         variants={containerVariants}
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.1 }}
-        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:px-0 px-2"
       >
         {servicesData
           .filter((serv: ServiceCardProps) => serv.home === true)

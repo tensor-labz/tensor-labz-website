@@ -5,11 +5,11 @@ import logo from "../../assets/images/logo.png";
 
 const Footer = () => {
   const socialLinks = [
-    { icon: FaFacebookF, href: "https://facebook.com/tensorlabz", color: "text-blue-500 hover:text-blue-600" },
-    { icon: FaLinkedinIn, href: "https://linkedin.com/company/tensorlabz", color: "text-blue-400 hover:text-blue-500" },
-    { icon: FaInstagram, href: "https://instagram.com/tensorlabz", color: "text-blue-300 hover:text-blue-400" },
-    { icon: FaTwitter, href: "https://twitter.com/tensorlabz", color: "text-blue-200 hover:text-blue-300" },
-    { icon: FaGithub, href: "https://github.com/tensorlabz", color: "text-blue-100 hover:text-blue-200" }
+    { icon: FaFacebookF, href: "https://facebook.com/tensorlabz", color: "text-slate-500 hover:text-slate-600" },
+    { icon: FaLinkedinIn, href: "https://linkedin.com/company/tensorlabz", color: "text-slate-400 hover:text-slate-500" },
+    { icon: FaInstagram, href: "https://instagram.com/tensorlabz", color: "text-slate-300 hover:text-bluslate-400" },
+    { icon: FaTwitter, href: "https://twitter.com/tensorlabz", color: "text-slate-200 hover:text-slate-300" },
+    { icon: FaGithub, href: "https://github.com/tensorlabz", color: "text-slate-100 hover:text-slate-200" }
   ];
 
   const footerLinks = [
@@ -19,7 +19,7 @@ const Footer = () => {
   ];
 
   return (
-    <footer className="bg-blue-50 text-blue-900 py-12 border-t-2 border-blue-200">
+    <footer className="bg-gray-700 text-slate-200 py-12 border-t-2 border-blue-200">
       <div className="max-w-screen-xl mx-auto px-6 grid md:grid-cols-4 gap-8">
         {/* Company Info */}
         <motion.div 
@@ -34,7 +34,7 @@ const Footer = () => {
             className='h-16 w-auto object-contain mb-4' 
             loading='lazy'
           />
-          <p className="text-blue-700 text-center md:text-left max-w-xs">
+          <p className="text-slate-50 text-center md:text-left max-w-xs">
             Transforming digital landscapes through innovative software solutions.
           </p>
         </motion.div>
@@ -48,12 +48,12 @@ const Footer = () => {
             transition={{ duration: 0.6, delay: index * 0.2 }}
             className="flex flex-col items-center md:items-start"
           >
-            <h4 className="font-bold text-lg mb-4 text-blue-800">{section.title}</h4>
+            <h4 className="font-bold text-lg mb-4 text-white">{section.title}</h4>
             {section.links.map((link) => (
               <a 
                 key={link} 
                 href="#" 
-                className="text-blue-600 hover:text-blue-800 transition-colors mb-2"
+                className="text-slate-300 hover:text-slate-200 transition-colors mb-2"
               >
                 {link}
               </a>
@@ -83,8 +83,8 @@ const Footer = () => {
 
         {/* Copyright */}
         <div className="col-span-full border-t border-blue-200 pt-6 mt-6 text-center">
-          <p className="text-blue-700">
-            &copy; {new Date().getFullYear()} <span className="font-bold text-blue-900">Tensor Labz</span>. 
+          <p className="text-slate-300">
+            &copy; {new Date().getFullYear()} <span className="font-bold text-slate-100">Tensor Labz</span>. 
             All rights reserved.
           </p>
         </div>
