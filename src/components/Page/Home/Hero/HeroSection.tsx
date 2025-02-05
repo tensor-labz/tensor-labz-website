@@ -44,7 +44,7 @@ const imageVariants: Variants = {
     opacity: 0, 
     x: 50, 
     y: 50, 
-    rotate: 30 
+    rotate: 10 
   },
   visible: { 
     opacity: 1,

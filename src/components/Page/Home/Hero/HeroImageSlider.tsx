@@ -14,14 +14,14 @@ const HeroImageSlider: React.FC = memo(() => {
       opacity: 0,
       scale: 0.95,
       x: -100,
-      rotateY: 10,
+      // rotateY: 10,
       zIndex: 1
     },
     animate: {
       opacity: 1,
       scale: 1,
       x: 0,
-      rotateY: 0,
+      // rotateY: 0,
       zIndex: 2,
       transition: {
         duration: 2.3,
@@ -32,7 +32,7 @@ const HeroImageSlider: React.FC = memo(() => {
       opacity: 0,
       scale: 1.1,
       x: 100,
-      rotateY: -10,
+      // rotateY: -10,
       zIndex: 1,
       transition: {
         duration: 2.3,
@@ -49,13 +49,12 @@ const HeroImageSlider: React.FC = memo(() => {
         initial="initial"
         animate="animate"
         exit="exit"
-        className="w-full h-full relative overflow-hidden"
+        className="w-full h-full min-h-full relative overflow-hidden"
       >
         <motion.img
           src={slider.img}
           alt={`Hero Image ${slider.title}`}
           className="w-full h-full object-cover"
-          loading="lazy"
           draggable={false}
         />
       </motion.div>
