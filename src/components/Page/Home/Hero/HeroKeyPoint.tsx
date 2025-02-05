@@ -6,12 +6,12 @@ import { useHeroContext } from "../../../../contexts/HeroContext";
 const titleVariants = {
   initial: { 
     opacity: 0, 
-    rotateX: -45, 
+    // rotateX: -45, 
     textShadow: "1px 1px 1px grey" 
   },
   animate: { 
     opacity: 1, 
-    rotateX: 0, 
+    // rotateX: 0, 
     textShadow: "none",
     transition: {
       duration: 2.3,
@@ -20,7 +20,7 @@ const titleVariants = {
   },
   exit: { 
     opacity: 0, 
-    rotateX: 45, 
+    // rotateX: 45, 
     textShadow: "1px 1px 1px grey" 
   }
 };
