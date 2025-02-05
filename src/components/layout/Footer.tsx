@@ -15,7 +15,7 @@ const Footer = () => {
   const footerLinks = [
     { title: "Services", links: ["Web Development", "Mobile Apps", "Cloud Solutions"] },
     { title: "Company", links: ["About Us", "Careers", "Contact"] },
-    { title: "Resources", links: ["Blog", "Case Studies", "White Papers"] }
+    { title: "Resources", links: ["Blog", "Case Stfvudies", "White Papers"] }
   ];
 
   return (
