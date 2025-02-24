@@ -9,7 +9,7 @@ const navData=[
     },
     {
         nav:"Insigts",
-        to:"#",
+        to:"/services",
         icon:<FaGear/>
     },
     {
