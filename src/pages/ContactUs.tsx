@@ -16,6 +16,10 @@ import {
   FaYoutube
 } from 'react-icons/fa';
 import Page from "../components/resuable/Page";
+import desktop from "../assets/images/Page/ContactUs/lg.jpg";
+import mobile from "../assets/images/Page/ContactUs/df.jpg";
+import tablet from "../assets/images/Page/ContactUs/tab.jpg";
+
 
 // Define a type for contact info
 type ContactInfoType = {
@@ -119,6 +123,7 @@ const SocialMediaLinks = memo(() => {
       <h3 className="text-xl font-semibold text-blue-900 mr-6 self-center">
         Follow Us
       </h3>
+      <div className="flex justify-center space-x-6 md:mt-0 mt-6">
       {socialLinks.map((social, index) => (
         <a
           key={index}
@@ -127,9 +132,11 @@ const SocialMediaLinks = memo(() => {
           rel="noopener noreferrer"
           className={`${social.color} transition-colors duration-300 transform hover:scale-110`}
         >
-          <social.icon className="w-8 h-8" />
+          <social.icon className="md:w-8 md:h-8 w-6 h-6" />
         </a>
+
       ))}
+          </div>
     </motion.div>
   );
 });
@@ -168,8 +175,16 @@ const ContactUs: React.FC = memo(() => {
 
   return (
     <Page HeadProps={{title:"Contact Us"}}>
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white flex items-center justify-center p-6">
-        <div className="max-w-4xl w-full space-y-10">
+      <div className="min-h-screen flex items-center justify-center p-6">
+  <picture className="absolute inset-0 -z-10">
+          <source media="(min-width: 768px)" srcSet={desktop} />
+          <source media="(min-width: 480px)" srcSet={tablet} />
+          <img src={mobile} alt="" className="w-full h-full object-cover brightness-75" />
+        </picture>
+   {/* Global overlay for better content visibility */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/20 to-black/30" />
+        <div className="max-w-4xl w-full space-y-10 relative bg-white/90 p-8 rounded-2xl shadow-2xl backdrop-blur-sm mt-10">
+
           <motion.h1
             initial={{ opacity: 0, y: -50 }}
             animate={{ opacity: 1, y: 0 }}
