@@ -1,7 +1,7 @@
 import React, { memo } from "react";
 import Section from "../components/resuable/Section";
 import Page from "../components/resuable/Page";
-// import bg from "../assets/vedio/Aboutus/bg.mp4";
+import bg from "../assets/images/Page/Home/About/bg.jpg";
 
 interface AboutUsSectionProps {
   title: string;
@@ -9,7 +9,7 @@ interface AboutUsSectionProps {
 }
 
 const AboutUsSectionItem = memo(({ title, description }: AboutUsSectionProps) => (
-  <div className="bg-white/80 p-6 rounded-xl border border-gray-300 shadow-lg ">
+  <div className="bg-white/80 p-6 rounded-xl border border-gray-300 shadow-lg">
     <h3 className="text-2xl font-semibold text-blue-900 mb-3">{title}</h3>
     <p className="text-gray-800 leading-relaxed">{description}</p>
   </div>
@@ -34,16 +34,26 @@ const AboutUs: React.FC = memo(() => {
   return (
     <Page HeadProps={{ title: "About Us" }}>
       <div className="relative min-h-screen h-[1000px] sm:h-screen w-full">
-        {/* Background Video */}
-        <video
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="absolute z-0 w-full h-full object-cover brightness-100"
-        >
-          <source src={"https://tensoragri.s3.us-east-1.amazonaws.com/pageBackground/bg.mp4"} type="video/mp4" />
-        </video>
+        {/* Background Video/Image Container */}
+        <div className="absolute inset-0 z-0">
+          {/* Video for larger screens (>=768px) */}
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="hidden md:block absolute w-full h-full object-cover brightness-100"
+          >
+            <source src="https://tensoragri.s3.us-east-1.amazonaws.com/pageBackground/bg.mp4" type="video/mp4" />
+          </video>
+
+          {/* Background image for smaller screens (<768px) */}
+          <img
+            src={bg}
+            alt="Background"
+            className="md:hidden w-full h-full object-cover"
+          />
+        </div>
 
         {/* Content Section */}
         <Section className="relative z-10 flex items-center justify-center h-full">
