@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import Section from "../../../../components/resuable/Section";
 import LatestProductCard from "./LatestProductCard";
 import ProjectData from "../../../../data/project_data";
-import LatestBanner from "../../../../assets/vedio/Home/topProducts/topProductBanner.mp4";
+import LatestBanner from "../../../../assets/images/Page/About/bg.jpg";
 import { useDeviceContext } from "../../../../contexts/DeviceContext";
 import TopProductTitle from "./TopProducttitle";
 import MobileTopCarousel from "./MobileTopCarsaole";
@@ -69,7 +69,7 @@ const LatestProductSection: React.FC = memo(() => {
           variants={sectionVariants}
         >
           <video
-            src={LatestBanner}
+            src="https://tensoragri.s3.us-east-1.amazonaws.com/Home/topProductBanner.mp4"
             className="object-cover object-center w-full rounded-md h-[400px] lg:h-[600px]"
             autoPlay
             muted
@@ -82,16 +82,12 @@ const LatestProductSection: React.FC = memo(() => {
         </motion.div>):(
           <>
          <h3 className="text-2xl text-center font-bold w-full text-slate-50 py-3">Our Top Insights</h3>
-            <video
+            <img
             src={LatestBanner}
             className="object-cover object-center w-full rounded-md h-[600px] absolute top-0 left-0 z-[-30]"
-            autoPlay
-            muted
-            loop
-            playsInline
           />
             </>
-        )} 
+        )}
 
         {/* Vertical Scrolling Projects */}
         {isMobile?(<MobileTopCarousel/>):(  <motion.div className="flex lg:w-3/5 w-full flex-col gap-6 h-full overflow-hidden lg:p-0 px-8 py-4">
@@ -113,7 +109,7 @@ const LatestProductSection: React.FC = memo(() => {
               ))}
           </AnimatePresence>
         </motion.div>)}
-      
+
       </motion.div>
     </Section>
   );
