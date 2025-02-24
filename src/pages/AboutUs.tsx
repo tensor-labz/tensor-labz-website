@@ -1,7 +1,7 @@
 import React, { memo } from "react";
 import Section from "../components/resuable/Section";
 import Page from "../components/resuable/Page";
-import bg from "../assets/vedio/Aboutus/bg.mp4";
+// import bg from "../assets/vedio/Aboutus/bg.mp4";
 
 interface AboutUsSectionProps {
   title: string;
