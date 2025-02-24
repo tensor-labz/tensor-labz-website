@@ -6,9 +6,9 @@ import Card from "../../../../components/resuable/Card";
 const ServiceCard: React.FC<ServiceCardProps> = memo(({ title, text, icon }) => {
   return (
     <Card
-      className="group relative flex sm:flex-col flex-row justify-between rounded-lg 
-      overflow-hidden p-3 sm:p-6 bg-gradient-to-br from-blue-50 via-white 
-      shadow-sm shadow-blue-100 to-blue-50 transition-all duration-300 
+      className="group relative flex sm:flex-col flex-row justify-between rounded-lg
+      overflow-hidden p-3 sm:p-6 bg-gradient-to-br from-blue-50 via-white
+      shadow-sm shadow-blue-100 to-blue-100 transition-all duration-300
       hover:shadow-md hover:scale-[1.02] sm:gap-x-0 gap-x-6"
       animation={{
         initial: { opacity: 0, y: 50 },

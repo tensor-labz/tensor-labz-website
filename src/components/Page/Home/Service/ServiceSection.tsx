@@ -17,7 +17,7 @@ const ServiceSection: React.FC = memo(() => {
       }
     }
   };
-  
+
   // Card animation variants (bottom to top with rolling effect)
   const cardVariants: Variants = {
     hidden: {
@@ -39,12 +39,12 @@ const ServiceSection: React.FC = memo(() => {
   };
 
   return (
-    <Section>
-      <div className='px-4 sm:text-justify text-center mb-4'>
+    <Section className='md:px-14 px-0'>
+      <div className='px-4 text-center mb-4 mt-6'>
       <h1 className="sm:text-4xl text-xl sm:font-bold font-semibold text-blue-900">What We Offer</h1>
       <h3 className="sm:text-lg text-base text-gray-500">Innovative solutions tailored to your digital transformation needs.</h3>
       </div>
-      
+
       <motion.div
         variants={containerVariants}
         initial="hidden"
@@ -55,7 +55,7 @@ const ServiceSection: React.FC = memo(() => {
         {servicesData
           .filter((serv: ServiceCardProps) => serv.home === true)
           .map((serv: ServiceCardProps, index: number) => (
-            <motion.div 
+            <motion.div
               key={index}
               variants={cardVariants}
               className="w-full"
