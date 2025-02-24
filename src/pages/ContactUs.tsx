@@ -1,19 +1,19 @@
 import React, { memo } from 'react';
 import { motion } from 'framer-motion';
 import { IconType } from 'react-icons';
-import { 
-  MdEmail, 
-  MdPhone, 
+import {
+  MdEmail,
+  MdPhone,
   MdLocationOn,
-  MdBusinessCenter 
+  MdBusinessCenter
 } from 'react-icons/md';
-import { 
-  FaWhatsapp, 
-  FaLinkedin, 
-  FaTwitter, 
-  FaFacebook, 
-  FaInstagram, 
-  FaYoutube 
+import {
+  FaWhatsapp,
+  FaLinkedin,
+  FaTwitter,
+  FaFacebook,
+  FaInstagram,
+  FaYoutube
 } from 'react-icons/fa';
 import Page from "../components/resuable/Page";
 
@@ -26,11 +26,11 @@ type ContactInfoType = {
 };
 
 // Contact Info Component
-const ContactInfoItem = memo(({ 
-  icon: Icon, 
-  title, 
-  value, 
-  link, 
+const ContactInfoItem = memo(({
+  icon: Icon,
+  title,
+  value,
+  link,
   linkType = 'default',
 }: {
   icon: IconType;
@@ -49,20 +49,21 @@ const ContactInfoItem = memo(({
   };
 
   return (
-    <motion.div 
+    <motion.div
       initial={{ opacity: 0, y: 50 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="bg-white border border-blue-100 rounded-2xl p-6 flex items-center space-x-6 
+      className="bg-white border border-blue-100 rounded-2xl p-6 flex items-center space-x-6
       hover:shadow-xl hover:border-blue-200 transition-all duration-300 group"
     >
       <div className="bg-blue-50 p-3 rounded-full group-hover:bg-blue-100 transition-colors">
         <Icon className="w-10 h-10 text-blue-600 group-hover:text-blue-700" />
+
       </div>
       <div className="flex-grow">
         <h3 className="text-lg font-semibold text-blue-900 mb-1">{title}</h3>
         {link ? (
-          <a 
+          <a
             href={getLinkHref()}
             target={linkType === 'whatsapp' ? '_blank' : undefined}
             rel={linkType === 'whatsapp' ? 'noopener noreferrer' : undefined}
@@ -81,28 +82,28 @@ const ContactInfoItem = memo(({
 // Social Media Links Component
 const SocialMediaLinks = memo(() => {
   const socialLinks = [
-    { 
-      icon: FaLinkedin, 
+    {
+      icon: FaLinkedin,
       href: "https://www.linkedin.com/company/innovatetech",
       color: "text-blue-600 hover:text-blue-800"
     },
-    { 
-      icon: FaFacebook, 
+    {
+      icon: FaFacebook,
       href: "https://www.facebook.com/innovatetech",
       color: "text-blue-700 hover:text-blue-900"
     },
-    { 
-      icon: FaInstagram, 
+    {
+      icon: FaInstagram,
       href: "https://www.instagram.com/innovatetech",
       color: "text-pink-600 hover:text-pink-800"
     },
-    { 
-      icon: FaYoutube, 
+    {
+      icon: FaYoutube,
       href: "https://www.youtube.com/c/innovatetech",
       color: "text-red-600 hover:text-red-800"
     },
-    { 
-      icon: FaTwitter, 
+    {
+      icon: FaTwitter,
       href: "https://twitter.com/innovatetech",
       color: "text-blue-400 hover:text-blue-600"
     }
@@ -113,7 +114,7 @@ const SocialMediaLinks = memo(() => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ delay: 0.6 }}
-      className="flex justify-center space-x-6 mt-10"
+      className="flex justify-center md:flex-row flex-col space-x-6 mt-10"
     >
       <h3 className="text-xl font-semibold text-blue-900 mr-6 self-center">
         Follow Us
@@ -169,17 +170,17 @@ const ContactUs: React.FC = memo(() => {
     <Page HeadProps={{title:"Contact Us"}}>
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white flex items-center justify-center p-6">
         <div className="max-w-4xl w-full space-y-10">
-          <motion.h1 
+          <motion.h1
             initial={{ opacity: 0, y: -50 }}
             animate={{ opacity: 1, y: 0 }}
             className="text-5xl font-bold text-center text-blue-900 mb-12"
           >
             Contact InnovateTech
           </motion.h1>
-          
+
           <div className="grid md:grid-cols-2 gap-8">
             {Object.entries(contactInfo).map(([key, info]) => (
-              <ContactInfoItem 
+              <ContactInfoItem
                 key={key}
                 icon={info.icon}
                 title={info.title}
@@ -190,7 +191,7 @@ const ContactUs: React.FC = memo(() => {
             ))}
           </div>
 
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.5 }}

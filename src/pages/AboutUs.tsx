@@ -42,7 +42,7 @@ const AboutUs: React.FC = memo(() => {
           playsInline
           className="absolute z-0 w-full h-full object-cover brightness-100"
         >
-          <source src={bg} type="video/mp4" />
+          <source src={"https://tensoragri.s3.us-east-1.amazonaws.com/pageBackground/bg.mp4"} type="video/mp4" />
         </video>
 
         {/* Content Section */}
