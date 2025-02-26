@@ -1,26 +1,39 @@
-import { createContext, useContext, useState } from "react"
+import { createContext, useState, ReactNode, FC, useContext } from "react";
 
-const ServiceContext=createContext({})
-type ServiceProps={
-    children:React.ReactNode
+// Define our types
+export interface ServiceTab {
+  title: string;
+  slug: string;
 }
-// type ServiceState= {
-//     // Define the state properties here
-// }
 
-// type ServiceAction= {
-//     type: string;
-//     // Define other action properties here
-// }
+interface ServiceContextType {
+  activeTab: ServiceTab;
+  setActiveTab: React.Dispatch<React.SetStateAction<ServiceTab>>;
+}
 
+interface ServiceProviderProps {
+  children: ReactNode;
+}
 
-export default function ServiceProvider({children}:ServiceProps) {
-    const [selectedService,setSelectService]=useState<number|null|undefined>(null)
+// Create context with default values
+export const ServiceContext = createContext<ServiceContextType>({
+  activeTab: { title: "Web Development", slug: "web-dev" },
+  setActiveTab: () => {},
+});
+
+const ServiceProvider: FC<ServiceProviderProps> = ({ children }) => {
+  const [activeTab, setActiveTab] = useState<ServiceTab>({
+    title: "Web Development",
+    slug: "web-dev"
+  });
+
   return (
-    <ServiceContext.Provider value={{selectedService:selectedService,onServiceSelect:setSelectService}}>
-{children}
+    <ServiceContext.Provider value={{ activeTab, setActiveTab }}>
+      {children}
     </ServiceContext.Provider>
-  )
-}
+  );
+};
 
-export const useServiceContext=()=>useContext(ServiceContext)
+export default ServiceProvider;
+
+export const  useServiceContext= ()=>useContext(ServiceContext)

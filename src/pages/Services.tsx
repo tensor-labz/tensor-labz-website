@@ -5,6 +5,7 @@ import ServiceProvider from "../contexts/ServiceContext";
 import ServiceHero from "../components/Page/Service/Hero/ServiceHero";
 import TabBar from "../components/Page/Service/Tabs/TabBar";
 import ServiceDropDown from "../components/Page/Service/Tabs/ServiceDropDown";
+import ServiceContainer from "../components/Page/Service/ServiceContainer";
 
 const Services = memo(() => {
   const controls = useAnimation();
@@ -31,6 +32,7 @@ const Services = memo(() => {
             <TabBar />
             <ServiceDropDown/>
           </div>
+          <ServiceContainer/>
         </ServiceProvider>
       </motion.div>
     </Page>
