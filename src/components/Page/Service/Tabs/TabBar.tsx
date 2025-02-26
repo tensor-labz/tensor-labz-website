@@ -18,7 +18,7 @@ const TabBar: FC = memo(() => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6 }}
-      className="bg-white rounded-lg hidden md:block shadow-md overflow-x-auto"
+      className="bg-white rounded-lg hidden md:block  overflow-x-auto"
     >
       <div className="flex space-x-1 p-1 min-w-full">
         {tabs.map((tab) => {
