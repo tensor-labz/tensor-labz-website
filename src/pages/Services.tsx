@@ -5,7 +5,7 @@ import ServiceProvider from "../contexts/ServiceContext";
 import ServiceHero from "../components/Page/Service/Hero/ServiceHero";
 import TabBar from "../components/Page/Service/Tabs/TabBar";
 import ServiceDropDown from "../components/Page/Service/Tabs/ServiceDropDown";
-import ServiceContainer from "../components/Page/Service/ServiceContainer";
+import ServiceContainer from "../components/Page/Service/Services/ServiceContainer";
 
 const Services = memo(() => {
   const controls = useAnimation();
