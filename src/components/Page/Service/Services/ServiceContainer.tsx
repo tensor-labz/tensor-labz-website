@@ -2,9 +2,9 @@ import { memo } from 'react';
 import Pagination from './Pagination';
 import ProjectCard from './ProjectCard';
 
-interface Props {}
 
-function ServiceContainer(props: Props) {
+
+function ServiceContainer() {
     return (
         <div>
             <h1 className="text-2xl font-semibold text-gray-800">Our Services</h1>
