@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { FiArrowRight } from 'react-icons/fi'; // Import arrow icon from Feather icons set
+import { FiArrowRight } from 'react-icons/fi';
 
 // Define the type for project data
 interface ProjectCardProps {
@@ -13,6 +13,7 @@ interface ProjectCardProps {
   onExplore?: () => void;
 }
 
+// Create the component
 const ProjectCard: React.FC<ProjectCardProps> = ({
   id,
   title,
@@ -25,14 +26,14 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
 
   // Animation variants
   const cardVariants = {
-    initial: { opacity: 0, y: 20 },
+    initial: { opacity: 0, y: 10 },
     animate: { opacity: 1, y: 0 },
-    hover: { y: -8, transition: { duration: 0.3 } }
+    hover: { y: -2, transition: { duration: 0.3 } }
   };
 
   const buttonVariants = {
     initial: { scale: 1 },
-    hover: { scale: 1.05, transition: { duration: 0.2 } }
+    hover: { scale: 1.01, transition: { duration: 0.2 } }
   };
 
   // Handle the explore button click
@@ -92,7 +93,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
           className="w-full py-3 px-4 bg-blue-600 text-white font-medium rounded-lg flex items-center justify-center gap-2 transition-colors hover:bg-blue-700"
           variants={buttonVariants}
           whileHover="hover"
-          whileTap={{ scale: 0.98 }}
+          whileTap={{ scale: 0.90 }}
         >
           Explore Project
           <FiArrowRight className="h-5 w-5" />
@@ -102,4 +103,18 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
   );
 };
 
-export default ProjectCard;
+// Add custom comparison function to optimize re-renders
+const arePropsEqual = (prevProps: ProjectCardProps, nextProps: ProjectCardProps) => {
+  return (
+    prevProps.id === nextProps.id &&
+    prevProps.title === nextProps.title &&
+    prevProps.imageURL === nextProps.imageURL &&
+    prevProps.description === nextProps.description &&
+    prevProps.services.length === nextProps.services.length &&
+    prevProps.services.every((service, index) => service === nextProps.services[index]) &&
+    prevProps.onExplore === nextProps.onExplore
+  );
+};
+
+// Export the memoized component
+export default memo(ProjectCard, arePropsEqual);
