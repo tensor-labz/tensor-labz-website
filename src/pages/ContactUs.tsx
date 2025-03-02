@@ -16,9 +16,9 @@ import {
   FaYoutube
 } from 'react-icons/fa';
 import Page from "../components/resuable/Page";
-import desktop from "../assets/images/Page/ContactUs/lg.jpg";
-import mobile from "../assets/images/Page/ContactUs/df.jpg";
-import tablet from "../assets/images/Page/ContactUs/tab.jpg";
+import desktop from "../assets/images/Page/ContactUs/ContactusBgLG.png";
+import mobile from "../assets/images/Page/ContactUs/ContactusBgSM.webp";
+import tablet from "../assets/images/Page/ContactUs/ContactusBgMd.webp";
 
 
 // Define a type for contact info
@@ -120,7 +120,7 @@ const SocialMediaLinks = memo(() => {
       transition={{ delay: 0.6 }}
       className="flex justify-center md:flex-row flex-col space-x-6 mt-10"
     >
-      <h3 className="text-xl font-semibold text-blue-900 mr-6 self-center">
+      <h3 className="text-xl font-semibold text-slate-50 mr-6 self-center">
         Follow Us
       </h3>
       <div className="flex justify-center space-x-6 md:mt-0 mt-6">
@@ -182,13 +182,13 @@ const ContactUs: React.FC = memo(() => {
           <img src={mobile} alt="" className="w-full h-full object-cover brightness-75" />
         </picture>
    {/* Global overlay for better content visibility */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/20 to-black/30" />
-        <div className="max-w-4xl w-full space-y-10 relative bg-white/90 p-8 rounded-2xl shadow-2xl backdrop-blur-sm mt-10">
+        {/* <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/20 to-white" /> */}
+        <div className="max-w-4xl w-full space-y-10 relative  p-8 rounded-2xl shadow-2xl backdrop-blur-sm mt-10">
 
           <motion.h1
             initial={{ opacity: 0, y: -50 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-5xl font-bold text-center text-blue-900 mb-12"
+            className="text-5xl font-bold text-center text-white mb-12"
           >
             Contact InnovateTech
           </motion.h1>
@@ -212,7 +212,7 @@ const ContactUs: React.FC = memo(() => {
             transition={{ delay: 0.5 }}
             className="text-center"
           >
-            <p className="text-blue-900 italic text-xl max-w-2xl mx-auto font-light">
+            <p className="text-slate-200 italic text-xl max-w-2xl mx-auto font-light">
               "Bridging innovation and technology to transform your business challenges into breakthrough solutions."
             </p>
           </motion.div>
