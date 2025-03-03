@@ -1,4 +1,4 @@
-import { home } from "../data/page_data";
+import { home } from "../data/home_hero_section_data";
 import { createContext, useContext, useEffect, useMemo, useReducer } from "react";
 
 // Reducer function to handle next and previous slide actions
