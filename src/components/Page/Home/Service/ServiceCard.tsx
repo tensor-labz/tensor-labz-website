@@ -41,7 +41,7 @@ const ServiceCard: React.FC<ServiceCardProps> = memo(({ title, text, icon }) => 
           src={icon}
           alt={`${title} Service Icon`}
           className="md:w-28 md:h-28 sm:w-16 sm:h-16 w-full h-full object-cover  sm:object-contain object-center
-          transition-transform group-hover:rotate-6"
+          transition-transform"
         />
       </motion.div>
 
