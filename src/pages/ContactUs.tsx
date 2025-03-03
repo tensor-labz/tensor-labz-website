@@ -212,7 +212,7 @@ const ContactUs: React.FC = memo(() => {
             transition={{ delay: 0.5 }}
             className="text-center"
           >
-            <p className="text-slate-200 italic text-xl max-w-2xl mx-auto font-light">
+            <p className="text-white italic text-xl max-w-2xl mx-auto font-light">
               "Bridging innovation and technology to transform your business challenges into breakthrough solutions."
             </p>
           </motion.div>
