@@ -1,11 +1,11 @@
 import React, { memo, useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import ProjectData from "../../../../data/project_data";
+import {latestProject} from "../../../../data/project_data";
 import LatestProductCard from "./LatestProductCard";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
 
 const MobileTopCarousel: React.FC = memo(() => {
-  const topProjects = ProjectData.filter((project) => project.isTop);
+  const topProjects =latestProject.map((project) => ({title:project?.title??"",description:project?.description??"",imgURL:project?.imgURL??"",...project}));
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const goNext=()=>setCurrentIndex((prev) => (prev + 1) % topProjects.length);
