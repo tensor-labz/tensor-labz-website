@@ -2,6 +2,7 @@ import { memo, useState, FC, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useServiceContext } from "../../../../contexts/ServiceContext";
 import { IoFilterSharp } from "react-icons/io5";
+import  servicesData from "../../../../data/service_data";
 
 const ServiceDropDown: FC = memo(() => {
   const [toggle, setToggle] = useState<boolean>(false);
@@ -26,13 +27,7 @@ const ServiceDropDown: FC = memo(() => {
     };
   }, [toggle]);
 
-  const options = [
-    { title: "Web Development", slug: "web-dev" },
-    { title: "Mobile Apps", slug: "mobile-apps" },
-    { title: "UI/UX Design", slug: "design" },
-    { title: "Cloud Services", slug: "cloud" },
-    { title: "Consulting", slug: "consulting" }
-  ];
+  const options =servicesData.map((service) => ({title:service.title,slug:service.slug}));
 
   // Animation variants for smoother transitions
   const dropdownVariants = {

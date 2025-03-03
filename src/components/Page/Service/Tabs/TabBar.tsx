@@ -1,18 +1,11 @@
 import { memo, FC } from "react";
 import { motion } from "framer-motion";
 import { useServiceContext } from "../../../../contexts/ServiceContext";
-
+import  servicesData from "../../../../data/service_data";
 const TabBar: FC = memo(() => {
   const { activeTab, setActiveTab } = useServiceContext();
 
-  const tabs = [
-    { title: "Web Development", slug: "web-dev" },
-    { title: "Mobile Apps", slug: "mobile-apps" },
-    { title: "UI/UX Design", slug: "design" },
-    { title: "Cloud Services", slug: "cloud" },
-    { title: "Consulting", slug: "consulting" }
-  ];
-
+  const tabs = servicesData.map((service) => ({title:service.title,slug:service.slug}));
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
