@@ -6,7 +6,7 @@ import projectContentData from "./project_content_data";
 const ProjectData:Array<projectProps>=[
     {
         id: 1,
-        tite: "CAD Modeling",
+        title: "CAD Modeling",
         imgURL: img,
         description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla id felis auctor, ultricies purus in, tincidunt nunc. Nulla facilisi. Nullam nec nunc nec nunc.",
         service: [1, 2],
@@ -15,7 +15,7 @@ const ProjectData:Array<projectProps>=[
 ]
 
 ProjectData.map((project)=>{
-    project.slug = project.tite.replace(/\s+/g, '-').toLowerCase()
+    project.slug = project.title.replace(/\s+/g, '-').toLowerCase()
     project.extraImages = ProjectExtraImage.filter((image) => image.id === project.id).map((image) => image.imageURL)
     project.content = projectContentData.find((content) => content.id === project.id)?.content,
         project.service = servicesData.filter((service) => project.service?.includes(service.id)).map((service) => ({ title:service.title,slug:service.slug }))

@@ -2,7 +2,7 @@
 
 type projectProps= {
   id?:number
-    tite:string,
+    title:string,
     imgURL:string,
     description:string,
   service?: Array<any>,

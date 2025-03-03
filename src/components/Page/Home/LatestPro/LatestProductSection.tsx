@@ -2,7 +2,7 @@ import React, { useState, useEffect, memo, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Section from "../../../../components/resuable/Section";
 import LatestProductCard from "./LatestProductCard";
-import ProjectData from "../../../../data/project_data";
+import {latestProject} from "../../../../data/project_data";
 import LatestBanner from "../../../../assets/images/Page/About/bg.jpg";
 import { useDeviceContext } from "../../../../contexts/DeviceContext";
 import TopProductTitle from "./TopProducttitle";
@@ -13,7 +13,7 @@ const LatestProductSection: React.FC = memo(() => {
   const device = useDeviceContext();
   const islarge=useMemo(()=>device==="lg" || device==="2xl" || device==="xl",[device])
   const isMobile=useMemo(()=>device==="xs" || device==="sm" ,[device])
-  const topProjects = ProjectData.filter((project) => project.isTop).slice(0, islarge?3:2);
+  const topProjects = latestProject.slice(0, islarge?3:2);
 
 
   const sectionVariants = {
@@ -104,7 +104,7 @@ const LatestProductSection: React.FC = memo(() => {
                   animate="visible"
                   exit="hidden"
                 >
-                  <LatestProductCard {...{ id: index, ...project }} />
+                  <LatestProductCard description={project?.description??""} imgURL={project?.imgURL??""} title={project?.title??""} />
                 </motion.div>
               ))}
           </AnimatePresence>
