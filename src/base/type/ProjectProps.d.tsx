@@ -1,11 +1,15 @@
+
+
 type projectProps= {
   id?:number
     tite:string,
-    img:string,
+    imgURL:string,
     description:string,
-    service:string|number,
-    tags:Array<String>,
-    isTop?:boolean
+  service?: Array<any>,
+extraImages?:Array<String>,
+  content?: string,
+  youtube_demo?: string,
+    slug?:string
   }
 
   export default projectProps
