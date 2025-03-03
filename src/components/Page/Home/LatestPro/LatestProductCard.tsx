@@ -46,7 +46,7 @@ const LatestProductCard: React.FC<projectProps> = memo((project) => {
         overflow-hidden
       `}
     >
-      <div className="w-full md:w-48">
+      <div className="w-full md:w-64">
         <img
           className="
             md:object-cover object-center
