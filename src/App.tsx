@@ -1,9 +1,9 @@
 import React, { memo, useState, useEffect } from 'react';
 import { BrowserRouter } from "react-router-dom";
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  MdSignalWifiOff, 
-  MdRefresh 
+import {
+  MdSignalWifiOff,
+  MdRefresh
 } from 'react-icons/md';
 
 import AppRoutes from './routes/Approutes';
@@ -26,12 +26,29 @@ const OfflineWarning: React.FC = () => {
       window.removeEventListener('online', handleOnline);
       window.removeEventListener('offline', handleOffline);
     };
+
+  }, []);
+  const getData = async () => {
+    try {
+      const res = await fetch(
+        "https://docs.google.com/spreadsheets/d/e/2PACX-1vRmFKioUp0LypY4N1QlLdAjRt4pOHN0i0SmQ_VKDNmyKSnFLKJdJfqOvKmL3j4u50j-FhiHwO_Lqu6P/pubhtml"
+      );
+      const data = await res.json();
+      const a = Object.keys(data).map((key) => data[key]);
+      console.log(a);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getData();
   }, []);
 
   if (isOnline) return null;
 
   return (
-    <motion.div 
+    <motion.div
       initial={{ opacity: 0, y: -50 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -50 }}
@@ -39,7 +56,7 @@ const OfflineWarning: React.FC = () => {
     >
       <MdSignalWifiOff className="w-6 h-6" />
       <span className="font-semibold">No Internet Connection</span>
-      <button 
+      <button
         onClick={() => window.location.reload()}
         className="ml-4 bg-white text-red-500 px-3 py-1 rounded flex items-center space-x-1 hover:bg-gray-100 transition"
       >
@@ -58,7 +75,7 @@ const App: React.FC = memo(() => {
           <AnimatePresence>
             <OfflineWarning />
           </AnimatePresence>
-          
+
           <Header />
           <main className="flex-grow">
             <AppRoutes />
