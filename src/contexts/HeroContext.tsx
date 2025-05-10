@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState, useReducer, useCallback } from "react";
+import { createContext, useContext, useEffect, useState, useReducer} from "react";
 
 // Define proper types
 interface SliderState {
