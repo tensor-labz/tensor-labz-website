@@ -2,6 +2,7 @@ import React, { memo } from "react";
 import Section from "../components/resuable/Section";
 import Page from "../components/resuable/Page";
 import bg from "../assets/images/Page/About/bg.jpg";
+import { useAppContext } from "../contexts/Api/AppContext";
 
 interface AboutUsSectionProps {
   title: string;
@@ -16,18 +17,19 @@ const AboutUsSectionItem = memo(({ title, description }: AboutUsSectionProps) =>
 ));
 
 const AboutUs: React.FC = memo(() => {
+  const {data}=useAppContext()
   const sectionData = [
     {
       title: "Mission",
-      description: "Empowering businesses through innovative technology and strategic digital transformation.",
+      description:data?.mission || "Mission statement not available.",
     },
     {
       title: "Vision",
-      description: "To be the leading digital partner that turns complex challenges into seamless technological solutions.",
+      description: data?.vision || "Vision statement not available.",
     },
     {
       title: "Values",
-      description: "Innovation, integrity, collaboration, and continuous learning drive everything we do.",
+      description: data?.values || "Values statement not available.",
     },
   ];
 
@@ -61,10 +63,10 @@ const AboutUs: React.FC = memo(() => {
           <div className="absolute inset-0 bg-gradient-to-b from-blue-200/50 via-white/80 to-blue-200/50 z-0" />
           <div className="relative max-w-4xl mx-auto text-center px-6 sm:mt-0 mt-8">
             <h1 className="text-4xl md:text-6xl font-bold mb-6 text-blue-900 shadow-sm">
-              Transforming Visions into Digital Realities
+              {data?.aboutus_title?? "About Us"}
             </h1>
             <p className="text-lg md:text-xl mb-8 text-gray-800 leading-relaxed">
-              We are a passionate team of innovators dedicated to crafting cutting-edge digital solutions that drive business growth and technological advancement.
+            {data?.aboutus_desc?? "About us description not available."}
             </p>
 
             {/* Section Items */}
