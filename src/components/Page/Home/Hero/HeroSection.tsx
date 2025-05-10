@@ -5,7 +5,6 @@ import Section from "../../../../components/resuable/Section";
 import HeroContextProvider from "../../../../contexts/HeroContext";
 import HeroImageSlider from "./HeroImageSlider";
 import HeroKeyPoint from "./HeroKeyPoint";
-import { home } from "../../../../data/home_hero_section_data";
 import bg from "../../../../assets/images/Page/Home/Hero/b1.webp";
 import { useAppContext } from '../../../../contexts/Api/AppContext';
 

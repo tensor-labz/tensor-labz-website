@@ -19,6 +19,7 @@ import Page from "../components/resuable/Page";
 import desktop from "../assets/images/Page/ContactUs/ContactusBgLG.png";
 import mobile from "../assets/images/Page/ContactUs/ContactusBgSM.webp";
 import tablet from "../assets/images/Page/ContactUs/ContactusBgMd.webp";
+import { useAppContext } from '../contexts/Api/AppContext';
 
 
 // Define a type for contact info
@@ -142,33 +143,34 @@ const SocialMediaLinks = memo(() => {
 });
 
 const ContactUs: React.FC = memo(() => {
+  const {data}=useAppContext()
   const contactInfo: Record<string, ContactInfoType> = {
     email: {
       title: "Corporate Email",
-      value: "info@innovatetech.solutions",
+      value: data?.email || "",
       icon: MdEmail,
       linkType: 'email'
     },
     phone: {
       title: "Main Office Line",
-      value: "+1 (650) 123-4567",
+      value: data?.contact_no || "",
       icon: MdPhone,
       linkType: 'phone'
     },
     whatsapp: {
       title: "Business WhatsApp",
-      value: "+1 (650) 987-6543",
+      value: data?.whatsapp || "",
       icon: FaWhatsapp,
       linkType: 'whatsapp'
     },
     address: {
       title: "Headquarters",
-      value: "Innovation Tower, 456 Tech Boulevard, Silicon Valley, CA 94000",
+      value:data?.address || "",
       icon: MdLocationOn
     },
     corporate: {
       title: "Corporate Entity",
-      value: "InnovateTech Solutions Inc.",
+      value:data?.corporate_name || "",
       icon: MdBusinessCenter
     }
   };
