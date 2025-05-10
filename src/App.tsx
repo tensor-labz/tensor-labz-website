@@ -10,6 +10,7 @@ import AppRoutes from './routes/Approutes';
 import DeviceContextProvider from './contexts/DeviceContext';
 import Footer from './components/layout/Footer';
 import Header from './components/layout/Header';
+import AppContextProvider from './contexts/Api/AppContext';
 
 // Offline Warning Component
 const OfflineWarning: React.FC = () => {
@@ -28,22 +29,7 @@ const OfflineWarning: React.FC = () => {
     };
 
   }, []);
-  const getData = async () => {
-    try {
-      const res = await fetch(
-        "https://docs.google.com/spreadsheets/d/e/2PACX-1vRmFKioUp0LypY4N1QlLdAjRt4pOHN0i0SmQ_VKDNmyKSnFLKJdJfqOvKmL3j4u50j-FhiHwO_Lqu6P/pubhtml"
-      );
-      const data = await res.json();
-      const a = Object.keys(data).map((key) => data[key]);
-      console.log(a);
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
-  useEffect(() => {
-    getData();
-  }, []);
 
   if (isOnline) return null;
 
@@ -70,6 +56,7 @@ const OfflineWarning: React.FC = () => {
 const App: React.FC = memo(() => {
   return (
     <DeviceContextProvider>
+      <AppContextProvider>
       <BrowserRouter>
         <div className="min-h-screen flex flex-col">
           <AnimatePresence>
@@ -82,7 +69,8 @@ const App: React.FC = memo(() => {
           </main>
           <Footer />
         </div>
-      </BrowserRouter>
+        </BrowserRouter>
+    </AppContextProvider>
     </DeviceContextProvider>
   );
 });

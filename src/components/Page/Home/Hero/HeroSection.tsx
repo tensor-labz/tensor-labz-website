@@ -7,6 +7,7 @@ import HeroImageSlider from "./HeroImageSlider";
 import HeroKeyPoint from "./HeroKeyPoint";
 import { home } from "../../../../data/home_hero_section_data";
 import bg from "../../../../assets/images/Page/Home/Hero/b1.webp";
+import { useAppContext } from '../../../../contexts/Api/AppContext';
 
 // Define variants with consistent animation durations
 const sectionVariants: Variants = {
@@ -64,7 +65,7 @@ const HeroSection: React.FC = memo(() => {
     threshold: 0.2,
     triggerOnce: true // Prevent repeated animations on scroll
   });
-
+const {data}=useAppContext()
   const controls = useAnimation();
   const imageControls = useAnimation();
   const textControls = useAnimation();
@@ -108,7 +109,7 @@ const HeroSection: React.FC = memo(() => {
             animate={textControls}
             className="hero"
           >
-            {home.hero.title}
+            {data?.hero_title || ""}
           </motion.h1>
 
           <motion.div
