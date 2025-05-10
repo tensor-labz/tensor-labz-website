@@ -44,7 +44,7 @@ const HeroKeyPoint: React.FC = memo(() => {
           exit="exit"
           className="text-2xl lg:text-4xl lg:text-justify text-center font-bold text-blue-900 drop-shadow-lg absolute w-full"
         >
-          {slider.title}
+          {slider?.title}
         </motion.h1>
       </AnimatePresence>
     </div>
