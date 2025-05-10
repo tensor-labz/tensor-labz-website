@@ -1,23 +1,22 @@
 import { createContext, useContext, useEffect, useState, useCallback } from "react";
-import ServiceDataContextProvider from "./ServiceApiContext";
 
 // Define proper types for context
-interface AppContextType {
+interface ServiceDataContextType {
   data: any | null;
   isLoading: boolean;
   error: Error | null;
   refreshData: () => void;
 }
 
-// Creating the AppContext with default values
-const AppContext = createContext<AppContextType>({
+// Creating the ServiceDataContext with default values
+const ServiceDataContext = createContext<ServiceDataContextType>({
   data: null,
   isLoading: false,
   error: null,
   refreshData: () => {}
 });
 
-type AppContextProviderProps = {
+type ServiceDataContextProviderProps = {
   children: React.ReactNode;
 };
 
@@ -32,8 +31,8 @@ const debounce = (fn: Function, delay: number) => {
   };
 };
 
-// AppContextProvider component that provides the context to its children
-export default function AppContextProvider({ children }: AppContextProviderProps) {
+// ServiceDataContextProvider component that provides the context to its children
+export default function ServiceDataContextProvider({ children }: ServiceDataContextProviderProps) {
   const [data, setData] = useState<any>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<Error | null>(null);
@@ -44,7 +43,7 @@ export default function AppContextProvider({ children }: AppContextProviderProps
     setError(null);
     try {
       const response = await fetch(
-        'https://script.google.com/macros/s/AKfycbxvsfZvJNDHQbm2piBoqD863Hpo5v65SzUrnjfvjxH852iH1RFw4j0-YsHiaIWLo-Txyg/exec?sheetName=AppData'
+        'https://script.google.com/macros/s/AKfycbxvsfZvJNDHQbm2piBoqD863Hpo5v65SzUrnjfvjxH852iH1RFw4j0-YsHiaIWLo-Txyg/exec?sheetName=ServiceData'
       );
 
       if (!response.ok) {
@@ -52,7 +51,7 @@ export default function AppContextProvider({ children }: AppContextProviderProps
       }
 
       const result = await response.json();
-      setData(result?.data[0]);
+      setData(result?.data);
     } catch (err) {
       setError(err instanceof Error ? err : new Error('An unknown error occurred'));
       console.error('Error fetching data:', err);
@@ -88,13 +87,11 @@ export default function AppContextProvider({ children }: AppContextProviderProps
   };
 
   return (
-    <AppContext.Provider value={contextValue}>
-      <ServiceDataContextProvider>
-        {children}
-        </ServiceDataContextProvider>
-    </AppContext.Provider>
+    <ServiceDataContext.Provider value={contextValue}>
+      {children}
+    </ServiceDataContext.Provider>
   );
 }
 
-// Custom hook to use AppContext in other components
-export const useAppContext = () => useContext(AppContext);
+// Custom hook to use ServiceDataContext in other components
+export const useServiceDataContext = () => useContext(ServiceDataContext);
