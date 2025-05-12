@@ -5,7 +5,7 @@ import  servicesData from "../../../../data/service_data";
 const TabBar: FC = memo(() => {
   const { activeTab, setActiveTab } = useServiceContext();
 
-  const tabs = servicesData.map((service) => ({title:service.title,slug:service.slug}));
+  const tabs = servicesData.map((service) => ({title:service.service_name,slug:service.slug}));
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}

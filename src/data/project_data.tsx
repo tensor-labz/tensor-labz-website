@@ -18,7 +18,7 @@ ProjectData.map((project)=>{
     project.slug = project.title.replace(/\s+/g, '-').toLowerCase()
     project.extraImages = ProjectExtraImage.filter((image) => image.id === project.id).map((image) => image.imageURL)
     project.content = projectContentData.find((content) => content.id === project.id)?.content,
-        project.service = servicesData.filter((service) => project.service?.includes(service.id)).map((service) => ({ title:service.title,slug:service.slug }))
+        project.service = servicesData.filter((service) => project.service?.includes(service.id)).map((service) => ({ title:service.service_name,slug:service.slug }))
 
     return project
 })

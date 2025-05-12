@@ -27,7 +27,7 @@ const ServiceDropDown: FC = memo(() => {
     };
   }, [toggle]);
 
-  const options =servicesData.map((service) => ({title:service.title,slug:service.slug}));
+  const options =servicesData.map((service) => ({title:service.service_name,slug:service.slug}));
 
   // Animation variants for smoother transitions
   const dropdownVariants = {

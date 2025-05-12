@@ -7,34 +7,34 @@ const servicesData:Array<ServiceCardProps> = [
 {
         id: 1,
         icon: threedprintings,
-        title: "3D Printing",
+        service_name: "3D Printing",
         slug: "3d-printing",
-        text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla id felis auctor, ultricies purus in, tincidunt nunc. Nulla facilisi. Nullam nec nunc nec nunc.",
-        home:true
+        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla id felis auctor, ultricies purus in, tincidunt nunc. Nulla facilisi. Nullam nec nunc nec nunc.",
+        show_in_home:"Yes"
     },
     {
         id: 2,
         icon: cadModel,
-        title: "CAD Modeling",
+        service_name: "CAD Modeling",
         slug: "cad-modeling",
-        text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla id felis auctor, ultricies purus in, tincidunt nunc. Nulla facilisi. Nullam nec nunc nec nunc.",
-        home:true
+        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla id felis auctor, ultricies purus in, tincidunt nunc. Nulla facilisi. Nullam nec nunc nec nunc.",
+        show_in_home:"Yes"
     },
     {
         id: 3,
         icon: iot,
-        title: "Internet of Things",
+        service_name: "Internet of Things",
         slug: "internet-of-things",
-        text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla id felis auctor, ultricies purus in, tincidunt nunc. Nulla facilisi. Nullam nec nunc nec nunc.",
-        home:true
+        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla id felis auctor, ultricies purus in, tincidunt nunc. Nulla facilisi. Nullam nec nunc nec nunc.",
+        show_in_home:"Yes"
     },
     {
         id: 4,
         icon: pcb,
-        title: "PCB Design",
+        service_name: "PCB Design",
         slug: "pcb-design",
-        text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla id felis auctor, ultricies purus in, tincidunt nunc. Nulla facilisi. Nullam nec nunc nec nunc.",
-        home:true
+        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla id felis auctor, ultricies purus in, tincidunt nunc. Nulla facilisi. Nullam nec nunc nec nunc.",
+        show_in_home:"Yes"
     },
     ];
 export default servicesData;
