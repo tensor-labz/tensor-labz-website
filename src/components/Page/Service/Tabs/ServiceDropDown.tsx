@@ -2,14 +2,15 @@ import { memo, useState, FC, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useServiceContext } from "../../../../contexts/ServiceContext";
 import { IoFilterSharp } from "react-icons/io5";
-import  servicesData from "../../../../data/service_data";
+import { useServiceDataContext } from "../../../../contexts/Api/ServiceApiContext";
+import { ServiceCardProps } from "../../../../base/type/ServiceProps.d";
 
 const ServiceDropDown: FC = memo(() => {
   const [toggle, setToggle] = useState<boolean>(false);
   const [showTooltip, setShowTooltip] = useState<boolean>(false);
   const { activeTab, setActiveTab } = useServiceContext();
   const dropdownRef = useRef<HTMLDivElement>(null);
-
+const {service_data,isLoading}=useServiceDataContext()
   // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -27,7 +28,7 @@ const ServiceDropDown: FC = memo(() => {
     };
   }, [toggle]);
 
-  const options =servicesData.map((service) => ({title:service.service_name,slug:service.slug}));
+  const options =isLoading?[]:service_data?.map((service:ServiceCardProps) => ({title:service?.service_name,slug:service?.slug}));
 
   // Animation variants for smoother transitions
   const dropdownVariants = {
@@ -146,7 +147,7 @@ const ServiceDropDown: FC = memo(() => {
               <div className="px-4 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider border-b border-gray-100">
                 Select Service
               </div>
-              {options.map((option, index) => (
+              {options.map((option:any, index:number) => (
                 <motion.button
                   key={option.slug}
                   custom={index}
