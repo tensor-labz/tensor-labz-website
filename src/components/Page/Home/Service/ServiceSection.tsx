@@ -4,6 +4,7 @@ import servicesData from "../../../../data/service_data";
 import { ServiceCardProps } from "../../../../base/type/ServiceProps.d";
 import Section from "../../../resuable/Section";
 import ServiceCard from "./ServiceCard";
+import { useServiceDataContext } from '../../../../contexts/Api/ServiceApiContext';
 
 const ServiceSection: React.FC = memo(() => {
   // Container animation variants for rolling scroll effect
@@ -17,7 +18,7 @@ const ServiceSection: React.FC = memo(() => {
       }
     }
   };
-
+const {service_data}=useServiceDataContext()
   // Card animation variants (bottom to top with rolling effect)
   const cardVariants: Variants = {
     hidden: {
@@ -52,9 +53,9 @@ const ServiceSection: React.FC = memo(() => {
         viewport={{ once: true, amount: 0.1 }}
         className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:px-0 px-2"
       >
-        {servicesData
-          .filter((serv: ServiceCardProps) => serv.home === true)
-          .map((serv: ServiceCardProps, index: number) => (
+        {service_data
+          ?.filter((serv: ServiceCardProps) => serv.home === true)
+          ?.map((serv: ServiceCardProps, index: number) => (
             <motion.div
               key={index}
               variants={cardVariants}

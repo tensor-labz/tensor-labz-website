@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useState, useCallback } from "rea
 
 // Define proper types for context
 interface ServiceDataContextType {
-  data: any | null;
+  service_data: any | null;
   isLoading: boolean;
   error: Error | null;
   refreshData: () => void;
@@ -10,7 +10,7 @@ interface ServiceDataContextType {
 
 // Creating the ServiceDataContext with default values
 const ServiceDataContext = createContext<ServiceDataContextType>({
-  data: null,
+  service_data: null,
   isLoading: false,
   error: null,
   refreshData: () => {}
@@ -33,7 +33,7 @@ const debounce = (fn: Function, delay: number) => {
 
 // ServiceDataContextProvider component that provides the context to its children
 export default function ServiceDataContextProvider({ children }: ServiceDataContextProviderProps) {
-  const [data, setData] = useState<any>(null);
+  const [service_data, setData] = useState<any>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<Error | null>(null);
 
@@ -54,7 +54,7 @@ export default function ServiceDataContextProvider({ children }: ServiceDataCont
       setData(result?.data);
     } catch (err) {
       setError(err instanceof Error ? err : new Error('An unknown error occurred'));
-      console.error('Error fetching data:', err);
+      console.error('Error fetching service_data:', err);
     } finally {
       setIsLoading(false);
     }
@@ -68,19 +68,19 @@ export default function ServiceDataContextProvider({ children }: ServiceDataCont
     [fetchData]
   );
 
-  // Initial data fetch
+  // Initial service_data fetch
   useEffect(() => {
     debouncedFetchData();
   }, [debouncedFetchData]);
 
-  // Function to manually refresh data if needed
+  // Function to manually refresh service_data if needed
   const refreshData = useCallback(() => {
     debouncedFetchData();
   }, [debouncedFetchData]);
 
   // Memoize the context value to prevent unnecessary re-renders
   const contextValue = {
-    data,
+    service_data,
     isLoading,
     error,
     refreshData
