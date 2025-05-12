@@ -80,7 +80,6 @@ export default function HeroContextProvider({
         }
 
         const result = await response.json();
-console.log(result)
         if (result?.data && Array.isArray(result.data)) {
           setSliderData(result.data);
         } else {
