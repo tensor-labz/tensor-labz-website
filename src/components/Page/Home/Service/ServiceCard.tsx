@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { ServiceCardProps } from "../../../../base/type/ServiceProps.d";
 import Card from "../../../../components/resuable/Card";
 
-const ServiceCard: React.FC<ServiceCardProps> = memo(({ title, text, icon }) => {
+const ServiceCard: React.FC<ServiceCardProps> = memo(({ service_name,description, icon }) => {
   return (
     <Card
       className="group relative flex sm:flex-col flex-row justify-between rounded-lg
@@ -39,7 +39,7 @@ const ServiceCard: React.FC<ServiceCardProps> = memo(({ title, text, icon }) => 
       >
         <img
           src={icon}
-          alt={`${title} Service Icon`}
+          alt={`${service_name} Service Icon`}
           className="md:w-28 md:h-28 sm:w-16 sm:h-16 w-full h-full object-cover  sm:object-contain object-center
           transition-transform"
         />
@@ -48,11 +48,11 @@ const ServiceCard: React.FC<ServiceCardProps> = memo(({ title, text, icon }) => 
       {/* Service Details */}
       <div className="sm:w-full w-3/5 text-center">
         <h3 className="md:text-2xl sm:text-lg text-base sm:font-semibold font-bold text-blue-900 sm:mb-3 mb-1">
-          {title}
+          {service_name}
         </h3>
 
         <p className="text-slate-600 md:text-base sm:text-sm text-sm line-clamp-3">
-          {text.length > 150 ? `${text.slice(0, 150)}...` : text}
+          {description?.length > 150 ? `${description?.slice(0, 150)}...` : description}
         </p>
       </div>
     </Card>

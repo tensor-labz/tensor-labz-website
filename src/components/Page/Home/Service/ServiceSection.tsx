@@ -17,7 +17,8 @@ const ServiceSection: React.FC = memo(() => {
       }
     }
   };
-const {service_data}=useServiceDataContext()
+  const { service_data } = useServiceDataContext()
+  console.log(service_data, "service_data")
   // Card animation variants (bottom to top with rolling effect)
   const cardVariants: Variants = {
     hidden: {
@@ -53,7 +54,7 @@ const {service_data}=useServiceDataContext()
         className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:px-0 px-2"
       >
         {service_data
-          ?.filter((serv: ServiceCardProps) => serv.home === true)
+          ?.filter((serv: ServiceCardProps) => serv?.show_in_home ==="Yes")
           ?.map((serv: ServiceCardProps, index: number) => (
             <motion.div
               key={index}
