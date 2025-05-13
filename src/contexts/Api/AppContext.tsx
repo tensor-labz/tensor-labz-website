@@ -2,6 +2,7 @@ import { createContext, useContext, useEffect, useState, useCallback } from "rea
 import ServiceDataContextProvider from "./ServiceApiContext";
 import SocialMediaDataContextProvider from "./SocialMediaContext";
 import ProjectDataContextProvider from "./ProjectDataContext";
+import HeroContextProvider from "contexts/HeroContext";
 
 // Define proper types for context
 interface AppContextType {
@@ -93,8 +94,10 @@ export default function AppContextProvider({ children }: AppContextProviderProps
     <AppContext.Provider value={contextValue}>
       <ServiceDataContextProvider>
         <ProjectDataContextProvider>
-        <SocialMediaDataContextProvider>
-          {children}
+          <SocialMediaDataContextProvider>
+            <HeroContextProvider>
+            {children}
+            </HeroContextProvider>
           </SocialMediaDataContextProvider>
           </ProjectDataContextProvider>
         </ServiceDataContextProvider>

@@ -1,25 +1,18 @@
-import React, { memo, useState, useEffect } from 'react';
+import React, { memo } from 'react';
 import { BrowserRouter } from "react-router-dom";
-import { motion, AnimatePresence } from 'framer-motion';
-import {
-  MdSignalWifiOff,
-  MdRefresh
-} from 'react-icons/md';
-
+import {AnimatePresence } from 'framer-motion';
 import AppRoutes from './routes/Approutes';
-import DeviceContextProvider from './contexts/DeviceContext';
 import Footer from './components/layout/Footer';
 import Header from './components/layout/Header';
-import AppContextProvider from './contexts/Api/AppContext';
+import { RootContextProvider } from './contexts/RootContext';
 import OfflineWarning from './components/OfflineWarning';
 
 
 
 const App: React.FC = memo(() => {
   return (
-    <DeviceContextProvider>
-      <AppContextProvider>
-      <BrowserRouter>
+<RootContextProvider>
+    <BrowserRouter>
         <div className="min-h-screen flex flex-col">
           <AnimatePresence>
             <OfflineWarning />
@@ -31,9 +24,8 @@ const App: React.FC = memo(() => {
           </main>
           <Footer />
         </div>
-        </BrowserRouter>
-    </AppContextProvider>
-    </DeviceContextProvider>
+      </BrowserRouter>
+      </RootContextProvider>
   );
 });
 
