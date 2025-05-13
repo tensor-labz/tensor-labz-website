@@ -44,7 +44,7 @@ export default function AppContextProvider({ children }: AppContextProviderProps
     setError(null);
     try {
       const response = await fetch(
-        'https://script.google.com/macros/s/AKfycbxt6TlkMoMX2sJI2TyLuOwUB1n13o2mfvsLRL0G21-awTRuUoGgqe8OJZof-_TFIcuaSg/exec?sheetName=AppData'
+        'https://script.google.com/macros/s/AKfycbwdBVXLOhb25deUgMuURv4Y7OE11x6OMgsHHWVlj21sz7BHrltuOzjpcl_db2kN9pGgYg/exec?sheetName=AppData'
       );
 
       if (!response.ok) {

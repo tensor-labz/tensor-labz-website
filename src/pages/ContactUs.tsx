@@ -5,7 +5,6 @@ import {
   MdEmail,
   MdPhone,
   MdLocationOn,
-  MdBusinessCenter
 } from 'react-icons/md';
 import {
   FaWhatsapp,
@@ -113,7 +112,7 @@ const SocialMediaLinks = memo(() => {
     {
       icon: FaTwitter,
       href: "https://twitter.com/innovatetech",
-      color: "text-blue-400 hover:text-blue-600"
+      color: "text-blue-600 hover:text-blue-800"
     }
   ];
 
