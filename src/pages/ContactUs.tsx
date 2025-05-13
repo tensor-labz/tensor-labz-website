@@ -19,6 +19,7 @@ import desktop from "../assets/images/Page/ContactUs/ContactusBgLG.png";
 import mobile from "../assets/images/Page/ContactUs/ContactusBgSM.webp";
 import tablet from "../assets/images/Page/ContactUs/ContactusBgMd.webp";
 import { useAppContext } from '../contexts/Api/AppContext';
+import { useSocialMediaDataContext } from '../contexts/Api/SocialMediaContext';
 
 
 // Define a type for contact info
@@ -88,35 +89,46 @@ const ContactInfoItem = memo(({
 
 // Social Media Links Component
 const SocialMediaLinks = memo(() => {
-  const socialLinks = [
+  const {social_media_data,isLoading}=useSocialMediaDataContext()
+  const socialMediaLinks = [
     {
       icon: FaLinkedin,
-      href: "https://www.linkedin.com/company/innovatetech",
-      color: "text-blue-600 hover:text-blue-800"
+      social_media:"Linkedin",
+      color: "text-blue-600 hover:text-blue-800",
     },
     {
       icon: FaFacebook,
-      href: "https://www.facebook.com/innovatetech",
-      color: "text-blue-700 hover:text-blue-900"
+      social_media:"FaceBook",
+      color: "text-blue-700 hover:text-blue-900",
+
     },
     {
       icon: FaInstagram,
-      href: "https://www.instagram.com/innovatetech",
-      color: "text-pink-600 hover:text-pink-800"
+      social_media:"Instragram",
+      color: "text-pink-600 hover:text-pink-800",
+
     },
     {
       icon: FaYoutube,
-      href: "https://www.youtube.com/c/innovatetech",
-      color: "text-red-600 hover:text-red-800"
+      social_media:"Youtube",
+      color: "text-red-600 hover:text-red-800",
     },
     {
       icon: FaTwitter,
-      href: "https://twitter.com/innovatetech",
-      color: "text-blue-600 hover:text-blue-800"
+      social_media:"Twitter",
+      color: "text-blue-600 hover:text-blue-800",
+
     }
   ];
+  const socialLinks = social_media_data?.map((social:any) => {
+    const socialLink = socialMediaLinks.find(link => link.social_media === social.social_media);
+    return {
+      ...socialLink,
+      href: social?.value,
+    };
+  }) || [];
 
-  return (
+  return isLoading?(<div>...</div>): (
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
@@ -126,8 +138,8 @@ const SocialMediaLinks = memo(() => {
       <h3 className="text-xl font-semibold text-slate-50 mr-6 self-center">
         Follow Us
       </h3>
-      <div className="flex justify-center space-x-6 md:mt-0 mt-6">
-      {socialLinks.map((social, index) => (
+      <div className="flex justify-center items-center  sm:space-x-6 md:mt-0 mt-6">
+      {socialLinks.map((social:any, index:number) => (
         <a
           key={index}
           href={social.href}
