@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState, useCallback } from "react";
 import ServiceDataContextProvider from "./ServiceApiContext";
 import SocialMediaDataContextProvider from "./SocialMediaContext";
+import ProjectDataContextProvider from "./ProjectDataContext";
 
 // Define proper types for context
 interface AppContextType {
@@ -91,9 +92,11 @@ export default function AppContextProvider({ children }: AppContextProviderProps
   return (
     <AppContext.Provider value={contextValue}>
       <ServiceDataContextProvider>
+        <ProjectDataContextProvider>
         <SocialMediaDataContextProvider>
           {children}
           </SocialMediaDataContextProvider>
+          </ProjectDataContextProvider>
         </ServiceDataContextProvider>
     </AppContext.Provider>
   );
