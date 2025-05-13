@@ -1,11 +1,12 @@
 import { memo, FC } from "react";
 import { motion } from "framer-motion";
 import { useServiceContext } from "../../../../contexts/ServiceContext";
-import  servicesData from "../../../../data/service_data";
+import { useServiceDataContext } from "../../../../contexts/Api/ServiceApiContext";
+import { ServiceCardProps } from "../../../../base/type/ServiceProps.d";
 const TabBar: FC = memo(() => {
   const { activeTab, setActiveTab } = useServiceContext();
-
-  const tabs = servicesData.map((service) => ({title:service.service_name,slug:service.slug}));
+  const {service_data,isLoading}=useServiceDataContext()
+  const tabs = isLoading?[]:service_data?.map((service:ServiceCardProps) => ({title:service?.service_name,slug:service?.slug}));
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -14,7 +15,7 @@ const TabBar: FC = memo(() => {
       className="bg-white rounded-lg hidden md:block  overflow-x-auto"
     >
       <div className="flex space-x-1 p-1 min-w-full">
-        {tabs.map((tab) => {
+        {tabs?.map((tab:any) => {
           const isActive = activeTab?.slug === tab?.slug;
           return (
             <motion.button

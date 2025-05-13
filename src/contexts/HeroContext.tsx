@@ -73,7 +73,7 @@ export default function HeroContextProvider({
     const fetchSliderData = async () => {
       setIsLoading(true);
       try {
-        const response = await fetch("https://script.google.com/macros/s/AKfycbz0BNE5xIcE5A23-oLYh0f0r2uut3tqNd2zmG4kSZcZpd_KZnMqiUYVyrVatnErEZb4mw/exec?sheetName=HeroData");
+        const response = await fetch("https://script.google.com/macros/s/AKfycbxt6TlkMoMX2sJI2TyLuOwUB1n13o2mfvsLRL0G21-awTRuUoGgqe8OJZof-_TFIcuaSg/exec?sheetName=HeroData");
 
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
