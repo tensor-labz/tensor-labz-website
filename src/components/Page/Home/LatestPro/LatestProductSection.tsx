@@ -2,20 +2,21 @@ import React, { useState, useEffect, memo, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Section from "../../../../components/resuable/Section";
 import LatestProductCard from "./LatestProductCard";
-import {latestProject} from "../../../../data/project_data";
 import LatestBanner from "../../../../assets/images/Page/About/bg.jpg";
 import { useDeviceContext } from "../../../../contexts/DeviceContext";
 import TopProductTitle from "./TopProducttitle";
 import MobileTopCarousel from "./MobileTopCarsaole";
+import { useProjectDataContext } from "../../../../contexts/Api/ProjectDataContext";
 
 const LatestProductSection: React.FC = memo(() => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const {project_data } = useProjectDataContext();
   const device = useDeviceContext();
   const islarge=useMemo(()=>device==="lg" || device==="2xl" || device==="xl",[device])
   const isMobile=useMemo(()=>device==="xs" || device==="sm" ,[device])
-  const topProjects = latestProject.slice(0, islarge?3:2);
+  const topProjects =project_data?.filter((data:any)=> data.IsTop==="Yes").slice(0, islarge?3:2);
 
-
+console.log("topProjects",project_data)
   const sectionVariants = {
     hidden: { opacity: 0, y: 50 },
     visible: {
@@ -52,7 +53,7 @@ const LatestProductSection: React.FC = memo(() => {
       setCurrentIndex((prev) => (prev + 1) % topProjects.length);
     }, 7000);
     return () => clearInterval(interval);
-  }, [topProjects.length]);
+  }, [topProjects?.length]);
 
   return (
     <Section className="min-h-screen  lg:container realtive  flex flex-col items-center justify-center">
@@ -93,8 +94,8 @@ const LatestProductSection: React.FC = memo(() => {
         {isMobile?(<MobileTopCarousel/>):(  <motion.div className="flex lg:w-3/5 w-full flex-col gap-6 h-full overflow-hidden lg:p-0 px-8 py-4">
           <AnimatePresence>
             {topProjects
-              .slice(currentIndex, currentIndex + (islarge?3:2))
-              .map((project, index) => (
+              ?.slice(currentIndex, currentIndex + (islarge?3:2))
+              ?.map((project:any, index:number) => (
                 <motion.div
                   className={index % 2 === 0 ? "self-start" : "self-end"}
                   key={index}
@@ -104,7 +105,7 @@ const LatestProductSection: React.FC = memo(() => {
                   animate="visible"
                   exit="hidden"
                 >
-                  <LatestProductCard description={project?.description??""} imgURL={project?.imgURL??""} title={project?.title??""} />
+                  <LatestProductCard description={project?.description??""} imageURL={project?.imageURL??""} title={project?.title??""} />
                 </motion.div>
               ))}
           </AnimatePresence>

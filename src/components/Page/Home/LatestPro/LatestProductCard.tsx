@@ -28,7 +28,7 @@ const LatestProductCard: React.FC<projectProps> = memo((project) => {
       damping: 20
     }
   };
-
+console.log("project",project)
   return (
     <Card
       animation={customAnimation}
@@ -60,7 +60,7 @@ const LatestProductCard: React.FC<projectProps> = memo((project) => {
             duration-300
             group-hover:scale-105
           "
-          src={project.imgURL}
+          src={project.imageURL}
           alt="Project Illustration"
         />
       </div>
