@@ -1,6 +1,7 @@
 import React, { memo } from 'react';
 import Card from "../../../../components/resuable/Card";
 import projectProps from "../../../../base/type/ProjectProps.d";
+import { extractGoogleDriveFileId } from '../../../../base/hooks/google';
 
 
 const LatestProductCard: React.FC<projectProps> = memo((project) => {
@@ -60,8 +61,8 @@ console.log("project",project)
             duration-300
             group-hover:scale-105
           "
-          src={project.imageURL}
-          alt="Project Illustration"
+          src={`https://drive.google.com/thumbnail?id=${extractGoogleDriveFileId(project?.imageURL)}`}
+          alt="https://drive.google.com/uc?export=view&id=1dfL80PcYk1ewfuHI_FffHP7qlCBTtGvl"
         />
       </div>
       <div className="flex flex-col justify-between p-4 leading-normal">

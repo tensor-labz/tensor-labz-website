@@ -6,8 +6,6 @@ import HeroImageSlider from "./HeroImageSlider";
 import HeroKeyPoint from "./HeroKeyPoint";
 import bg from "../../../../assets/images/Page/Home/Hero/b1.webp";
 import { useAppContext } from '../../../../contexts/Api/AppContext';
-import LoadingHeroPlaceholder from './LoadingPlaceHolder';
-
 // Define variants with consistent animation durations
 const sectionVariants: Variants = {
   hidden: {
@@ -64,7 +62,7 @@ const HeroSection: React.FC = memo(() => {
     threshold: 0.2,
     triggerOnce: true // Prevent repeated animations on scroll
   });
-const {data,isLoading}=useAppContext()
+const {data}=useAppContext()
   const controls = useAnimation();
   const imageControls = useAnimation();
   const textControls = useAnimation();

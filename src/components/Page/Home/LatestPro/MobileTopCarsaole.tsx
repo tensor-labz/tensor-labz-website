@@ -89,7 +89,7 @@ const MobileTopCarousel: React.FC = memo(() => {
       {/* Indicators */}
       {topProjects.length > 1 && (
         <div className="flex justify-center gap-2 mt-4">
-          {topProjects.map((_, index) => (
+          {topProjects.map((_:any, index:number) => (
             <motion.div
               key={index}
               className={`h-1 rounded-full cursor-pointer ${
