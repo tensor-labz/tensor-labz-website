@@ -95,7 +95,7 @@ export default function AppContextProvider({ children }: AppContextProviderProps
       <ServiceDataContextProvider>
         <ProjectDataContextProvider>
           <SocialMediaDataContextProvider>
-            <HeroContextProvider>
+            <HeroContextProvider delay={5000}>
             {children}
             </HeroContextProvider>
           </SocialMediaDataContextProvider>

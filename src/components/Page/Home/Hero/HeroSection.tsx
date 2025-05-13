@@ -2,11 +2,11 @@ import React, { memo, useCallback } from 'react';
 import { motion, useAnimation, Variants } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import Section from "../../../../components/resuable/Section";
-import HeroContextProvider from "../../../../contexts/HeroContext";
 import HeroImageSlider from "./HeroImageSlider";
 import HeroKeyPoint from "./HeroKeyPoint";
 import bg from "../../../../assets/images/Page/Home/Hero/b1.webp";
 import { useAppContext } from '../../../../contexts/Api/AppContext';
+import LoadingHeroPlaceholder from './LoadingPlaceHolder';
 
 // Define variants with consistent animation durations
 const sectionVariants: Variants = {
@@ -64,7 +64,7 @@ const HeroSection: React.FC = memo(() => {
     threshold: 0.2,
     triggerOnce: true // Prevent repeated animations on scroll
   });
-const {data}=useAppContext()
+const {data,isLoading}=useAppContext()
   const controls = useAnimation();
   const imageControls = useAnimation();
   const textControls = useAnimation();
@@ -82,8 +82,8 @@ const {data}=useAppContext()
     triggerAnimations();
   }, [inView, triggerAnimations]);
 
+  // if(isLoading) return <LoadingHeroPlaceholder/>
   return (
-    <HeroContextProvider delay={5000}>
       <Section
         ref={ref}
         className="relative md:bg-gradient-to-br from-white to-sky-50 dark:from-gray-800 dark:to-gray-900
@@ -133,7 +133,6 @@ const {data}=useAppContext()
           <HeroImageSlider />
         </motion.div>
       </Section>
-    </HeroContextProvider>
   );
 });
 

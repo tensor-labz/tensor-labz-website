@@ -50,7 +50,7 @@ console.log("topProjects",project_data)
   // Auto-slide logic for projects
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % topProjects.length);
+      setCurrentIndex((prev) => (prev + 1) % topProjects?.length);
     }, 7000);
     return () => clearInterval(interval);
   }, [topProjects?.length]);
