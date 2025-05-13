@@ -58,27 +58,30 @@ const ContactInfoItem = memo(({
       initial={{ opacity: 0, y: 50 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="bg-white border border-blue-100 rounded-2xl p-6 flex items-center space-x-6
+      className="bg-white border border-blue-100 rounded-2xl sm:p-6 p-4 flex sm:flex-row flex-col items-center justify-center sm:space-x-6
       hover:shadow-xl hover:border-blue-200 transition-all duration-300 group"
     >
       <div className="bg-blue-50 p-3 rounded-full group-hover:bg-blue-100 transition-colors">
-        <Icon className="w-10 h-10 text-blue-600 group-hover:text-blue-700" />
+        <Icon className="sm:w-10 sm:h-10 w-7 h-7 text-blue-600 group-hover:text-blue-700" />
 
       </div>
-      <div className="flex-grow">
-        <h3 className="text-lg font-semibold text-blue-900 mb-1">{title}</h3>
+      <div className="flex-grow w-full sm:w-auto">
+
+  <div className="flex-grow w-full sm:w-auto sm:text-justify text-center">
+        <h3 className="text-base sm:text-lg font-semibold text-blue-900 mb-1">{title}</h3>
         {link ? (
           <a
             href={getLinkHref()}
             target={linkType === 'whatsapp' ? '_blank' : undefined}
             rel={linkType === 'whatsapp' ? 'noopener noreferrer' : undefined}
-            className="text-blue-700 hover:text-blue-900 transition-colors text-sm"
+            className="text-blue-700 hover:text-blue-900 transition-colors text-xs sm:text-sm break-words inline-block w-full"
           >
             {value}
           </a>
         ) : (
-          <p className="text-gray-600 text-sm">{value}</p>
+          <p className="text-gray-600 text-xs sm:text-sm break-words w-full">{value}</p>
         )}
+      </div>
       </div>
     </motion.div>
   );
@@ -167,11 +170,6 @@ const ContactUs: React.FC = memo(() => {
       title: "Headquarters",
       value:data?.address || "",
       icon: MdLocationOn
-    },
-    corporate: {
-      title: "Corporate Entity",
-      value:data?.corporate_name || "",
-      icon: MdBusinessCenter
     }
   };
 
@@ -185,12 +183,12 @@ const ContactUs: React.FC = memo(() => {
         </picture>
    {/* Global overlay for better content visibility */}
         {/* <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/20 to-white" /> */}
-        <div className="max-w-4xl w-full space-y-10 relative  p-8 rounded-2xl shadow-2xl backdrop-blur-sm mt-10">
+        <div className="max-w-4xl w-full space-y-10 relative  p-8 rounded-2xl shadow-2xl backdrop-blur-sm mt-10 flex items-center justify-center flex-col">
 
           <motion.h1
             initial={{ opacity: 0, y: -50 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-5xl font-bold text-center text-white mb-12"
+            className="md:text-5xl text-3xl font-bold text-center text-white md:mb-12 mb-6"
           >
             Contact InnovateTech
           </motion.h1>
