@@ -36,7 +36,7 @@ const NavItem: React.FC<NavItemProps> = memo(({ icon, nav, to, onNavigate }) => 
 
 const MobileNavigation: React.FC = memo(() => {
   const [isOpen, setIsOpen] = useState(false);
-
+  const navigate = useNavigate();
   const toggleDrawer = () => setIsOpen(!isOpen);
 
   const closeDrawer = () => setIsOpen(false);
@@ -82,6 +82,10 @@ const MobileNavigation: React.FC = memo(() => {
                   src={logo}
                   alt="Logo"
                   className="h-10 w-auto object-contain"
+                  onClick={() => {
+                    navigate("/");
+                    closeDrawer();
+                  }}
                 />
                 <motion.button
                   whileTap={{ scale: 0.9 }}

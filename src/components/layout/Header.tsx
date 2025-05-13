@@ -5,6 +5,7 @@ import logo from '../../assets/images/logo.png';
 import useScroll from '../../base/hooks/useScroll';
 import NavBar from './NavBar';
 import MobileNavigation from './MobileNavigation';
+import { Link } from 'react-router-dom';
 
 
 // Header Component
@@ -26,6 +27,8 @@ const Header: React.FC<{ className?: string }> = memo(({ className = '' }) => {
       }}
       className={`fixed top-0 left-0 w-full md:px-6 px-3 sm:py-1 py-2 flex justify-between items-center z-50 ${className}`}
     >
+      <Link to="/" className="flex items-center">
+
       <motion.img
         src={logo}
         alt="Logo"
@@ -35,6 +38,8 @@ const Header: React.FC<{ className?: string }> = memo(({ className = '' }) => {
         transition={{ delay: 0.2, type: 'spring', stiffness: 300 }}
         className="md:h-12 h-8 object-contain"
       />
+      </Link>
+
 
       <NavBar />
       <MobileNavigation/>
