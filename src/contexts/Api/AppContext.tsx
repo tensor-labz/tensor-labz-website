@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useState, useCallback } from "rea
 import ServiceDataContextProvider from "./ServiceApiContext";
 import SocialMediaDataContextProvider from "./SocialMediaContext";
 import ProjectDataContextProvider from "./ProjectDataContext";
-import HeroContextProvider from "contexts/HeroContext";
+import HeroContextProvider from "../HeroContext";
 
 // Define proper types for context
 interface AppContextType {

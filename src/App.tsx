@@ -1,11 +1,9 @@
 import React, { memo } from 'react';
 import { BrowserRouter } from "react-router-dom";
 import {AnimatePresence } from 'framer-motion';
-import AppRoutes from './routes/Approutes';
-import Footer from './components/layout/Footer';
-import Header from './components/layout/Header';
 import { RootContextProvider } from './contexts/RootContext';
 import OfflineWarning from './components/OfflineWarning';
+import Layout from './components/layout/Layout';
 
 
 
@@ -17,12 +15,8 @@ const App: React.FC = memo(() => {
           <AnimatePresence>
             <OfflineWarning />
           </AnimatePresence>
+<Layout/>
 
-          <Header />
-          <main className="flex-grow">
-            <AppRoutes />
-          </main>
-          <Footer />
         </div>
       </BrowserRouter>
       </RootContextProvider>

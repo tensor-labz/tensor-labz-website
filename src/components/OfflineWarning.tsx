@@ -44,5 +44,5 @@ const OfflineWarning: React.FC =memo( () => {
       </motion.div>
     );
   });
-  App.displayName = 'OfflineWarning';
+ OfflineWarning.displayName = 'OfflineWarning';
 export default OfflineWarning;
