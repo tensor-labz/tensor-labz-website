@@ -47,13 +47,13 @@ console.log("project",project)
         overflow-hidden
       `}
     >
-      <div className="w-full md:w-64">
+      <div className="w-full md:w-1/5 md:h-full bg-red">
         <img
           className="
             md:object-cover object-center
             w-full
             h-[250px]
-            md:h-auto
+            md:h-full
             rounded-t-lg
             md:rounded-none
             md:rounded-s-lg
@@ -62,10 +62,10 @@ console.log("project",project)
             group-hover:scale-105
           "
           src={`https://drive.google.com/thumbnail?id=${extractGoogleDriveFileId(project?.imageURL)}`}
-          alt="https://drive.google.com/uc?export=view&id=1dfL80PcYk1ewfuHI_FffHP7qlCBTtGvl"
+          alt={`https://drive.google.com/thumbnail?id=${extractGoogleDriveFileId(project?.imageURL)}`}
         />
       </div>
-      <div className="flex flex-col justify-between p-4 leading-normal">
+      <div className="sm:flex-grow flex flex-col justify-between p-4 leading-normal">
         <h5 className="
           mb-2
           xs:text-2xl

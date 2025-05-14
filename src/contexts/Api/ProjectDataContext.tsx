@@ -55,7 +55,7 @@ export default function ProjectDataContextProvider({ children }: ProjectDataCont
     }),
     [project_data, isLoading, error]
   );
-
+console.log(project_data)
 
   return (
     <ProjectDataContext.Provider value={contextValue}>

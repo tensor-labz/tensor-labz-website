@@ -10,7 +10,7 @@ const ProjectData:Array<projectProps>=[
         imageURL: img,
         description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla id felis auctor, ultricies purus in, tincidunt nunc. Nulla facilisi. Nullam nec nunc nec nunc.",
         service: [1, 2],
-        youtube_demo:""
+        vedio_demo:""
 }
 ]
 

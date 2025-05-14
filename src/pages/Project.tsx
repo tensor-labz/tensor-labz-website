@@ -135,7 +135,7 @@ const ProjectPage = () => {
               <h2 className="text-2xl font-bold mb-4">Video Demo</h2>
               <div className="aspect-w-16 aspect-h-9">
                 <iframe
-                  src={projectData.youtubeDemo}
+                  src={projectData?.vedio_demo}
                   title="YouTube Demo"
                   className="w-full h-64 md:h-96 rounded-lg"
                   allowFullScreen

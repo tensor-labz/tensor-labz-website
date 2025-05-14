@@ -8,7 +8,7 @@ type projectProps= {
   service?: Array<any>,
 extraImages?:Array<String>,
   content?: string,
-  youtube_demo?: string,
+  vedio_demo?: string,
     slug?:string
   }
 
