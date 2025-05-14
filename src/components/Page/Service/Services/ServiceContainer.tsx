@@ -22,6 +22,7 @@ function ServiceContainer() {
                             imageURL={`https://drive.google.com/thumbnail?id=${extractGoogleDriveFileId(pro?.imageURL)}`}
                             services={pro?.tags?.split(',')?.map((tag:string) => tag.trim())}
                             id={index}
+                            slug={pro.slug}
                         />
                     ))
                 }

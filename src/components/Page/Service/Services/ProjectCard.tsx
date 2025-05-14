@@ -10,16 +10,17 @@ interface ProjectCardProps {
   imageURL: string;
   description: string;
   services: string[];
+  slug: string;
   onExplore?: () => void;
 }
 
 // Create the component
 const ProjectCard: React.FC<ProjectCardProps> = ({
-  id,
   title,
   imageURL,
   description,
   services,
+  slug,
   onExplore
 }) => {
   const navigate = useNavigate();
@@ -42,7 +43,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
       onExplore();
     } else {
       // Redirect to the project detail page
-      navigate(`/project/${id}`);
+      navigate(`/project/${slug}`);
     }
   };
 

@@ -1,65 +1,41 @@
-import  { useState } from 'react';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { FaGithub, FaExternalLinkAlt,  FaCode } from 'react-icons/fa';
+import { useParams } from 'react-router-dom';
+import { useProjectDataContext } from '../contexts/Api/ProjectDataContext';
+import { extractGoogleDriveFileId } from '../base/hooks/google';
 
 const ProjectPage = () => {
-  // Dummy data
-  const projectData = {
-    title: "Modern E-Commerce Dashboard",
-    content: `
-      <h3>Overview</h3>
-      <p>A comprehensive dashboard solution for e-commerce businesses to track sales, inventory, and customer analytics in real-time.</p>
-
-      <h3>Key Features</h3>
-      <ul>
-        <li>Real-time sales monitoring with interactive charts</li>
-        <li>Inventory management system with low-stock alerts</li>
-        <li>Customer behavior analytics and segmentation</li>
-        <li>Performance reports with exportable data</li>
-        <li>Mobile responsive design for on-the-go monitoring</li>
-      </ul>
-
-      <h3>Technologies Used</h3>
-      <p>This project was built using React.js, Redux for state management, Chart.js for data visualization, and a Node.js backend with MongoDB.</p>
-    `,
-    mainImage: "https://www.exin.com/app/uploads/2023/02/Automation-image-for-blog-article.jpg",
-    services: [
-      "UI/UX Design",
-      "Frontend Development",
-      "Backend Integration",
-      "Data Visualization",
-      "Performance Optimization"
-    ],
-    links: [
-      { name: "GitHub", url: "#", icon: <FaGithub /> },
-      { name: "Live Demo", url: "#", icon: <FaExternalLinkAlt /> },
-      { name: "Source Code", url: "#", icon: <FaCode /> }
-    ],
-    youtubeDemo: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-    images: [
-      "https://www.exin.com/app/uploads/2023/02/Automation-image-for-blog-article.jpg",
-      "https://www.exin.com/app/uploads/2023/02/Automation-image-for-blog-article.jpg",
-      "https://www.exin.com/app/uploads/2023/02/Automation-image-for-blog-article.jpg",
-      "https://www.exin.com/app/uploads/2023/02/Automation-image-for-blog-article.jpg"
-    ]
-  };
+  const { slug } = useParams();
+  const { project_data, isLoading } = useProjectDataContext();
+  const projectData = project_data?.find((data:any) => data.slug === slug);
 
   // State for image slider on mobile
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
+  // Get sample images array safely
+  const sampleImages = projectData?.sample_images?.split(",") || [];
+
   // Handle next image
   const nextImage = () => {
     setCurrentImageIndex((prevIndex) =>
-      prevIndex === projectData.images.length - 1 ? 0 : prevIndex + 1
+      prevIndex === sampleImages.length - 1 ? 0 : prevIndex + 1
     );
   };
 
   // Handle previous image
   const prevImage = () => {
     setCurrentImageIndex((prevIndex) =>
-      prevIndex === 0 ? projectData.images.length - 1 : prevIndex - 1
+      prevIndex === 0 ? sampleImages.length - 1 : prevIndex - 1
     );
   };
+
+  if (isLoading) {
+    return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
+  }
+
+  if (!projectData) {
+    return <div className="min-h-screen flex items-center justify-center">Project not found</div>;
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -86,12 +62,12 @@ const ProjectPage = () => {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.4, duration: 0.8 }}
           >
-            {projectData.services.map((service, index) => (
+            {projectData.tags?.split(",").map((tag:string, index:number) => (
               <span
                 key={index}
                 className="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm"
               >
-                {service}
+                {tag.trim()}
               </span>
             ))}
           </motion.div>
@@ -109,65 +85,47 @@ const ProjectPage = () => {
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5 }}
             >
-              <img
-                src={projectData.mainImage}
-                alt={projectData.title}
-                className="w-full h-auto"
-              />
+              {projectData.imageURL && (
+                <img
+                  src={`https://drive.google.com/thumbnail?id=${extractGoogleDriveFileId(projectData.imageURL)}`}
+                  alt={projectData?.title}
+                  className="w-full h-auto"
+                />
+              )}
             </motion.div>
 
             {/* Content */}
             <motion.div
-              className="prose max-w-none mb-10"
+              className="project-content max-w-none mb-10"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3, duration: 0.5 }}
-              dangerouslySetInnerHTML={{ __html: projectData.content }}
+              dangerouslySetInnerHTML={{ __html: projectData.content || '' }}
             />
 
             {/* YouTube Demo */}
-            <motion.div
-              className="rounded-xl overflow-hidden shadow-lg mb-10"
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5, duration: 0.5 }}
-            >
-              <h2 className="text-2xl font-bold mb-4">Video Demo</h2>
-              <div className="aspect-w-16 aspect-h-9">
-                <iframe
-                  src={projectData?.vedio_demo}
-                  title="YouTube Demo"
-                  className="w-full h-64 md:h-96 rounded-lg"
-                  allowFullScreen
-                ></iframe>
-              </div>
-            </motion.div>
+            {projectData.vedio_demo && (
+              <motion.div
+                className="rounded-xl overflow-hidden shadow-lg mb-10"
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.5, duration: 0.5 }}
+              >
+                <h2 className="text-2xl font-bold mb-4">Video Demo</h2>
+                <div className="aspect-w-16 aspect-h-9">
+                  <iframe
+                    src={projectData.vedio_demo}
+                    title="YouTube Demo"
+                    className="w-full h-64 md:h-96 rounded-lg"
+                    allowFullScreen
+                  ></iframe>
+                </div>
+              </motion.div>
+            )}
           </div>
 
           {/* Sidebar */}
           <div className="lg:col-span-1">
-            {/* Project Links */}
-            <motion.div
-              className="bg-white rounded-xl shadow-lg p-6 mb-10"
-              initial={{ opacity: 0, x: 50 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.2, duration: 0.5 }}
-            >
-              <h2 className="text-2xl font-bold mb-4">Project Links</h2>
-              <div className="space-y-4">
-                {projectData.links.map((link, index) => (
-                  <a
-                    key={index}
-                    href={link.url}
-                    className="flex items-center gap-3 text-blue-600 hover:text-blue-800 transition-colors p-2 border-b border-gray-100 last:border-0"
-                  >
-                    <span className="text-xl">{link.icon}</span>
-                    <span>{link.name}</span>
-                  </a>
-                ))}
-              </div>
-            </motion.div>
-
             {/* Additional Images - Desktop Grid */}
             <div className="hidden md:block">
               <motion.div
@@ -177,14 +135,18 @@ const ProjectPage = () => {
               >
                 <h2 className="text-2xl font-bold mb-4">Project Gallery</h2>
                 <div className="grid grid-cols-2 gap-4">
-                  {projectData.images.map((image, index) => (
+                  {sampleImages.map((image:string, index:number) => (
                     <motion.div
                       key={index}
                       className="rounded-lg overflow-hidden shadow-md"
                       whileHover={{ scale: 1.05 }}
                       transition={{ duration: 0.3 }}
                     >
-                      <img src={image} alt={`Project image ${index + 1}`} className="w-full h-auto" />
+                      <img
+                        src={`https://drive.google.com/thumbnail?id=${extractGoogleDriveFileId(image)}`}
+                        alt={`Project image ${index + 1}`}
+                        className="w-full h-auto"
+                      />
                     </motion.div>
                   ))}
                 </div>
@@ -200,39 +162,43 @@ const ProjectPage = () => {
               >
                 <h2 className="text-2xl font-bold mb-4">Project Gallery</h2>
                 <div className="relative">
-                  <motion.div
-                    className="rounded-lg overflow-hidden shadow-md"
-                    key={currentImageIndex}
-                    initial={{ opacity: 0.5, x: 100 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0.5, x: -100 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    <img
-                      src={projectData.images[currentImageIndex]}
-                      alt={`Project image ${currentImageIndex + 1}`}
-                      className="w-full h-auto"
-                    />
-                  </motion.div>
+                  {sampleImages.length > 0 && (
+                    <motion.div
+                      className="rounded-lg overflow-hidden shadow-md"
+                      key={currentImageIndex}
+                      initial={{ opacity: 0.5, x: 100 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0.5, x: -100 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      <img
+                        src={`https://drive.google.com/thumbnail?id=${extractGoogleDriveFileId(sampleImages[currentImageIndex])}`}
+                        alt={`Project image ${currentImageIndex + 1}`}
+                        className="w-full h-auto"
+                      />
+                    </motion.div>
+                  )}
 
                   {/* Navigation Controls */}
-                  <div className="flex justify-between mt-4">
-                    <button
-                      onClick={prevImage}
-                      className="bg-blue-600 text-white rounded-full w-10 h-10 flex items-center justify-center shadow-md hover:bg-blue-700"
-                    >
-                      &larr;
-                    </button>
-                    <span className="text-gray-600">
-                      {currentImageIndex + 1} / {projectData.images.length}
-                    </span>
-                    <button
-                      onClick={nextImage}
-                      className="bg-blue-600 text-white rounded-full w-10 h-10 flex items-center justify-center shadow-md hover:bg-blue-700"
-                    >
-                      &rarr;
-                    </button>
-                  </div>
+                  {sampleImages.length > 1 && (
+                    <div className="flex justify-between mt-4">
+                      <button
+                        onClick={prevImage}
+                        className="bg-blue-600 text-white rounded-full w-10 h-10 flex items-center justify-center shadow-md hover:bg-blue-700"
+                      >
+                        &larr;
+                      </button>
+                      <span className="text-gray-600">
+                        {currentImageIndex + 1} / {sampleImages.length}
+                      </span>
+                      <button
+                        onClick={nextImage}
+                        className="bg-blue-600 text-white rounded-full w-10 h-10 flex items-center justify-center shadow-md hover:bg-blue-700"
+                      >
+                        &rarr;
+                      </button>
+                    </div>
+                  )}
                 </div>
               </motion.div>
             </div>

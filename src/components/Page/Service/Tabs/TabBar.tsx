@@ -6,7 +6,7 @@ import { ServiceCardProps } from "../../../../base/type/ServiceProps.d";
 const TabBar: FC = memo(() => {
   const { activeTab, setActiveTab } = useServiceContext();
   const {service_data,isLoading}=useServiceDataContext()
-  const tabs = isLoading?[]:service_data?.map((service:ServiceCardProps) => ({title:service?.service_name,slug:service?.slug}));
+  const tabs = isLoading?[]:[{title:"All"},...service_data?.map((service:ServiceCardProps) => ({title:service?.service_name,slug:service?.slug}))];
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}

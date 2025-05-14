@@ -17,7 +17,7 @@ export default function AppRoutes() {
         <Route path="/about-us" element={<AboutUs/>} />
         <Route path="/contact-us" element={<ContactUs/>} />
         <Route path="/services" element={<Services/>} />
-        <Route path="/project/:projectId" element={<Project/>} />
+        <Route path="/project/:slug" element={<Project/>} />
     </Routes>
     </AnimatePresence>
 

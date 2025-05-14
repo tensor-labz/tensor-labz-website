@@ -3,7 +3,7 @@ import { createContext, useState, ReactNode, FC, useContext } from "react";
 // Define our types
 export interface ServiceTab {
   title: string;
-  slug: string;
+  slug?: string;
 }
 
 interface ServiceContextType {
@@ -17,15 +17,12 @@ interface ServiceProviderProps {
 
 // Create context with default values
 export const ServiceContext = createContext<ServiceContextType>({
-  activeTab: { title: "Web Development", slug: "web-dev" },
+  activeTab: { title: "All" },
   setActiveTab: () => {},
 });
 
 const ServiceProvider: FC<ServiceProviderProps> = ({ children }) => {
-  const [activeTab, setActiveTab] = useState<ServiceTab>({
-    title: "Web Development",
-    slug: "web-dev"
-  });
+  const [activeTab, setActiveTab] = useState<ServiceTab>({ title: "All" });
 
   return (
     <ServiceContext.Provider value={{ activeTab, setActiveTab }}>
@@ -34,6 +31,13 @@ const ServiceProvider: FC<ServiceProviderProps> = ({ children }) => {
   );
 };
 
-export default ServiceProvider;
+// Custom hook to use the service context
+export const useServiceContext = () => {
+  const context = useContext(ServiceContext);
+  if (context === undefined) {
+    throw new Error("useServiceContext must be used within a ServiceProvider");
+  }
+  return context;
+};
 
-export const  useServiceContext= ()=>useContext(ServiceContext)
+export default ServiceProvider;
