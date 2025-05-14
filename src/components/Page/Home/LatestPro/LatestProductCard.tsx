@@ -29,7 +29,7 @@ const LatestProductCard: React.FC<projectProps> = memo((project) => {
       damping: 20
     }
   };
-console.log("project",project)
+
   return (
     <Card
       animation={customAnimation}
@@ -38,7 +38,7 @@ console.log("project",project)
         bg-white border border-gray-200
         rounded-lg shadow
         ${safeid % 2 !== 0 ? "md:flex-row-reverse self-end" : "md:flex-row self-start"}
-        md:max-w-xl
+        md:max-w-2xl
         hover:bg-blue-50
         dark:border-gray-700
         dark:bg-blue-800
@@ -47,13 +47,13 @@ console.log("project",project)
         overflow-hidden
       `}
     >
-      <div className="w-full md:w-1/5 md:h-full bg-red">
+      <div className="w-full md:w-48">
         <img
           className="
             md:object-cover object-center
             w-full
             h-[250px]
-            md:h-full
+            md:h-auto
             rounded-t-lg
             md:rounded-none
             md:rounded-s-lg
@@ -62,10 +62,10 @@ console.log("project",project)
             group-hover:scale-105
           "
           src={`https://drive.google.com/thumbnail?id=${extractGoogleDriveFileId(project?.imageURL)}`}
-          alt={`https://drive.google.com/thumbnail?id=${extractGoogleDriveFileId(project?.imageURL)}`}
+          alt="Project Illustration"
         />
       </div>
-      <div className="sm:flex-grow flex flex-col justify-between p-4 leading-normal">
+      <div className="flex flex-col justify-between p-4 leading-normal">
         <h5 className="
           mb-2
           xs:text-2xl

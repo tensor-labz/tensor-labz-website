@@ -91,13 +91,13 @@ console.log("topProjects",project_data)
         )}
 
         {/* Vertical Scrolling Projects */}
-        {isMobile?(<MobileTopCarousel/>):(  <motion.div className="flex lg:w-3/5 w-full flex-col gap-6 h-full overflow-hidden lg:p-0 px-8 py-4">
+        {isMobile?(<MobileTopCarousel/>):(  <motion.div className="flex  lg:w-3/5 w-full flex-col gap-6 h-full overflow-hidden lg:p-0 px-8 py-4">
           <AnimatePresence>
             {topProjects
               ?.slice(currentIndex, currentIndex + (islarge?3:2))
               ?.map((project:any, index:number) => (
                 <motion.div
-                  className={index % 2 === 0 ? "self-start" : "self-end"}
+                  className={index % 2 === 0 ? "self-start w-4/5" : "self-end w-4/5"}
                   key={index}
                   custom={index}
                   variants={cardVariants}
