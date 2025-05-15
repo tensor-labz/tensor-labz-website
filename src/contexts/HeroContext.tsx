@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState, useReducer} from "react";
-
+import { useRootContext } from "./RootContext";
 // Define proper types
 interface SliderState {
   currentSlide: number;
@@ -64,7 +64,7 @@ export default function HeroContextProvider({
   const [sliderData, setSliderData] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<Error | null>(null);
- const 
+ const { googleSheet_URl } = useRootContext();
   // useReducer to manage the current slide
   const [state, dispatch] = useReducer(sliderReducer, { currentSlide: 0 });
 
@@ -73,7 +73,7 @@ export default function HeroContextProvider({
     const fetchSliderData = async () => {
       setIsLoading(true);
       try {
-        const response = await fetch("https://script.google.com/macros/s/AKfycbwdBVXLOhb25deUgMuURv4Y7OE11x6OMgsHHWVlj21sz7BHrltuOzjpcl_db2kN9pGgYg/exec?sheetName=HeroData");
+        const response = await fetch(`${googleSheet_URl}HeroData`);
 
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
