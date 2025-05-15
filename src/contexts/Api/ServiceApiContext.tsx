@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState, useCallback, useMemo } from "react";
-
+import { useRootContext } from "../RootContext";
 interface ServiceDataContextType {
   service_data: any | null;
   isLoading: boolean;
@@ -20,13 +20,13 @@ export default function ServiceDataContextProvider({ children }: ServiceDataCont
   const [service_data, setData] = useState<any>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<Error | null>(null);
-
+const { googleSheet_URl } = useRootContext();
   const fetchData = useCallback(async () => {
     setIsLoading(true);
     setError(null);
     try {
       const response = await fetch(
-        'https://script.google.com/macros/s/AKfycbwdBVXLOhb25deUgMuURv4Y7OE11x6OMgsHHWVlj21sz7BHrltuOzjpcl_db2kN9pGgYg/exec?sheetName=ServiceData'
+        `${googleSheet_URl}ServiceData`
       );
 
       if (!response.ok) {

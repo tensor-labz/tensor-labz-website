@@ -1,3 +1,4 @@
+import { useRootContext } from "../RootContext";
 import { createContext, useContext, useEffect, useState, useCallback, useMemo } from "react";
 
 interface ProjectDataContextType {
@@ -20,13 +21,13 @@ export default function ProjectDataContextProvider({ children }: ProjectDataCont
   const [project_data, setData] = useState<any>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<Error | null>(null);
-
+  const { googleSheet_URl } = useRootContext();
   const fetchData = useCallback(async () => {
     setIsLoading(true);
     setError(null);
     try {
       const response = await fetch(
-        'https://script.google.com/macros/s/AKfycbwdBVXLOhb25deUgMuURv4Y7OE11x6OMgsHHWVlj21sz7BHrltuOzjpcl_db2kN9pGgYg/exec?sheetName=ProjectData'
+        `${googleSheet_URl}=ProjectData`
       );
 
       if (!response.ok) {

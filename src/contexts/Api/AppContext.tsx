@@ -3,6 +3,7 @@ import ServiceDataContextProvider from "./ServiceApiContext";
 import SocialMediaDataContextProvider from "./SocialMediaContext";
 import ProjectDataContextProvider from "./ProjectDataContext";
 import HeroContextProvider from "../HeroContext";
+import {useRootContext} from "../RootContext";
 
 // Define proper types for context
 interface AppContextType {
@@ -40,20 +41,19 @@ export default function AppContextProvider({ children }: AppContextProviderProps
   const [data, setData] = useState<any>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<Error | null>(null);
-
+  const {googleSheet_URl}=useRootContext();
   // Define fetchData function outside useEffect
   const fetchData = useCallback(async () => {
     setIsLoading(true);
     setError(null);
     try {
       const response = await fetch(
-        'https://script.google.com/macros/s/AKfycbwdBVXLOhb25deUgMuURv4Y7OE11x6OMgsHHWVlj21sz7BHrltuOzjpcl_db2kN9pGgYg/exec?sheetName=AppData'
+        `${googleSheet_URl}AppData`
       );
 
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
-
       const result = await response.json();
       setData(result?.data[0]);
     } catch (err) {

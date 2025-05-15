@@ -64,7 +64,7 @@ export default function HeroContextProvider({
   const [sliderData, setSliderData] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<Error | null>(null);
-
+ const 
   // useReducer to manage the current slide
   const [state, dispatch] = useReducer(sliderReducer, { currentSlide: 0 });
 
