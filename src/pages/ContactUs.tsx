@@ -15,10 +15,10 @@ import {
   FaYoutube
 } from 'react-icons/fa';
 import Page from "../components/resuable/Page";
-import desktop from "../assets/images/Page/ContactUs/ContactusBgLG.png";
-import mobile from "../assets/images/Page/ContactUs/ContactusBgSM.webp";
-import tablet from "../assets/images/Page/ContactUs/ContactusBgMd.webp";
+
+
 import { useAppContext } from '../contexts/Api/AppContext';
+import { useRootContext } from '../contexts/RootContext';
 import { useSocialMediaDataContext } from '../contexts/Api/SocialMediaContext';
 
 
@@ -157,7 +157,8 @@ const SocialMediaLinks = memo(() => {
 });
 
 const ContactUs: React.FC = memo(() => {
-  const {data}=useAppContext()
+  const { data } = useAppContext()
+  const {Data}=useRootContext()
   const contactInfo: Record<string, ContactInfoType> = {
     email: {
       title: "Corporate Email",
@@ -188,9 +189,9 @@ const ContactUs: React.FC = memo(() => {
     <Page HeadProps={{title:"Contact Us"}}>
       <div className="min-h-screen flex items-center justify-center p-6">
   <picture className="absolute inset-0 -z-10">
-          <source media="(min-width: 768px)" srcSet={desktop} />
-          <source media="(min-width: 480px)" srcSet={tablet} />
-          <img src={mobile} alt="" className="w-full h-full object-cover brightness-75" />
+          <source media="(min-width: 768px)" srcSet={Data?.contactus?.bg?.lg} />
+          <source media="(min-width: 480px)" srcSet={Data?.contactus?.bg?.md} />
+          <img src={Data?.contactus?.bg?.sm} alt="" className="w-full h-full object-cover brightness-75" />
         </picture>
    {/* Global overlay for better content visibility */}
         {/* <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/20 to-white" /> */}
@@ -201,7 +202,7 @@ const ContactUs: React.FC = memo(() => {
             animate={{ opacity: 1, y: 0 }}
             className="md:text-5xl text-3xl font-bold text-center text-white md:mb-12 mb-6"
           >
-            Contact InnovateTech
+            {Data?.contactus?.title || "Contact Us"}
           </motion.h1>
 
           <div className="grid md:grid-cols-2 gap-8">
@@ -224,7 +225,7 @@ const ContactUs: React.FC = memo(() => {
             className="text-center"
           >
             <p className="text-white italic text-xl max-w-2xl mx-auto font-light">
-              "Bridging innovation and technology to transform your business challenges into breakthrough solutions."
+              {Data?.contactus?.quote}
             </p>
           </motion.div>
 
