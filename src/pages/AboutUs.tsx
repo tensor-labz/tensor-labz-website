@@ -1,8 +1,9 @@
 import React, { memo } from "react";
 import Section from "../components/resuable/Section";
 import Page from "../components/resuable/Page";
-import bg from "../assets/images/Page/About/bg.jpg";
+
 import { useAppContext } from "../contexts/Api/AppContext";
+import { useRootContext } from "../contexts/RootContext";
 
 interface AboutUsSectionProps {
   title: string;
@@ -17,7 +18,8 @@ const AboutUsSectionItem = memo(({ title, description }: AboutUsSectionProps) =>
 ));
 
 const AboutUs: React.FC = memo(() => {
-  const {data}=useAppContext()
+  const { data } = useAppContext()
+  const {Data}=useRootContext()
   const sectionData = [
     {
       title: "Mission",
@@ -46,12 +48,12 @@ const AboutUs: React.FC = memo(() => {
             playsInline
             className="hidden md:block absolute w-full h-full object-cover brightness-100"
           >
-            <source src="https://tensoragri.s3.us-east-1.amazonaws.com/pageBackground/bg.mp4" type="video/mp4" />
+            <source src={Data?.aboutus?.bg?.lg} type="video/mp4" />
           </video>
 
           {/* Background image for smaller screens (<768px) */}
           <img
-            src={bg}
+            src={Data?.aboutus?.bg?.md}
             alt="Background"
             className="md:hidden w-full h-full object-cover"
           />
