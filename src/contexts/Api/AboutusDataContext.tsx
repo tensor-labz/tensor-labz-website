@@ -1,33 +1,33 @@
 import { useRootContext } from "../RootContext";
 import { createContext, useContext, useEffect, useState, useCallback, useMemo } from "react";
 
-interface SocialMediaDataContextType {
-  social_media_data: any | null;
+interface AboutusDataContextType {
+  aboutus_data: any | null;
   isLoading: boolean;
   error: Error | null;
 }
 
-const SocialMediaDataContext = createContext<SocialMediaDataContextType>({
-  social_media_data: null,
+const AboutusDataContext = createContext<AboutusDataContextType>({
+  aboutus_data: null,
   isLoading: false,
   error: null,
 });
 
-type SocialMediaDataContextProviderProps = {
+type AboutusDataContextProviderProps = {
   children: React.ReactNode;
 };
 
-export default function SocialMediaDataContextProvider({ children }: SocialMediaDataContextProviderProps) {
-  const [social_media_data, setData] = useState<any>(null);
+export default function AboutusDataContextProvider({ children }: AboutusDataContextProviderProps) {
+  const [aboutus_data, setData] = useState<any>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<Error | null>(null);
-const { googleSheet_URl } = useRootContext();
+  const { googleSheet_URl } = useRootContext();
   const fetchData = useCallback(async () => {
     setIsLoading(true);
     setError(null);
     try {
       const response = await fetch(
-        `${googleSheet_URl}LinkData`
+        `${googleSheet_URl}=AboutusData`
       );
 
       if (!response.ok) {
@@ -38,7 +38,7 @@ const { googleSheet_URl } = useRootContext();
       setData(result?.data);
     } catch (err) {
       setError(err instanceof Error ? err : new Error('An unknown error occurred'));
-      console.error('Error fetching social_media_data:', err);
+      console.error('Error fetching aboutus_data:', err);
     } finally {
       setIsLoading(false);
     }
@@ -50,19 +50,19 @@ const { googleSheet_URl } = useRootContext();
 
   const contextValue = useMemo(
     () => ({
-      social_media_data,
+      aboutus_data,
       isLoading,
       error,
     }),
-    [social_media_data, isLoading, error]
+    [aboutus_data, isLoading, error]
   );
-
+console.log(aboutus_data)
 
   return (
-    <SocialMediaDataContext.Provider value={contextValue}>
+    <AboutusDataContext.Provider value={contextValue}>
       {children}
-    </SocialMediaDataContext.Provider>
+    </AboutusDataContext.Provider>
   );
 }
 
-export const useSocialMediaDataContext = () => useContext(SocialMediaDataContext);
+export const useAboutusDataContext = () => useContext(AboutusDataContext);

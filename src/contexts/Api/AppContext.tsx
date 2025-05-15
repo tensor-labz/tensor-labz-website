@@ -3,6 +3,7 @@ import ServiceDataContextProvider from "./ServiceApiContext";
 import SocialMediaDataContextProvider from "./SocialMediaContext";
 import ProjectDataContextProvider from "./ProjectDataContext";
 import HeroContextProvider from "../HeroContext";
+import AboutusCont from "./AboutusDataContext";
 import {useRootContext} from "../RootContext";
 
 // Define proper types for context
@@ -48,7 +49,7 @@ export default function AppContextProvider({ children }: AppContextProviderProps
     setError(null);
     try {
       const response = await fetch(
-        `${googleSheet_URl}AppData`
+        `${googleSheet_URl}ContactData`
       );
 
       if (!response.ok) {
@@ -92,6 +93,7 @@ export default function AppContextProvider({ children }: AppContextProviderProps
 
   return (
     <AppContext.Provider value={contextValue}>
+      <AboutusCont>
       <ServiceDataContextProvider>
         <ProjectDataContextProvider>
           <SocialMediaDataContextProvider>
@@ -101,6 +103,7 @@ export default function AppContextProvider({ children }: AppContextProviderProps
           </SocialMediaDataContextProvider>
           </ProjectDataContextProvider>
         </ServiceDataContextProvider>
+        </AboutusCont>
     </AppContext.Provider>
   );
 }

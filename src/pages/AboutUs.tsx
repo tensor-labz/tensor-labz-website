@@ -1,29 +1,14 @@
 import React, { memo } from "react";
 import Section from "../components/resuable/Section";
 import Page from "../components/resuable/Page";
-import { useAppContext } from "../contexts/Api/AppContext";
 import { useRootContext } from "../contexts/RootContext";
 import AboutUsSectionItem from "../components/Page/Aboutus/AboutUsSection";
+import { useAboutusDataContext } from "../contexts/Api/AboutusDataContext";
 
 
 const AboutUs: React.FC = memo(() => {
-  const { data } = useAppContext()
+  const { aboutus_data } = useAboutusDataContext()
   const {Data}=useRootContext()
-  const sectionData = [
-    {
-      title: "Mission",
-      description:data?.mission || "Mission statement not available.",
-    },
-    {
-      title: "Vision",
-      description: data?.vision || "Vision statement not available.",
-    },
-    {
-      title: "Values",
-      description: data?.values || "Values statement not available.",
-    },
-  ];
-
   return (
     <Page HeadProps={{ title: "About Us" }}>
       <div className="relative min-h-screen h-[1000px] sm:h-screen w-full">
@@ -62,11 +47,11 @@ const AboutUs: React.FC = memo(() => {
 
             {/* Section Items */}
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 text-center">
-              {sectionData.map((section, index) => (
+              {aboutus_data?.map((section:any, index:number) => (
                 <AboutUsSectionItem
                   key={index}
-                  title={section.title}
-                  description={section.description}
+                  title={section?.components}
+                  description={section?.value}
                 />
               ))}
             </div>
