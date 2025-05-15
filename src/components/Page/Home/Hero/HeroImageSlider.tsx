@@ -1,7 +1,7 @@
 import React, { memo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useHeroContext } from "../../../../contexts/HeroContext";
-import { extractGoogleDriveFileId } from '../../../../base/hooks/google';
+
 // Memoized component with performance optimizations
 const HeroImageSlider: React.FC = memo(() => {
   const { currentSlide, slider } = useHeroContext();
@@ -50,7 +50,7 @@ const HeroImageSlider: React.FC = memo(() => {
           {/* Make sure slider.img is defined */}
           {slider && slider.img && (
             <img
-              src={`https://drive.google.com/thumbnail?id=${extractGoogleDriveFileId(slider.img)}`}
+              src={slider.img}
               alt={`Hero Image ${slider.title || ''}`}
               className="w-full h-full object-fill object-center"
               draggable={false}
