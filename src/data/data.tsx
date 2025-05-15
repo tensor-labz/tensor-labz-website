@@ -35,6 +35,8 @@ const data: any = {
         description: "Stay updated with our latest insights and articles.",
     },
     aboutus: {
+        title: "Transforming Visions into Digital Realities",
+        content:"We are a passionate team of innovators dedicated to crafting cutting-edge digital solutions that drive business growth and technological advancement.",
         bg: {
             lg: "https://tensoragri.s3.us-east-1.amazonaws.com/pageBackground/bg.mp4",
         md:aboutussmbg

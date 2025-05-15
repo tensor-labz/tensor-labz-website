@@ -65,10 +65,10 @@ const AboutUs: React.FC = memo(() => {
           <div className="absolute inset-0 bg-gradient-to-b from-blue-200/50 via-white/80 to-blue-200/50 z-0" />
           <div className="relative max-w-4xl mx-auto text-center px-6 sm:mt-0 mt-8">
             <h1 className="text-4xl md:text-6xl font-bold mb-6 text-blue-900 shadow-sm">
-              {data?.aboutus_title?? "About Us"}
+              {Data?.aboutus?.title?? "About Us"}
             </h1>
             <p className="text-lg md:text-xl mb-8 text-gray-800 leading-relaxed">
-            {data?.aboutus_desc?? "About us description not available."}
+            {Data?.aboutus?.content?? "About us description not available."}
             </p>
 
             {/* Section Items */}
