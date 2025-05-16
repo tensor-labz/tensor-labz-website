@@ -10,6 +10,7 @@ import {
 import {
   FaWhatsapp,
 } from 'react-icons/fa';
+
 export type ContactInfoType = {
   title: string;
   icon: IconType;
@@ -17,23 +18,13 @@ export type ContactInfoType = {
 };
 
 // Contact Info Component
-const contactInfo = {
-  "Corporate Email": {
-      icon: MdEmail,
-      linkType: 'email'
-    },
-    "Main Office Line": {
-      icon: MdPhone,
-      linkType: 'phone'
-    },
-    "Business WhatsApp": {
-      icon: FaWhatsapp,
-      linkType: 'whatsapp'
-    },
-    "Headquarters":{
-      icon: MdLocationOn
-    }
-  };
+export const contactInfoIcon = {
+  "email": MdEmail,
+  "phoneNo": MdPhone,
+  "address": MdLocationOn,
+  "whatsapp": FaWhatsapp,
+  "default": MdLocationOn,
+}
 const ContactInfoItem = memo(({
   icon: Icon,
   title,

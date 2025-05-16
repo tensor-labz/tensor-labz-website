@@ -1,16 +1,16 @@
 import React, { memo } from 'react';
 import { motion } from 'framer-motion';
-
 import Page from "../components/resuable/Page";
 import { useRootContext } from '../contexts/RootContext';
-
-import ContactInfoItem  from '../components/Page/Contactus/ContactInfo';
+import { useAppContext } from '../contexts/Api/AppContext';
+import ContactInfoItem, { contactInfoIcon }  from '../components/Page/Contactus/ContactInfo';
 import SocialMediaLinks from '../components/Page/Contactus/SocialMediaLinks';
+import ContactusPlaceholder from '../components/Page/Contactus/ContactUsPlaceHolder';
 
 const ContactUs: React.FC = memo(() => {
   const {Data}=useRootContext()
-
-
+  const {data,isLoading}=useAppContext()
+console.log(data)
   return (
     <Page HeadProps={{title:"Contact Us"}}>
       <div className="min-h-screen flex items-center justify-center p-6">
@@ -32,14 +32,14 @@ const ContactUs: React.FC = memo(() => {
           </motion.h1>
 
           <div className="grid md:grid-cols-2 gap-8">
-            {Object.entries(contactInfo).map(([key, info]) => (
+            {isLoading?(Array(4).fill("").map((_, i) => (<ContactusPlaceholder key={ i} />))):data?.map((contact:any,index:number) => (
               <ContactInfoItem
-                key={key}
-                icon={info.icon}
-                title={info.title}
-                value={info.value}
-                link={info.value}
-                linkType={info.linkType}
+                key={index}
+                icon={contactInfoIcon[contact?.contact as keyof typeof contactInfoIcon]}
+                title={contact?.title}
+                value={contact.value}
+                link={contact.value}
+                linkType={contact.contact}
               />
             ))}
           </div>
