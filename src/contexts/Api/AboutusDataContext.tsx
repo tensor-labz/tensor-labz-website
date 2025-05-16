@@ -27,7 +27,7 @@ export default function AboutusDataContextProvider({ children }: AboutusDataCont
     setError(null);
     try {
       const response = await fetch(
-        `${googleSheet_URl}=AboutusData`
+        `${googleSheet_URl}AboutusData`
       );
 
       if (!response.ok) {
