@@ -5,6 +5,7 @@ import navData from "./nav_data";
 import contectusdesktop from "../assets/images/Page/ContactUs/ContactusBgLG.png";
 import contectusmobile from "../assets/images/Page/ContactUs/ContactusBgSM.webp";
 import contectustablet from "../assets/images/Page/ContactUs/ContactusBgMd.webp";
+import serviceMobileHero from "../assets/images/Page/ContactUs/lg.jpg";
 const data: any = {
 
   layout:{
@@ -30,11 +31,14 @@ const data: any = {
     },
     insight: {
         hero: {
-            hero_bg: "",
+            hero_bg: {
+                lg: "https://tensoragri.s3.us-east-1.amazonaws.com/3865720-uhd_3840_2160_25fps.mp4",
+                sm:serviceMobileHero
+            },
             title: "Insights",
             description: "Stay updated with our latest insights and articles.",
         },
-        title: "Insights",
+        title: "Our Services",
         description: "Stay updated with our latest insights and articles.",
     },
     aboutus: {
@@ -53,6 +57,11 @@ const data: any = {
         },
         quote: "Bridging innovation and technology to transform your business challenges into breakthrough solutions.",
         title:"Contact InnovateTech"
+    },
+    project: {
+        hero: {
+            bg:"D:\\Projects\\BitBucket\\tensor-labz-website\\src\\assets\\images\\Page\\ProjectBg.jpg"
+        }
     }
 }
 export default data;

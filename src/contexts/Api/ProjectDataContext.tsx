@@ -27,7 +27,7 @@ export default function ProjectDataContextProvider({ children }: ProjectDataCont
     setError(null);
     try {
       const response = await fetch(
-        `${googleSheet_URl}=ProjectData`
+        `${googleSheet_URl}ProjectData`
       );
 
       if (!response.ok) {

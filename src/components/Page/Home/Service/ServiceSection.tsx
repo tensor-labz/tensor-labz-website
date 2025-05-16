@@ -53,7 +53,7 @@ const ServiceSection: React.FC = memo(() => {
         className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:px-0 px-2"
       >
         {!isLoading&&service_data
-          ?.filter((serv: ServiceCardProps) => serv?.show_in_home ==="Yes")
+          ?.filter((serv: ServiceCardProps) => serv?.show_in_home)
           ?.map((serv: ServiceCardProps, index: number) => (
             <motion.div
               key={index}

@@ -3,17 +3,19 @@ import { motion } from 'framer-motion';
 import { useParams } from 'react-router-dom';
 import { useProjectDataContext } from '../contexts/Api/ProjectDataContext';
 import { extractGoogleDriveFileId } from '../base/hooks/google';
+import { useRootContext } from '../contexts/RootContext';
 
 const ProjectPage = () => {
   const { slug } = useParams();
   const { project_data, isLoading } = useProjectDataContext();
+  const {Data } = useRootContext();
   const projectData = project_data?.find((data:any) => data.slug === slug);
 
   // State for image slider on mobile
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   // Get sample images array safely
-  const sampleImages = projectData?.sample_images?.split(",") || [];
+  const sampleImages = projectData?.sample_images;
 
   // Handle next image
   const nextImage = () => {
@@ -41,38 +43,40 @@ const ProjectPage = () => {
     <div className="min-h-screen bg-gray-50">
       {/* Header with animation */}
       <motion.header
-        className="bg-gradient-to-r from-blue-600 to-indigo-800 text-white py-16 px-4 md:px-8"
-        initial={{ opacity: 0, y: -50 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-      >
-        <div className="max-w-6xl mx-auto">
-          <motion.h1
-            className="text-4xl md:text-5xl font-bold mb-4"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.2, duration: 0.8 }}
-          >
-            {projectData.title}
-          </motion.h1>
+  className="relative text-white py-16 px-4 md:px-8 bg-gradient-to-r from-blue-600 to-indigo-800 bg-blend-overlay bg-cover bg-center"
+  style={{ backgroundImage: `url(${Data.project.hero.bg})` }}
+  initial={{ opacity: 0, y: -50 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ duration: 0.6 }}
+>
+  <div className="max-w-6xl mx-auto">
+    <motion.h1
+      className="text-4xl md:text-5xl font-bold mb-4"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ delay: 0.2, duration: 0.8 }}
+    >
+      {projectData.title}
+    </motion.h1>
 
-          <motion.div
-            className="flex flex-wrap gap-3"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.4, duration: 0.8 }}
-          >
-            {projectData.tags?.split(",").map((tag:string, index:number) => (
-              <span
-                key={index}
-                className="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm"
-              >
-                {tag.trim()}
-              </span>
-            ))}
-          </motion.div>
-        </div>
-      </motion.header>
+    <motion.div
+      className="flex flex-wrap gap-3"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ delay: 0.4, duration: 0.8 }}
+    >
+      {projectData.tags?.map((tag: string, index: number) => (
+        <span
+          key={index}
+          className="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm"
+        >
+          {tag.trim()}
+        </span>
+      ))}
+    </motion.div>
+  </div>
+</motion.header>
+
 
       <main className="max-w-6xl mx-auto py-12 px-4 md:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">

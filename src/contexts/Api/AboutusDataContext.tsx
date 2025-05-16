@@ -56,7 +56,6 @@ export default function AboutusDataContextProvider({ children }: AboutusDataCont
     }),
     [aboutus_data, isLoading, error]
   );
-console.log(aboutus_data)
 
   return (
     <AboutusDataContext.Provider value={contextValue}>
