@@ -60,7 +60,9 @@ const data: any = {
     },
     project: {
         hero: {
-            bg:"D:\\Projects\\BitBucket\\tensor-labz-website\\src\\assets\\images\\Page\\ProjectBg.jpg"
+            bg: { lg:"https://tensoragri.s3.us-east-1.amazonaws.com/pageBackground/bg.mp4",
+                sm:serviceMobileHero
+            }
         }
     }
 }
