@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import { useProjectDataContext } from '../contexts/Api/ProjectDataContext';
 import ProjectHero from '../components/Page/Project/ProjectHero';
 import ProjectLoadingPlaceholder from '../components/Page/Project/ProjectPageLoading';
+import ProjectNotFound from '../components/Page/Project/ProjectNotFound';
 const ProjectPage = () => {
   const { slug } = useParams();
   const { project_data, isLoading } = useProjectDataContext();
@@ -34,7 +35,7 @@ const ProjectPage = () => {
   }
 
   if (!projectData) {
-    return <div className="min-h-screen flex items-center justify-center">Project not found</div>;
+    return <ProjectNotFound />;
   }
 
   return (
@@ -47,7 +48,6 @@ const ProjectPage = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
           {/* Main Content */}
           <div className="lg:col-span-2">
-            {/* Main Image with animation */}
             <motion.div
               className="rounded-xl overflow-hidden shadow-lg mb-10"
               initial={{ opacity: 0, scale: 0.9 }}
@@ -95,7 +95,6 @@ const ProjectPage = () => {
 
           {/* Sidebar */}
           <div className="lg:col-span-1">
-            {/* Additional Images - Desktop Grid */}
             <div className="hidden md:block">
               <motion.div
                 initial={{ opacity: 0, y: 30 }}
@@ -121,8 +120,6 @@ const ProjectPage = () => {
                 </div>
               </motion.div>
             </div>
-
-            {/* Additional Images - Mobile Slider */}
             <div className="md:hidden">
               <motion.div
                 initial={{ opacity: 0, y: 30 }}
@@ -148,7 +145,6 @@ const ProjectPage = () => {
                     </motion.div>
                   )}
 
-                  {/* Navigation Controls */}
                   {sampleImages.length > 1 && (
                     <div className="flex justify-between mt-4">
                       <button
