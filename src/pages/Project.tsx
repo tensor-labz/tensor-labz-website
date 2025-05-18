@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useParams } from 'react-router-dom';
 import { useProjectDataContext } from '../contexts/Api/ProjectDataContext';
-import { extractGoogleDriveFileId } from '../base/hooks/google';
 import ProjectHero from '../components/Page/Project/ProjectHero';
 
 const ProjectPage = () => {
@@ -57,7 +56,7 @@ const ProjectPage = () => {
             >
               {projectData.imageURL && (
                 <img
-                  src={`https://drive.google.com/thumbnail?id=${extractGoogleDriveFileId(projectData.imageURL)}`}
+                  src={projectData.imageURL}
                   alt={projectData?.title}
                   className="w-full h-auto"
                 />
@@ -81,7 +80,7 @@ const ProjectPage = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.5, duration: 0.5 }}
               >
-                <h2 className="text-2xl font-bold mb-4">Video Demo</h2>
+                <h2 className="text-2xl font-bold mb-4">Demo</h2>
                 <div className="aspect-w-16 aspect-h-9">
                   <iframe
                     src={projectData.vedio_demo}
@@ -113,7 +112,7 @@ const ProjectPage = () => {
                       transition={{ duration: 0.3 }}
                     >
                       <img
-                        src={`https://drive.google.com/thumbnail?id=${extractGoogleDriveFileId(image)}`}
+                        src={image}
                         alt={`Project image ${index + 1}`}
                         className="w-full h-auto"
                       />
@@ -142,7 +141,7 @@ const ProjectPage = () => {
                       transition={{ duration: 0.3 }}
                     >
                       <img
-                        src={`https://drive.google.com/thumbnail?id=${extractGoogleDriveFileId(sampleImages[currentImageIndex])}`}
+                        src={sampleImages[currentImageIndex]}
                         alt={`Project image ${currentImageIndex + 1}`}
                         className="w-full h-auto"
                       />
