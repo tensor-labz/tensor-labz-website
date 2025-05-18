@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { useParams } from 'react-router-dom';
 import { useProjectDataContext } from '../contexts/Api/ProjectDataContext';
 import ProjectHero from '../components/Page/Project/ProjectHero';
-
+import ProjectLoadingPlaceholder from '../components/Page/Project/ProjectPageLoading';
 const ProjectPage = () => {
   const { slug } = useParams();
   const { project_data, isLoading } = useProjectDataContext();
@@ -30,7 +30,7 @@ const ProjectPage = () => {
   };
 
   if (isLoading) {
-    return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
+    return <ProjectLoadingPlaceholder/>
   }
 
   if (!projectData) {
