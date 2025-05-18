@@ -12,8 +12,8 @@ function ServiceContainer() {
     const { project_data } = useProjectDataContext()
     const {activeTab}=useServiceContext()
     return (
-        <div className='mt-6 mb-6'>
-            <h1 className="text-2xl font-bold text-gray-800">{ Data.insight.title}</h1>
+        <div className='mt-4 mb-6 mx-6'>
+            <h1 className="text-2xl font-bold text-gray-800 mb-4">{ Data.insight.title}</h1>
             <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
                 {/* Project Card */}
                 {
@@ -33,6 +33,7 @@ function ServiceContainer() {
                             services={pro?.tags}
                             id={index}
                             slug={pro.slug}
+                            isTop={pro.is_top}
                         />
                     ))
                 }
