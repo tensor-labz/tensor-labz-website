@@ -1,5 +1,4 @@
 import React, { memo } from 'react';
-import { BrowserRouter } from "react-router-dom";
 import {AnimatePresence } from 'framer-motion';
 import { RootContextProvider } from './contexts/RootContext';
 import OfflineWarning from './components/OfflineWarning';
@@ -10,7 +9,6 @@ import Layout from './components/layout/Layout';
 const App: React.FC = memo(() => {
   return (
 <RootContextProvider>
-    <BrowserRouter>
         <div className="min-h-screen flex flex-col">
           <AnimatePresence>
             <OfflineWarning />
@@ -18,7 +16,6 @@ const App: React.FC = memo(() => {
 <Layout/>
 
         </div>
-      </BrowserRouter>
       </RootContextProvider>
   );
 });

@@ -1,15 +1,16 @@
 import { memo, useEffect } from "react";
 import { motion, useAnimation } from "framer-motion";
 import Page from "../components/resuable/Page";
-import ServiceProvider from "../contexts/ServiceContext";
 import ServiceHero from "../components/Page/Service/Hero/ServiceHero";
 import TabBar from "../components/Page/Service/Tabs/TabBar";
 import ServiceDropDown from "../components/Page/Service/Tabs/ServiceDropDown";
 import ServiceContainer from "../components/Page/Service/Services/ServiceContainer";
+// import { useProjectDataContext } from "../contexts/Api/ProjectDataContext";
+// import ProjectPageLoading from "../components/Page/Project/ProjectPageLoading"
 
 const Services = memo(() => {
+  // const {isLoading}=useProjectDataContext()
   const controls = useAnimation();
-
   useEffect(() => {
     controls.start({
       opacity: 1,
@@ -18,14 +19,16 @@ const Services = memo(() => {
     });
   }, [controls]);
 
-  return (
+//  if (isLoading) {
+//     return <ProjectPageLoading/>
+//   }
+  return(
     <Page HeadProps={{ title: "Services" }}>
       <motion.div
         initial={{ opacity: 0 }}
         animate={controls}
         className="min-h-screen flex flex-col items-center"
       >
-        <ServiceProvider>
           {/* Grouping Hero & Tabs for Consistency */}
           <div className="w-full">
             <ServiceHero />
@@ -33,7 +36,6 @@ const Services = memo(() => {
             <ServiceDropDown/>
           </div>
           <ServiceContainer/>
-        </ServiceProvider>
       </motion.div>
     </Page>
   );

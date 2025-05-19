@@ -1,6 +1,6 @@
 import { memo, useEffect, useState } from "react";
-import { motion } from "framer-motion";
 import { FiChevronsLeft, FiChevronLeft, FiChevronRight, FiChevronsRight } from "react-icons/fi";
+import { useSearchParams } from "react-router-dom";
 
 interface PaginationProps {
   totalItems: number;
@@ -9,14 +9,30 @@ interface PaginationProps {
 
 const Pagination = memo(({ totalItems, itemsPerPage }: PaginationProps) => {
   const totalPages = Math.ceil(totalItems / itemsPerPage);
-  const [windowWidth, setWindowWidth] = useState<number>(window.innerWidth);
-  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [searchParams, setSearchParams] = useSearchParams();
 
+  // Initialize currentPage from URL params or default to 1
+  const [currentPage, setCurrentPage] = useState(() => {
+    const pageParam = searchParams.get("page");
+    return pageParam ? parseInt(pageParam, 10) : 1;
+  });
+
+  // Handle window resize
   useEffect(() => {
     const handleResize = () => setWindowWidth(window.innerWidth);
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  // Update URL when page changes
+  useEffect(() => {
+    setSearchParams(prev => {
+      const newParams = new URLSearchParams(prev);
+      newParams.set("page", currentPage.toString());
+      return newParams;
+    });
+  }, [currentPage, setSearchParams]);
 
   const handlePageChange = (page: number) => {
     if (page < 1 || page > totalPages) return;
@@ -25,95 +41,113 @@ const Pagination = memo(({ totalItems, itemsPerPage }: PaginationProps) => {
 
   const renderPageNumbers = () => {
     if (totalPages <= 5) {
-      return [...Array(totalPages)].map((_, i) => (
-        <motion.button
+      return Array.from({ length: totalPages }, (_, i) => (
+        <button
           key={i + 1}
           onClick={() => handlePageChange(i + 1)}
           className={`px-3 py-1 rounded-md transition ${
             currentPage === i + 1 ? "bg-blue-600 text-white" : "bg-gray-200"
           }`}
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
         >
           {i + 1}
-        </motion.button>
+        </button>
       ));
     } else {
-      return (
-        <>
-          <motion.button
-            onClick={() => handlePageChange(1)}
-            className={`px-3 py-1 rounded-md ${currentPage === 1 ? "bg-blue-600 text-white" : "bg-gray-200"}`}
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
+      // Determine which page numbers to show
+      let pagesToShow = [];
+
+      // Always show first page
+      pagesToShow.push(1);
+
+      // Add ellipsis if needed
+      if (currentPage > 3) {
+        pagesToShow.push(-1); // -1 represents ellipsis
+      }
+
+      // Add pages around current page
+      for (let i = Math.max(2, currentPage - 1); i <= Math.min(totalPages - 1, currentPage + 1); i++) {
+        pagesToShow.push(i);
+      }
+
+      // Add ellipsis if needed
+      if (currentPage < totalPages - 2) {
+        pagesToShow.push(-2); // -2 represents ellipsis
+      }
+
+      // Always show last page
+      if (totalPages > 1) {
+        pagesToShow.push(totalPages);
+      }
+
+      return pagesToShow.map((page, index) => {
+        if (page < 0) {
+          // Render ellipsis
+          return <span key={`ellipsis-${index}`} className="px-2">...</span>;
+        }
+
+        return (
+          <button
+            key={page}
+            onClick={() => handlePageChange(page)}
+            className={`px-3 py-1 rounded-md transition ${
+              currentPage === page ? "bg-blue-600 text-white" : "bg-gray-200"
+            }`}
           >
-            1
-          </motion.button>
-          {currentPage > 3 && <span>...</span>}
-          {[currentPage - 1, currentPage, currentPage + 1].map((page) =>
-            page > 1 && page < totalPages ? (
-              <motion.button
-                key={page}
-                onClick={() => handlePageChange(page)}
-                className={`px-3 py-1 rounded-md ${currentPage === page ? "bg-blue-600 text-white" : "bg-gray-200"}`}
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-              >
-                {page}
-              </motion.button>
-            ) : null
-          )}
-          {currentPage < totalPages - 2 && <span>...</span>}
-          <motion.button
-            onClick={() => handlePageChange(totalPages)}
-            className={`px-3 py-1 rounded-md ${currentPage === totalPages ? "bg-blue-600 text-white" : "bg-gray-200"}`}
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
-          >
-            {totalPages}
-          </motion.button>
-        </>
-      );
+            {page}
+          </button>
+        );
+      });
     }
   };
 
+  // Don't render anything if there are no pages
+  if (totalPages <= 0) return null;
+
   return (
     <div className="flex md:justify-end justify-center items-center space-x-2 mt-4">
-      <motion.button
+      <button
         onClick={() => handlePageChange(1)}
         disabled={currentPage === 1}
-        className="p-2 rounded disabled:opacity-50 md:bg-gray-200 md:hover:scale-105 transition"
+        className="p-2 rounded disabled:opacity-50 md:bg-gray-200 hover:bg-gray-300 transition"
+        aria-label="First page"
       >
         <FiChevronsLeft size={20} />
-      </motion.button>
-      <motion.button
+      </button>
+      <button
         onClick={() => handlePageChange(currentPage - 1)}
         disabled={currentPage === 1}
-        className="p-2 rounded disabled:opacity-50 md:bg-gray-200 md:hover:scale-105 transition"
+        className="p-2 rounded disabled:opacity-50 md:bg-gray-200 hover:bg-gray-300 transition"
+        aria-label="Previous page"
       >
         <FiChevronLeft size={20} />
-      </motion.button>
+      </button>
 
       {windowWidth >= 768 ? (
-        renderPageNumbers()
+        <div className="flex space-x-2">
+          {renderPageNumbers()}
+        </div>
       ) : (
-        <motion.span className="px-3 py-1 rounded-md bg-blue-600 text-white">{currentPage}</motion.span>
+        <span className="px-3 py-1 rounded-md bg-blue-600 text-white">
+          {currentPage} / {totalPages}
+        </span>
       )}
 
-      <motion.button
+      <button
         onClick={() => handlePageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
-        className="p-2 rounded disabled:opacity-50 md:bg-gray-200 md:hover:scale-105 transition"
+        className="p-2 rounded disabled:opacity-50 md:bg-gray-200 hover:bg-gray-300 transition"
+        aria-label="Next page"
       >
         <FiChevronRight size={20} />
-      </motion.button>
-      <motion.button
+      </button>
+      <button
         onClick={() => handlePageChange(totalPages)}
         disabled={currentPage === totalPages}
-        className="p-2 rounded disabled:opacity-50 md:bg-gray-200 md:hover:scale-105 transition"
+        className="p-2 rounded disabled:opacity-50 md:bg-gray-200 hover:bg-gray-300 transition"
+        aria-label="Last page"
       >
         <FiChevronsRight size={20} />
-      </motion.button>
+      </button>
     </div>
   );
 });

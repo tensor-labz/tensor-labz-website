@@ -5,10 +5,10 @@ import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
 import { useProjectDataContext } from "../../../../contexts/Api/ProjectDataContext";
 
 const MobileTopCarousel: React.FC = memo(() => {
-  const { project_data, isLoading } = useProjectDataContext();
+  const { projectData, isLoading } = useProjectDataContext();
   const topProjects = isLoading
     ? []
-    : project_data?.filter((data: any) => data.IsTop === "Yes")
+    : projectData?.filter((data: any) => data.IsTop === "Yes")
       .map((project: any) => ({
         title: project?.title ?? "",
         description: project?.description ?? "",

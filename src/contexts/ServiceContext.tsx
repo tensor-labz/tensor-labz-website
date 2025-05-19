@@ -1,6 +1,14 @@
-import { createContext, useState, ReactNode, FC, useContext } from "react";
+import {
+  createContext,
+  useState,
+  ReactNode,
+  FC,
+  useContext,
+  useEffect,
+} from "react";
+import { useNavigate } from "react-router-dom";
 
-// Define our types
+// Define the types
 export interface ServiceTab {
   title: string;
   slug?: string;
@@ -15,14 +23,18 @@ interface ServiceProviderProps {
   children: ReactNode;
 }
 
-// Create context with default values
-export const ServiceContext = createContext<ServiceContextType>({
-  activeTab: { title: "All" },
-  setActiveTab: () => {},
-});
+// Create the context with a fallback default
+const ServiceContext = createContext<ServiceContextType | undefined>(undefined); // safer than non-null default
 
 const ServiceProvider: FC<ServiceProviderProps> = ({ children }) => {
   const [activeTab, setActiveTab] = useState<ServiceTab>({ title: "All" });
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (activeTab.slug) {
+      navigate(`/services/${activeTab.slug}`);
+    }
+  }, [activeTab.slug, navigate]); // cleaner dependency
 
   return (
     <ServiceContext.Provider value={{ activeTab, setActiveTab }}>
@@ -31,10 +43,10 @@ const ServiceProvider: FC<ServiceProviderProps> = ({ children }) => {
   );
 };
 
-// Custom hook to use the service context
+// Custom hook to access context
 export const useServiceContext = () => {
   const context = useContext(ServiceContext);
-  if (context === undefined) {
+  if (!context) {
     throw new Error("useServiceContext must be used within a ServiceProvider");
   }
   return context;

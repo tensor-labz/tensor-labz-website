@@ -10,13 +10,12 @@ import { useProjectDataContext } from "../../../../contexts/Api/ProjectDataConte
 
 const LatestProductSection: React.FC = memo(() => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const {project_data } = useProjectDataContext();
+  const {projectData } = useProjectDataContext();
   const device = useDeviceContext();
   const islarge=useMemo(()=>device==="lg" || device==="2xl" || device==="xl",[device])
   const isMobile=useMemo(()=>device==="xs" || device==="sm" ,[device])
-  const topProjects =project_data?.filter((data:any)=> data.IsTop==="Yes").slice(0, islarge?3:2);
+  const topProjects =projectData?.filter((data:any)=> data.IsTop==="Yes").slice(0, islarge?3:2);
 
-console.log("topProjects",project_data)
   const sectionVariants = {
     hidden: { opacity: 0, y: 50 },
     visible: {
@@ -50,7 +49,7 @@ console.log("topProjects",project_data)
   // Auto-slide logic for projects
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % topProjects?.length);
+      setCurrentIndex((prev) => (prev + 1) % (topProjects?.length??1));
     }, 7000);
     return () => clearInterval(interval);
   }, [topProjects?.length]);

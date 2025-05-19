@@ -7,14 +7,14 @@ import ProjectLoadingPlaceholder from '../components/Page/Project/ProjectPageLoa
 import ProjectNotFound from '../components/Page/Project/ProjectNotFound';
 const ProjectPage = () => {
   const { slug } = useParams();
-  const { project_data, isLoading } = useProjectDataContext();
-  const projectData = project_data?.find((data:any) => data.slug === slug);
+  const { projectData, isLoading } = useProjectDataContext();
+  const projectdata = projectData?.find((data:any) => data.slug === slug);
 
   // State for image slider on mobile
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   // Get sample images array safely
-  const sampleImages = projectData?.sample_images;
+  const sampleImages = projectdata?.sample_images;
 
   // Handle next image
   const nextImage = () => {
@@ -34,14 +34,14 @@ const ProjectPage = () => {
     return <ProjectLoadingPlaceholder/>
   }
 
-  if (!projectData) {
+  if (!projectdata) {
     return <ProjectNotFound />;
   }
 
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header with animation */}
-      <ProjectHero title={projectData.title} tags={projectData.tags} is_top={projectData.is_top} serviceName={projectData.service} />
+      <ProjectHero title={projectdata.title} tags={projectdata.tags} is_top={projectdata.is_top} serviceName={projectdata.service} />
 
 
       <main className="max-w-6xl mx-auto py-12 px-4 md:px-8">
@@ -54,10 +54,10 @@ const ProjectPage = () => {
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5 }}
             >
-              {projectData.imageURL && (
+              {projectdata.imageURL && (
                 <img
-                  src={projectData.imageURL}
-                  alt={projectData?.title}
+                  src={projectdata.imageURL}
+                  alt={projectdata?.title}
                   className="w-full h-auto"
                 />
               )}
@@ -69,11 +69,11 @@ const ProjectPage = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3, duration: 0.5 }}
-              dangerouslySetInnerHTML={{ __html: projectData.content || '' }}
+              dangerouslySetInnerHTML={{ __html: projectdata.content || '' }}
             />
 
             {/* YouTube Demo */}
-            {projectData.vedio_demo && (
+            {projectdata.vedio_demo && (
               <motion.div
                 className="rounded-xl overflow-hidden shadow-lg mb-10"
                 initial={{ opacity: 0, y: 30 }}
@@ -83,7 +83,7 @@ const ProjectPage = () => {
                 <h2 className="text-2xl font-bold mb-4">Demo</h2>
                 <div className="aspect-w-16 aspect-h-9">
                   <iframe
-                    src={projectData.vedio_demo}
+                    src={projectdata.vedio_demo}
                     title="YouTube Demo"
                     className="w-full h-64 md:h-96 rounded-lg"
                     allowFullScreen
