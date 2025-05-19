@@ -15,12 +15,14 @@ interface ProjectDataContextType {
   projectData: ProjectItem[] | null;
   isLoading: boolean;
   error: Error | null;
+  topData: ProjectItem[] | null;
 }
 
 const ProjectDataContext = createContext<ProjectDataContextType>({
   projectData: null,
   isLoading: false,
   error: null,
+  topData: null,
 });
 
 interface ProjectDataContextProviderProps {
@@ -31,6 +33,7 @@ export default function ProjectDataContextProvider({ children }: ProjectDataCont
   const [projectData, setProjectData] = useState<ProjectItem[] | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<Error | null>(null);
+  const [topData,setTopData]=useState<ProjectItem[] | null>(null)
 
   const { googleSheet_URl } = useRootContext();
   const { activeTab }= useServiceContext();
@@ -73,7 +76,7 @@ export default function ProjectDataContextProvider({ children }: ProjectDataCont
 
           const result = await response.json();
           const data: ProjectItem[] = result?.data || [];
-
+          setTopData(data.filter((item) => item.is_top === true))
           // Filter by service if slug is not "all"
           let filteredData = data;
           if (currentSlug && currentSlug !== "all") {
@@ -128,8 +131,9 @@ export default function ProjectDataContextProvider({ children }: ProjectDataCont
       projectData,
       isLoading,
       error,
+      topData
     }),
-    [projectData, isLoading, error]
+    [projectData, isLoading, error,topData]
   );
 
   return (

@@ -1,7 +1,7 @@
 import React, { memo } from 'react';
 import Card from "../../../../components/resuable/Card";
 import projectProps from "../../../../base/type/ProjectProps.d";
-import { extractGoogleDriveFileId } from '../../../../base/hooks/google';
+import { useNavigate } from 'react-router-dom';
 
 
 const LatestProductCard: React.FC<projectProps> = memo((project) => {
@@ -29,7 +29,7 @@ const LatestProductCard: React.FC<projectProps> = memo((project) => {
       damping: 20
     }
   };
-
+const navigate=useNavigate()
   return (
     <Card
       animation={customAnimation}
@@ -46,6 +46,9 @@ const LatestProductCard: React.FC<projectProps> = memo((project) => {
         transform transition-all duration-300
         overflow-hidden
       `}
+      onClick={() => {
+        navigate(`/project/${project.slug}`);
+      } }
     >
       <div className="w-full md:w-48">
         <img
@@ -61,7 +64,7 @@ const LatestProductCard: React.FC<projectProps> = memo((project) => {
             duration-300
             group-hover:scale-105
           "
-          src={`https://drive.google.com/thumbnail?id=${extractGoogleDriveFileId(project?.imageURL)}`}
+          src={project?.imageURL}
           alt="Project Illustration"
         />
       </div>

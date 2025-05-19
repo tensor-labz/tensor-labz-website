@@ -10,11 +10,11 @@ import { useProjectDataContext } from "../../../../contexts/Api/ProjectDataConte
 
 const LatestProductSection: React.FC = memo(() => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const {projectData } = useProjectDataContext();
+  const {topData } = useProjectDataContext();
   const device = useDeviceContext();
   const islarge=useMemo(()=>device==="lg" || device==="2xl" || device==="xl",[device])
   const isMobile=useMemo(()=>device==="xs" || device==="sm" ,[device])
-  const topProjects =projectData?.filter((data:any)=> data.IsTop==="Yes").slice(0, islarge?3:2);
+  const topProjects =topData?.slice(0, islarge?3:2);
 
   const sectionVariants = {
     hidden: { opacity: 0, y: 50 },
@@ -104,7 +104,7 @@ const LatestProductSection: React.FC = memo(() => {
                   animate="visible"
                   exit="hidden"
                 >
-                  <LatestProductCard description={project?.description??""} imageURL={project?.imageURL??""} title={project?.title??""} />
+                  <LatestProductCard slug={project?.slug} description={project?.description??""} imageURL={project?.imageURL??""} title={project?.title??""} />
                 </motion.div>
               ))}
           </AnimatePresence>
