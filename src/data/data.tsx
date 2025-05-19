@@ -17,6 +17,7 @@ const data: any = {
         hero: {
             hero_bg: "",
             slider_delay: 5000,
+            title:"yerrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrru gy"
         },
         services: {
             title: "Our Services",
