@@ -9,7 +9,7 @@ import {
 } from 'react-icons/fa';
 import { useSocialMediaDataContext } from '../../../contexts/Api/SocialMediaContext';
 const SocialMediaLinks = memo(() => {
-  const {social_media_data,isLoading}=useSocialMediaDataContext()
+  const {link_data,isLoading}=useSocialMediaDataContext()
   const socialMediaLinks = [
     {
       icon: FaLinkedin,
@@ -40,7 +40,7 @@ const SocialMediaLinks = memo(() => {
 
     }
   ];
-  const socialLinks = social_media_data?.map((social:any) => {
+  const socialLinks = link_data?.social_media?.map((social:any) => {
     const socialLink = socialMediaLinks.find(link => link.social_media === social.social_media);
     return {
       ...socialLink,

@@ -10,7 +10,6 @@ import ContactusPlaceholder from '../components/Page/Contactus/ContactUsPlaceHol
 const ContactUs: React.FC = memo(() => {
   const {Data}=useRootContext()
   const {data,isLoading}=useAppContext()
-console.log(data)
   return (
     <Page HeadProps={{title:"Contact Us"}}>
       <div className="min-h-screen flex items-center justify-center p-6">

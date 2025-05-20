@@ -2,13 +2,13 @@ import { useRootContext } from "../RootContext";
 import { createContext, useContext, useEffect, useState, useCallback, useMemo } from "react";
 
 interface SocialMediaDataContextType {
-  social_media_data: any | null;
+  link_data: any | null;
   isLoading: boolean;
   error: Error | null;
 }
 
 const SocialMediaDataContext = createContext<SocialMediaDataContextType>({
-  social_media_data: null,
+  link_data: null,
   isLoading: false,
   error: null,
 });
@@ -18,7 +18,7 @@ type SocialMediaDataContextProviderProps = {
 };
 
 export default function SocialMediaDataContextProvider({ children }: SocialMediaDataContextProviderProps) {
-  const [social_media_data, setData] = useState<any>(null);
+  const [link_data, setData] = useState<any>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<Error | null>(null);
 const { googleSheet_URl } = useRootContext();
@@ -38,7 +38,7 @@ const { googleSheet_URl } = useRootContext();
       setData(result?.data);
     } catch (err) {
       setError(err instanceof Error ? err : new Error('An unknown error occurred'));
-      console.error('Error fetching social_media_data:', err);
+      console.error('Error fetching link_data:', err);
     } finally {
       setIsLoading(false);
     }
@@ -50,11 +50,11 @@ const { googleSheet_URl } = useRootContext();
 
   const contextValue = useMemo(
     () => ({
-      social_media_data,
+      link_data,
       isLoading,
       error,
     }),
-    [social_media_data, isLoading, error]
+    [link_data, isLoading, error]
   );
 
 
