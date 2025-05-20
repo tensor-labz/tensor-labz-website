@@ -1,11 +1,14 @@
 import { FC } from 'react';
 import { motion } from 'framer-motion';
 import { useRootContext } from '../../../../contexts/RootContext';
-
+import { useServiceDataContext } from "../../../../contexts/Api/ServiceApiContext";
+import { useServiceContext } from "../../../../contexts/ServiceContext";
 
 
 const ServiceHero: FC = () => {
-  const {Data}=useRootContext()
+  const { Data } = useRootContext()
+  const { service_data } = useServiceDataContext();
+  const { activeTab } = useServiceContext();
   return (
     <div className="relative w-full h-32 sm:h-40 md:h-60">
       {/* Background for small screens (Image) */}
@@ -49,7 +52,7 @@ const ServiceHero: FC = () => {
           transition={{ duration: 0.8, delay: 0.3 }}
           className="text-2xl md:text-5xl font-bold text-center mb-4"
         >
-          {Data.insight.hero.title}
+          {service_data.find((se:any)=>se.slug==activeTab.slug)?.service_name?? Data.insight.hero.title}
         </motion.h1>
 
         <motion.p
@@ -58,7 +61,7 @@ const ServiceHero: FC = () => {
           transition={{ duration: 0.8, delay: 0.5 }}
           className="text-sm md:text-lg text-center max-w-2xl md:block hidden"
         >
-          {Data.insight.hero.description}
+          {service_data.find((se:any)=>se.slug==activeTab.slug)?.description??Data.insight.hero.description}
         </motion.p>
       </div>
     </div>

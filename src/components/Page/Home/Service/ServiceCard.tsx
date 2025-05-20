@@ -2,8 +2,12 @@ import React, { memo } from 'react';
 import { motion } from 'framer-motion';
 import { ServiceCardProps } from "../../../../base/type/ServiceProps.d";
 import Card from "../../../../components/resuable/Card";
+import { useNavigate } from 'react-router-dom';
+import { useServiceContext } from '../../../../contexts/ServiceContext';
 
-const ServiceCard: React.FC<ServiceCardProps> = memo(({ service_name,description, icon }) => {
+const ServiceCard: React.FC<ServiceCardProps> = memo(({ service_name, description, icon,slug }) => {
+  const navigate = useNavigate();
+  const {setActiveTab } = useServiceContext();
   return (
     <Card
       className="group relative flex sm:flex-col flex-row justify-between rounded-lg
@@ -28,6 +32,10 @@ const ServiceCard: React.FC<ServiceCardProps> = memo(({ service_name,description
             ease: "easeOut"
           }
         }
+      }}
+      onClick={() => {
+setActiveTab({title:service_name, slug:slug})
+        navigate(`/services/${slug}`)
       }}
     >
       {/* Service Icon */}
