@@ -2,15 +2,16 @@ import React, { useState, useEffect, memo, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Section from "../../../../components/resuable/Section";
 import LatestProductCard from "./LatestProductCard";
-import LatestBanner from "../../../../assets/images/Page/About/bg.jpg";
 import { useDeviceContext } from "../../../../contexts/DeviceContext";
 import TopProductTitle from "./TopProducttitle";
 import MobileTopCarousel from "./MobileTopCarsaole";
 import { useProjectDataContext } from "../../../../contexts/Api/ProjectDataContext";
+import { useRootContext } from "../../../../contexts/RootContext";
 
 const LatestProductSection: React.FC = memo(() => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const {topData } = useProjectDataContext();
+  const { topData } = useProjectDataContext();
+  const {Data}=useRootContext()
   const device = useDeviceContext();
   const islarge=useMemo(()=>device==="lg" || device==="2xl" || device==="xl",[device])
   const isMobile=useMemo(()=>device==="xs" || device==="sm" ,[device])
@@ -69,7 +70,7 @@ const LatestProductSection: React.FC = memo(() => {
           variants={sectionVariants}
         >
           <video
-            src="https://tensoragri.s3.us-east-1.amazonaws.com/Home/topProductBanner.mp4"
+            src={Data?.Home?.latest_project?.hero_bg?.lg}
             className="object-cover object-center w-full rounded-md h-[400px] lg:h-[600px]"
             autoPlay
             muted
@@ -83,7 +84,7 @@ const LatestProductSection: React.FC = memo(() => {
           <>
          <h3 className="text-2xl text-center font-bold w-full text-slate-50 py-3">Our Top Insights</h3>
             <img
-            src={LatestBanner}
+            src={Data?.Home?.latest_project?.hero_bg?.sm}
             className="object-cover object-center w-full rounded-md h-[600px] absolute top-0 left-0 z-[-30]"
           />
             </>

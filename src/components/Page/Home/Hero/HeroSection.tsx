@@ -4,9 +4,8 @@ import { useInView } from "react-intersection-observer";
 import Section from "../../../../components/resuable/Section";
 import HeroImageSlider from "./HeroImageSlider";
 import HeroKeyPoint from "./HeroKeyPoint";
-import bg from "../../../../assets/images/Page/Home/Hero/b1.webp";
 import { useRootContext } from "../../../../contexts/RootContext";
-// Define variants with consistent animation durations
+import Data from "../../../../data/data"
 const sectionVariants: Variants = {
   hidden: {
     opacity: 0,
@@ -14,7 +13,7 @@ const sectionVariants: Variants = {
   },
   visible: {
     opacity: 1,
-    background: `url('${bg}')`,
+    background: `url('${Data.Home.hero.hero_bg}')`,
     backgroundPosition: 'center',
     backgroundSize: "cover",
     transition: {
