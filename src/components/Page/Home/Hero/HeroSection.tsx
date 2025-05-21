@@ -93,7 +93,7 @@ const {Data}=useRootContext();
           initial="hidden"
           animate={controls}
           className="border-sky-700 md:border-l-2 lg:border-l-4 absolute inset-0
-          rounded-bl-none lg:rounded-bl-[38%] pointer-events-none z-0 animate-border-shine"
+          pointer-events-none z-0 animate-border-shine"
         />
 
         {/* Hero Content - Fixed width to prevent layout shifts */}

@@ -52,7 +52,7 @@ const ServiceHero: FC = () => {
           transition={{ duration: 0.8, delay: 0.3 }}
           className="text-2xl md:text-5xl font-bold text-center mb-4"
         >
-          {service_data.find((se:any)=>se.slug==activeTab.slug)?.service_name?? Data.insight.hero.title}
+          {service_data?.find((se:any)=>se.slug==activeTab.slug)?.service_name?? Data.insight.hero.title}
         </motion.h1>
 
         <motion.p
@@ -61,7 +61,7 @@ const ServiceHero: FC = () => {
           transition={{ duration: 0.8, delay: 0.5 }}
           className="text-sm md:text-lg text-center max-w-2xl md:block hidden"
         >
-          {service_data.find((se:any)=>se.slug==activeTab.slug)?.description??Data.insight.hero.description}
+          {service_data?.find((se:any)=>se.slug==activeTab.slug)?.description??Data.insight.hero.description}
         </motion.p>
       </div>
     </div>
