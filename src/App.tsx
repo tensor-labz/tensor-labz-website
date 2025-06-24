@@ -11,9 +11,10 @@ const App: React.FC = memo(() => {
 <RootContextProvider>
         <div className="min-h-screen flex flex-col">
           <AnimatePresence>
-            <OfflineWarning />
+          <OfflineWarning />
+          <Layout/>
           </AnimatePresence>
-<Layout/>
+
 
         </div>
       </RootContextProvider>
