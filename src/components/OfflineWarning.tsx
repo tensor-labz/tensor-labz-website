@@ -1,48 +1,58 @@
-import React, { memo, useState, useEffect } from 'react';
-import { motion} from 'framer-motion';
-import {
-  MdSignalWifiOff,
-  MdRefresh
-} from 'react-icons/md';
-// Offline Warning Component
-const OfflineWarning: React.FC =memo( () => {
-    const [isOnline, setIsOnline] = useState(navigator.onLine);
+import React, { memo, useState, useEffect, useRef } from 'react';
+import { motion } from 'framer-motion';
+import { MdSignalWifiOff, MdRefresh } from 'react-icons/md';
 
-    useEffect(() => {
-      const handleOnline = () => setIsOnline(true);
-      const handleOffline = () => setIsOnline(false);
+// Throttle implementation
+function throttle(fn: () => void, delay: number) {
+  let lastCall = 0;
+  return function () {
+    const now = Date.now();
+    if (now - lastCall >= delay) {
+      lastCall = now;
+      fn();
+    }
+  };
+}
 
-      window.addEventListener('online', handleOnline);
-      window.addEventListener('offline', handleOffline);
+const OfflineWarning: React.FC = memo(() => {
+  const [isOnline, setIsOnline] = useState(navigator.onLine);
+  const setOnlineStatus = useRef(() => setIsOnline(navigator.onLine));
 
-      return () => {
-        window.removeEventListener('online', handleOnline);
-        window.removeEventListener('offline', handleOffline);
-      };
+  useEffect(() => {
+    const throttledHandler = throttle(() => {
+      setOnlineStatus.current();
+    }, 1000); // throttle: once every 1 second max
 
-    }, []);
+    window.addEventListener('online', throttledHandler);
+    window.addEventListener('offline', throttledHandler);
 
+    return () => {
+      window.removeEventListener('online', throttledHandler);
+      window.removeEventListener('offline', throttledHandler);
+    };
+  }, []);
 
-    if (isOnline) return null;
+  if (isOnline) return null;
 
-    return (
-      <motion.div
-        initial={{ opacity: 0, y: -50 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: -50 }}
-        className="fixed top-0 left-0 w-full bg-red-500 text-white p-3 z-50 flex items-center justify-center space-x-2"
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: -50 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -50 }}
+      className="fixed top-0 left-0 w-full bg-red-500 text-white p-3 z-[1000] flex items-center justify-center space-x-2"
+    >
+      <MdSignalWifiOff className="w-6 h-6" />
+      <span className="font-semibold">No Internet Connection</span>
+      <button
+        onClick={() => window.location.reload()}
+        className="ml-4 bg-white text-red-500 px-3 py-1 rounded flex items-center space-x-1 hover:bg-gray-100 transition"
       >
-        <MdSignalWifiOff className="w-6 h-6" />
-        <span className="font-semibold">No Internet Connection</span>
-        <button
-          onClick={() => window.location.reload()}
-          className="ml-4 bg-white text-red-500 px-3 py-1 rounded flex items-center space-x-1 hover:bg-gray-100 transition"
-        >
-          <MdRefresh />
-          <span>Retry</span>
-        </button>
-      </motion.div>
-    );
-  });
- OfflineWarning.displayName = 'OfflineWarning';
+        <MdRefresh />
+        <span>Retry</span>
+      </button>
+    </motion.div>
+  );
+});
+
+OfflineWarning.displayName = 'OfflineWarning';
 export default OfflineWarning;
