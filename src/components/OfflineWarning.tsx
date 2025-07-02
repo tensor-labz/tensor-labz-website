@@ -1,18 +1,8 @@
 import React, { memo, useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { MdSignalWifiOff, MdRefresh } from 'react-icons/md';
+import { throttle } from '../base/util/throttle'; // Adjust the import path as necessary
 
-// Throttle implementation
-function throttle(fn: () => void, delay: number) {
-  let lastCall = 0;
-  return function () {
-    const now = Date.now();
-    if (now - lastCall >= delay) {
-      lastCall = now;
-      fn();
-    }
-  };
-}
 
 const OfflineWarning: React.FC = memo(() => {
   const [isOnline, setIsOnline] = useState(navigator.onLine);

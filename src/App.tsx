@@ -14,8 +14,6 @@ const App: React.FC = memo(() => {
           <OfflineWarning />
           <Layout/>
           </AnimatePresence>
-
-
         </div>
       </RootContextProvider>
   );
