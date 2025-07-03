@@ -6,6 +6,17 @@ import HeroImageSlider from "./HeroImageSlider";
 import HeroKeyPoint from "./HeroKeyPoint";
 import { useRootContext } from "../../../../contexts/RootContext";
 import Data from "../../../../data/data"
+import { useProjectDataContext } from "../../../../contexts/Api/ProjectDataContext";
+import {useServiceDataContext } from "../../../../contexts/Api/ServiceApiContext";
+import {
+  FaMicrochip,
+  FaRobot,
+  FaCube,
+  FaWifi,
+  FaCode,
+  FaBolt
+} from 'react-icons/fa';
+
 const sectionVariants: Variants = {
   hidden: {
     opacity: 0,
@@ -17,20 +28,21 @@ const sectionVariants: Variants = {
     backgroundPosition: 'center',
     backgroundSize: "cover",
     transition: {
-      duration: 0.8,
+      duration: 1.0,
       ease: "easeInOut"
     }
   }
 };
 
 const textVariants: Variants = {
-  hidden: { opacity: 0, x: -50 },
+  hidden: { opacity: 0, x: -50, y: 20 },
   visible: (index: number) => ({
     opacity: 1,
     x: 0,
+    y: 0,
     transition: {
-      duration: 0.6,
-      delay: index * 0.2,
+      duration: 0.8,
+      delay: index * 0.15,
       ease: "easeOut"
     }
   })
@@ -40,8 +52,8 @@ const imageVariants: Variants = {
   hidden: {
     opacity: 0,
     x: 50,
-    scale: 0.95,
-    rotate: 5
+    scale: 0.9,
+    rotate: 8
   },
   visible: {
     opacity: 1,
@@ -49,87 +61,265 @@ const imageVariants: Variants = {
     scale: 1,
     rotate: 0,
     transition: {
-      duration: 1.2,
+      duration: 1.4,
       ease: "easeOut"
     }
   }
 };
 
+// New floating icon variants
+const floatingIconVariants: Variants = {
+  hidden: { opacity: 0, scale: 0 },
+  visible: (index: number) => ({
+    opacity: 0.6,
+    scale: 1,
+    transition: {
+      duration: 0.6,
+      delay: 1.2 + index * 0.1,
+      ease: "easeOut"
+    }
+  })
+};
+
 const HeroSection: React.FC = memo(() => {
-  // Increased threshold for more reliable triggering
   const [ref, inView] = useInView({
     threshold: 0.2,
-    triggerOnce: true // Prevent repeated animations on scroll
+    triggerOnce: true
   });
-const {Data}=useRootContext();
+  const { projectData } = useProjectDataContext();
+  const {service_data}=useServiceDataContext();
+  const { Data } = useRootContext();
   const controls = useAnimation();
   const imageControls = useAnimation();
   const textControls = useAnimation();
+  const iconControls = useAnimation();
 
-  // Memoized animation trigger with staggered sequence
   const triggerAnimations = useCallback(async () => {
     if (inView) {
       await controls.start("visible");
       await textControls.start("visible");
       await imageControls.start("visible");
+      iconControls.start("visible");
     }
-  }, [inView, controls, imageControls, textControls]);
+  }, [inView, controls, imageControls, textControls, iconControls]);
 
   React.useEffect(() => {
     triggerAnimations();
   }, [inView, triggerAnimations]);
 
-  // if(isLoading) return <LoadingHeroPlaceholder/>
+  // Tech icons for floating animation
+  const techIcons = [
+    { icon: FaMicrochip, position: { top: '15%', left: '8%' } },
+    { icon: FaRobot, position: { top: '25%', right: '12%' } },
+    { icon: FaCube, position: { bottom: '30%', left: '5%' } },
+    { icon: FaWifi, position: { bottom: '20%', right: '8%' } },
+    { icon: FaCode, position: { top: '40%', left: '3%' } },
+    { icon: FaBolt, position: { top: '60%', right: '15%' } }
+  ];
+
   return (
-      <Section
-        ref={ref}
-        className="relative md:bg-gradient-to-br from-white to-sky-50 dark:from-gray-800 dark:to-gray-900
-        text-gray-800 dark:text-gray-100 py-10 sm:py-20 md:py-18 lg:py-24 px-6 md:px-8 lg:px-12
-        min-h-screen flex md:flex-row flex-col-reverse items-center justify-center gap-x-8 gap-y-4 overflow-hidden"
-      >
-        {/* Curve Container */}
+    <Section
+      ref={ref}
+      className="relative md:bg-gradient-to-br from-white to-sky-50 dark:from-gray-800 dark:to-gray-900
+      text-gray-800 dark:text-gray-100 py-10 sm:py-20 md:py-18 lg:py-24 px-6 md:px-8 lg:px-12
+      min-h-screen flex md:flex-row flex-col-reverse items-center justify-center gap-x-8 gap-y-4 overflow-hidden"
+    >
+      {/* Enhanced Background with Particles */}
+      <motion.div
+        variants={sectionVariants}
+        initial="hidden"
+        animate={controls}
+        className="border-sky-700 md:border-l-2 lg:border-l-4 absolute inset-0
+        pointer-events-none z-0 animate-border-shine"
+      />
+
+      {/* Floating Particles */}
+      <div className="absolute inset-0 pointer-events-none">
+        {[...Array(12)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute w-1 h-1 bg-sky-400 rounded-full opacity-40"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+            }}
+            animate={{
+              y: [0, -30, 0],
+              x: [0, 15, 0],
+              opacity: [0.2, 0.8, 0.2],
+              scale: [1, 1.5, 1],
+            }}
+            transition={{
+              duration: 6 + Math.random() * 4,
+              repeat: Infinity,
+              delay: Math.random() * 3,
+              ease: "easeInOut"
+            }}
+          />
+        ))}
+      </div>
+
+      {/* Floating Tech Icons */}
+      {techIcons.map((tech, index) => (
         <motion.div
-          variants={sectionVariants}
+          key={index}
+          custom={index}
+          variants={floatingIconVariants}
           initial="hidden"
-          animate={controls}
-          className="border-sky-700 md:border-l-2 lg:border-l-4 absolute inset-0
-          pointer-events-none z-0 animate-border-shine"
+          animate={iconControls}
+          className="absolute hidden lg:block z-5 text-sky-500 dark:text-sky-400"
+          style={tech.position}
+        >
+          <motion.div
+            animate={{
+              y: [0, -8, 0],
+              rotate: [0, 5, -5, 0],
+            }}
+            transition={{
+              duration: 4 + index * 0.5,
+              repeat: Infinity,
+              ease: "easeInOut"
+            }}
+            className="text-2xl opacity-30 hover:opacity-60 hover:scale-110 transition-all duration-300"
+          >
+            <tech.icon />
+          </motion.div>
+        </motion.div>
+      ))}
+
+      {/* Enhanced Hero Content */}
+      <div className="flex lg:flex-col flex-col-reverse justify-center lg:w-7/12 w-full z-20 relative font-serif min-h-[200px]">
+
+        {/* Subtle Tech Badge */}
+        {/* <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5, duration: 0.6 }}
+          className="mb-4 inline-flex items-center gap-2 self-start"
+        >
+          <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-sky-100 dark:bg-sky-900/30 text-sky-700 dark:text-sky-300 text-sm font-medium">
+            <FaMicrochip className="text-xs" />
+            <span>IoT & Embedded Systems</span>
+            <motion.div
+              animate={{ rotate: 360 }}
+              transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+              className="w-2 h-2 bg-sky-500 rounded-full"
+            />
+          </div>
+        </motion.div> */}
+
+        <motion.h1
+          custom={0}
+          variants={textVariants}
+          initial="hidden"
+          animate={textControls}
+          className="hero relative"
+        >
+          {Data.Home.hero.title || ""}
+
+          {/* Subtle text decoration */}
+          <motion.div
+            initial={{ width: 0 }}
+            animate={{ width: "100%" }}
+            transition={{ delay: 1.5, duration: 1.2, ease: "easeOut" }}
+            className="absolute bottom-0 left-0 h-0.5 bg-gradient-to-r from-sky-500 to-blue-600 opacity-20"
+          />
+        </motion.h1>
+
+        <motion.div
+          initial="hidden"
+          animate={textControls}
+          variants={textVariants}
+          custom={1}
+          className="mt-6 min-h-[60px] relative"
+        >
+          <HeroKeyPoint />
+
+          {/* Subtle glow effect */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: [0, 0.1, 0] }}
+            transition={{ delay: 2, duration: 3, repeat: Infinity }}
+            className="absolute inset-0 bg-gradient-to-r from-sky-200 to-blue-200 dark:from-sky-800 dark:to-blue-800 blur-xl -z-10"
+          />
+        </motion.div>
+
+        {/* Enhanced Stats/Metrics */}
+        <motion.div
+          custom={2}
+          variants={textVariants}
+          initial="hidden"
+          animate={textControls}
+          className="mt-10 flex gap-8 text-sm"
+        >
+          {[
+            { value: `${projectData?.length}+`, label: "Projects", icon: FaCube },
+            { value: `${service_data?.length}+`, label: "Services", icon: FaRobot },
+            { value: `${new Date().getFullYear()-2023}+`, label: "Years", icon: FaBolt }
+          ].map((stat, index) => (
+            stat.value&&<motion.div
+              key={stat.label}
+              animate={{
+                y: [0, -2, 0],
+              }}
+              transition={{
+                duration: 3,
+                repeat: Infinity,
+                delay: index * 0.5,
+                ease: "easeInOut"
+              }}
+              className="flex items-center justify-center gap-2 text-sky-600 dark:text-sky-400"
+            >
+              <stat.icon className="text-lg" />
+              <div>
+                <div className="font-bold text-lg">{stat.value}</div>
+                <div className="text-xs opacity-70">{stat.label}</div>
+              </div>
+            </motion.div>
+          ))}
+        </motion.div>
+      </div>
+
+      {/* Enhanced Hero Image */}
+      <motion.div
+        variants={imageVariants}
+        initial="hidden"
+        animate={imageControls}
+        className="lg:w-5/12 w-full z-10 overflow-hidden md:min-h-[500px] min-h-80 relative"
+        style={{ perspective: "1000px" }}
+      >
+        {/* Subtle glow behind image */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: [0, 0.3, 0] }}
+          transition={{ delay: 1.8, duration: 4, repeat: Infinity }}
+          className="absolute inset-0 bg-gradient-to-br from-sky-300 to-blue-500 blur-3xl -z-10 scale-75"
         />
 
-        {/* Hero Content - Fixed width to prevent layout shifts */}
-        <div className="flex lg:flex-col flex-col-reverse justify-center lg:w-7/12 w-full z-20 relative font-serif min-h-[200px]">
-          <motion.h1
-            custom={0}
-            variants={textVariants}
-            initial="hidden"
-            animate={textControls}
-            className="hero"
-          >
-            {Data.Home.hero.title || ""}
-          </motion.h1>
-
-          <motion.div
-            initial="hidden"
-            animate={textControls}
-            variants={textVariants}
-            custom={1}
-            className="mt-6 min-h-[60px]"
-          >
-            <HeroKeyPoint />
-          </motion.div>
-        </div>
-
-        {/* Hero Image - Fixed dimensions to prevent layout shifts */}
+        {/* Image container with subtle hover effect */}
         <motion.div
-          variants={imageVariants}
-          initial="hidden"
-          animate={imageControls}
-          className="lg:w-5/12 w-full z-10 overflow-hidden md:min-h-[500px] min-h-80 relative"
-          style={{ perspective: "1000px" }}
+          whileHover={{ scale: 1.02, rotateY: 2 }}
+          transition={{ duration: 0.3 }}
+          className="w-full h-full relative"
         >
           <HeroImageSlider />
         </motion.div>
-      </Section>
+
+        {/* Corner accents */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 2.2, duration: 0.8 }}
+          className="absolute top-4 right-4 w-8 h-8 border-t-2 border-r-2 border-sky-400 opacity-30"
+        />
+        <motion.div
+          initial={{ opacity: 0, scale: 0 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 2.4, duration: 0.8 }}
+          className="absolute bottom-4 left-4 w-8 h-8 border-b-2 border-l-2 border-sky-400 opacity-30"
+        />
+      </motion.div>
+    </Section>
   );
 });
 
