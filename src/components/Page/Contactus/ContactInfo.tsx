@@ -42,8 +42,7 @@ const ContactInfoItem = memo(({
     switch(linkType) {
       case 'email': return `mailto:${link || ''}`;
       case 'phone': return `tel:${link || ''}`;
-      // case 'whatsapp': return `https://wa.me/${(link || '').replace(/\D/g, '')}`;
-      case 'whatsapp': return `helo`;
+      case 'whatsapp':return link ? `https://wa.me/${String(link).replace(/\D/g, '')}` : '';
       default: return link || '#';
     }
   };
