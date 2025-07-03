@@ -1,7 +1,7 @@
 import React, { memo, useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { MdSignalWifiOff, MdRefresh } from 'react-icons/md';
-import { throttle } from '../base/util/throttle'; // Adjust the import path as necessary
+import { throttle } from '../../base/util/Throttle';
 
 
 const OfflineWarning: React.FC = memo(() => {
