@@ -10,8 +10,9 @@ type NavItemType = {
 const NavItem: React.FC<NavItemType> = memo((navItem: NavItemType) => {
       const isVisible = useScroll();
     const { pathname } = useLocation()
-    const isattack=useMemo(()=>pathname==='/services' || pathname==='/contact-us',[pathname])
-    return (
+    const isattack=useMemo(()=>/\/(services|contact-us)/.test(pathname),[pathname])
+
+  return (
         <NavLink
         to={navItem.to}
         className="group relative inline-block overflow-hidden"
