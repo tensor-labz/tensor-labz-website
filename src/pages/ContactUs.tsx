@@ -49,7 +49,7 @@ const ContactUs: React.FC = memo(() => {
             transition={{ delay: 0.5 }}
             className="text-center"
           >
-            <p className="text-white italic text-xl max-w-2xl mx-auto font-light">
+            <p className="text-white italic text-base md:text-xl max-w-2xl mx-auto font-light">
               {Data?.contactus?.quote}
             </p>
           </motion.div>
