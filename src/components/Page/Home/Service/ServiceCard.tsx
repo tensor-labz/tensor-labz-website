@@ -54,7 +54,7 @@ setActiveTab({title:service_name, slug:slug})
       </motion.div>
 
       {/* Service Details */}
-      <div className="sm:w-full w-3/5 text-center">
+      <div className="sm:w-full w-3/5 text-center self-center">
         <h3 className="md:text-2xl sm:text-lg text-base sm:font-semibold font-bold text-blue-900 sm:mb-3 mb-1">
           {service_name}
         </h3>
