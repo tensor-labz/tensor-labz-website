@@ -12,7 +12,7 @@ const AboutUs: React.FC = memo(() => {
   const {Data}=useRootContext()
   return (
     <Page HeadProps={{ title: "About Us" }}>
-      <div className="relative min-h-screen h-[1000px] sm:h-screen w-full">
+      <div className="relative min-h-screen h-[1250px] md:h-[900px] lg:h-screen w-full">
         {/* Background Video/Image Container */}
         <div className="absolute inset-0 z-0">
           {/* Video for larger screens (>=768px) */}
@@ -38,7 +38,7 @@ const AboutUs: React.FC = memo(() => {
         <Section className="relative z-10 flex items-center justify-center h-full">
           {/* Overlay */}
           <div className="absolute inset-0 bg-gradient-to-b from-blue-200/50 via-white/80 to-blue-200/50 z-0" />
-          <div className="w-11/12 relative  mx-auto text-center p-8 sm:mt-0 mt-8 rounded-2xl shadow-2xl backdrop-blur-sm">
+          <div className="w-11/12 relative  mx-auto text-center p-8 sm:mt-0 lg:mt-8 md:mt-14 rounded-2xl shadow-2xl backdrop-blur-sm">
             <h1 className="text-4xl md:text-6xl font-bold mb-6 text-blue-900 shadow-sm">
               {Data?.aboutus?.title?? "About Us"}
             </h1>
