@@ -204,7 +204,7 @@ const HeroSection: React.FC = memo(() => {
             initial={{ width: 0 }}
             animate={{ width: "100%" }}
             transition={{ delay: 1.5, duration: 1.2, ease: "easeOut" }}
-            className="absolute bottom-0 left-0 h-0.5 bg-gradient-to-r from-sky-500 to-blue-600 opacity-20"
+            className="absolute bottom-0 left-0 h-0.5 bg-gradient-to-r from-sky-500 to-blue-600 opacity-20 md:block hidden"
           />
         </motion.h1>
 
@@ -232,7 +232,7 @@ const HeroSection: React.FC = memo(() => {
           variants={textVariants}
           initial="hidden"
           animate={textControls}
-          className="mt-10 flex gap-8 text-sm"
+          className="mt-10 flex gap-8 text-sm md:self-start self-center"
         >
           {[
             { value: `${projectData?.length}+`, label: "Projects", icon: FaCube },
@@ -267,7 +267,7 @@ const HeroSection: React.FC = memo(() => {
         variants={imageVariants}
         initial="hidden"
         animate={imageControls}
-        className="lg:w-5/12 w-full z-10 overflow-hidden md:min-h-[500px] min-h-80 relative"
+        className="lg:w-5/12 w-full z-10 overflow-hidden md:min-h-[500px] min-h-80 relative "
         style={{ perspective: "1000px" }}
       >
         {/* Subtle glow behind image */}

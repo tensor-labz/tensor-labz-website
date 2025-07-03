@@ -50,7 +50,7 @@ const navigate=useNavigate()
         navigate(`/project/${project.slug}`);
       } }
     >
-      <div className="w-full md:w-48">
+      <div className="w-full md:w-48 ">
         <img
           className="
             md:object-cover object-center
