@@ -190,24 +190,6 @@ const HeroSection: React.FC = memo(() => {
       {/* Enhanced Hero Content */}
       <div className="flex lg:flex-col flex-col-reverse justify-center lg:w-7/12 w-full z-20 relative font-serif min-h-[200px]">
 
-        {/* Subtle Tech Badge */}
-        {/* <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5, duration: 0.6 }}
-          className="mb-4 inline-flex items-center gap-2 self-start"
-        >
-          <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-sky-100 dark:bg-sky-900/30 text-sky-700 dark:text-sky-300 text-sm font-medium">
-            <FaMicrochip className="text-xs" />
-            <span>IoT & Embedded Systems</span>
-            <motion.div
-              animate={{ rotate: 360 }}
-              transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
-              className="w-2 h-2 bg-sky-500 rounded-full"
-            />
-          </div>
-        </motion.div> */}
-
         <motion.h1
           custom={0}
           variants={textVariants}
@@ -257,7 +239,7 @@ const HeroSection: React.FC = memo(() => {
             { value: `${service_data?.length}+`, label: "Services", icon: FaRobot },
             { value: `${new Date().getFullYear()-2023}+`, label: "Years", icon: FaBolt }
           ].map((stat, index) => (
-            stat.value&&<motion.div
+            stat?.value&&<motion.div
               key={stat.label}
               animate={{
                 y: [0, -2, 0],
@@ -305,19 +287,7 @@ const HeroSection: React.FC = memo(() => {
           <HeroImageSlider />
         </motion.div>
 
-        {/* Corner accents */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 2.2, duration: 0.8 }}
-          className="absolute top-4 right-4 w-8 h-8 border-t-2 border-r-2 border-sky-400 opacity-30"
-        />
-        <motion.div
-          initial={{ opacity: 0, scale: 0 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 2.4, duration: 0.8 }}
-          className="absolute bottom-4 left-4 w-8 h-8 border-b-2 border-l-2 border-sky-400 opacity-30"
-        />
+
       </motion.div>
     </Section>
   );
