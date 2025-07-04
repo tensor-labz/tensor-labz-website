@@ -37,7 +37,8 @@ const Footer = () => {
             loading='lazy'
           />
           <p className="text-slate-50 text-center md:text-left max-w-xs">
-            Transforming digital landscapes through innovative software solutions.
+          Empowering creators and problem-solvers through research, innovation, and
+          practical application. 
           </p>
         </motion.div>
 
