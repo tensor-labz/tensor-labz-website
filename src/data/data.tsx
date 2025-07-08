@@ -12,7 +12,7 @@ const data: any = {
         hero: {
             hero_bg: "https://tensor-labz-store.s3.eu-north-1.amazonaws.com/Home/hero_bg.webp",
             slider_delay: 5000,
-            title:"Pioneering Sustainable Solutions with Engineering & Technology"
+            title:"Innovating Sustainability Through Technology"
         },
         services: {
             title: "Our Services",
