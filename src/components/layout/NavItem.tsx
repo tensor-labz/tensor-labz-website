@@ -1,4 +1,4 @@
-import React, { memo,useMemo } from 'react';
+import React, { memo } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import useScroll from '../../base/hooks/useScroll';
 import {motion } from 'framer-motion';
