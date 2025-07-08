@@ -18,7 +18,7 @@ const Header: React.FC<{ className?: string }> = memo(({ className = '' }) => {
       animate={{
         opacity: 1,
         y: 0,
-        backgroundColor: isVisible ? 'rgba(255, 255, 255, 0.95)' : 'transparent',
+        backgroundColor: isVisible ? '#092B4A' : 'transparent',
         boxShadow: isVisible ? '0 4px 6px -1px rgba(0, 0, 0, 0.1)' : 'none'
       }}
       transition={{

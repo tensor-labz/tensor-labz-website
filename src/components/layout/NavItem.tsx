@@ -19,7 +19,7 @@ const NavItem: React.FC<NavItemType> = memo((navItem: NavItemType) => {
       >
         {isVisible ? (
           <motion.span
-            className={`file:inline-block text-lg font-semibold text-blue-800 relative  after:content-['']
+            className={`file:inline-block text-lg font-semibold text-white relative  after:content-['']
 after:rounded-xl
 after:absolute
 after:left-0 after:bottom-0
