@@ -10,7 +10,7 @@ type NavItemType = {
 const NavItem: React.FC<NavItemType> = memo((navItem: NavItemType) => {
       const isVisible = useScroll();
     const { pathname } = useLocation()
-    const isattack=useMemo(()=>/\/(services|contact-us)/.test(pathname),[pathname])
+    const isattack=/contact-us/.test(pathname) || /services/g.test(pathname)
 
   return (
         <NavLink
