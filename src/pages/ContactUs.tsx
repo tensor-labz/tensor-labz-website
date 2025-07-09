@@ -12,7 +12,7 @@ const ContactUs: React.FC = memo(() => {
   const {data,isLoading}=useAppContext()
   return (
     <Page HeadProps={{title:"Contact Us"}}>
-      <div className="min-h-screen flex items-center justify-center p-6">
+      <div className="min-h-screen flex items-center justify-center p-6 lg:mx-0 mx-8">
   <picture className="absolute inset-0 -z-10">
           <source media="(min-width: 768px)" srcSet={Data?.contactus?.bg?.lg} />
           <source media="(min-width: 480px)" srcSet={Data?.contactus?.bg?.md} />

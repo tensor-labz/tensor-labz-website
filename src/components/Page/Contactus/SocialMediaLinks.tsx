@@ -8,72 +8,153 @@ import {
   FaYoutube
 } from 'react-icons/fa';
 import { useSocialMediaDataContext } from '../../../contexts/Api/SocialMediaContext';
+
+// Types
+interface SocialMediaItem {
+  social_media: string;
+  value: string;
+}
+
+interface SocialMediaLink {
+  icon: React.ComponentType<{ className?: string }>;
+  social_media: string;
+  color: string;
+  href?: string;
+}
+
+interface SocialMediaData {
+  social_media?: SocialMediaItem[];
+}
+
+interface SocialMediaContextType {
+  link_data?: SocialMediaData;
+  isLoading: boolean;
+}
+
+// Loading skeleton component with responsive layout
+const LoadingSkeleton = () => (
+  <div className="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-6 mt-10 mx-auto px-4">
+    <div className="h-6 w-24 bg-gray-700 rounded animate-pulse"></div>
+    <div className="flex justify-center items-center space-x-4">
+      {[...Array(5)].map((_, index) => (
+        <div
+          key={index}
+          className="w-6 h-6 md:w-8 md:h-8 bg-gray-700 rounded-full animate-pulse"
+        />
+      ))}
+    </div>
+  </div>
+);
+
+// Error component
+const ErrorMessage = ({ message }: { message: string }) => (
+  <div className="flex justify-center items-center mt-10 bg-black mx-auto px-4">
+    <p className="text-red-500 text-sm">{message}</p>
+  </div>
+);
+
 const SocialMediaLinks = memo(() => {
-  const {link_data,isLoading}=useSocialMediaDataContext()
-  const socialMediaLinks = [
+  const { link_data, isLoading } = useSocialMediaDataContext() as SocialMediaContextType;
+
+  // Social media configuration
+  const socialMediaConfig: SocialMediaLink[] = [
     {
       icon: FaLinkedin,
-      social_media:"Linkedin",
+      social_media: "Linkedin",
       color: "text-blue-600 hover:text-blue-800",
     },
     {
       icon: FaFacebook,
-      social_media:"FaceBook",
+      social_media: "FaceBook",
       color: "text-blue-700 hover:text-blue-900",
-
     },
     {
       icon: FaInstagram,
-      social_media:"Instragram",
+      social_media: "Instagram", // Fixed typo
       color: "text-pink-600 hover:text-pink-800",
-
     },
     {
       icon: FaYoutube,
-      social_media:"Youtube",
+      social_media: "Youtube",
       color: "text-red-600 hover:text-red-800",
     },
     {
       icon: FaTwitter,
-      social_media:"Twitter",
-      color: "text-blue-600 hover:text-blue-800",
-
+      social_media: "Twitter",
+      color: "text-blue-400 hover:text-blue-600",
     }
   ];
-  const socialLinks = link_data?.social_media?.map((social:any) => {
-    const socialLink = socialMediaLinks.find(link => link.social_media === social.social_media);
-    return {
-      ...socialLink,
-      href: social?.value,
-    };
-  }) || [];
 
-  return isLoading?(<div>...</div>): (
+  // Map social media data to configured links
+  const socialLinks = link_data?.social_media?.map((social: SocialMediaItem) => {
+    const config = socialMediaConfig.find(
+      link => link.social_media.toLowerCase() === social.social_media.toLowerCase()
+    );
+    return config ? { ...config, href: social.value } : null;
+  }).filter(Boolean) || [];
+
+  // Handle loading state
+  if (isLoading) {
+    return <LoadingSkeleton />;
+  }
+
+  // Handle empty state
+  if (!socialLinks.length) {
+    return <ErrorMessage message="No social media links available" />;
+  }
+
+  return (
     <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ delay: 0.6 }}
-      className="flex justify-center md:flex-row flex-col space-x-6 mt-10"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.6, duration: 0.8, ease: "easeInOut" }}
+      className="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-6 mt-10 mx-auto px-4 py-6 rounded-lg"
     >
-      <h3 className="text-xl font-semibold text-slate-50 mr-6 self-center">
+      <motion.h3
+        initial={{ opacity: 0, x: -20 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ delay: 0.8, duration: 0.6 }}
+        className="text-xl font-semibold text-slate-50 sm:text-blue-800 text-center"
+      >
         Follow Us
-      </h3>
-      <div className="flex justify-center items-center  sm:space-x-6 md:mt-0 mt-6">
-      {socialLinks.map((social:any, index:number) => (
-        <a
-          key={index}
-          href={social.href}
-          target="_blank"
-          rel="noopener noreferrer"
-          className={`${social.color} transition-colors duration-300 transform hover:scale-110`}
-        >
-          <social.icon className="md:w-8 md:h-8 w-6 h-6" />
-        </a>
+      </motion.h3>
 
-      ))}
-          </div>
+      <motion.div
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ delay: 1, duration: 0.6 }}
+        className="flex justify-center items-center space-x-4 sm:space-x-6"
+      >
+        {socialLinks.map((social: SocialMediaLink, index: number) => {
+          const IconComponent = social.icon;
+
+          return (
+            <motion.a
+              key={`${social.social_media}-${index}`}
+              href={social.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`${social.color} transition-all duration-300 transform hover:scale-110 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 rounded-full p-2`}
+              whileHover={{
+                scale: 1.2,
+                rotate: 5,
+                transition: { duration: 0.2 }
+              }}
+              whileTap={{ scale: 0.95 }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 1.2 + index * 0.1, duration: 0.4 }}
+              aria-label={`Follow us on ${social.social_media}`}
+            >
+              <IconComponent className="w-6 h-6 md:w-8 md:h-8" />
+            </motion.a>
+          );
+        })}
+      </motion.div>
     </motion.div>
   );
 });
+
 SocialMediaLinks.displayName = "SocialMediaLinks";
+
 export default SocialMediaLinks;
