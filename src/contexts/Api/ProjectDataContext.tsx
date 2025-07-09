@@ -89,7 +89,7 @@ export default function ProjectDataContextProvider({ children }: ProjectDataCont
 
           if (page) {
             const pageNumber = parseInt(page, 10);
-            const itemsPerPage = 10;
+            const itemsPerPage = 9;
             const startIndex = (pageNumber - 1) * itemsPerPage;
             const endIndex = startIndex + itemsPerPage;
             filteredData = filteredData.slice(startIndex, endIndex);
