@@ -23,7 +23,7 @@ const ContactUs: React.FC = memo(() => {
           <motion.h1
             initial={{ opacity: 0, y: -50 }}
             animate={{ opacity: 1, y: 0 }}
-            className="md:text-5xl text-3xl font-bold text-center md:text-blue-900 text-white md:mb-12 mb-6"
+            className="md:text-5xl text-3xl font-bold text-center sm:text-blue-900 text-white md:mb-12 mb-6"
           >
             {Data?.contactus?.title || "Contact Us"}
           </motion.h1>
@@ -47,9 +47,10 @@ const ContactUs: React.FC = memo(() => {
             transition={{ delay: 0.5 }}
             className="text-center"
           >
-            <p className="text-white sm:text-grey-600 italic text-sm md:text-xl max-w-2xl mx-auto sm:font-light font-bold">
-              {Data?.contactus?.quote}
-            </p>
+          <p className="text-white sm:text-gray-600 italic text-sm md:text-xl max-w-2xl mx-auto sm:font-medium font-bold">
+  {Data?.contactus?.quote}
+</p>
+
           </motion.div>
 
           <SocialMediaLinks />
