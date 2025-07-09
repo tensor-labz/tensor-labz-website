@@ -1,97 +1,203 @@
 import { memo } from 'react';
 import { motion } from 'framer-motion';
-import { FaFacebookF, FaLinkedinIn, FaInstagram, FaTwitter, FaGithub } from 'react-icons/fa';
+import { FaFacebookF, FaLinkedinIn, FaInstagram, FaGithub, FaMapMarkerAlt, FaEnvelope, FaPhone, FaClock,FaWhatsapp } from 'react-icons/fa';
 import logo from "../../assets/images/logo.png";
 import { useServiceDataContext } from '../../contexts/Api/ServiceApiContext';
 
 const Footer = () => {
-  const {service_data,isLoading}=useServiceDataContext()
+  const { service_data, isLoading } = useServiceDataContext();
+
   const socialLinks = [
-    { icon: FaFacebookF, href: "https://facebook.com/tensorlabz", color: "text-slate-500 hover:text-slate-600" },
-    { icon: FaLinkedinIn, href: "https://linkedin.com/company/tensorlabz", color: "text-slate-400 hover:text-slate-500" },
-    { icon: FaInstagram, href: "https://instagram.com/tensorlabz", color: "text-slate-300 hover:text-bluslate-400" },
-    { icon: FaTwitter, href: "https://twitter.com/tensorlabz", color: "text-slate-200 hover:text-slate-300" },
-    { icon: FaGithub, href: "https://github.com/tensorlabz", color: "text-slate-100 hover:text-slate-200" }
+    { icon: FaWhatsapp, href: "https://twitter.com/tensorlabz", color: "text-green-400 hover:text-green-300" },
+    { icon: FaFacebookF, href: "https://facebook.com/tensorlabz", color: "text-blue-400 hover:text-blue-300" },
+    { icon: FaLinkedinIn, href: "https://linkedin.com/company/tensorlabz", color: "text-blue-400 hover:text-blue-300" },
+    { icon: FaInstagram, href: "https://instagram.com/tensorlabz", color: "text-pink-400 hover:text-pink-300" },
+    // { icon: FaGithub, href: "https://github.com/tensorlabz", color: "text-gray-400 hover:text-gray-300" }
   ];
 
   const footerLinks = [
-    { title: "Services", links:isLoading?[]:service_data?.map((service:any) => ({  title:service?.service_name,link:`/services${service?.slug}`})) },
-    { title: "Company", links: [{ title: "About Us", link: "/about-us" }, { title: "Insights", link:"/services"}, {title: "Contact",link:"contact-us"}] },
-    // { title: "Resources", links: ["Blog", "Case Stfvudies", "White Papers"] }
+    { title: "Services", links: isLoading ? [] : service_data?.map((service: any) => ({ title: service?.service_name, link: `/services${service?.slug}` })) },
+    { title: "Company", links: [{ title: "About Us", link: "/about-us" }, { title: "Insights", link: "/services" }, { title: "Contact", link: "/contact-us" }] },
   ];
 
+  const contactInfo = [
+    { icon: FaMapMarkerAlt, text: "1234 Innovation Street, Tech City, TC 12345", type: "address" },
+    { icon: FaEnvelope, text: "hello@tensorlabz.com", type: "email", href: "mailto:hello@tensorlabz.com" },
+    { icon: FaPhone, text: "+1 (555) 123-4567", type: "phone", href: "tel:+15551234567" },
+    { icon: FaClock, text: "Mon - Fri: 9:00 AM - 6:00 PM", type: "hours" }
+  ];
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.2
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.6,
+        ease: "easeOut"
+      }
+    }
+  };
+
+  const socialVariants = {
+    hidden: { opacity: 0, scale: 0 },
+    visible: {
+      opacity: 1,
+      scale: 1,
+      transition: {
+        duration: 0.4,
+        ease: "backOut"
+      }
+    },
+    hover: {
+      scale: 1.2,
+      rotate: 5,
+      transition: {
+        duration: 0.3,
+        ease: "easeInOut"
+      }
+    }
+  };
+
   return (
-    <footer className="bg-gray-700 text-slate-200 py-12 border-t-2 border-blue-200">
-      <div className="max-w-screen-xl mx-auto px-6 grid md:grid-cols-4 gap-8">
-        {/* Company Info */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="col-span-full md:col-span-1 flex flex-col items-center md:items-start"
-        >
-          <img
-            src={logo}
-            alt='Tensor Labz Logo'
-            className='h-16 w-auto object-contain mb-4'
-            loading='lazy'
-          />
-          <p className="text-slate-50 text-center md:text-left max-w-xs">
-          Empowering creators and problem-solvers through research, innovation, and
-          practical application. 
-          </p>
-        </motion.div>
+    <footer className=" bg-[#092B4A] text-slate-200 py-16 border-t-2 border-blue-200/20 relative overflow-hidden">
+      {/* Background decoration */}
+      {/* <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 to-purple-500/5 pointer-events-none"></div> */}
+      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-400 via-purple-600 to-blue-900"></div>
 
-        {/* Footer Links */}
-        {footerLinks?.map((section, index) => (
+      <motion.div
+        variants={containerVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.3 }}
+        className="max-w-screen-xl mx-auto px-6 relative z-10"
+      >
+        <div className="grid lg:grid-cols-12 md:grid-cols-2 gap-8 lg:gap-12">
+          {/* Company Info */}
           <motion.div
-            key={section.title}
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: index * 0.2 }}
-            className="flex flex-col items-center md:items-start"
+            variants={itemVariants}
+            className="lg:col-span-4 md:col-span-2 flex flex-col items-center md:items-start space-y-4"
           >
-            <h4 className="font-bold text-lg mb-4 text-white">{section?.title}</h4>
-            {section?.links?.map((link:any) => (
-              <a
-                key={link?.title}
-                href={link?.link}
-                className="text-slate-300 hover:text-slate-200 transition-colors mb-2"
-              >
-                {link.title}
-              </a>
-            ))}
-          </motion.div>
-        ))}
+            <motion.img
+              src={logo}
+              alt='Tensor Labz Logo'
+              className='h-16 w-auto object-contain'
+              loading='lazy'
+              whileHover={{ scale: 1.05 }}
+              transition={{ duration: 0.3 }}
+            />
+            <p className="text-slate-300 text-center md:text-left max-w-xs leading-relaxed">
+              Empowering creators and problem-solvers through research, innovation, and practical application.
+            </p>
 
-        {/* Social Media Links */}
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-          className="col-span-full md:col-span-1 flex justify-center md:justify-end items-center space-x-6"
-        >
-          {socialLinks?.map(({ icon: Icon, href, color }) => (
-            <a
-              key={href}
-              href={href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={`text-2xl ${color} transition-transform hover:scale-110`}
+            {/* Social Media Links */}
+            <div className="flex space-x-4 pt-4 lg:col-span-4">
+              {socialLinks?.map(({ icon: Icon, href, color }) => (
+                <motion.a
+                  key={href}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  variants={socialVariants}
+                  whileHover="hover"
+                  className={`text-xl ${color} transition-colors p-2 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-sm`}
+                >
+                  <Icon />
+                </motion.a>
+              ))}
+            </div>
+          </motion.div >
+<motion.div  variants={itemVariants} className='lg:col-span-4 flex justify-content-between md:flex-row flex-col items-center md:items-start space-y-4 md:space-y-0 md:space-x-6'>
+          {/* Footer Links */}
+          {footerLinks?.map((section) => (
+            <div
+
+              className="flex flex-col items-center md:items-start space-y-4"
             >
-              <Icon />
-            </a>
+              <h4 className="font-bold text-lg text-white relative">
+                {section?.title}
+                <span className="absolute -bottom-1 left-0 w-full h-0.5 bg-gradient-to-r from-blue-400 to-purple-400 transform scale-x-0 group-hover:scale-x-100 transition-transform"></span>
+              </h4>
+              <div className="space-y-2">
+                {section?.links?.map((link: any) => (
+                  <motion.a
+                    key={link?.title}
+                    href={link?.link}
+                    className="text-slate-300 hover:text-white transition-colors block relative overflow-hidden group md:text-justify text-center"
+                    whileHover={{ x: 5 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <span className="relative z-10">{link.title}</span>
+                    <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-400 group-hover:w-full transition-all duration-300"></span>
+                  </motion.a>
+                ))}
+              </div>
+            </div>
           ))}
-        </motion.div>
+</motion.div>
+           {/* Contact Information */}
+           <motion.div
+            variants={itemVariants}
+            className="lg:col-span-2 md:col-span-2 flex flex-col items-center md:items-start space-y-4"
+          >
+            <h4 className="font-bold text-lg text-white">Contact Us</h4>
+            <div className="space-y-3 w-full">
+              {contactInfo.map((contact, index) => (
+                <motion.div
+                  key={index}
+                  className="flex items-center md:items-start justify-center md:justify-start space-x-3 group"
+                  whileHover={{ x: 5 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <motion.div
+                    className="flex-shrink-0 w-5 h-5 mt-1 text-blue-400 group-hover:text-blue-300 transition-colors md:block hidden"
+                    whileHover={{ scale: 1.1 }}
+                  >
+                    <contact.icon />
+                  </motion.div>
+                  {contact.href ? (
+                    <a
+                      href={contact.href}
+                      className="text-slate-300 hover:text-white transition-colors text-sm leading-relaxed text-center md:text-left"
+                    >
+                      {contact.text}
+                    </a>
+                  ) : (
+                    <span className="text-slate-300 text-sm leading-relaxed text-center md:text-left">
+                      {contact.text}
+                    </span>
+                  )}
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+        </div>
 
         {/* Copyright */}
-        <div className="col-span-full border-t border-blue-200 pt-6 mt-6 text-center">
-          <p className="text-slate-300">
-            &copy; {new Date().getFullYear()} <span className="font-bold text-slate-100">Tensor Labz</span>.
-            All rights reserved.
-          </p>
-        </div>
-      </div>
+        <motion.div
+          variants={itemVariants}
+          className="border-t border-blue-200/20 pt-8 mt-12 text-center"
+        >
+          <div className="flex flex-col justify-center items-center space-y-4 md:space-y-0">
+            <p className="text-slate-300 text-sm">
+              &copy; {new Date().getFullYear()} <span className="font-bold text-white">Tensor Labz</span>.
+              All rights reserved.
+            </p>
+
+          </div>
+        </motion.div>
+      </motion.div>
     </footer>
   );
 }
