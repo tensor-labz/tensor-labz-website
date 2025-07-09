@@ -33,7 +33,7 @@ interface SocialMediaContextType {
 
 // Loading skeleton component with responsive layout
 const LoadingSkeleton = () => (
-  <div className="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-6 mt-10 mx-auto px-4">
+  <div className="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-6 mt-10 bg-black mx-auto px-4">
     <div className="h-6 w-24 bg-gray-700 rounded animate-pulse"></div>
     <div className="flex justify-center items-center space-x-4">
       {[...Array(5)].map((_, index) => (
@@ -86,12 +86,12 @@ const SocialMediaLinks = memo(() => {
   ];
 
   // Map social media data to configured links
-  const socialLinks = link_data?.social_media?.map((social: SocialMediaItem) => {
+  const socialLinks: SocialMediaLink[] = link_data?.social_media?.map((social: SocialMediaItem) => {
     const config = socialMediaConfig.find(
       link => link.social_media.toLowerCase() === social.social_media.toLowerCase()
     );
     return config ? { ...config, href: social.value } : null;
-  }).filter(Boolean) || [];
+  }).filter((link): link is SocialMediaLink => link !== null) || [];
 
   // Handle loading state
   if (isLoading) {
@@ -108,7 +108,7 @@ const SocialMediaLinks = memo(() => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.6, duration: 0.8, ease: "easeInOut" }}
-      className="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-6 mt-10 mx-auto px-4 py-6 rounded-lg"
+      className="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-6 mt-10 bg-black mx-auto px-4 py-6 rounded-lg"
     >
       <motion.h3
         initial={{ opacity: 0, x: -20 }}
