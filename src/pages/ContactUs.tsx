@@ -16,10 +16,8 @@ const ContactUs: React.FC = memo(() => {
   <picture className="absolute inset-0 -z-10">
           <source media="(min-width: 768px)" srcSet={Data?.contactus?.bg?.lg} />
           <source media="(min-width: 480px)" srcSet={Data?.contactus?.bg?.md} />
-          <img src={Data?.contactus?.bg?.sm} alt="" className="w-full h-full object-cover brightness-75" />
+          <img src={Data?.contactus?.bg?.sm} alt="" className="w-full h-full object-cover" />
         </picture>
-   {/* Global overlay for better content visibility */}
-        {/* <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/20 to-white" /> */}
         <div className="max-w-4xl w-full space-y-10 relative  p-8 rounded-2xl shadow-2xl backdrop-blur-sm mt-10 flex items-center justify-center flex-col">
 
           <motion.h1
