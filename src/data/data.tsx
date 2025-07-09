@@ -1,6 +1,10 @@
 
 import logo from "../assets/images/logo.png";
 import navData from "./nav_data";
+import heroBg from "../assets/images/Page/Home/Hero/hero_bg.webp"
+import ContactLgBg from "../assets/images/Page/ContactUs/ContactusBgLG.png"
+import ContactMdBg from "../assets/images/Page/ContactUs/ContactusBgMd.webp"
+import ContactSmBg from "../assets/images/Page/ContactUs/ContactusBgSM.webp"
 const data: any = {
 
   layout:{
@@ -10,7 +14,7 @@ const data: any = {
     },
     Home: {
         hero: {
-            hero_bg: "https://tensor-labz-store.s3.eu-north-1.amazonaws.com/Home/hero_bg.webp",
+            hero_bg:heroBg,
             slider_delay: 5000,
             title:"Innovating Sustainability Through Technology"
         },
@@ -51,9 +55,9 @@ const data: any = {
     },
     contactus:{
         bg: {
-            lg:"https://tensor-labz-store.s3.eu-north-1.amazonaws.com/contact-us/ContactusBgLG.png",
-            md:"https://tensor-labz-store.s3.eu-north-1.amazonaws.com/contact-us/ContactusBgMd.webp",
-            sm:"https://tensor-labz-store.s3.eu-north-1.amazonaws.com/contact-us/ContactusBgSM.webp"
+            lg:ContactLgBg,
+            md:ContactMdBg,
+            sm:ContactSmBg
         },
         quote: "Bridging innovation and technology to transform your business challenges into breakthrough solutions.",
         title:"Contact InnovateTech"
