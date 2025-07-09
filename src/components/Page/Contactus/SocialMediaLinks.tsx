@@ -48,7 +48,7 @@ const LoadingSkeleton = () => (
 
 // Error component
 const ErrorMessage = ({ message }: { message: string }) => (
-  <div className="flex justify-center items-center mt-10 bg-black mx-auto px-4">
+  <div className="flex justify-center items-center mt-10 mx-auto px-4">
     <p className="text-red-500 text-sm">{message}</p>
   </div>
 );
@@ -108,7 +108,7 @@ const SocialMediaLinks = memo(() => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.6, duration: 0.8, ease: "easeInOut" }}
-      className="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-6 mt-10 bg-black mx-auto px-4 py-6 rounded-lg"
+      className="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-6 mt-10  mx-auto px-4 py-6 rounded-lg"
     >
       <motion.h3
         initial={{ opacity: 0, x: -20 }}
