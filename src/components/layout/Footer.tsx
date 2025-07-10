@@ -118,38 +118,42 @@ const Footer = () => {
               ))}
             </div>
           </motion.div >
-<motion.div  variants={itemVariants} className='lg:col-span-4 flex justify-content-between md:flex-row flex-col items-center md:items-start space-y-4 md:space-y-0 md:space-x-6'>
-          {/* Footer Links */}
-          {footerLinks?.map((section) => (
-            <div
-
-              className="flex flex-col items-center md:items-start space-y-4"
-            >
-              <h4 className="font-bold text-lg text-white relative">
-                {section?.title}
-                <span className="absolute -bottom-1 left-0 w-full h-0.5 bg-gradient-to-r from-blue-400 to-purple-400 transform scale-x-0 group-hover:scale-x-100 transition-transform"></span>
-              </h4>
-              <div className="space-y-2">
-                {section?.links?.map((link: any) => (
-                  <motion.a
-                    key={link?.title}
-                    href={link?.link}
-                    className="text-slate-300 hover:text-white transition-colors block relative overflow-hidden group md:text-justify text-center"
-                    whileHover={{ x: 5 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    <span className="relative z-10">{link.title}</span>
-                    <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-400 group-hover:w-full transition-all duration-300"></span>
-                  </motion.a>
-                ))}
-              </div>
-            </div>
-          ))}
+          <motion.div
+  variants={itemVariants}
+  className="lg:col-span-4 flex flex-col md:flex-row justify-between md:space-x-4 space-y-4 md:space-y-0"
+>
+  {footerLinks?.map((section, index) => (
+    <div
+      key={section.title}
+      className={`flex flex-col items-center md:items-start space-y-4 break-words ${
+        index === 0 ? 'md:basis-2/3' : 'md:basis-1/3'
+      }`}
+    >
+      <h4 className="font-bold text-lg text-white relative">
+        {section?.title}
+        <span className="absolute -bottom-1 left-0 w-full h-0.5 bg-gradient-to-r from-blue-400 to-purple-400 transform scale-x-0 group-hover:scale-x-100 transition-transform"></span>
+      </h4>
+      <div className="space-y-2 w-full">
+        {section?.links?.map((link: any) => (
+          <motion.a
+            key={link?.title}
+            href={link?.link}
+            className="text-slate-300 hover:text-white transition-colors block relative overflow-hidden group text-center md:text-left break-words"
+            whileHover={{ x: 5 }}
+            transition={{ duration: 0.2 }}
+          >
+            <span className="relative z-10">{link.title}</span>
+            <span className="absolute bottom-0 left-0 w-0 h-0.1 shadow-md bg-white group-hover:w-full transition-all duration-300"></span>
+          </motion.a>
+        ))}
+      </div>
+    </div>
+  ))}
 </motion.div>
            {/* Contact Information */}
            <motion.div
             variants={itemVariants}
-            className="lg:col-span-2 md:col-span-2 flex flex-col items-center md:items-start space-y-4"
+            className="lg:col-span-4 md:col-span-2 flex flex-col items-center md:items-start space-y-4"
           >
             <h4 className="font-bold text-lg text-white">Contact Us</h4>
             <div className="space-y-3 w-full">

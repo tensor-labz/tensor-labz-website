@@ -1,7 +1,6 @@
 import React, { memo } from 'react';
 import { motion} from 'framer-motion';
 import logo from '../../assets/images/logo.png';
-
 import useScroll from '../../base/hooks/useScroll';
 import NavBar from './NavBar';
 import MobileNavigation from './MobileNavigation';

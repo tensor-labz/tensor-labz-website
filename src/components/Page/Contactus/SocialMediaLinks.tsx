@@ -8,6 +8,7 @@ import {
   FaYoutube
 } from 'react-icons/fa';
 import { useSocialMediaDataContext } from '../../../contexts/Api/SocialMediaContext';
+import { IconType } from "react-icons";
 
 // Types
 interface SocialMediaItem {
@@ -16,7 +17,7 @@ interface SocialMediaItem {
 }
 
 interface SocialMediaLink {
-  icon: React.ComponentType<{ className?: string }>;
+  icon: IconType;
   social_media: string;
   color: string;
   href?: string;
