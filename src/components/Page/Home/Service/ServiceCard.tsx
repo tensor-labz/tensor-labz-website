@@ -13,7 +13,7 @@ const ServiceCard: React.FC<ServiceCardProps> = memo(({ service_name, descriptio
     <Card
       className="
         group relative flex sm:flex-col flex-row justify-between
-        rounded-xl overflow-hidden px-4 py-3 sm:p-6
+        rounded-xl overflow-hidden px-3 py-3 sm:p-6
         bg-gradient-to-br from-white via-white to-[#b3c7da]
         border border-[#092B4A]/10
         shadow-sm hover:shadow-lg transition-all duration-300
@@ -70,13 +70,17 @@ const ServiceCard: React.FC<ServiceCardProps> = memo(({ service_name, descriptio
         <h3 className="md:text-2xl sm:text-xl text-lg font-bold text-[#092B4A] mb-1">
           {service_name}
         </h3>
+        <p className="text-sm sm:text-base text-[#092B4A]/80 leading-relaxed sm:hidden block">
+          {description}
+          </p>
       </div>
 
       {/* Hover Reveal Overlay */}
       <motion.div
         className="
+hidden
           absolute bottom-0 left-0 w-full px-4 py-3 sm:px-6
-          flex items-center justify-center text-center
+          sm:flex items-center justify-center text-center
           overflow-hidden
           bg-[#092B4A]
           h-0 group-hover:h-[60%]

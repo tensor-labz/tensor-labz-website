@@ -50,7 +50,7 @@ const ServiceSection: React.FC = memo(() => {
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.1 }}
-        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:px-0 px-2"
+        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:px-0 px-2 md:mx-0 mx-6"
       >
         {!isLoading&&service_data
           ?.filter((serv: ServiceCardProps) => serv?.show_in_home)
