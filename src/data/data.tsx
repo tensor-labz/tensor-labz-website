@@ -5,6 +5,7 @@ import heroBg from "../assets/images/Page/Home/Hero/hero_bg.webp"
 import ContactLgBg from "../assets/images/Page/ContactUs/ContactusBgLG.png"
 import ContactMdBg from "../assets/images/Page/ContactUs/ContactusBgMd.webp"
 import ContactSmBg from "../assets/images/Page/ContactUs/ContactusBgSM.webp"
+import TopProductTitle from "../assets/images/Page/Home/TopProduct/topproductbg.jpg";
 const data: any = {
 
   layout:{
@@ -27,7 +28,7 @@ const data: any = {
             hero_content: "Check out our latest projects and see what we can do for you.",
             hero_bg: {
                 lg:"https://tensor-labz-store.s3.eu-north-1.amazonaws.com/Home/topProductBanner.mp4",
-                sm:"https://tensor-labz-store.s3.eu-north-1.amazonaws.com/Home/LatestProjectBg.jpg"
+                sm:TopProductTitle
             }
         }
 
