@@ -24,7 +24,7 @@ after:rounded-xl
 after:absolute
 after:left-0 after:bottom-0
 after:h-0.5 sm:after:h-1 after:w-0
-after:bg-blue-800
+after:bg-white
 after:transition-all after:duration-300 hover:after:w-3/4 `}
           >
             {navItem.nav}
