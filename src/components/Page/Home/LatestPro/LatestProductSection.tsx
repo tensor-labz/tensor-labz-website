@@ -7,7 +7,7 @@ import TopProductTitle from "./TopProducttitle";
 import MobileTopCarousel from "./MobileTopCarsaole";
 import { useProjectDataContext } from "../../../../contexts/Api/ProjectDataContext";
 import { useRootContext } from "../../../../contexts/RootContext";
-
+import { HiOutlineCubeTransparent } from "react-icons/hi";
 const LatestProductSection: React.FC = memo(() => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const { topData } = useProjectDataContext();
@@ -65,22 +65,84 @@ const LatestProductSection: React.FC = memo(() => {
         variants={sectionVariants}
       >
         {/* Video Banner */}
-       {islarge?(<motion.div
-          className="lg:w-2/5 w-full relative"
-          variants={sectionVariants}
-        >
-          <video
-            src={Data?.Home?.latest_project?.hero_bg?.lg}
-            className="object-cover object-center w-full rounded-md h-[400px] lg:h-[600px]"
-            autoPlay
-            muted
-            loop
-            playsInline
-          />
-          <div className="absolute bottom-4 w-full md:bottom-0">
-            <TopProductTitle />
-          </div>
-        </motion.div>):(
+        {islarge ? (
+        <motion.div
+        className="lg:w-2/5 w-full relative overflow-hidden rounded-md"
+        variants={sectionVariants}
+        whileHover={{ scale: 1.02 }}
+      >
+        {/* Video */}
+        <video
+          src={Data?.Home?.latest_project?.hero_bg?.lg}
+          className="object-cover object-center w-full rounded-md h-[400px] lg:h-[600px]"
+          autoPlay
+          muted
+          loop
+          playsInline
+        />
+
+        {/* Overlay gradient glow */}
+        <motion.div
+          className="absolute inset-0 bg-gradient-to-tr from-purple-500/20 to-blue-500/20 pointer-events-none mix-blend-overlay"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: [0, 0.2, 0] }}
+          transition={{
+            duration: 6,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+        />
+
+        {/* Floating blurred shape */}
+        <motion.div
+          className="absolute -top-10 -right-10 w-40 h-40 bg-blue-400/10 rounded-full blur-3xl"
+          animate={{
+            x: [0, 20, 0],
+            y: [0, 20, 0],
+            rotate: [0, 15, 0],
+          }}
+          transition={{
+            duration: 10,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+        />
+
+        {/* Rotating cube icon */}
+        <motion.div
+  className="absolute text-white opacity-40 w-10 h-10"
+  animate={{
+    rotate: [0, 360],
+    top: ["1rem", "1rem", "calc(100% - 2.5rem)", "calc(100% - 2.5rem)"],
+    left: ["1rem", "calc(100% - 2.5rem)", "calc(100% - 2.5rem)", "1rem"],
+  }}
+  transition={{
+    rotate: {
+      repeat: Infinity,
+      duration: 8,
+      ease: "linear",
+    },
+    top: {
+      duration: 20,
+      repeat: Infinity,
+      ease: "easeInOut",
+    },
+    left: {
+      duration: 20,
+      repeat: Infinity,
+      ease: "easeInOut",
+    },
+  }}
+>
+  <HiOutlineCubeTransparent className="w-full h-full" />
+</motion.div>
+
+        {/* Bottom text */}
+        <div className="absolute bottom-4 w-full md:bottom-0">
+          <TopProductTitle />
+        </div>
+      </motion.div>
+       ):(
           <>
          <h3 className="text-2xl text-center font-bold w-full text-slate-50 py-3">Our Top Insights</h3>
             <img

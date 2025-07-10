@@ -1,61 +1,59 @@
-import React, { useEffect, useState, memo } from "react";
+import React, { memo } from "react";
 import { motion } from "framer-motion";
 
-// Memoized Component for Performance Optimization
 const TopProductTitle: React.FC = memo(() => {
-  const title = "Our Top Insights";
-  const [currentIndex, setCurrentIndex] = useState<number>(0);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentIndex((prevIndex) =>
-        prevIndex < title.length ? prevIndex + 1 : 0
-      );
-    }, 2000); // Adjust the interval speed here
-
-    return () => clearInterval(interval); // Clean up interval on unmount
-  }, [title.length]);
+  const title = "Innovating in 3D Modeling, Embedded Systems & IoT";
 
   return (
-    <h3 className="text-2xl text-center font-bold absolute bottom-4 w-full text-slate-50">
-      {/* Container for staggered animation */}
-      <motion.div
+    <div className="w-full flex flex-col items-center">
+      <motion.h3
+        className="text-3xl md:text-4xl text-center font-extrabold text-slate-50"
         initial="hidden"
         animate="visible"
         variants={containerVariants}
-        key={currentIndex} // Ensure re-render for animation
-        className="inline-block"
       >
-        {/* Render characters dynamically */}
-        {title.split("").map((char, index) => (
+        {title.split(" ").map((word, index) => (
           <motion.span
-            key={`${char}-${index}`}
-            variants={characterVariants}
-            className="inline-block"
+            key={`${word}-${index}`}
+            variants={wordVariants}
+            className="inline-block mx-1"
           >
-            {char === " " ? "\u00A0" : char}
+            {word}
           </motion.span>
         ))}
-      </motion.div>
-    </h3>
+      </motion.h3>
+      <motion.p
+        className="mt-2 text-slate-300 text-sm md:text-base text-center"
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 1.5, duration: 0.6, ease: "easeOut" }}
+      >
+        Tensor Labs — Pioneering Next-Gen Tech Solutions
+      </motion.p>
+    </div>
   );
 });
 
 export default TopProductTitle;
 
-// Variants for container (staggered effect)
+// Container animation: stagger words
 const containerVariants = {
   hidden: { opacity: 1 },
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.05, // Delay between each character's animation
+      staggerChildren: 0.15,
     },
   },
 };
 
-// Variants for individual characters
-const characterVariants = {
-  hidden: { opacity: 0, y: 10 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.3, ease: "easeOut" } },
+// Word animation: fade + subtle skew for 3D effect
+const wordVariants = {
+  hidden: { opacity: 0, y: 10, skewY: 5 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    skewY: 0,
+    transition: { duration: 0.5, ease: "easeOut" },
+  },
 };
