@@ -87,12 +87,12 @@ const SocialMediaLinks = memo(() => {
   ];
 
   // Map social media data to configured links
-  const socialLinks: SocialMediaLink[] = link_data?.social_media?.map((social: SocialMediaItem) => {
+  const socialLinks= link_data?.social_media?.map((social: SocialMediaItem) => {
     const config = socialMediaConfig.find(
       link => link.social_media.toLowerCase() === social.social_media.toLowerCase()
     );
     return config ? { ...config, href: social.value } : null;
-  }).filter((link): link is SocialMediaLink => link !== null) || [];
+  }) || [];
 
   // Handle loading state
   if (isLoading) {
@@ -126,16 +126,16 @@ const SocialMediaLinks = memo(() => {
         transition={{ delay: 1, duration: 0.6 }}
         className="flex justify-center items-center space-x-4 sm:space-x-6"
       >
-        {socialLinks.map((social: SocialMediaLink, index: number) => {
-          const IconComponent = social.icon;
+        {socialLinks.map((social, index: number) => {
+          const IconComponent = social?.icon;
 
           return (
             <motion.a
-              key={`${social.social_media}-${index}`}
-              href={social.href}
+              key={`${social?.social_media}-${index}`}
+              href={social?.href}
               target="_blank"
               rel="noopener noreferrer"
-              className={`${social.color} transition-all duration-300 transform hover:scale-110 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 rounded-full p-2`}
+              className={`${social?.color} transition-all duration-300 transform hover:scale-110 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 rounded-full p-2`}
               whileHover={{
                 scale: 1.2,
                 rotate: 5,
@@ -145,9 +145,9 @@ const SocialMediaLinks = memo(() => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 1.2 + index * 0.1, duration: 0.4 }}
-              aria-label={`Follow us on ${social.social_media}`}
+              aria-label={`Follow us on ${social?.social_media}`}
             >
-              <IconComponent className="w-6 h-6 md:w-8 md:h-8" />
+              {IconComponent && <IconComponent className="w-6 h-6 md:w-8 md:h-8" />}
             </motion.a>
           );
         })}

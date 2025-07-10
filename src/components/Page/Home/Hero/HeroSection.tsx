@@ -204,7 +204,7 @@ const HeroSection: React.FC = memo(() => {
             initial={{ width: 0 }}
             animate={{ width: "100%" }}
             transition={{ delay: 1.5, duration: 1.2, ease: "easeOut" }}
-            className="absolute bottom-0 left-0 h-0.5 bg-gradient-to-r from-sky-500 to-blue-600 opacity-20 md:block hidden"
+            className="absolute -bottom-6 left-0 h-0.5 bg-gradient-to-r from-sky-500 to-blue-600 opacity-20 md:block hidden"
           />
         </motion.h1>
 
@@ -213,7 +213,7 @@ const HeroSection: React.FC = memo(() => {
           animate={textControls}
           variants={textVariants}
           custom={1}
-          className="mt-6 min-h-[60px] relative"
+          className="mt-10 min-h-[60px] relative"
         >
           <HeroKeyPoint />
 
@@ -254,8 +254,8 @@ const HeroSection: React.FC = memo(() => {
             >
               <stat.icon className="text-lg" />
               <div>
-                <div className="font-bold text-lg">{stat.value}</div>
-                <div className="text-xs opacity-70">{stat.label}</div>
+                <div className="font-bold text-xl">{stat.value}</div>
+                <div className="text-sm opacity-70">{stat.label}</div>
               </div>
             </motion.div>
           ))}
