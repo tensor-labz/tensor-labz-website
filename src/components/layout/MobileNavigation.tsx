@@ -1,10 +1,10 @@
 import React, { useState, memo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaBars, FaTimes } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import navData from "../../data/nav_data";
 import logo from "../../assets/images/logo.png"; // Replace with your actual logo path
-
+import useScroll from "../../base/hooks/useScroll";
 interface NavItemProps {
   icon: React.ReactNode;
   nav: string;
@@ -40,7 +40,9 @@ const MobileNavigation: React.FC = memo(() => {
   const toggleDrawer = () => setIsOpen(!isOpen);
 
   const closeDrawer = () => setIsOpen(false);
-
+  const { pathname } = useLocation();
+  const isVisible = useScroll();
+  const ishome = pathname === "/";
   return (
     <>
       {/* Mobile Menu Toggle */}
@@ -48,7 +50,7 @@ const MobileNavigation: React.FC = memo(() => {
         <motion.button
           whileTap={{ scale: 0.9 }}
           onClick={toggleDrawer}
-          className="text-xl text-blue-600 focus:outline-none"
+          className={`text-xl ${ishome && !isVisible?"text-blue-600":"text-white"}  focus:outline-none`}
         >
           {isOpen ? <FaTimes /> : <FaBars />}
         </motion.button>
