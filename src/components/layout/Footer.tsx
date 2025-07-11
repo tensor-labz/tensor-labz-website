@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import { motion } from 'framer-motion';
-import { FaFacebookF, FaLinkedinIn, FaInstagram, FaMapMarkerAlt, FaEnvelope, FaPhone, FaClock,FaWhatsapp } from 'react-icons/fa';
+import { FaFacebookF, FaLinkedinIn, FaInstagram, FaMapMarkerAlt, FaEnvelope, FaPhone, FaClock,FaWhatsapp,FaTiktok,FaYoutube } from 'react-icons/fa';
 import logo from "../../assets/images/logo.png";
 import { useServiceDataContext } from '../../contexts/Api/ServiceApiContext';
 
@@ -12,7 +12,8 @@ const Footer = () => {
     { icon: FaFacebookF, href: "https://facebook.com/tensorlabz", color: "text-blue-400 hover:text-blue-300" },
     { icon: FaLinkedinIn, href: "https://linkedin.com/company/tensorlabz", color: "text-blue-400 hover:text-blue-300" },
     { icon: FaInstagram, href: "https://instagram.com/tensorlabz", color: "text-pink-400 hover:text-pink-300" },
-    // { icon: FaGithub, href: "https://github.com/tensorlabz", color: "text-gray-400 hover:text-gray-300" }
+    { icon: FaTiktok, href: "https://github.com/tensorlabz", color: "text-gray-200 hover:text-gray-100 border-3 border-white" },
+    { icon: FaYoutube, href: "https://github.com/tensorlabz", color: "text-red-400 hover:text-red-300" }
   ];
 
   const footerLinks = [

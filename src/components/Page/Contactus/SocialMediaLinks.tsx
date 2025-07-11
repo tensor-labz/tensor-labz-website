@@ -2,10 +2,10 @@ import { memo } from "react";
 import { motion } from "framer-motion";
 import {
   FaLinkedin,
-  FaTwitter,
   FaFacebook,
   FaInstagram,
-  FaYoutube
+  FaYoutube,
+  FaTiktok
 } from 'react-icons/fa';
 import { useSocialMediaDataContext } from '../../../contexts/Api/SocialMediaContext';
 import { IconType } from "react-icons";
@@ -34,8 +34,8 @@ interface SocialMediaContextType {
 
 // Loading skeleton component with responsive layout
 const LoadingSkeleton = () => (
-  <div className="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-6 mt-10 bg-black mx-auto px-4">
-    <div className="h-6 w-24 bg-gray-700 rounded animate-pulse"></div>
+  <div className="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-6 mt-10 mx-auto px-4">
+    <div className="h-6 w-24 bg-blue-700 rounded animate-pulse"></div>
     <div className="flex justify-center items-center space-x-4">
       {[...Array(5)].map((_, index) => (
         <div
@@ -56,7 +56,6 @@ const ErrorMessage = ({ message }: { message: string }) => (
 
 const SocialMediaLinks = memo(() => {
   const { link_data, isLoading } = useSocialMediaDataContext() as SocialMediaContextType;
-
   // Social media configuration
   const socialMediaConfig: SocialMediaLink[] = [
     {
@@ -67,11 +66,11 @@ const SocialMediaLinks = memo(() => {
     {
       icon: FaFacebook,
       social_media: "FaceBook",
-      color: "text-blue-700 hover:text-blue-900",
+      color: "text-sky-700 hover:text-sky-900",
     },
     {
       icon: FaInstagram,
-      social_media: "Instagram", // Fixed typo
+      social_media: "Instragram", // Fixed typo
       color: "text-pink-600 hover:text-pink-800",
     },
     {
@@ -80,20 +79,20 @@ const SocialMediaLinks = memo(() => {
       color: "text-red-600 hover:text-red-800",
     },
     {
-      icon: FaTwitter,
-      social_media: "Twitter",
-      color: "text-blue-400 hover:text-blue-600",
+      icon: FaTiktok,
+      social_media: "TikTok",
+      color: "text-black-400 hover:text-black-600",
     }
   ];
 
   // Map social media data to configured links
-  const socialLinks= link_data?.social_media?.map((social: SocialMediaItem) => {
+  const socialLinks= link_data?.social_media?.map((social) => {
     const config = socialMediaConfig.find(
-      link => link.social_media.toLowerCase() === social.social_media.toLowerCase()
+      link => link.social_media === social?.social_media
     );
     return config ? { ...config, href: social.value } : null;
   }) || [];
-
+console.log("Mapped Social Links:", socialLinks);
   // Handle loading state
   if (isLoading) {
     return <LoadingSkeleton />;
