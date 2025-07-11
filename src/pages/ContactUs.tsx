@@ -31,7 +31,7 @@ const ContactUs: React.FC = memo(() => {
           <div className="grid md:grid-cols-2 gap-8">
             {isLoading?(Array(4).fill("").map((_, i) => (<ContactusPlaceholder key={ i} />))):data?.map((contact:any,index:number) => (
               <ContactInfoItem
-                key={index}
+                key={`contactus-${index}`}
                 icon={contactInfoIcon[contact?.contact as keyof typeof contactInfoIcon]}
                 title={contact?.title}
                 value={contact.value}

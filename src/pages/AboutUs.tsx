@@ -50,7 +50,7 @@ const AboutUs: React.FC = memo(() => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 text-center ">
               {isLoading ? (Array(3).fill("").map((_, i) => (<Placeholder key={ i} />))):aboutus_data?.map((section:any, index:number) => (
                 <AboutUsSectionItem
-                  key={index}
+                  key={`aboutus-${index}`}
                   title={section?.components}
                   description={section?.value}
                 />

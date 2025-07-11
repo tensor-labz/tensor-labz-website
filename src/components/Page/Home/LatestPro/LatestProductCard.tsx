@@ -45,6 +45,7 @@ const navigate=useNavigate()
         dark:hover:bg-blue-700
         transform transition-all duration-300
         overflow-hidden
+        md:h-32
       `}
       onClick={() => {
         navigate(`/project/${project.slug}`);

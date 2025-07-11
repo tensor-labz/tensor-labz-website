@@ -15,8 +15,8 @@ const LatestProductSection: React.FC = memo(() => {
   const device = useDeviceContext();
   const islarge=useMemo(()=>device==="lg" || device==="2xl" || device==="xl",[device])
   const isMobile=useMemo(()=>device==="xs" || device==="sm" ,[device])
-  const topProjects =topData?.slice(0, islarge?3:2);
-
+  // const topProjects =topData?.slice(0, islarge?4:2);
+  const topProjects =topData
   const sectionVariants = {
     hidden: { opacity: 0, y: 50 },
     visible: {
@@ -47,11 +47,11 @@ const LatestProductSection: React.FC = memo(() => {
     }),
   };
 
-  // Auto-slide logic for projects
+  //Auto-slide logic for projects
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % (topProjects?.length??1));
-    }, 7000);
+    }, 5000);
     return () => clearInterval(interval);
   }, [topProjects?.length]);
 
@@ -153,25 +153,42 @@ const LatestProductSection: React.FC = memo(() => {
         )}
 
         {/* Vertical Scrolling Projects */}
-        {isMobile?(<MobileTopCarousel/>):(  <motion.div className="flex  lg:w-3/5 w-full flex-col gap-6 h-full overflow-hidden lg:p-0 px-8 py-4">
+        {isMobile ? (<MobileTopCarousel />) : (
+          <div className="lg:w-3/5 w-full min-h-full">
+          <motion.div className="flex   flex-col gap-6 h-full overflow-hidden lg:p-0 px-8 py-4">
           <AnimatePresence>
             {topProjects
-              ?.slice(currentIndex, currentIndex + (islarge?3:2))
+              ?.slice(currentIndex, currentIndex + (islarge?4:2))
               ?.map((project:any, index:number) => (
                 <motion.div
-                  className={index % 2 === 0 ? "self-start w-4/5" : "self-end w-4/5"}
-                  key={index}
+                  className={`${index % 2 === 0 ? "self-start" : "self-end"} w-4/5`}
+                  key={`latestProd-${index}`}
                   custom={index}
                   variants={cardVariants}
                   initial="hidden"
                   animate="visible"
                   exit="hidden"
                 >
-                  <LatestProductCard slug={project?.slug} description={project?.description??""} imageURL={project?.imageURL??""} title={project?.title??""} />
+                  <LatestProductCard slug={project?.slug} description={project?.description??""} imageURL={project?.imageURL??""} title={project?.title??""} id={index} />
                 </motion.div>
               ))}
           </AnimatePresence>
-        </motion.div>)}
+
+        </motion.div>
+                 <div className="flex justify-center gap-2 mt-4">
+  {Array.from({ length: Math.ceil(topProjects?.length??1 / (islarge ? 4 : 2)) }).map((_, i) => (
+    <div
+      key={`indicator-${i}`}
+      className={`h-2 w-2 rounded-full transition-all duration-300 ${
+        i === Math.floor(currentIndex / (islarge ? 4 : 2))
+          ? "bg-blue-600 w-4"
+          : "bg-gray-400"
+      }`}
+    ></div>
+  ))}
+</div>
+            </div>
+        )}
 
       </motion.div>
     </Section>
