@@ -8,12 +8,12 @@ const Footer = () => {
   const { service_data, isLoading } = useServiceDataContext();
 
   const socialLinks = [
-    { icon: FaWhatsapp, href: "https://twitter.com/tensorlabz", color: "text-green-400 hover:text-green-300" },
-    { icon: FaFacebookF, href: "https://facebook.com/tensorlabz", color: "text-blue-400 hover:text-blue-300" },
-    { icon: FaLinkedinIn, href: "https://linkedin.com/company/tensorlabz", color: "text-blue-400 hover:text-blue-300" },
-    { icon: FaInstagram, href: "https://instagram.com/tensorlabz", color: "text-pink-400 hover:text-pink-300" },
-    { icon: FaTiktok, href: "https://github.com/tensorlabz", color: "text-gray-200 hover:text-gray-100 border-3 border-white" },
-    { icon: FaYoutube, href: "https://github.com/tensorlabz", color: "text-red-400 hover:text-red-300" }
+    { icon: FaWhatsapp, href: "https://wa.me/+94705359369", color: "text-green-400 hover:text-green-300" },
+    { icon: FaFacebookF, href: "https://www.facebook.com/tensorlabz", color: "text-blue-400 hover:text-blue-300" },
+    { icon: FaLinkedinIn, href: "https://lk.linkedin.com/company/tensoragri", color: "text-blue-400 hover:text-blue-300" },
+    { icon: FaInstagram, href: "https://www.instagram.com/tensorlabz", color: "text-pink-400 hover:text-pink-300" },
+    { icon: FaTiktok, href: "https://www.tiktok.com/@tensoragri", color: "text-gray-200 hover:text-gray-100 border-3 border-white" },
+    { icon: FaYoutube, href: "http://www.youtube.com/@TENSORAGRI", color: "text-red-400 hover:text-red-300" }
   ];
 
   const footerLinks = [
@@ -22,10 +22,10 @@ const Footer = () => {
   ];
 
   const contactInfo = [
-    { icon: FaMapMarkerAlt, text: "1234 Innovation Street, Tech City, TC 12345", type: "address" },
-    { icon: FaEnvelope, text: "hello@tensorlabz.com", type: "email", href: "mailto:hello@tensorlabz.com" },
-    { icon: FaPhone, text: "+1 (555) 123-4567", type: "phone", href: "tel:+15551234567" },
-    { icon: FaClock, text: "Mon - Fri: 9:00 AM - 6:00 PM", type: "hours" }
+    { icon: FaMapMarkerAlt, text: "Kalviyankadu, Jaffna, Srilanka.", type: "address",href:"#" },
+    { icon: FaEnvelope, text: "tensoragri@gmail.com", type: "email", href: "mailto:tensoragri@gmail.com" },
+    { icon: FaPhone, text: "+94 070-595-1199", type: "phone", href: "tel:+94705951199" },
+    { icon: FaClock, text: "Mon - Fri: 8:00 AM - 6:00 PM", type: "hours" }
   ];
 
   const containerVariants = {

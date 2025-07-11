@@ -92,7 +92,6 @@ const SocialMediaLinks = memo(() => {
     );
     return config ? { ...config, href: social.value } : null;
   }) || [];
-console.log("Mapped Social Links:", socialLinks);
   // Handle loading state
   if (isLoading) {
     return <LoadingSkeleton />;
