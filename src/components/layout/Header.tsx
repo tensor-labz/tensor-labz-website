@@ -1,6 +1,7 @@
 import React, { memo } from 'react';
 import { motion} from 'framer-motion';
 import logo from '../../assets/images/logo.png';
+import logo1 from '../../assets/images/logo1.png';
 import useScroll from '../../base/hooks/useScroll';
 import NavBar from './NavBar';
 import MobileNavigation from './MobileNavigation';
@@ -29,7 +30,7 @@ const Header: React.FC<{ className?: string }> = memo(({ className = '' }) => {
       <Link to="/" className="flex items-center">
 
       <motion.img
-        src={logo}
+        src={isVisible?logo:logo1}
         alt="Logo"
         loading="lazy"
         initial={{ scale: 0.8, opacity: 0 }}

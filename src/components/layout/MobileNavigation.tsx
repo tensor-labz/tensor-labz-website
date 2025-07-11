@@ -3,8 +3,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { FaBars, FaTimes } from "react-icons/fa";
 import { useLocation, useNavigate } from "react-router-dom";
 import navData from "../../data/nav_data";
-import logo from "../../assets/images/logo.png"; // Replace with your actual logo path
 import useScroll from "../../base/hooks/useScroll";
+import logo1 from "../../assets/images/logo1.png"; // Replace with your actual logo path
 interface NavItemProps {
   icon: React.ReactNode;
   nav: string;
@@ -81,7 +81,7 @@ const MobileNavigation: React.FC = memo(() => {
               {/* Drawer Header */}
               <div className="flex items-center justify-between p-4 border-b border-gray-200">
                 <img
-                  src={logo}
+                  src={logo1}
                   alt="Logo"
                   className="h-10 w-auto object-contain"
                   onClick={() => {
