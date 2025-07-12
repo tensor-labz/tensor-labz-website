@@ -22,13 +22,10 @@ export const RootContextProvider: React.FC<RootContextProviderType> = ({children
     return (
         <RootContext.Provider value={{ Data:data,googleSheet_URl:sheetUrl }}>
             <DevicesContextProvider>
-
                 <BrowserRouter>
                 <ServiceProvider>
                     <AppContextProvider>
-
                             {children}
-
                         </AppContextProvider>
                         </ServiceProvider>
                     </BrowserRouter>
