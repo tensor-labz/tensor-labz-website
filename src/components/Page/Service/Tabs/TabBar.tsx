@@ -35,7 +35,7 @@ const TabBar: FC = memo(() => {
               key={tab.slug || tab.title}
               onClick={() => setActiveTab(tab)}
               className={`relative px-4 py-2 text-sm font-medium rounded-md transition-all whitespace-nowrap flex-shrink-0
-                ${isActive ? "bg-blue-500 text-white" : "text-gray-700 hover:bg-gray-100"}`}
+                ${isActive ? "#092B4A text-white" : "text-gray-700 hover:bg-gray-100"}`}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
