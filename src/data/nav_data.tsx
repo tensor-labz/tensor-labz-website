@@ -25,7 +25,7 @@ const navData=[
     {
         nav:"Contact Us",
         to:"contact-us",
-        icon:<MdOutlineSupportAgent />
+        icon: <MdOutlineSupportAgent size={ 25} />
         // icon:<FaPhone/>
     }
 ]
