@@ -88,7 +88,7 @@ export default function ProjectDataContextProvider({ children }: ProjectDataCont
           const page = urlSearchParams.get("page");
 
           if (page) {
-            const pageNumber = parseInt(page, 10);
+            const pageNumber = parseInt(page, 6);
             const itemsPerPage = 9;
             const startIndex = (pageNumber - 1) * itemsPerPage;
             const endIndex = startIndex + itemsPerPage;

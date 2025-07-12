@@ -195,7 +195,7 @@ function ServiceContainer() {
                     )
                 }
             </div>
-            <Pagination totalItems={projectData?.length??0} itemsPerPage={10} />
+            <Pagination totalItems={projectData?.length??0} itemsPerPage={6} />
         </div>
     );
 }
