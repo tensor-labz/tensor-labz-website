@@ -1,5 +1,7 @@
 import React, { memo } from 'react';
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink,
+//  useLocation
+} from 'react-router-dom';
 import useScroll from '../../base/hooks/useScroll';
 import {motion } from 'framer-motion';
 type NavItemType = {
@@ -9,8 +11,8 @@ type NavItemType = {
 }
 const NavItem: React.FC<NavItemType> = memo((navItem: NavItemType) => {
       const isVisible = useScroll();
-    const { pathname } = useLocation()
-    const isattack= /services/g.test(pathname)
+    // const { pathname } = useLocation()
+    // const isattack= /services/g.test(pathname)
 
   return (
         <NavLink
@@ -31,7 +33,9 @@ after:transition-all after:duration-300 hover:after:w-3/4 `}
           </motion.span>
         ) : (
           <motion.span
-              className={`block p-2 text-xl ${isattack?"text-white":"text-blue-900 hover:shadow-lg"} transition-all duration-300`}
+            className={`block p-2 text-xl ${
+              //isattack ? "text-white" :
+               "text-blue-900 hover:shadow-lg"} transition-all duration-300`}
           >
             {navItem.icon}
           </motion.span>
