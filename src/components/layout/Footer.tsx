@@ -84,11 +84,11 @@ const Footer = () => {
         viewport={{ once: true, amount: 0.3 }}
         className="max-w-screen-xl mx-auto px-6 relative z-10"
       >
-        <div className="grid lg:grid-cols-12 md:grid-cols-2 gap-8 lg:gap-12">
+        <div className="grid md:grid-cols-12  gap-8 lg:gap-12">
           {/* Company Info */}
           <motion.div
             variants={itemVariants}
-            className="lg:col-span-4 md:col-span-2 flex flex-col items-center md:items-start space-y-4"
+            className="md:col-span-4 flex flex-col items-center md:items-start space-y-4"
           >
             <motion.img
               src={logo}
@@ -103,7 +103,7 @@ const Footer = () => {
             </p>
 
             {/* Social Media Links */}
-            <div className=" space-x-4 pt-4 lg:col-span-4 md:flex hidden">
+            <div className=" space-x-4 pt-4 md:col-span-4 md:flex hidden">
               {socialLinks?.map(({ icon: Icon, href, color }) => (
                 <motion.a
                   key={href}
@@ -121,7 +121,7 @@ const Footer = () => {
           </motion.div >
           <motion.div
   variants={itemVariants}
-  className="lg:col-span-4 flex flex-col md:flex-row justify-between md:space-x-4 space-y-4 md:space-y-0"
+  className="md:col-span-4 flex flex-col md:flex-row justify-between md:space-x-4 space-y-4 md:space-y-0"
 >
   {footerLinks?.map((section, index) => (
     <div
@@ -188,7 +188,7 @@ const Footer = () => {
             </div>
           </motion.div>
         </div>
- <div className=" space-x-4 pt-4 lg:col-span-4 flex md:hidden mx-auto  justify-center items-center">
+ <div className=" space-x-4 pt-4 md:col-span-4 flex md:hidden mx-auto  justify-center items-center">
               {socialLinks?.map(({ icon: Icon, href, color }) => (
                 <motion.a
                   key={href}
