@@ -4,11 +4,13 @@ import ProjectCard from './ProjectCard';
 import { useProjectDataContext } from '../../../../contexts/Api/ProjectDataContext';
 import { useRootContext } from '../../../../contexts/RootContext';
 import ServiceEmpty from "../../../../components/Page/Service/ServiceEmpty"
+import ServiceLoading from "../../../../components/Page/Service/ServiceLoading"
 
 
 function ServiceContainer() {
     const { Data} = useRootContext()
-    const { projectData } = useProjectDataContext()
+    const { projectData,isLoading } = useProjectDataContext()
+    if (isLoading) return <ServiceLoading/>
     return (
         <div className='mt-4 mb-6 mx-12 sm:mx-4 lg:mx-8 xl:mx-16'>
             <h1 className="text-2xl font-bold text-gray-800 mb-4">{ Data.insight.title}</h1>
