@@ -1,52 +1,67 @@
-import { memo, useEffect, useState } from "react";
+import { memo, useEffect, useState, useCallback } from "react";
 import { FiChevronsLeft, FiChevronLeft, FiChevronRight, FiChevronsRight } from "react-icons/fi";
-import { useSearchParams } from "react-router-dom";
 
 interface PaginationProps {
   totalItems: number;
   itemsPerPage: number;
+  onPageChange?: (page: number) => void;
+  initialPage?: number;
 }
 
-const Pagination = memo(({ totalItems, itemsPerPage }: PaginationProps) => {
+const Pagination = memo(({ totalItems, itemsPerPage, onPageChange, initialPage = 1 }: PaginationProps) => {
   const totalPages = Math.ceil(totalItems / itemsPerPage);
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [windowWidth, setWindowWidth] = useState(0); // Initialize with 0 to avoid SSR issues
 
-  // Initialize currentPage from URL params or default to 1
+  // Initialize currentPage with validation
   const [currentPage, setCurrentPage] = useState(() => {
-    const pageParam = searchParams.get("page");
-    return pageParam ? parseInt(pageParam, 10) : 1;
+    // Ensure page is within valid range
+    return Math.max(1, Math.min(initialPage, totalPages || 1));
   });
 
-  // Handle window resize
-  useEffect(() => {
-    const handleResize = () => setWindowWidth(window.innerWidth);
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
+  // Handle window resize with useCallback to prevent unnecessary re-renders
+  const handleResize = useCallback(() => {
+    setWindowWidth(window.innerWidth);
   }, []);
 
-  // Update URL when page changes
+  // Set initial window width and handle resize
   useEffect(() => {
-    setSearchParams(prev => {
-      const newParams = new URLSearchParams(prev);
-      newParams.set("page", currentPage.toString());
-      return newParams;
-    });
-  }, [currentPage, setSearchParams]);
+    // Only access window on client side
+    if (typeof window !== 'undefined') {
+      setWindowWidth(window.innerWidth);
+      window.addEventListener("resize", handleResize);
+      return () => window.removeEventListener("resize", handleResize);
+    }
+  }, [handleResize]);
 
-  const handlePageChange = (page: number) => {
-    if (page < 1 || page > totalPages) return;
+  // Call onPageChange callback when page changes
+  useEffect(() => {
+    if (onPageChange && currentPage > 0 && currentPage <= totalPages) {
+      onPageChange(currentPage);
+    }
+  }, [currentPage, onPageChange, totalPages]);
+
+  // Reset to page 1 if totalPages changes and current page is out of range
+  useEffect(() => {
+    if (totalPages > 0 && currentPage > totalPages) {
+      setCurrentPage(1);
+    }
+  }, [totalPages, currentPage]);
+
+  const handlePageChange = useCallback((page: number) => {
+    if (page < 1 || page > totalPages || page === currentPage) return;
     setCurrentPage(page);
-  };
+  }, [totalPages, currentPage]);
 
-  const renderPageNumbers = () => {
+  const renderPageNumbers = useCallback(() => {
     if (totalPages <= 5) {
       return Array.from({ length: totalPages }, (_, i) => (
         <button
           key={i + 1}
           onClick={() => handlePageChange(i + 1)}
-          className={`px-3 py-1 rounded-md transition ${
-            currentPage === i + 1 ? "bg-blue-600 text-white" : "bg-gray-200"
+          className={`px-3 py-2 rounded-md transition-colors duration-200 ${
+            currentPage === i + 1
+              ? "bg-blue-600 text-white shadow-sm"
+              : "bg-gray-200 text-gray-700 hover:bg-gray-300"
           }`}
         >
           {i + 1}
@@ -82,15 +97,24 @@ const Pagination = memo(({ totalItems, itemsPerPage }: PaginationProps) => {
       return pagesToShow.map((page, index) => {
         if (page < 0) {
           // Render ellipsis
-          return <span key={`ellipsis-${index}`} className="px-2">...</span>;
+          return (
+            <span
+              key={`ellipsis-${index}`}
+              className="px-2 text-gray-500"
+            >
+              ...
+            </span>
+          );
         }
 
         return (
           <button
             key={page}
             onClick={() => handlePageChange(page)}
-            className={`px-3 py-1 rounded-md transition ${
-              currentPage === page ? "bg-blue-600 text-white" : "bg-gray-200"
+            className={`px-3 py-2 rounded-md transition-colors duration-200 ${
+              currentPage === page
+                ? "bg-blue-600 text-white shadow-sm"
+                : "bg-gray-200 text-gray-700 hover:bg-gray-300"
             }`}
           >
             {page}
@@ -98,25 +122,26 @@ const Pagination = memo(({ totalItems, itemsPerPage }: PaginationProps) => {
         );
       });
     }
-  };
+  }, [totalPages, currentPage, handlePageChange]);
 
-  // Don't render anything if there are no pages
-  if (totalPages <= 0) return null;
+  // Don't render anything if there are no pages or invalid data
+  if (totalPages <= 0 || totalItems <= 0) return null;
 
   return (
     <div className="flex md:justify-end justify-center items-center space-x-2 mt-4">
       <button
         onClick={() => handlePageChange(1)}
         disabled={currentPage === 1}
-        className="p-2 rounded disabled:opacity-50 md:bg-gray-200 hover:bg-gray-300 transition"
+        className="p-2 rounded-md disabled:opacity-50 disabled:cursor-not-allowed bg-gray-200 hover:bg-gray-300 transition-colors duration-200"
         aria-label="First page"
       >
         <FiChevronsLeft size={20} />
       </button>
+
       <button
         onClick={() => handlePageChange(currentPage - 1)}
         disabled={currentPage === 1}
-        className="p-2 rounded disabled:opacity-50 md:bg-gray-200 hover:bg-gray-300 transition"
+        className="p-2 rounded-md disabled:opacity-50 disabled:cursor-not-allowed bg-gray-200 hover:bg-gray-300 transition-colors duration-200"
         aria-label="Previous page"
       >
         <FiChevronLeft size={20} />
@@ -127,7 +152,7 @@ const Pagination = memo(({ totalItems, itemsPerPage }: PaginationProps) => {
           {renderPageNumbers()}
         </div>
       ) : (
-        <span className="px-3 py-1 rounded-md bg-blue-600 text-white">
+        <span className="px-3 py-2 rounded-md bg-blue-600 text-white font-medium">
           {currentPage} / {totalPages}
         </span>
       )}
@@ -135,15 +160,16 @@ const Pagination = memo(({ totalItems, itemsPerPage }: PaginationProps) => {
       <button
         onClick={() => handlePageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
-        className="p-2 rounded disabled:opacity-50 md:bg-gray-200 hover:bg-gray-300 transition"
+        className="p-2 rounded-md disabled:opacity-50 disabled:cursor-not-allowed bg-gray-200 hover:bg-gray-300 transition-colors duration-200"
         aria-label="Next page"
       >
         <FiChevronRight size={20} />
       </button>
+
       <button
         onClick={() => handlePageChange(totalPages)}
         disabled={currentPage === totalPages}
-        className="p-2 rounded disabled:opacity-50 md:bg-gray-200 hover:bg-gray-300 transition"
+        className="p-2 rounded-md disabled:opacity-50 disabled:cursor-not-allowed bg-gray-200 hover:bg-gray-300 transition-colors duration-200"
         aria-label="Last page"
       >
         <FiChevronsRight size={20} />
@@ -151,5 +177,7 @@ const Pagination = memo(({ totalItems, itemsPerPage }: PaginationProps) => {
     </div>
   );
 });
+
+Pagination.displayName = 'Pagination';
 
 export default Pagination;
