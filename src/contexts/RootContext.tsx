@@ -16,8 +16,7 @@ type RootContextProviderType = {
     children: React.ReactNode;
 }
 const RootContext = createContext<RootContextType>(null as any);
-const sheetUrl="https://script.google.com/macros/s/AKfycbx_lHKXjzOh0iyB8r1vNz2DZI0WIc3uNpx1__b8jCAoM0BLWWSnzPB0k1am4sDM8WptDA/exec?sheetName="
-
+const sheetUrl="https://script.google.com/macros/s/AKfycbytPoq9QIY-9e844pm5Li3gZXEkxulVNyFJ_wLTo8yBtXCBYiJ0mCEjnG82AuJxqUwT_w/exec?sheetName="
 export const RootContextProvider: React.FC<RootContextProviderType> = ({children}) => {
     return (
         <RootContext.Provider value={{ Data:data,googleSheet_URl:sheetUrl }}>
