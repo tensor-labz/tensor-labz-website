@@ -86,14 +86,13 @@ const HeroSection: React.FC = memo(() => {
     threshold: 0.2,
     triggerOnce: true
   });
-  const { projectData } = useProjectDataContext();
-  const {service_data}=useServiceDataContext();
+  const projects = useProjectDataContext();
+  const services=useServiceDataContext();
   const { Data } = useRootContext();
   const controls = useAnimation();
   const imageControls = useAnimation();
   const textControls = useAnimation();
   const iconControls = useAnimation();
-
   const triggerAnimations = useCallback(async () => {
     if (inView) {
       await controls.start("visible");
@@ -124,7 +123,13 @@ const HeroSection: React.FC = memo(() => {
       text-gray-800 dark:text-gray-100 py-10 sm:py-20 md:py-18 lg:py-24 px-6 md:px-8 lg:px-12
       min-h-screen flex md:flex-row flex-col-reverse items-center justify-center gap-x-8 gap-y-4 overflow-hidden"
     >
-   
+   <motion.div
+        variants={sectionVariants}
+        initial="hidden"
+        animate={controls}
+        className=" absolute inset-0
+        pointer-events-none z-0 animate-border-shine"
+      />
 
       {/* Floating Particles */}
       <div className="absolute inset-0 pointer-events-none">
@@ -228,11 +233,22 @@ const HeroSection: React.FC = memo(() => {
           className="mt-10 flex gap-8 text-sm md:self-start self-center"
         >
           {[
-            { value: `${projectData?.length}+`, label: "Projects", icon: FaCube },
-            { value: `${service_data?.length}+`, label: "Services", icon: FaRobot },
+            { value: `${projects.projectData?.length}+`, label: "Projects", icon: FaCube },
+            { value: `${services?.service_data?.length}+`, label: "Services", icon: FaRobot },
             { value: `${new Date().getFullYear()-2023}+`, label: "Years", icon: FaBolt }
           ].map((stat, index) => (
-            stat?.value&& <motion.div
+            [projects.isLoading,services.isLoading].some(item=>item==true) ? ( <motion.div
+      className="w-4 h-4 rounded-full bg-gray-400"
+      animate={{
+        scale: [1, 1.4, 1],
+        opacity: [1, 0.6, 1],
+      }}
+      transition={{
+        duration: 1,
+        repeat: Infinity,
+        ease: 'easeInOut',
+      }}
+    />): <motion.div
               key={stat.label}
               animate={{
                 y: [0, -2, 0],
