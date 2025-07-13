@@ -1,17 +1,21 @@
-import React, { memo } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import { motion} from 'framer-motion';
 import logo from '../../assets/images/logo.png';
 import logo1 from '../../assets/images/logo1.png';
 import useScroll from '../../base/hooks/useScroll';
 import NavBar from './NavBar';
 import MobileNavigation from './MobileNavigation';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 
 // Header Component
 const Header: React.FC<{ className?: string }> = memo(({ className = '' }) => {
   const isVisible = useScroll();
-
+  const path=useLocation()
+  const [ishome,setisHome] = useState(path.pathname === "/");
+  useEffect(() => {
+setisHome(path.pathname === "/");
+  }, [path]);
   return (
     <motion.header
       initial={{ opacity: 0, y: -50 }}
@@ -30,7 +34,7 @@ const Header: React.FC<{ className?: string }> = memo(({ className = '' }) => {
       <Link to="/" className="flex items-center">
 
       <motion.img
-        src={isVisible?logo:logo1}
+        src={isVisible?logo:ishome?logo1:logo}
         alt="Logo"
         loading="lazy"
         initial={{ scale: 0.8, opacity: 0 }}

@@ -21,7 +21,7 @@ const ServiceHero: FC = () => {
         <img
           src={Data.insight.hero.hero_bg.sm}
           alt="Hero Background"
-          className="w-full h-full object-cover brightness-75"
+          className="w-full h-full object-cover"
         />
       </motion.div>
 
@@ -37,7 +37,7 @@ const ServiceHero: FC = () => {
           muted
           loop
           playsInline
-          className="w-full h-full object-cover object-center brightness-75"
+          className="w-full h-full object-cover object-center"
         >
           <source src={Data.insight.hero.hero_bg.lg} type="video/mp4" />
           Your browser does not support the video tag.
