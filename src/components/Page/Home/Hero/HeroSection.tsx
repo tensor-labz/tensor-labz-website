@@ -186,7 +186,7 @@ const HeroSection: React.FC = memo(() => {
       ))}
 
       {/* Enhanced Hero Content */}
-      <div className="flex lg:flex-col flex-col-reverse justify-center lg:w-7/12 w-full z-20 relative font-serif min-h-[200px]">
+      <div className="flex flex-col justify-center lg:w-7/12 w-full z-20 relative  min-h-[200px]">
 
         <motion.h1
           custom={0}
@@ -205,13 +205,13 @@ const HeroSection: React.FC = memo(() => {
             className="absolute -bottom-6 left-0 h-0.5 bg-gradient-to-r from-sky-500 to-blue-600 opacity-20 md:block hidden"
           />
         </motion.h1>
-
+<div className="mt-4 md:mt-10 flex flex-col  justify-center lg:w-7/12 w-full">
         <motion.div
           initial="hidden"
           animate={textControls}
           variants={textVariants}
           custom={1}
-          className="mt-10 min-h-[60px] relative"
+          className="md:min-h-[60px] min-h-[40px]  relative"
         >
           <HeroKeyPoint />
 
@@ -230,7 +230,7 @@ const HeroSection: React.FC = memo(() => {
           variants={textVariants}
           initial="hidden"
           animate={textControls}
-          className="mt-10 flex gap-8 text-sm md:self-start self-center"
+          className="md:mt-10 mt-4 flex gap-8 text-sm md:self-start self-center"
         >
           {[
             { value: `${projects.projectData?.length}+`, label: "Projects", icon: FaCube },
@@ -268,7 +268,8 @@ const HeroSection: React.FC = memo(() => {
               </div>
             </motion.div>
           ))}
-        </motion.div>
+          </motion.div>
+          </div>
       </div>
 
       {/* Enhanced Hero Image */}
