@@ -7,14 +7,13 @@ import TopProductTitle from "./TopProducttitle";
 import MobileTopCarousel from "./MobileTopCarsaole";
 import { useProjectDataContext } from "../../../../contexts/Api/ProjectDataContext";
 import { useRootContext } from "../../../../contexts/RootContext";
-import { HiOutlineCubeTransparent } from "react-icons/hi";
 const LatestProductSection: React.FC = memo(() => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const { topData } = useProjectDataContext();
   const {Data}=useRootContext()
   const device = useDeviceContext();
   const islarge=useMemo(()=>device==="lg" || device==="2xl" || device==="xl",[device])
-  const isMobile=useMemo(()=>device==="xs" || device==="sm" ,[device])
+  const isMobile = useMemo(() => device === "xs" || device === "sm", [device])
   // const topProjects =topData?.slice(0, islarge?4:2);
   const topProjects =topData
   const sectionVariants = {
@@ -108,34 +107,7 @@ const LatestProductSection: React.FC = memo(() => {
           }}
         />
 
-        {/* Rotating cube icon */}
-        <motion.div
-  className="absolute text-white opacity-40 w-10 h-10"
-  animate={{
-    rotate: [0, 360],
-    top: ["1rem", "1rem", "calc(100% - 2.5rem)", "calc(100% - 2.5rem)"],
-    left: ["1rem", "calc(100% - 2.5rem)", "calc(100% - 2.5rem)", "1rem"],
-  }}
-  transition={{
-    rotate: {
-      repeat: Infinity,
-      duration: 8,
-      ease: "linear",
-    },
-    top: {
-      duration: 20,
-      repeat: Infinity,
-      ease: "easeInOut",
-    },
-    left: {
-      duration: 20,
-      repeat: Infinity,
-      ease: "easeInOut",
-    },
-  }}
->
-  <HiOutlineCubeTransparent className="w-full h-full" />
-</motion.div>
+
 
         {/* Bottom text */}
         <div className="absolute bottom-4 w-full md:bottom-0">
