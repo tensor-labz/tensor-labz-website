@@ -83,7 +83,7 @@ hidden
           sm:flex items-center justify-center text-center
           overflow-hidden
           bg-[#092B4A]
-          h-0 group-hover:h-[60%]
+          h-0 group-hover:h-[45%]
           transition-all duration-500 ease-in-out
           z-20
         "
