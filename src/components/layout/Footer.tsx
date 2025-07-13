@@ -103,7 +103,7 @@ const Footer = () => {
             </p>
 
             {/* Social Media Links */}
-            <div className="flex space-x-4 pt-4 lg:col-span-4">
+            <div className=" space-x-4 pt-4 lg:col-span-4 md:flex hidden">
               {socialLinks?.map(({ icon: Icon, href, color }) => (
                 <motion.a
                   key={href}
@@ -188,7 +188,21 @@ const Footer = () => {
             </div>
           </motion.div>
         </div>
-
+ <div className=" space-x-4 pt-4 lg:col-span-4 flex md:hidden mx-auto  justify-center items-center">
+              {socialLinks?.map(({ icon: Icon, href, color }) => (
+                <motion.a
+                  key={href}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  variants={socialVariants}
+                  whileHover="hover"
+                  className={`text-xl ${color} transition-colors p-2 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-sm`}
+                >
+                  <Icon />
+                </motion.a>
+              ))}
+            </div>
         {/* Copyright */}
         <motion.div
           variants={itemVariants}
@@ -206,5 +220,6 @@ const Footer = () => {
     </footer>
   );
 }
+
 
 export default memo(Footer);
