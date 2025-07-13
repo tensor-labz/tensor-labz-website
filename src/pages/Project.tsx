@@ -64,13 +64,22 @@ const ProjectPage = () => {
             </motion.div>
 
             {/* Content */}
-            <motion.div
+           { projectdata?.content ?
+            (<motion.div
               className="project-content max-w-none mb-10"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3, duration: 0.5 }}
               dangerouslySetInnerHTML={{ __html: projectdata.content || '' }}
-            />
+            />):(
+          <motion.p   className="max-w-none mb-10 text-xl"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3, duration: 0.5 }}>
+{projectdata?.description || 'No description available.'}
+          </motion.p>
+            )
+           }
 
             {/* YouTube Demo */}
             {projectdata.vedio_demo && (
