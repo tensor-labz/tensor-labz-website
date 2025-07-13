@@ -124,14 +124,7 @@ const HeroSection: React.FC = memo(() => {
       text-gray-800 dark:text-gray-100 py-10 sm:py-20 md:py-18 lg:py-24 px-6 md:px-8 lg:px-12
       min-h-screen flex md:flex-row flex-col-reverse items-center justify-center gap-x-8 gap-y-4 overflow-hidden"
     >
-      {/* Enhanced Background with Particles */}
-      <motion.div
-        variants={sectionVariants}
-        initial="hidden"
-        animate={controls}
-        className="border-sky-700 md:border-l-2 lg:border-l-4 absolute inset-0
-        pointer-events-none z-0 animate-border-shine"
-      />
+   
 
       {/* Floating Particles */}
       <div className="absolute inset-0 pointer-events-none">
