@@ -5,7 +5,7 @@ import { useRootContext } from "../contexts/RootContext";
 import AboutUsSectionItem from "../components/Page/Aboutus/AboutUsSection";
 import { useAboutusDataContext } from "../contexts/Api/AboutusDataContext";
 import Placeholder from "../components/Page/Aboutus/LoadingPlaceHolder";
-import ContactUs from './ContactUs';
+
 
 
 const AboutUs: React.FC = memo(() => {
