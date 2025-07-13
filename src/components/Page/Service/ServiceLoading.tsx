@@ -1,55 +1,124 @@
-import { memo } from 'react';
+import React, { memo } from 'react';
 import { motion } from 'framer-motion';
-import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 
-const ServiceLoading = memo(() => {
+const ServiceLoading: React.FC = memo(() => {
   return (
-    <div className='mt-4 mb-6 mx-12 sm:mx-4 lg:mx-8 xl:mx-16'>
-      <div className="flex items-center justify-center mb-6">
-        <motion.div
-          animate={{ rotate: 360 }}
-          transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-          className="text-blue-600"
-        >
-          <AiOutlineLoading3Quarters size={32} />
-        </motion.div>
-      </div>
-
-      <div className="space-y-4">
-        {[1, 2, 3].map((i) => (
-          <motion.div
-            key={i}
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: i * 0.1, duration: 0.4 }}
-            className="flex items-center gap-3 p-4 bg-gray-50 rounded-lg border border-gray-100"
-          >
-            <div className="w-12 h-12 bg-gray-200 rounded-lg animate-pulse"></div>
-            <div className="flex-1 space-y-2">
-              <div className="h-4 bg-gray-200 rounded animate-pulse"></div>
-              <div className="h-3 bg-gray-200 rounded animate-pulse w-2/3"></div>
-            </div>
-            <div className="w-16 h-6 bg-gray-200 rounded animate-pulse"></div>
-          </motion.div>
-        ))}
-      </div>
-
+    <div className="col-span-1 sm:col-span-2 lg:col-span-3 flex flex-col items-center justify-center py-20 px-8">
+      {/* 3D Cube Loading Animation */}
       <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.5 }}
-        className="mt-6 flex justify-center"
+        className="relative"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+        style={{ perspective: '1000px' }}
       >
-        <div className="flex gap-2">
-          <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce"></div>
-          <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-          <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+        <motion.div
+          className="relative w-16 h-16"
+          animate={{
+            rotateX: [0, 360],
+            rotateY: [0, 360],
+          }}
+          transition={{
+            duration: 3,
+            repeat: Infinity,
+            ease: "linear"
+          }}
+          style={{
+            transformStyle: 'preserve-3d',
+          }}
+        >
+          {/* Front Face */}
+          <div
+            className="absolute w-16 h-16 bg-gradient-to-br from-[#092B4A] to-[#0d3a5c] border border-[#092B4A]/20 rounded-lg"
+            style={{
+              transform: 'translateZ(32px)',
+            }}
+          />
+
+          {/* Back Face */}
+          <div
+            className="absolute w-16 h-16 bg-gradient-to-br from-[#0d3a5c] to-[#092B4A] border border-[#092B4A]/20 rounded-lg"
+            style={{
+              transform: 'translateZ(-32px) rotateY(180deg)',
+            }}
+          />
+
+          {/* Right Face */}
+          <div
+            className="absolute w-16 h-16 bg-gradient-to-br from-[#0a2940] to-[#092B4A] border border-[#092B4A]/20 rounded-lg"
+            style={{
+              transform: 'rotateY(90deg) translateZ(32px)',
+            }}
+          />
+
+          {/* Left Face */}
+          <div
+            className="absolute w-16 h-16 bg-gradient-to-br from-[#092B4A] to-[#0a2940] border border-[#092B4A]/20 rounded-lg"
+            style={{
+              transform: 'rotateY(-90deg) translateZ(32px)',
+            }}
+          />
+
+          {/* Top Face */}
+          <div
+            className="absolute w-16 h-16 bg-gradient-to-br from-[#0e4259] to-[#092B4A] border border-[#092B4A]/20 rounded-lg"
+            style={{
+              transform: 'rotateX(90deg) translateZ(32px)',
+            }}
+          />
+
+          {/* Bottom Face */}
+          <div
+            className="absolute w-16 h-16 bg-gradient-to-br from-[#092B4A] to-[#0e4259] border border-[#092B4A]/20 rounded-lg"
+            style={{
+              transform: 'rotateX(-90deg) translateZ(32px)',
+            }}
+          />
+        </motion.div>
+
+        {/* Floating Particles */}
+        <div className="absolute inset-0 pointer-events-none">
+          {[...Array(6)].map((_, i) => (
+            <motion.div
+              key={i}
+              className="absolute w-2 h-2 bg-[#092B4A]/30 rounded-full"
+              animate={{
+                x: [0, Math.cos(i * 60 * Math.PI / 180) * 40],
+                y: [0, Math.sin(i * 60 * Math.PI / 180) * 40],
+                opacity: [0.3, 0.8, 0.3],
+              }}
+              transition={{
+                duration: 2,
+                repeat: Infinity,
+                delay: i * 0.2,
+                ease: "easeInOut"
+              }}
+              style={{
+                left: '50%',
+                top: '50%',
+                transform: 'translate(-50%, -50%)',
+              }}
+            />
+          ))}
         </div>
       </motion.div>
+
+      {/* Subtle Glow Effect */}
+      <motion.div
+        className="absolute w-32 h-32 bg-[#092B4A]/10 rounded-full blur-xl -z-10"
+        animate={{
+          scale: [1, 1.2, 1],
+          opacity: [0.3, 0.6, 0.3],
+        }}
+        transition={{
+          duration: 2,
+          repeat: Infinity,
+          ease: "easeInOut"
+        }}
+      />
     </div>
   );
 });
 
 ServiceLoading.displayName = 'ServiceLoading';
-
 export default ServiceLoading;
