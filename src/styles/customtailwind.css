@@ -26,7 +26,7 @@
     @apply  text-xs md:text-base h;
 }
 .hero{
-    @apply sm:text-3xl text-2xl md:text-left text-center md:text-6xl font-bold md:font-extrabold leading-tight bg-gradient-to-tr from-blue-500 via-sky-900 to-blue-800 bg-clip-text text-transparent py-2 font-[];
+    @apply sm:text-3xl text-2xl md:text-left text-center md:text-6xl font-bold md:font-extrabold leading-tight bg-gradient-to-tr from-blue-500 via-sky-900 to-blue-800 bg-clip-text text-transparent py-2 ;
 }
 .title{
   @apply font-extrabold md:text-7xl text-4xl ;
