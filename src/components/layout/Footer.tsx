@@ -22,7 +22,7 @@ const Footer = () => {
   ];
 
   const contactInfo = [
-    { icon: FaMapMarkerAlt, text: "Kalviyankadu, Jaffna, Srilanka.", type: "address",href:"#" },
+    { icon: FaMapMarkerAlt, text: "Jaffna, Srilanka.", type: "address",href:"#" },
     { icon: FaEnvelope, text: "tensoragri@gmail.com", type: "email", href: "mailto:tensoragri@gmail.com" },
     { icon: FaPhone, text: "+94 070-595-1199", type: "phone", href: "tel:+94705951199" },
     { icon: FaClock, text: "Mon - Fri: 8:00 AM - 6:00 PM", type: "hours" }
@@ -196,7 +196,7 @@ const Footer = () => {
         >
           <div className="flex flex-col justify-center items-center space-y-4 md:space-y-0">
             <p className="text-slate-300 text-sm">
-              &copy; {new Date().getFullYear()} <span className="font-bold text-white">Tensor Labz</span>.
+              &copy; {new Date().getFullYear()} <span className="font-bold text-white">Tensor Labs</span>.
               All rights reserved.
             </p>
 

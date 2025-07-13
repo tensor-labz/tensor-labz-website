@@ -17,7 +17,7 @@ const data: any = {
         hero: {
             hero_bg:heroBg,
             slider_delay: 5000,
-            title:"Creating sustainable impact through technology"
+            title:"Creating Sustainable Impact Through Technology"
         },
         services: {
             title: "Our Services",

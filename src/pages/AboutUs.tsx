@@ -16,7 +16,7 @@ const AboutUs: React.FC = memo(() => {
         {/* Background Video/Image Container */}
         <div className="absolute inset-0 z-0">
           {/* Video for larger screens (>=768px) */}
-          <video
+          {/* <video
             autoPlay
             loop
             muted
@@ -25,19 +25,24 @@ const AboutUs: React.FC = memo(() => {
           >
             <source src={Data?.aboutus?.bg?.lg} type="video/mp4" />
           </video>
-
+ */}
           {/* Background image for smaller screens (<768px) */}
-          <img
+        {/*}  <img
             src={Data?.aboutus?.bg?.md}
             alt="Background"
             className="md:hidden w-full h-full object-cover"
-          />
+          /> */}
+          <picture className="absolute inset-0 -z-10">
+          <source media="(min-width: 768px)" srcSet={Data?.contactus?.bg?.lg} />
+          <source media="(min-width: 480px)" srcSet={Data?.contactus?.bg?.md} />
+          <img src={Data?.aboutus?.bg?.md} alt="" className="w-full h-full object-cover" />
+        </picture>
         </div>
 
         {/* Content Section */}
         <Section className="relative z-10 flex items-center justify-center h-full">
           {/* Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-b from-blue-200/50 via-white/80 to-blue-200/50 z-0" />
+          {/* <div className="absolute inset-0 bg-gradient-to-b from-blue-200/50 via-white/80 to-blue-200/50 z-0" /> */}
           <div className="w-11/12 relative  mx-auto text-center p-8 sm:mt-0 lg:mt-8 md:mt-14 rounded-2xl shadow-2xl backdrop-blur-sm">
             <h1 className="text-4xl md:text-6xl font-bold mb-6 text-blue-900 shadow-sm">
               {Data?.aboutus?.title?? "About Us"}

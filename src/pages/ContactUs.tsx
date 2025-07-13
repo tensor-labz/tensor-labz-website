@@ -12,13 +12,13 @@ const ContactUs: React.FC = memo(() => {
   const {data,isLoading}=useAppContext()
   return (
     <Page HeadProps={{title:"Contact Us"}}>
-      <div className="min-h-screen flex items-center justify-center p-6 lg:mx-0 mx-8">
+      <div className="min-h-screen flex items-center justify-center p-6 lg:mx-0 mx-4">
   <picture className="absolute inset-0 -z-10">
           <source media="(min-width: 768px)" srcSet={Data?.contactus?.bg?.lg} />
           <source media="(min-width: 480px)" srcSet={Data?.contactus?.bg?.md} />
           <img src={Data?.contactus?.bg?.sm} alt="" className="w-full h-full object-cover" />
         </picture>
-        <div className="max-w-4xl w-full space-y-10 relative  p-8 rounded-2xl shadow-2xl backdrop-blur-md mt-10 flex items-center justify-center flex-col">
+        <div className="max-w-4xl w-full space-y-10 relative  p-4 rounded-2xl shadow-2xl backdrop-blur-md mt-10 flex items-center justify-center flex-col">
 
           <motion.h1
             initial={{ opacity: 0, y: -50 }}

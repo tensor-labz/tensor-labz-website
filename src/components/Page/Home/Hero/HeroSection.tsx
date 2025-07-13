@@ -239,7 +239,7 @@ const HeroSection: React.FC = memo(() => {
             { value: `${service_data?.length}+`, label: "Services", icon: FaRobot },
             { value: `${new Date().getFullYear()-2023}+`, label: "Years", icon: FaBolt }
           ].map((stat, index) => (
-            stat?.value&&<motion.div
+            stat?.value&& <motion.div
               key={stat.label}
               animate={{
                 y: [0, -2, 0],
