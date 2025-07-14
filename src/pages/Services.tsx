@@ -17,11 +17,9 @@ const Services = memo(() => {
       background: "linear-gradient(to top right, #092B4A 0%, #ffffff 25%)",
       transition: { duration: 0.8, ease: "easeInOut" },
     });
-  }, [controls]);
+  }, []);
 
-//  if (isLoading) {
-//     return <ProjectPageLoading/>
-//   }
+
   return(
     <Page HeadProps={{ title: "Services" }}>
       <motion.div

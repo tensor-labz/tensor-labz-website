@@ -1,11 +1,11 @@
-import { FC } from 'react';
+import { FC,memo } from 'react';
 import { motion } from 'framer-motion';
 import { useRootContext } from '../../../../contexts/RootContext';
 import { useServiceDataContext } from "../../../../contexts/Api/ServiceApiContext";
 import { useServiceContext } from "../../../../contexts/ServiceContext";
 
 
-const ServiceHero: FC = () => {
+const ServiceHero: FC =memo( () => {
   const { Data } = useRootContext()
   const { service_data } = useServiceDataContext();
   const { activeTab } = useServiceContext();
@@ -66,6 +66,6 @@ const ServiceHero: FC = () => {
       </div>
     </div>
   );
-};
-
+});
+ServiceHero.displayName = "ServiceHero"; // For better debugging in React DevTools
 export default ServiceHero;
