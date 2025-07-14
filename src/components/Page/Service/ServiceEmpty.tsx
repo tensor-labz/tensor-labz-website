@@ -33,7 +33,7 @@ const EmptyServices: React.FC = memo(() => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
       >
-        <h3 className="text-2xl font-light text-[#092B4A]">
+        <h3 className="text-2xl h5 text-[#092B4A]">
           No Projects Available
         </h3>
 

@@ -12,11 +12,18 @@ const Pagination = memo(({ totalItems, itemsPerPage, onPageChange, initialPage =
   const totalPages = Math.ceil(totalItems / itemsPerPage);
   const [windowWidth, setWindowWidth] = useState(0); // Initialize with 0 to avoid SSR issues
 
+
   // Initialize currentPage with validation
-  const [currentPage, setCurrentPage] = useState(() => {
-    // Ensure page is within valid range
-    return Math.max(1, Math.min(initialPage, totalPages || 1));
-  });
+  const getInitialPage = () => {
+  if (typeof window !== "undefined") {
+    const params = new URLSearchParams(window.location.search);
+    const pageParam = parseInt(params.get("page") || "");
+    if (!isNaN(pageParam)) return Math.max(1, Math.min(pageParam, totalPages));
+  }
+  return initialPage;
+};
+
+const [currentPage, setCurrentPage] = useState(getInitialPage);
 
   // Handle window resize with useCallback to prevent unnecessary re-renders
   const handleResize = useCallback(() => {
@@ -32,6 +39,15 @@ const Pagination = memo(({ totalItems, itemsPerPage, onPageChange, initialPage =
       return () => window.removeEventListener("resize", handleResize);
     }
   }, [handleResize]);
+// Update URL query when page changes
+useEffect(() => {
+  if (typeof window !== "undefined") {
+    const url = new URL(window.location.href);
+    url.pathname = "/services"; // always force /services
+    url.searchParams.set("page", currentPage.toString());
+    window.history.pushState({}, "", url.toString());
+  }
+}, [currentPage]);
 
   // Call onPageChange callback when page changes
   useEffect(() => {
