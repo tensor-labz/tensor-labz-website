@@ -119,8 +119,8 @@ const HeroSection: React.FC = memo(() => {
   return (
     <Section
       ref={ref}
-      className="relative md:bg-gradient-to-br from-white to-sky-50 dark:from-gray-800 dark:to-gray-900
-      text-gray-800 dark:text-gray-100 py-10 sm:py-20 md:py-18 lg:py-24 px-6 md:px-8 lg:px-12
+      className="relative md:bg-gradient-to-br from-white to-sky-50
+      text-gray-800  py-10 sm:py-20 md:py-18 lg:py-24 px-6 md:px-8 lg:px-12
       min-h-screen flex md:flex-row flex-col-reverse items-center justify-center gap-x-8 gap-y-4 overflow-hidden"
     >
    <motion.div
@@ -165,7 +165,7 @@ const HeroSection: React.FC = memo(() => {
           variants={floatingIconVariants}
           initial="hidden"
           animate={iconControls}
-          className="absolute hidden lg:block z-5 text-sky-500 dark:text-sky-400"
+          className="absolute hidden lg:block z-5 text-sky-500 "
           style={tech.position}
         >
           <motion.div
@@ -220,7 +220,7 @@ const HeroSection: React.FC = memo(() => {
             initial={{ opacity: 0 }}
             animate={{ opacity: [0, 0.1, 0] }}
             transition={{ delay: 2, duration: 3, repeat: Infinity }}
-            className="absolute inset-0 bg-gradient-to-r from-sky-200 to-blue-200 dark:from-sky-800 dark:to-blue-800 blur-xl -z-10"
+            className="absolute inset-0 bg-gradient-to-r from-sky-200 to-blue-200   blur-xl -z-10"
           />
         </motion.div>
 
@@ -259,7 +259,7 @@ const HeroSection: React.FC = memo(() => {
                 delay: index * 0.5,
                 ease: "easeInOut"
               }}
-              className="flex items-center justify-center gap-2 text-sky-600 dark:text-sky-400"
+              className="flex items-center justify-center gap-2 text-sky-600"
             >
               <stat.icon className="text-lg" />
               <div>

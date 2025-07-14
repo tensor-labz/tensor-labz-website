@@ -61,7 +61,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
 
   return (
     <motion.div
-      className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden w-full h-full flex flex-col"
+      className="bg-white  rounded-2xl shadow-lg overflow-hidden w-full h-full flex flex-col"
       variants={cardVariants}
       initial="initial"
       animate="animate"
@@ -123,7 +123,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
         )}
 
         {/* Title */}
-        <h3 className="text-xl md:text-2xl font-bold text-gray-800 dark:text-white mb-2 line-clamp-1 pr-16">{title}</h3>
+        <h3 className="text-xl md:text-2xl font-bold text-gray-800  mb-2 line-clamp-1 pr-16">{title}</h3>
 
         {/* Service tags */}
         <div className="flex flex-wrap gap-2 mb-4">
@@ -131,7 +131,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
             {services.slice(0, 3).map((service, index) => (
               <motion.span
                 key={index}
-                className="px-3 py-1 text-xs font-medium rounded-full bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400"
+                className="px-3 py-1 text-xs font-medium rounded-full bg-blue-50  text-blue-600 "
                 variants={serviceTagVariants}
                 initial="initial"
                 animate="animate"
@@ -146,7 +146,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
                 initial="initial"
                 animate="animate"
                 custom={3}
-                className="px-3 py-1 text-xs font-medium rounded-full bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300"
+                className="px-3 py-1 text-xs font-medium rounded-full bg-gray-100  text-gray-600 "
               >
                 +{services.length - 3} more
               </motion.span>
@@ -154,7 +154,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
           </AnimatePresence>
         </div>
 
-        <p className="text-gray-600 dark:text-gray-300 mb-10 line-clamp-2 flex-grow">{description}</p>
+        <p className="text-gray-600  mb-10 line-clamp-2 flex-grow">{description}</p>
 
         {/* Explore button - corner icon that expands on hover */}
         <motion.div
