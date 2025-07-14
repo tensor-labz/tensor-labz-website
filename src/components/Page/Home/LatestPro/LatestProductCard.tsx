@@ -1,105 +1,83 @@
-import React, { memo } from 'react';
+import React, { memo } from "react";
+import { useNavigate } from "react-router-dom";
 import Card from "../../../../components/resuable/Card";
 import projectProps from "../../../../base/type/ProjectProps.d";
-import { useNavigate } from 'react-router-dom';
-
+import { FiArrowRight } from "react-icons/fi";
 
 const LatestProductCard: React.FC<projectProps> = memo((project) => {
-  const safeid=project.id??0
+  const safeid = project.id ?? 0;
+  const navigate = useNavigate();
+
   const customAnimation = {
     initial: {
       opacity: 0,
       scale: 0.95,
-      x: safeid % 2 !== 0 ? 50 : -50
-    },
-    whileHover: {
-      boxShadow: "0 10px 25px rgba(0, 0, 0, 0.1)"
-    },
-    whileTap: {
-      scale: 0.952
+      x: safeid % 2 !== 0 ? 50 : -50,
     },
     whileInView: {
       opacity: 1,
       x: 0,
-      scale: 1
+      scale: 1,
     },
     transition: {
       type: "spring",
       stiffness: 300,
-      damping: 20
-    }
+      damping: 20,
+    },
   };
-const navigate=useNavigate()
+
   return (
     <Card
       animation={customAnimation}
       className={`
-        flex flex-col items-center
-        bg-white border border-gray-200
-        rounded-lg shadow
-        ${safeid % 2 !== 0 ? "md:flex-row-reverse self-end" : "md:flex-row self-start"}
-        md:max-w-2xl
-        hover:bg-blue-50
-        dark:border-gray-700
-        dark:bg-blue-800
-        dark:hover:bg-blue-700
-        transform transition-all duration-300
+        relative
+        flex flex-col md:flex-row
+        w-full md:max-w-2xl
+        bg-white border border-gray-200 rounded-xl shadow-[0_10px_25px_-5px_rgba(0,0,0,0.1)]
         overflow-hidden
-        md:h-32
+        md:h-[300px]
+        cursor-pointer
+        transition-all duration-300
       `}
-      onClick={() => {
-        navigate(`/project/${project.slug}`);
-      } }
+      onClick={() => navigate(`/project/${project.slug}`)}
     >
-      <div className="w-full md:w-48 ">
+      {/* IMAGE */}
+      <div className="w-full md:w-full h-[250px] md:h-full relative">
         <img
-          className="
-            md:object-cover object-center
-            w-full
-            h-[250px]
-            md:h-auto
-            rounded-t-lg
-            md:rounded-none
-            md:rounded-s-lg
-            transition-transform
-            duration-300
-            group-hover:scale-105
-          "
-          src={project?.imageURL}
+          src={project.imageURL}
           alt="Project Illustration"
+          className="
+            object-cover w-full h-full
+            transition-transform duration-300
+          "
         />
+
+        {/* OVERLAY ON MD+ */}
+        <div
+          className="
+            hidden md:flex
+            absolute inset-0 flex-col justify-end
+            bg-gradient-to-t from-black/50 to-transparent
+            p-6
+          "
+        >
+          <h5 className="text-white text-2xl font-bold mb-2">
+            {project.title}
+          </h5>
+          <FiArrowRight className="text-white w-6 h-6" />
+        </div>
       </div>
-      <div className="flex flex-col justify-between p-4 leading-normal">
-        <h5 className="
-          mb-2
-          xs:text-2xl
-          text-xl
-          font-bold
-          tracking-tight
-          text-gray-900
-          dark:text-white
-          transition-colors
-          duration-300
-          group-hover:text-blue-600
-        ">
+
+      {/* CONTENT FOR MOBILE ONLY */}
+      <div className="flex flex-col p-4 md:hidden">
+        <h5 className="mb-2 text-xl font-bold text-gray-900">
           {project.title}
         </h5>
-        <p className="
-          mb-3
-          font-normal
-          text-gray-700
-          dark:text-gray-400
-          transition-colors
-          duration-300
-          xs:text-base
-        ">
-       {project.description}
-        </p>
+        <p className="text-gray-700 text-base">{project.description}</p>
       </div>
     </Card>
   );
 });
 
-LatestProductCard.displayName = 'LatestProductCard';
-
+LatestProductCard.displayName = "LatestProductCard";
 export default LatestProductCard;

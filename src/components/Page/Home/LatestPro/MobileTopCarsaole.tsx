@@ -42,9 +42,9 @@ const MobileTopCarousel: React.FC = memo(() => {
   }
 
   return (
-    <div className="relative flex flex-col justify-center items-center w-full">
+    <div className="relative flex flex-col justify-center items-center w-full min-h-full">
       {/* Carousel Container */}
-      <div className="overflow-hidden w-full relative">
+      <div className="overflow-hidden w-full relative h-full">
         <AnimatePresence initial={false} mode="wait">
           <motion.div
             key={currentIndex}
