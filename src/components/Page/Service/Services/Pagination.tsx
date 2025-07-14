@@ -43,7 +43,6 @@ const [currentPage, setCurrentPage] = useState(getInitialPage);
 useEffect(() => {
   if (typeof window !== "undefined") {
     const url = new URL(window.location.href);
-    url.pathname = "/services"; // always force /services
     url.searchParams.set("page", currentPage.toString());
     window.history.pushState({}, "", url.toString());
   }

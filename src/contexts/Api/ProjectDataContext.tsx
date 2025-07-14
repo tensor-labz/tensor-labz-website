@@ -112,9 +112,6 @@ export default function ProjectDataContextProvider({ children }: ProjectDataCont
       if (newUrlParams !== urlParamsRef.current) {
         urlParamsRef.current = newUrlParams;
 
-        // Don't need to call fetchData() here - we'll rely on React's
-        // re-render after state change to trigger the effect again
-        // This ensures we're not fetching twice unnecessarily
         setProjectData(null); // Force a re-fetch
       }
     };
