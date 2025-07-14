@@ -27,7 +27,7 @@ interface ServiceProviderProps {
 const ServiceContext = createContext<ServiceContextType | undefined>(undefined); // safer than non-null default
 
 const ServiceProvider: FC<ServiceProviderProps> = ({ children }) => {
-  const [activeTab, setActiveTab] = useState<ServiceTab>({ title: "All",slug:"all" });
+  const [activeTab, setActiveTab] = useState<ServiceTab>({ title: "All" });
   const navigate = useNavigate();
 
   useEffect(() => {

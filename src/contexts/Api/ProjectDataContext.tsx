@@ -1,3 +1,4 @@
+
 import { useRootContext } from "../RootContext";
 import { createContext, useContext, useEffect, useState, useRef, useMemo } from "react";
 import { useServiceContext } from "../ServiceContext";
@@ -6,7 +7,6 @@ import { useServiceContext } from "../ServiceContext";
 interface ProjectItem {
   id: string;
   service: string;
-  is_top?: boolean;
   // Add other properties that exist in your project data
   [key: string]: any;
 }
@@ -33,136 +33,89 @@ export default function ProjectDataContextProvider({ children }: ProjectDataCont
   const [projectData, setProjectData] = useState<ProjectItem[] | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<Error | null>(null);
-  const [topData, setTopData] = useState<ProjectItem[] | null>(null);
-  const [rawData, setRawData] = useState<ProjectItem[] | null>(null);
+  const [topData,setTopData]=useState<ProjectItem[] | null>(null)
 
   const { googleSheet_URl } = useRootContext();
-  const { activeTab } = useServiceContext();
-
+  const { activeTab }= useServiceContext();
   // Use refs to track URL parameters for comparison
   const urlParamsRef = useRef<string>("");
   const slugRef = useRef<string | undefined>(activeTab.slug);
 
-  // Function to get current URL parameters
-  const getCurrentUrlParams = () => {
-    if (typeof window !== 'undefined') {
-      return window.location.search;
-    }
-    return '';
-  };
-
-  // Function to filter and paginate data
-  const filterAndPaginateData = (data: ProjectItem[], slug?: string, urlParams?: string) => {
-    let filteredData = [...data];
-
-    // Filter by service if slug is not "all" or undefined
-    if (slug && slug !== "all") {
-      filteredData = data.filter((item) => item.service === slug);
-    }
-
-    // Handle pagination using URL parameters
-    if (urlParams) {
-      const urlSearchParams = new URLSearchParams(urlParams);
-      const page = urlSearchParams.get("page");
-
-      if (page) {
-        const pageNumber = parseInt(page, 10);
-        const itemsPerPage = 6;
-        const startIndex = (pageNumber - 1) * itemsPerPage;
-        const endIndex = startIndex + itemsPerPage;
-        filteredData = filteredData.slice(startIndex, endIndex);
-      }
-    }
-
-    return filteredData;
-  };
-
-  // Fetch data from API
-  const fetchData = async () => {
-    if (!googleSheet_URl) {
-      setError(new Error("Google Sheet URL is not defined"));
-      return;
-    }
-
-    setIsLoading(true);
-    setError(null);
-
-    try {
-      const response = await fetch(`${googleSheet_URl}ProjectData`);
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-
-      const result = await response.json();
-      const data: ProjectItem[] = result?.data || [];
-
-      // Store raw data for future filtering
-      setRawData(data);
-
-      // Set top data (this doesn't change with filtering)
-      setTopData(data.filter((item) => item.is_top === true));
-
-      // Get current URL parameters and active slug
-      const currentUrlParams = getCurrentUrlParams();
-      const currentSlug = activeTab.slug;
-
-      // Filter and paginate data
-      const filteredData = filterAndPaginateData(data, currentSlug, currentUrlParams);
-      setProjectData(filteredData);
-
-      // Update refs
-      urlParamsRef.current = currentUrlParams;
-      slugRef.current = currentSlug;
-
-    } catch (err) {
-      setError(err instanceof Error ? err : new Error('An unknown error occurred'));
-      console.error('Error fetching project data:', err);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  // Effect to handle initial data fetch
+  // Single useEffect to handle all data fetching scenarios
   useEffect(() => {
-    fetchData();
-  }, [googleSheet_URl]); // Only fetch when URL changes
-
-  // Effect to handle slug changes and URL parameter changes
-  useEffect(() => {
-    if (!rawData) return; // Don't process if we don't have raw data yet
-
-    const currentUrlParams = getCurrentUrlParams();
+    // Get current URL search params
+    const currentUrlParams = window.location.search;
     const currentSlug = activeTab.slug;
 
-    // Check if we need to re-filter data
-    const shouldRefilter =
+    // Check if we need to fetch new data
+    const shouldFetch =
+      !projectData ||
       currentUrlParams !== urlParamsRef.current ||
       currentSlug !== slugRef.current;
 
-    if (shouldRefilter) {
+    if (shouldFetch) {
       // Update refs
       urlParamsRef.current = currentUrlParams;
       slugRef.current = currentSlug;
 
-      // Re-filter and paginate data
-      const filteredData = filterAndPaginateData(rawData, currentSlug, currentUrlParams);
-      setProjectData(filteredData);
+      const fetchData = async () => {
+        if (!googleSheet_URl) {
+          setError(new Error("Google Sheet URL is not defined"));
+          return;
+        }
+
+        setIsLoading(true);
+        setError(null);
+
+        try {
+          const response = await fetch(`${googleSheet_URl}ProjectData`);
+
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+
+          const result = await response.json();
+          const data: ProjectItem[] = result?.data || [];
+          setTopData(data.filter((item) => item.is_top === true))
+          // Filter by service if slug is not "all"
+          let filteredData = data;
+          if (currentSlug && currentSlug !== "all") {
+            filteredData = data.filter((item) => item.service === currentSlug);
+          }
+
+          // Handle pagination using window.location.search
+          const urlSearchParams = new URLSearchParams(currentUrlParams);
+          const page = urlSearchParams.get("page");
+
+          if (page) {
+            const pageNumber = parseInt(page, 6);
+            const itemsPerPage = 9;
+            const startIndex = (pageNumber - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            filteredData = filteredData.slice(startIndex, endIndex);
+          }
+          setProjectData(filteredData);
+        } catch (err) {
+          setError(err instanceof Error ? err : new Error('An unknown error occurred'));
+          console.error('Error fetching project data:', err);
+        } finally {
+          setIsLoading(false);
+        }
+      };
+
+      fetchData();
     }
-  }, [activeTab.slug, rawData]); // Re-run when slug or rawData changes
 
-  // Effect to handle URL changes (back/forward navigation)
-  useEffect(() => {
+    // Set up listener for URL changes (back/forward navigation)
     const handleUrlChange = () => {
-      if (!rawData) return;
-
-      const newUrlParams = getCurrentUrlParams();
+      const newUrlParams = window.location.search;
       if (newUrlParams !== urlParamsRef.current) {
         urlParamsRef.current = newUrlParams;
 
-        // Re-filter data with new URL parameters
-        const filteredData = filterAndPaginateData(rawData, activeTab.slug, newUrlParams);
-        setProjectData(filteredData);
+        // Don't need to call fetchData() here - we'll rely on React's
+        // re-render after state change to trigger the effect again
+        // This ensures we're not fetching twice unnecessarily
+        setProjectData(null); // Force a re-fetch
       }
     };
 
@@ -171,7 +124,7 @@ export default function ProjectDataContextProvider({ children }: ProjectDataCont
     return () => {
       window.removeEventListener('popstate', handleUrlChange);
     };
-  }, [rawData, activeTab.slug]);
+  }, [ activeTab, projectData]);
 
   const contextValue = useMemo(
     () => ({
@@ -180,7 +133,7 @@ export default function ProjectDataContextProvider({ children }: ProjectDataCont
       error,
       topData
     }),
-    [projectData, isLoading, error, topData]
+    [projectData, isLoading, error,topData]
   );
 
   return (
