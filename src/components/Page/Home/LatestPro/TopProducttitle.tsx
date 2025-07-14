@@ -1,8 +1,12 @@
 import React, { memo } from "react";
 import { motion } from "framer-motion";
 
-const TopProductTitle: React.FC = memo(() => {
-  const title = "Innovating in 3D Modeling, Embedded Systems & IoT";
+
+type TopProductTitleProps = {
+  title?: string;
+  subtitle?: string;
+}
+const TopProductTitle: React.FC<TopProductTitleProps> = memo(({title="Innovating in 3D Modeling, Embedded Systems & IoT",subtitle="Tensor Labs — Pioneering Next-Gen Tech Solutions"}:TopProductTitleProps) => {
 
   return (
     <div className="w-full flex flex-col items-center">
@@ -12,11 +16,11 @@ const TopProductTitle: React.FC = memo(() => {
         animate="visible"
         variants={containerVariants}
       >
-        {title.split(" ").map((word, index) => (
+        {Array.from(title).map((word, index) => (
           <motion.span
             key={`${word}-${index}`}
             variants={wordVariants}
-            className="inline-block mx-1"
+            className="inline-block mx-1 text-blue-500"
           >
             {word}
           </motion.span>
@@ -28,7 +32,7 @@ const TopProductTitle: React.FC = memo(() => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 1.5, duration: 0.6, ease: "easeOut" }}
       >
-        Tensor Labs — Pioneering Next-Gen Tech Solutions
+        {subtitle}
       </motion.p>
     </div>
   );

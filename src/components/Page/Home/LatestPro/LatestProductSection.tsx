@@ -3,10 +3,11 @@ import { motion, AnimatePresence } from "framer-motion";
 import Section from "../../../../components/resuable/Section";
 import LatestProductCard from "./LatestProductCard";
 import { useDeviceContext } from "../../../../contexts/DeviceContext";
-import TopProductTitle from "./TopProducttitle";
+
 import MobileTopCarousel from "./MobileTopCarsaole";
 import { useProjectDataContext } from "../../../../contexts/Api/ProjectDataContext";
 import { useRootContext } from "../../../../contexts/RootContext";
+import LatestHero from "./LatestHero";
 const LatestProductSection: React.FC = memo(() => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const { topData } = useProjectDataContext();
@@ -55,77 +56,25 @@ const LatestProductSection: React.FC = memo(() => {
   }, [topProjects?.length]);
 
   return (
-    <Section className="min-h-screen  lg:container realtive  flex flex-col items-center justify-center">
+    <Section className="min-h-screen  lg:container realtive  flex flex-col items-center justify-center my-6">
+       <div className='px-4 text-center mb-4 mt-6 '>
+      <h1 className="sm:text-4xl text-xl sm:font-bold font-semibold text-blue-900">Our Latest Top isights</h1>
+      <h3 className="sm:text-lg text-base text-gray-500">Innovative solutions tailored to your digital transformation needs.</h3>
+      </div>
       <motion.div
-        className="flex lg:flex-row flex-col gap-8 w-full h-full relative"
+        className="flex lg:flex-row flex-col-reverse gap-8 w-full h-full relative"
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true }}
         variants={sectionVariants}
       >
-        {/* Video Banner */}
-        {islarge ? (
-        <motion.div
-        className="lg:w-2/5 w-full relative overflow-hidden rounded-md"
-        variants={sectionVariants}
-        whileHover={{ scale: 1.02 }}
-      >
-        {/* Video */}
-        <video
-          src={Data?.Home?.latest_project?.hero_bg?.lg}
-          className="object-cover object-center w-full rounded-md h-[400px] lg:h-[600px]"
-          autoPlay
-          muted
-          loop
-          playsInline
-        />
+<motion.div
+  className="w-full lg:w-2/5 max-w-full relative rounded-2xl overflow-hidden shadow-[0_10px_25px_-5px_rgba(0,0,0,0.1)] border border-gray-200 bg-white"
+  variants={sectionVariants}
+>
+  <LatestHero />
+</motion.div>
 
-        {/* Overlay gradient glow */}
-        <motion.div
-          className="absolute inset-0 bg-gradient-to-tr from-purple-500/20 to-blue-500/20 pointer-events-none mix-blend-overlay"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: [0, 0.2, 0] }}
-          transition={{
-            duration: 6,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-        />
-
-        {/* Floating blurred shape */}
-        <motion.div
-          className="absolute -top-10 -right-10 w-40 h-40 bg-blue-400/10 rounded-full blur-3xl"
-          animate={{
-            x: [0, 20, 0],
-            y: [0, 20, 0],
-            rotate: [0, 15, 0],
-          }}
-          transition={{
-            duration: 10,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-        />
-
-
-
-        {/* Bottom text */}
-        <div className="absolute bottom-4 w-full md:bottom-0">
-          <TopProductTitle />
-        </div>
-      </motion.div>
-       ):(
-          <>
-         <h3 className="text-2xl text-center font-bold w-full text-slate-50 py-3">Our Top Insights</h3>
-            <img
-            src={Data?.Home?.latest_project?.hero_bg?.sm}
-            className="object-cover object-center w-full rounded-md h-[600px] absolute top-0 left-0 z-[-30]"
-          />
-            </>
-        )}
-
-        {/* Vertical Scrolling Projects */}
-        {isMobile ? (<MobileTopCarousel />) : (
           <div className="lg:w-3/5 w-full min-h-full">
           <motion.div className="flex   flex-col gap-6 h-full overflow-hidden lg:p-0 px-8 py-4">
           <AnimatePresence>
@@ -160,7 +109,6 @@ const LatestProductSection: React.FC = memo(() => {
   ))}
 </div>
             </div>
-        )}
 
       </motion.div>
     </Section>
