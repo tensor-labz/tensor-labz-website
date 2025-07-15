@@ -34,7 +34,7 @@ const ServiceProvider: FC<ServiceProviderProps> = ({ children }) => {
     if (activeTab.slug) {
       navigate(`/services/${activeTab.slug}`);
     }
-  }, [activeTab.slug, navigate]); // cleaner dependency
+  }, [activeTab.slug]); // cleaner dependency
 
   return (
     <ServiceContext.Provider value={{ activeTab, setActiveTab }}>

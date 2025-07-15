@@ -37,7 +37,7 @@ const HeroImageSlider: React.FC = memo(() => {
   };
 
   return (
-    <div className="w-full h-full relative overflow-hidden md:min-h-[500px] min-h-80" >
+    <div className="w-full h-full relative overflow-hidden min-h-[500px]" >
       <AnimatePresence mode="wait">
         <motion.div
           key={currentSlide}

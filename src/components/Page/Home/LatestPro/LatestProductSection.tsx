@@ -4,13 +4,13 @@ import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import Section from "../../../../components/resuable/Section";
 import { useDeviceContext } from "../../../../contexts/DeviceContext";
 import MobileTopCarousel from "./MobileTopCarsaole";
-import { useProjectDataContext } from "../../../../contexts/Api/ProjectDataContext";
 import LatestProductCard from "./LatestProductCard";
 import LatestHero from "./LatestHero";
+import { useTopProjects } from './../../../../contexts/Api/useTopProjects';
 
 const LatestProductSection: React.FC = memo(() => {
   const [currentPage, setCurrentPage] = useState(0);
-  const { topData } = useProjectDataContext();
+  const  topData = useTopProjects();
   const device = useDeviceContext();
 
   const isLarge = useMemo(

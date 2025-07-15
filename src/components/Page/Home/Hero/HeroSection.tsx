@@ -186,7 +186,7 @@ const HeroSection: React.FC = memo(() => {
       ))}
 
       {/* Enhanced Hero Content */}
-      <div className="flex flex-col justify-center lg:w-7/12 w-full z-20 relative  min-h-[200px]">
+      <div className="flex flex-col justify-center lg:w-7/12 w-full z-20 relative  md:min-h-[200px]">
 
         <motion.h1
           custom={0}
@@ -233,11 +233,11 @@ const HeroSection: React.FC = memo(() => {
           className="md:mt-10 mt-4 flex gap-8 text-sm md:self-start self-center"
         >
           {[
-            { value: `${projects.projectData?.length}+`, label: "Projects", icon: FaCube },
+            { value: `${projects.rawProjects?.length}+`, label: "Projects", icon: FaCube },
             { value: `${services?.service_data?.length}+`, label: "Services", icon: FaRobot },
             { value: `${new Date().getFullYear()-2023}+`, label: "Years", icon: FaBolt }
           ].map((stat, index) => (
-            [projects.isLoading,services.isLoading].some(item=>item==true) ? ( <motion.div
+            [projects?.isLoading,services?.isLoading].some(item=>item==true) ? ( <motion.div
       className="w-4 h-4 rounded-full bg-gray-400"
       animate={{
         scale: [1, 1.4, 1],
@@ -277,7 +277,7 @@ const HeroSection: React.FC = memo(() => {
         variants={imageVariants}
         initial="hidden"
         animate={imageControls}
-        className="lg:w-5/12 w-full z-10 overflow-hidden md:min-h-[500px] min-h-80 relative "
+        className="lg:w-5/12 w-full z-10 overflow-hidden min-h-[500px]  relative "
         style={{ perspective: "1000px" }}
       >
         {/* Subtle glow behind image */}

@@ -7,8 +7,8 @@ import ProjectLoadingPlaceholder from '../components/Page/Project/ProjectPageLoa
 import ProjectNotFound from '../components/Page/Project/ProjectNotFound';
 const ProjectPage = () => {
   const { slug } = useParams();
-  const { projectData, isLoading } = useProjectDataContext();
-  const projectdata = projectData?.find((data:any) => data.slug === slug);
+  const { rawProjects, isLoading } = useProjectDataContext();
+  const projectdata = rawProjects?.find((data:any) => data.slug === slug);
 
   // State for image slider on mobile
   const [currentImageIndex, setCurrentImageIndex] = useState(0);

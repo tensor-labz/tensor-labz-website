@@ -2,13 +2,11 @@ import React, { memo, useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import LatestProductCard from "./LatestProductCard";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
-import { useProjectDataContext } from "../../../../contexts/Api/ProjectDataContext";
+import { useTopProjects } from './../../../../contexts/Api/useTopProjects';
 
 const MobileTopCarousel: React.FC = memo(() => {
-  const { topData, isLoading } = useProjectDataContext();
-  const topProjects = isLoading
-    ? []
-    :topData?.map((project: any) => ({
+  const topData = useTopProjects();
+  const topProjects =topData?.map((project: any) => ({
         title: project?.title ?? "",
         description: project?.description ?? "",
         imageURL: project?.imageURL

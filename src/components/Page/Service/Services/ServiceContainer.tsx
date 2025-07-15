@@ -1,15 +1,14 @@
 import { memo } from 'react';
 import Pagination from './Pagination';
 import ProjectCard from './ProjectCard';
-import { useProjectDataContext } from '../../../../contexts/Api/ProjectDataContext';
 import { useRootContext } from '../../../../contexts/RootContext';
 import ServiceEmpty from "../../../../components/Page/Service/ServiceEmpty"
 import ServiceLoading from "../../../../components/Page/Service/ServiceLoading"
-
+import { useFilteredProjects } from '../../../../contexts/Api/useFilteredProjects';
 
 function ServiceContainer() {
-    const { Data} = useRootContext()
-    const { projectData,isLoading } = useProjectDataContext()
+    const { Data } = useRootContext()
+    const { filtered, totalItems, isLoading } = useFilteredProjects();
     if (isLoading) return <ServiceLoading/>
     return (
         <div className='mt-4 mb-6 mx-12 sm:mx-4 lg:mx-8 xl:mx-16'>
@@ -17,7 +16,7 @@ function ServiceContainer() {
             <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
                 {/* Project Card */}
                 {
-                  projectData?.length?  projectData?.map((pro: any, index: number) => (
+                  filtered?.length?  filtered?.map((pro: any, index: number) => (
                         <ProjectCard
                             key={index}
                             title={pro.title}
@@ -35,7 +34,7 @@ function ServiceContainer() {
                     )
                 }
             </div>
-            <Pagination totalItems={projectData?.length??0} itemsPerPage={6} />
+            <Pagination totalItems={totalItems??0} itemsPerPage={6} />
         </div>
     );
 }
