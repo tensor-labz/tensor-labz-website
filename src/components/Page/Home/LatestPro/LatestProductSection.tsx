@@ -88,7 +88,7 @@ const LatestProductSection: React.FC = memo(() => {
       >
         {/* LEFT HERO */}
         <motion.div
-          className="w-full lg:w-2/5 max-w-full relative rounded-2xl overflow-hidden shadow-[0_10px_25px_-5px_rgba(0,0,0,0.1)] border border-gray-200 bg-white"
+          className="w-10/12 mx-auto lg:w-2/5 max-w-full relative rounded-2xl overflow-hidden shadow-[0_10px_25px_-5px_rgba(0,0,0,0.1)] border border-gray-200 bg-white md:px-0 "
           variants={sectionVariants}
         >
           <LatestHero />

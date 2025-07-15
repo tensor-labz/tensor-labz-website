@@ -38,11 +38,11 @@ const LatestHero: React.FC = memo(() => {
   }
 
   return (
-    <div className="relative w-full h-full overflow-hidden rounded-2xl">
+    <div className="relative w-full h-full overflow-hidden rounded-2xl md:p-2 p-6">
       {latestNews?.type === "vedio" ? (
         <video
           src={latestNews?.Value}
-          className="w-full h-full object-cover object-center"
+          className="w-full h-full object-cover object-center rounded-2xl"
           autoPlay
           muted
           loop
