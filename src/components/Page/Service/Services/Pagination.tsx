@@ -105,7 +105,7 @@ const Pagination = memo(({ totalItems, itemsPerPage }: PaginationProps) => {
     }
   };
 
-  if (totalPages <= 1 || totalItems <= 0) return null;
+  // if (totalPages <= 1 || totalItems <= 0) return null;
 
   return (
     <div className="flex md:justify-end justify-center items-center space-x-2 mt-4">
