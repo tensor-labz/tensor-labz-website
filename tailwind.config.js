@@ -27,7 +27,7 @@ export default {
         },
       },
       fontFamily: {
-        'sans': ['Century Gothic Paneuropean', 'ui-sans-serif', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', 'Noto Sans', 'sans-serif'],
+        'sans': [ "Exo", 'sans-serif'],
       },
       container:{
         center: true,
