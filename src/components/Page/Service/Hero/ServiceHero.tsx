@@ -1,4 +1,4 @@
-import { FC,memo } from 'react';
+import { FC,memo, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { useRootContext } from '../../../../contexts/RootContext';
 import { useServiceDataContext } from "../../../../contexts/Api/ServiceApiContext";
@@ -9,6 +9,9 @@ const ServiceHero: FC =memo( () => {
   const { Data } = useRootContext()
   const { service_data } = useServiceDataContext();
   const { activeTab } = useServiceContext();
+  const selctedservice = useMemo(() => {
+    return service_data?.find((se: any) => se.slug == activeTab.slug) ?? { service_name: Data.insight.hero.title, description: Data.insight.hero.description };
+  }, [service_data, activeTab.slug]);
   return (
     <div className="relative w-full h-32 sm:h-40 md:h-60">
       {/* Background for small screens (Image) */}
@@ -52,7 +55,7 @@ const ServiceHero: FC =memo( () => {
           transition={{ duration: 0.8, delay: 0.3 }}
           className="text-2xl md:text-5xl font-bold text-center mb-4"
         >
-          {service_data?.find((se:any)=>se.slug==activeTab.slug)?.service_name?? Data.insight.hero.title}
+          {selctedservice?.service_name}
         </motion.h1>
 
         <motion.p
@@ -61,7 +64,7 @@ const ServiceHero: FC =memo( () => {
           transition={{ duration: 0.8, delay: 0.5 }}
           className="text-sm md:text-lg text-center max-w-2xl md:block hidden"
         >
-          {service_data?.find((se:any)=>se.slug==activeTab.slug)?.description??Data.insight.hero.description}
+          {selctedservice?.description}
         </motion.p>
       </div>
     </div>
