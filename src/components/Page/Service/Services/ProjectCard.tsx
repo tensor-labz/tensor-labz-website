@@ -161,6 +161,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
           className="absolute bottom-4 left-4"
           initial="initial"
           whileHover="expanded"
+          onClick={handleExplore}
         >
           <motion.div
             className="flex items-center overflow-hidden rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 shadow-md text-white"
@@ -171,7 +172,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
             transition={{ type: "spring", stiffness: 500, damping: 30 }}
           >
             <motion.button
-              onClick={handleExplore}
+
               className="h-10 w-10 flex items-center relative justify-center rounded-full"
               whileTap={{ scale: 0.9 }}
             >
