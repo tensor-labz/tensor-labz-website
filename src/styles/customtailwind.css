@@ -26,10 +26,10 @@
     @apply  text-xs md:text-base h;
 }
 .hero{
-    @apply sm:text-3xl text-2xl md:text-left text-center md:text-6xl font-semibold md:font-bold leading-tight bg-gradient-to-tr from-blue-500 via-sky-900 to-blue-800 bg-clip-text text-transparent py-2 ;
+    @apply sm:text-3xl text-2xl md:text-left text-center md:text-6xl font-semibold md:font-bold leading-snug bg-gradient-to-tr from-blue-500 via-sky-900 to-blue-800 bg-clip-text text-transparent py-2 flex flex-col md:justify-start md:items-start justify-center md:space-y-4 space-y-2;
 }
 .title{
-  @apply font-extrabold md:text-7xl text-4xl ;
+  @apply font-extrabold md:text-7xl text-4xl;
 }
 .p{
     @apply text-sm md:text-base break-all;

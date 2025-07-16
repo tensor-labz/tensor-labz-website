@@ -195,7 +195,10 @@ const HeroSection: React.FC = memo(() => {
           animate={textControls}
           className="hero relative"
         >
-          {Data.Home.hero.title || ""}
+          {Data.Home.hero.title?.map((line:string, index:number) => (
+            <span key={index} className="block">
+              {line}</span>
+          ))}
 
           {/* Subtle text decoration */}
           <motion.div
