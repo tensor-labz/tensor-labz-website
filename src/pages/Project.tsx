@@ -41,7 +41,7 @@ const ProjectPage = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header with animation */}
-      <ProjectHero title={projectdata.title} tags={projectdata.tags} is_top={projectdata.is_top} serviceName={projectdata.service} />
+      <ProjectHero title={projectdata.title} description={projectdata?.description } tags={projectdata.tags} is_top={projectdata.is_top} serviceName={projectdata.service} />
 
 
       <main className="max-w-6xl mx-auto py-12 px-4 md:px-8">
