@@ -192,7 +192,8 @@ const ProjectHero: React.FC<ResponsiveBackgroundHeaderProps> = ({
             </Link>
 
             {/* Quick Contact Icons */}
-            <Link className="flex items-center gap-2" to='/contact-us'>
+            <div className="flex items-center gap-2">
+            <Link  to='/contact-us'>
 
               <div
                 className={`p-2 rounded-full transition-all duration-300 cursor-pointer ${
@@ -204,8 +205,8 @@ const ProjectHero: React.FC<ResponsiveBackgroundHeaderProps> = ({
               >
                 <FcOnlineSupport className="text-2xl" />
               </div>
-
-              <Link to='tel:+94705951199'
+</Link>
+              <a href='tel:+94705951199'
                 className={`p-2 rounded-full transition-all duration-300 cursor-pointer ${
                   bgType === "light"
                     ? "bg-gray-100 hover:bg-gray-200 text-gray-700"
@@ -214,9 +215,9 @@ const ProjectHero: React.FC<ResponsiveBackgroundHeaderProps> = ({
                 title="Call Us"
               >
                 <FiPhone className="text-xl" />
-              </Link>
+              </a>
+</div>
 
-</Link>
             {/* Support Text */}
             <p className="text-sm text-black lg:text-sky-900 text-center lg:text-right md:block hidden">
               24/7 Customer Support
