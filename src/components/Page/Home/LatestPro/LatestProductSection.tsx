@@ -24,7 +24,7 @@ const LatestProductSection: React.FC = memo(() => {
 
   const topProjects = topData ?? [];
 
-  const visibleCount = isLarge ? 4 : 1;
+  const visibleCount = !isMobile ? 4 : 1;
   const pageCount = Math.ceil(topProjects.length / visibleCount);
 
   // Auto-slide logic for pages
@@ -95,7 +95,7 @@ const LatestProductSection: React.FC = memo(() => {
         </motion.div>
 
         {/* RIGHT SLIDES */}
-        <div className="lg:w-3/5 w-full flex flex-col gap-4 relative">
+        <div className="lg:w-3/5 lg:px-0 px-16 w-full flex flex-col gap-4 relative">
           {isMobile ? (
             <MobileTopCarousel />
           ) : (
