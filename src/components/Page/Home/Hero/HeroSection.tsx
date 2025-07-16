@@ -121,7 +121,7 @@ const HeroSection: React.FC = memo(() => {
       ref={ref}
       className="relative md:bg-gradient-to-br from-white to-sky-50
       text-gray-800  py-10 sm:py-20 md:py-18 lg:py-24 px-6 md:px-8 lg:px-12
-      min-h-screen flex md:flex-row flex-col-reverse items-center justify-center gap-x-8 gap-y-4 overflow-hidden"
+      min-h-screen flex lg:flex-row flex-col-reverse items-center justify-center gap-x-8 gap-y-4 overflow-hidden"
     >
    <motion.div
         variants={sectionVariants}
@@ -233,7 +233,7 @@ const HeroSection: React.FC = memo(() => {
           variants={textVariants}
           initial="hidden"
           animate={textControls}
-          className="md:mt-10 mt-4 flex gap-8 text-sm md:self-start self-center"
+          className="lg:mt-10 mt-4 flex lg:gap-8 gap-12 text-sm lg:self-start self-center"
         >
           {[
             { value: `${projects.rawProjects?.length}+`, label: "Projects", icon: FaCube },
@@ -262,12 +262,12 @@ const HeroSection: React.FC = memo(() => {
                 delay: index * 0.5,
                 ease: "easeInOut"
               }}
-              className="flex items-center justify-center gap-2 text-sky-600"
+              className="flex items-center justify-center lg:gap-2 gap-3 text-sky-600"
             >
-              <stat.icon className="text-lg" />
+              <stat.icon className="lg:text-lg text-5xl" />
               <div>
-                <div className="font-bold text-xl">{stat.value}</div>
-                <div className="text-sm opacity-70">{stat.label}</div>
+                <div className="font-bold lg:text-xl text-2xl">{stat.value}</div>
+                <div className="text-xl lg:text-sm opacity-70">{stat.label}</div>
               </div>
             </motion.div>
           ))}
