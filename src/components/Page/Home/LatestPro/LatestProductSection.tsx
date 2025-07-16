@@ -69,7 +69,7 @@ const LatestProductSection: React.FC = memo(() => {
   };
 
   return (
-    <Section className="min-h-screen lg:container flex flex-col items-center justify-center my-6">
+    <Section className="min-h-screen lg:container flex flex-col items-center justify-center  py-10 sm:py-20 md:py-18 lg:py-24">
       <div className="px-4 text-center mb-4 mt-6">
         <h1 className="sm:text-4xl text-xl sm:font-bold font-semibold text-blue-900">
           Our Latest Top Insights
