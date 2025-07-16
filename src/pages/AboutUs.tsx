@@ -45,7 +45,7 @@ const AboutUs: React.FC = memo(() => {
           {/* Overlay */}
           {/* <div className="absolute inset-0 bg-gradient-to-b from-blue-200/50 via-white/80 to-blue-200/50 z-0" /> */}
           <div className="w-11/12 relative  mx-auto text-center p-8 sm:mt-0 lg:mt-8 md:mt-14 rounded-2xl shadow-2xl backdrop-blur-md">
-            <h1 className="text-4xl md:text-6xl font-bold mb-6 md:text-blue-900 text-white shadow-sm">
+            <h1 className="text-4xl md:text-6xl font-bold mb-6 md:text-blue-900 text-white shadow-sm leading-relaxed">
               {Data?.aboutus?.title?? "About Us"}
             </h1>
             <p className="text-lg md:text-xl mb-8 md:text-gray-800 text-slate-100 leading-relaxed">

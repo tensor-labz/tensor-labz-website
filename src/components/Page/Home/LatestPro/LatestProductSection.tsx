@@ -74,9 +74,9 @@ const LatestProductSection: React.FC = memo(() => {
         <h1 className="sm:text-4xl text-xl sm:font-bold font-semibold text-blue-900">
           Our Latest Top Insights
         </h1>
-        <h3 className="sm:text-lg text-base text-gray-500">
+        {/* <h3 className="sm:text-lg text-base text-gray-500">
           Innovative solutions tailored to your digital transformation needs.
-        </h3>
+        </h3> */}
       </div>
 
       <motion.div
