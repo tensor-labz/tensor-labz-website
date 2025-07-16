@@ -196,7 +196,7 @@ const HeroSection: React.FC = memo(() => {
           className="hero relative"
         >
           {Data.Home.hero.title?.map((line:string, index:number) => (
-            <span key={index} className="block">
+            <span key={index} className="block no-wrap">
               {line}</span>
           ))}
 
@@ -264,9 +264,9 @@ const HeroSection: React.FC = memo(() => {
               }}
               className="flex items-center justify-center gap-2 md:gap-3 text-sky-600"
             >
-              <stat.icon className="text-lg md:text-5xl" />
+              <stat.icon className="text-lg md:text-4xl" />
               <div>
-                <div className="font-bold text-xl md:text-2xl">{stat.value}</div>
+                <div className="font-bold text-base md:text-2xl">{stat.value}</div>
                 <div className="md:text-xl text-sm opacity-70">{stat.label}</div>
               </div>
             </motion.div>

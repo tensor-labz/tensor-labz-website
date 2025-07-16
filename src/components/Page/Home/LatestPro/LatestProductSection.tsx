@@ -95,7 +95,7 @@ const LatestProductSection: React.FC = memo(() => {
         </motion.div>
 
         {/* RIGHT SLIDES */}
-        <div className="lg:w-3/5 lg:px-0 px-16 w-full flex flex-col gap-4 relative">
+        <div className="lg:w-3/5 lg:px-0 md:px-16 px-4 w-full flex flex-col gap-4 relative">
           {isMobile ? (
             <MobileTopCarousel />
           ) : (
