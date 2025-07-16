@@ -13,10 +13,10 @@ const LatestProductSection: React.FC = memo(() => {
   const  topData = useTopProjects();
   const device = useDeviceContext();
 
-  const isLarge = useMemo(
-    () => device === "lg" || device === "xl" || device === "2xl",
-    [device]
-  );
+  // const isLarge = useMemo(
+  //   () => device === "lg" || device === "xl" || device === "2xl",
+  //   [device]
+  // );
   const isMobile = useMemo(
     () => device === "xs" || device === "sm",
     [device]
