@@ -1,8 +1,8 @@
 const appData={
-    title:"Tensor Labz",
+    title:"Tensor Labs",
     description:"This is a React App",
     keywords:["3D printings","Agriculture","Tensor Labz","Prototyping","CADModeling"],
-    author:"Tensor Labz",
+    author:"Tesor Labs,Sriniruban,ThanuMahee",
     logo:"../assets/images/logo.png",
 }
 
