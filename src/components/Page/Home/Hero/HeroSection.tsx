@@ -178,7 +178,7 @@ const HeroSection: React.FC = memo(() => {
               repeat: Infinity,
               ease: "easeInOut"
             }}
-            className="text-2xl opacity-30 hover:opacity-60 hover:scale-110 transition-all duration-300"
+            className="md:text-2xl text-lg opacity-30 hover:opacity-60 hover:scale-110 transition-all duration-300"
           >
             <tech.icon />
           </motion.div>
@@ -233,7 +233,7 @@ const HeroSection: React.FC = memo(() => {
           variants={textVariants}
           initial="hidden"
           animate={textControls}
-          className="lg:mt-10 mt-4 flex lg:gap-8 gap-12 text-sm lg:self-start self-center"
+          className="md:mt-10 mt-4 flex gap-8 md:gap-12 text-sm lg:self-start self-center"
         >
           {[
             { value: `${projects.rawProjects?.length}+`, label: "Projects", icon: FaCube },
@@ -262,12 +262,12 @@ const HeroSection: React.FC = memo(() => {
                 delay: index * 0.5,
                 ease: "easeInOut"
               }}
-              className="flex items-center justify-center lg:gap-2 gap-3 text-sky-600"
+              className="flex items-center justify-center gap-2 md:gap-3 text-sky-600"
             >
-              <stat.icon className="lg:text-lg text-5xl" />
+              <stat.icon className="text-lg md:text-5xl" />
               <div>
-                <div className="font-bold lg:text-xl text-2xl">{stat.value}</div>
-                <div className="text-xl lg:text-sm opacity-70">{stat.label}</div>
+                <div className="font-bold text-xl md:text-2xl">{stat.value}</div>
+                <div className="md:text-xl text-sm opacity-70">{stat.label}</div>
               </div>
             </motion.div>
           ))}

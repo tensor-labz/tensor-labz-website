@@ -178,7 +178,8 @@ const ProjectHero: React.FC<ResponsiveBackgroundHeaderProps> = ({
           >
             {/* Main Contact Button */}
             <Link
-              to="https://wa.me/+94705359369"
+              to={`https://wa.me/+94705359369?text=${encodeURIComponent(
+                `Hello, I need assistance with the project: ${title}.`)}`}
               className={`group relative inline-flex items-center gap-3 px-6 py-3 rounded-full transition-all duration-300 ${
                 bgType === "light"
                   ? "bg-blue-600 hover:bg-blue-700 text-white shadow-lg hover:shadow-xl"
