@@ -158,7 +158,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
 
         {/* Explore button - corner icon that expands on hover */}
         <motion.div
-          className="absolute bottom-4 left-4"
+          className="absolute bottom-4 left-4 cursor-pointer"
           initial="initial"
           whileHover="expanded"
           onClick={handleExplore}
