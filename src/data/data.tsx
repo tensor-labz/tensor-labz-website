@@ -65,7 +65,7 @@ const data: any = {
     },
     project: {
         hero: {
-            bg: { lg:"https://tensoragri.s3.us-east-1.amazonaws.com/pageBackground/bg.mp4",
+            bg: {
                 sm:"https://tensor-labz-store.s3.eu-north-1.amazonaws.com/Home/LatestProjectBg.jpg"
             }
         }
