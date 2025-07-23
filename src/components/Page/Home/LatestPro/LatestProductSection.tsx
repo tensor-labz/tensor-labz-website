@@ -121,17 +121,17 @@ const LatestProductSection: React.FC = memo(() => {
               </AnimatePresence>
 
               {/* Prev/Next icons */}
-              <div className="absolute top-1/2 -translate-y-1/2 left-0 p-2 cursor-pointer">
+              <div className="absolute top-1/2 -translate-y-1/2 -left-10 p-2 cursor-pointer">
                 <FiChevronLeft
                   size={32}
-                  className="text-gray-700 hover:text-blue-600"
+                  className="text-gray-700 font-bold hover:text-blue-600"
                   onClick={handlePrev}
                 />
               </div>
-              <div className="absolute top-1/2 -translate-y-1/2 right-0 p-2 cursor-pointer">
+              <div className="absolute top-1/2 -translate-y-1/2 -right-10 p-2 cursor-pointer">
                 <FiChevronRight
                   size={32}
-                  className="text-gray-700 hover:text-blue-600"
+                  className="text-gray-700 font-bold hover:text-blue-600"
                   onClick={handleNext}
                 />
               </div>
