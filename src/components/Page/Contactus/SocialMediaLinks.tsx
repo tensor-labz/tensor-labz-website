@@ -80,7 +80,7 @@ const SocialMediaLinks = memo(() => {
     },
     {
       icon: FaTiktok,
-      social_media: "TikTok",
+      social_media: "Tiktok",
       color: "text-black-400 hover:text-black-600",
     }
   ];

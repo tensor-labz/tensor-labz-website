@@ -48,7 +48,7 @@ const data: any = {
     },
     aboutus: {
         title: "Transforming Visions into Realities",
-        content:"We are a passionate team of innovators dedicated to crafting cutting-edge digital solutions that drive business growth and technological advancement.",
+        content:"We are a passionate team of innovators dedicated to crafting cutting-edge solutions that drive business growth and technological advancement.",
         bg: {
             lg: "https://tensor-labz-store.s3.eu-north-1.amazonaws.com/about-us/aboutusBg.mp4",
         md:"https://tensor-labz-store.s3.eu-north-1.amazonaws.com/about-us/aboutusbgSm.jpg"
