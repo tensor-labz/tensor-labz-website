@@ -1,11 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useState,useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useParams } from 'react-router-dom';
 import { useProjectDataContext } from '../contexts/Api/ProjectDataContext';
 import ProjectHero from '../components/Page/Project/ProjectHero';
 import ProjectLoadingPlaceholder from '../components/Page/Project/ProjectPageLoading';
 import ProjectNotFound from '../components/Page/Project/ProjectNotFound';
-import Page from "../components/resuable/Page";
+import HeaderHelment from "../base/Head";
 const ProjectPage = () => {
   const { slug } = useParams();
   const { rawProjects, isLoading } = useProjectDataContext();
@@ -38,11 +38,10 @@ const ProjectPage = () => {
   if (!projectdata) {
     return <ProjectNotFound />;
   }
-  useEffect(() => {
-window.scrollTo(0, 0);
-},[])
+  useEffect(() => { window.scrollTo(0, 0) },[])
   return (
-    <Page HeadProps={{title:projectdata.title}} >
+    <div className="min-h-screen bg-gray-50">
+            <HeaderHelment {...{title:projectdata.title}} />
       {/* Header with animation */}
       <ProjectHero title={projectdata.title} description={projectdata?.description } tags={projectdata.tags} is_top={projectdata.is_top} serviceName={projectdata.service} />
 
@@ -182,7 +181,7 @@ window.scrollTo(0, 0);
           </div>
         </div>
       </main>
-    </Page>
+    </div>
   );
 };
 
