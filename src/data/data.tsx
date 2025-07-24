@@ -37,7 +37,7 @@ const data: any = {
     insight: {
         hero: {
             hero_bg: {
-                lg: "https://tensor-labz-store.s3.eu-north-1.amazonaws.com/Insights/insightBg.mp4",
+                lg: "https://tensor-labz-store.s3.eu-north-1.amazonaws.com/Insights/service_hero.webm",
                 sm:"https://tensor-labz-store.s3.eu-north-1.amazonaws.com/Insights/ServicePageSm.jpg"
             },
             title: "Insights",
