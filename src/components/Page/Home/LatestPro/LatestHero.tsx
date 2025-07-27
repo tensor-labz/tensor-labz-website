@@ -6,6 +6,7 @@ const LatestHero: React.FC = memo(() => {
   const [latestNews, setLatestNews] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [imageAspectRatios, setImageAspectRatios] = useState<number[]>([]);
   const { googleSheet_URl } = useRootContext();
 
   useEffect(() => {
@@ -36,13 +37,44 @@ const LatestHero: React.FC = memo(() => {
         return Array.isArray(parsed) ? parsed : [latestNews.Value];
       } catch {
         return latestNews.Value.includes(",")
-          ? latestNews.Value.split(",").map((img:string) => img.trim())
+          ? latestNews.Value.split(",").map((img: string) => img.trim())
           : [latestNews.Value];
       }
     }
 
     return [];
   };
+
+  // Function to detect image aspect ratio
+  const loadImageAspectRatio = (imageSrc: string): Promise<number> => {
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.onload = () => {
+        resolve(img.width / img.height);
+      };
+      img.onerror = () => {
+        resolve(1); // Default to square aspect ratio if image fails to load
+      };
+      img.src = imageSrc;
+    });
+  };
+
+  // Load aspect ratios for all images
+  useEffect(() => {
+    const loadAspectRatios = async () => {
+      const images = getImages();
+      if (images.length > 0) {
+        const ratios = await Promise.all(
+          images.map((img: string) => loadImageAspectRatio(img))
+        );
+        setImageAspectRatios(ratios);
+      }
+    };
+
+    if (latestNews?.type === "slider" || !latestNews?.type) {
+      loadAspectRatios();
+    }
+  }, [latestNews]);
 
   useEffect(() => {
     if (latestNews?.type !== "slider") return;
@@ -67,6 +99,23 @@ const LatestHero: React.FC = memo(() => {
     setCurrentIndex((prev) => (prev + 1) % images.length);
   };
 
+  // Get responsive image classes based on aspect ratio
+  const getImageClasses = (aspectRatio: number) => {
+    // Container aspect ratio (approximate for mobile)
+    const containerAspectRatio = window.innerWidth < 768 ? 16/9 : 16/9; // Adjust based on your container
+
+    if (aspectRatio > containerAspectRatio * 1.2) {
+      // Wide landscape image - contain to show full width
+      return "w-full h-full object-contain object-center bg-gray-100";
+    } else if (aspectRatio < containerAspectRatio * 0.8) {
+      // Portrait or very tall image - contain to show full height
+      return "w-full h-full object-contain object-center bg-gray-100";
+    } else {
+      // Aspect ratio is close to container - cover is fine
+      return "w-full h-full object-cover object-center";
+    }
+  };
+
   if (isLoading) {
     return (
       <motion.div
@@ -84,7 +133,7 @@ const LatestHero: React.FC = memo(() => {
 
   return (
     <div className="relative w-full h-[300px] md:h-full overflow-hidden rounded-2xl md:p-2 p-4">
-      {latestNews?.type === "vedio" ? (
+      {latestNews?.type === "video" ? (
         <video
           src={latestNews?.Value}
           className="w-full h-full object-cover object-center rounded-2xl"
@@ -94,19 +143,27 @@ const LatestHero: React.FC = memo(() => {
           playsInline
         />
       ) : latestNews?.type === "slider" ? (
-        <div className="relative w-full h-full rounded-2xl overflow-hidden">
+        <div className="relative w-full h-full rounded-2xl overflow-hidden bg-gray-100">
           <AnimatePresence>
             {getImages().length > 0 && (
-              <motion.img
+              <motion.div
                 key={currentIndex}
-                src={getImages()[currentIndex]}
-                alt={`Slide ${currentIndex + 1}`}
-                className="absolute inset-0 w-full h-full object-cover object-center"
+                className="absolute inset-0 w-full h-full flex items-center justify-center"
                 initial={{ opacity: 0, scale: 1.05 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.95 }}
                 transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
-              />
+              >
+                <img
+                  src={getImages()[currentIndex]}
+                  alt={`Slide ${currentIndex + 1}`}
+                  className={getImageClasses(imageAspectRatios[currentIndex] || 1)}
+                  style={{
+                    maxWidth: '100%',
+                    maxHeight: '100%',
+                  }}
+                />
+              </motion.div>
             )}
           </AnimatePresence>
 
@@ -152,10 +209,10 @@ const LatestHero: React.FC = memo(() => {
                     d="M9 5l7 7-7 7"
                   />
                 </motion.svg>
-              </motion.button>
+                </motion.button>
 
               <div className="absolute bottom-3 md:bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
-                {getImages().map((_:any, index:number) => (
+                {getImages().map((_: any, index: number) => (
                   <motion.button
                     key={index}
                     onClick={() => setCurrentIndex(index)}
@@ -179,11 +236,17 @@ const LatestHero: React.FC = memo(() => {
           )}
         </div>
       ) : (
-        <img
-          src={latestNews?.Value}
-          alt="Latest News"
-          className="w-full h-full object-cover object-center"
-        />
+        <div className="relative w-full h-full rounded-2xl overflow-hidden bg-gray-100 flex items-center justify-center">
+          <img
+            src={latestNews?.Value}
+            alt="Latest News"
+            className={getImageClasses(imageAspectRatios[0] || 1)}
+            style={{
+              maxWidth: '100%',
+              maxHeight: '100%',
+            }}
+          />
+        </div>
       )}
 
       <motion.div
