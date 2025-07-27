@@ -12,7 +12,7 @@ const navData=[
         icon:<FaHome/>
     },
     {
-        nav:"Insigts",
+        nav:"insights",
         to:"/services/all",
         // icon:<FaGear/>
         icon:<FaScrewdriverWrench />
