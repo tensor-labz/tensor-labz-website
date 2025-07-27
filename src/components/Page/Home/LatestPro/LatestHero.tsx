@@ -36,7 +36,7 @@ const LatestHero: React.FC = memo(() => {
         return Array.isArray(parsed) ? parsed : [latestNews.Value];
       } catch {
         return latestNews.Value.includes(",")
-          ? latestNews.Value.split(",").map((img) => img.trim())
+          ? latestNews.Value.split(",").map((img:string) => img.trim())
           : [latestNews.Value];
       }
     }
@@ -155,7 +155,7 @@ const LatestHero: React.FC = memo(() => {
               </motion.button>
 
               <div className="absolute bottom-3 md:bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
-                {getImages().map((_, index) => (
+                {getImages().map((_:any, index:number) => (
                   <motion.button
                     key={index}
                     onClick={() => setCurrentIndex(index)}
