@@ -81,7 +81,7 @@ const ProjectHero: React.FC<ResponsiveBackgroundHeaderProps> = ({
 
   return (
     <header
-      className={`relative ${textColor} py-11 px-4 md:px-8 overflow-hidden ${className}`}
+      className={`relative ${textColor} md:py-11 py-16 px-4 md:px-8 overflow-hidden ${className}`}
       style={fadeInStyles}
     >
       {/* Background */}
@@ -95,13 +95,13 @@ const ProjectHero: React.FC<ResponsiveBackgroundHeaderProps> = ({
             className="w-full h-full object-cover"
           />
           <div
-            className="absolute inset-0 md:bg-gradient-to-t bg-gradient-to-b from-blue-900/60 via-blue-700/40 to-transparent"
+            className="absolute inset-0 md:bg-gradient-to-t bg-gradient-to-b from-blue-600/60 via-blue-200/40  to-white"
           />
         </div>
 
 
       {/* Content */}
-      <div className="max-w-6xl mx-auto relative z-10 mt-6">
+      <div className="max-w-6xl mx-auto relative z-10 mt-6 text-blue-900">
         {serviceName && (
           <div
             className={`mb-2 text-sm md:text-base opacity-90`}
@@ -109,7 +109,7 @@ const ProjectHero: React.FC<ResponsiveBackgroundHeaderProps> = ({
           >
             <Link
               to={`/services/${serviceName}`}
-              className="hover:underline font-medium"
+              className="hover:underline font-medium "
             >
               {
                 service_data?.find(
@@ -125,25 +125,18 @@ const ProjectHero: React.FC<ResponsiveBackgroundHeaderProps> = ({
           {/* Left Content */}
           <div className="flex-1 lg:pr-8">
             <h1
-              className="text-3xl md:text-4xl font-bold mb-4 flex items-center gap-3"
+              className="text-3xl md:text-4xl text-blue-900 font-bold mb-4 flex items-center gap-3"
               style={contentFadeInStyles}
             >
               {title}
               {is_top && (
                  <FaCrown
-    className="inline-block text-xl md:text-2xl text-white drop-shadow-[2px_2px_2px_rgba(0,0,0,0.3)]"
+    className="inline-block text-xl md:text-2xl text-blue-900 drop-shadow-[2px_2px_2px_rgba(0,0,0,0.3)]"
   />
               )}
             </h1>
 
-            {description && (
-              <p
-                className="text-lg md:text-xl mb-6 opacity-90 leading-relaxed"
-                style={contentFadeInStyles}
-              >
-                {description}
-              </p>
-            )}
+
 
             <div
               className="flex flex-wrap gap-3 mb-6"
@@ -159,7 +152,14 @@ const ProjectHero: React.FC<ResponsiveBackgroundHeaderProps> = ({
               ))}
             </div>
           </div>
-
+     {description && (
+              <p
+                className="text-lg md:text-xl abs opacity-90 text-center w-full md:font-semibold  leading-relaxed md:text-white text-blue-900 absolute md:-bottom-3 -bottom-16"
+                style={contentFadeInStyles}
+              >
+                {description}
+              </p>
+            )}
           {/* Professional Contact Section */}
           <div
             className="flex flex-col items-center lg:items-end space-y-4 mt-6 lg:mt-0"
@@ -187,10 +187,10 @@ const ProjectHero: React.FC<ResponsiveBackgroundHeaderProps> = ({
 </div>
 
             {/* Support Text */}
-            <p className="text-sm text-white  text-center lg:text-right md:block hidden">
+            {/* <p className="text-sm text-sky-900  text-center lg:text-right md:block hidden">
               24/7 Customer Support
 
-            </p>
+            </p> */}
           </div>
         </div>
       </div>
