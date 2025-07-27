@@ -26,8 +26,8 @@ const ServiceHero: FC =memo( () => {
           alt="Hero Background"
           className="w-full h-full object-cover"
         />
+        <div className="absolute inset-0 z-10 md:hidden bg-blue-300 w-full h-full"></div>
       </motion.div>
-
       {/* Background for medium and up (Video) */}
       <motion.div
         initial={{ opacity: 0 }}
