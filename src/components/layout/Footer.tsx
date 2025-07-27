@@ -213,7 +213,9 @@ const Footer = () => {
               &copy; {new Date().getFullYear()} <span className="font-bold text-white">Tensor Labs</span>.
               All rights reserved.
             </p>
-
+   <p className="text-slate-400 text-xs py-2">
+              Powered by: <a href='https://www.linkedin.com/in/thanumahee12/' className="italic ">Thanu Mahee</a>.
+            </p>
           </div>
         </motion.div>
       </motion.div>
