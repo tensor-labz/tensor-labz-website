@@ -152,14 +152,14 @@ const ProjectHero: React.FC<ResponsiveBackgroundHeaderProps> = ({
               ))}
             </div>
           </div>
-     {description && (
+     {/* {description && (
               <p
                 className="text-lg md:text-xl abs opacity-90 text-center w-full md:font-semibold  leading-relaxed md:text-white text-blue-900 absolute md:-bottom-3 -bottom-16"
                 style={contentFadeInStyles}
               >
                 {description}
               </p>
-            )}
+            )} */}
           {/* Professional Contact Section */}
           <div
             className="flex flex-col items-center lg:items-end space-y-4 mt-6 lg:mt-0"
@@ -193,6 +193,14 @@ const ProjectHero: React.FC<ResponsiveBackgroundHeaderProps> = ({
             </p> */}
           </div>
         </div>
+           {description && (
+              <p
+                className="text-lg md:text-xl abs opacity-90 text-center w-full md:font-semibold  leading-relaxed md:text-white text-blue-900 "
+                style={contentFadeInStyles}
+              >
+                {description}
+              </p>
+            )}
       </div>
     </header>
   );
