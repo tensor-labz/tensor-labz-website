@@ -19,36 +19,18 @@ const ServiceHero: FC =memo( () => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1 }}
-        className="absolute inset-0 z-0 md:hidden"
+        className="absolute inset-0 z-0 "
       >
         <img
           src={Data.insight.hero.hero_bg.sm}
           alt="Hero Background"
           className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 z-10 md:hidden bg-blue-300 w-full h-full"></div>
-      </motion.div>
-      {/* Background for medium and up (Video) */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1 }}
-        className="absolute inset-0 z-0 hidden md:block"
-      >
-        <video
-          autoPlay
-          muted
-          loop
-          playsInline
-          className="w-full h-full object-cover object-center"
-        >
-          <source src={Data.insight.hero.hero_bg.lg} type="video/mp4" />
-          Your browser does not support the video tag.
-        </video>
       </motion.div>
 
+
       {/* Content */}
-      <div className="relative z-10 flex flex-col items-center justify-center h-full text-white px-4">
+      <div className="relative z-10 flex flex-col items-center justify-center h-full text-blue-900 px-4">
         <motion.h1
           initial={{ y: -50, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
