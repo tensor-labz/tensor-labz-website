@@ -178,7 +178,7 @@ const ProjectHero: React.FC<ResponsiveBackgroundHeaderProps> = ({
                 <FcOnlineSupport className="text-2xl" />
               </div>
 </Link>
-              <a href='tel:+94705951199'
+              <a href='tel:+94770484739'
                 className={"p-2 rounded-full cursor-pointer transition-all duration-300  bg-white  hover:bg-blue-50  backdrop-blur-sm border text-blue-900 hover:text-blue-700 border-white/20 hover:border-white"}
                 title="Call Us"
               >
