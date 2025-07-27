@@ -95,7 +95,7 @@ const ProjectHero: React.FC<ResponsiveBackgroundHeaderProps> = ({
             className="w-full h-full object-cover"
           />
           <div
-            className="absolute inset-0 md:bg-gradient-to-t bg-gradient-to-b from-blue-600/60 via-blue-200/40  to-white"
+            className="absolute inset-0 bg-gradient-to-t  from-blue-600/60 via-blue-200/40  to-white"
           />
         </div>
 
@@ -195,7 +195,7 @@ const ProjectHero: React.FC<ResponsiveBackgroundHeaderProps> = ({
         </div>
            {description && (
               <p
-                className="text-lg md:text-xl abs opacity-90 text-center w-full md:font-semibold  leading-relaxed md:text-white text-blue-900 "
+                className="text-lg md:text-xl abs opacity-90 text-center w-full md:font-semibold  leading-relaxed text-white"
                 style={contentFadeInStyles}
               >
                 {description}
