@@ -5,7 +5,7 @@ import heroBg from "../assets/images/Page/Home/Hero/hero_bg.webp"
 import ContactLgBg from "../assets/images/Page/ContactUs/ContactusBgLG.png"
 import ContactMdBg from "../assets/images/Page/ContactUs/ContactusBgMd.webp"
 import ProjectHero from "../assets/images/Page/Project/ProjectHero.jpg"
-import ServiceHero from "../assets/images/Page/Insights/HeroImage.jpg"
+import ServiceHero from "../assets/images/Page/Insights/HeroImage.png"
 import ContactSmBg from "../assets/images/Page/ContactUs/ContactusBgSM.webp"
 import TopProductTitle from "../assets/images/Page/Home/TopProduct/topproductbg.jpg";
 const data: any = {
