@@ -63,7 +63,7 @@ const data: any = {
             sm:ContactSmBg
         },
         quote: "Bridging innovation and technology to transform your business challenges into breakthrough solutions.",
-        title:"Contact InnovateTech"
+        title:"Reach Out to Tensor Labs"
     },
     project: {
         hero: {
