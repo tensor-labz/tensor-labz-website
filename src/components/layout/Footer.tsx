@@ -9,11 +9,11 @@ const Footer = () => {
 
   const socialLinks = [
     { icon: FaWhatsapp, href: "https://wa.me/+94705359369", color: "text-green-400 hover:text-green-300" },
-    { icon: FaFacebookF, href: "https://www.facebook.com/tensorlabz", color: "text-blue-400 hover:text-blue-300" },
-    { icon: FaLinkedinIn, href: "https://lk.linkedin.com/company/tensoragri", color: "text-blue-400 hover:text-blue-300" },
-    { icon: FaInstagram, href: "https://www.instagram.com/tensorlabz", color: "text-pink-400 hover:text-pink-300" },
+    { icon: FaFacebookF, href: "https://www.facebook.com/tensorlabs.tech", color: "text-blue-400 hover:text-blue-300" },
+    { icon: FaLinkedinIn, href: "https://www.linkedin.com/company/tensoragri", color: "text-blue-400 hover:text-blue-300" },
+    { icon: FaInstagram, href: "https://www.instagram.com/tensorlabs.tech", color: "text-pink-400 hover:text-pink-300" },
     { icon: FaTiktok, href: "https://www.tiktok.com/@tensoragri", color: "text-gray-200 hover:text-gray-100 border-3 border-white" },
-    { icon: FaYoutube, href: "http://www.youtube.com/@TENSORAGRI", color: "text-red-400 hover:text-red-300" }
+    { icon: FaYoutube, href: "https://www.youtube.com/@TENSORAGRI", color: "text-red-400 hover:text-red-300" }
   ];
 
   const footerLinks = [
@@ -213,7 +213,9 @@ const Footer = () => {
               &copy; {new Date().getFullYear()} <span className="font-bold text-white">Tensor Labs</span>.
               All rights reserved.
             </p>
-
+   <p className="text-slate-400 text-xs py-2">
+              Powered by: <a href='https://www.linkedin.com/in/thanumahee12/' className="italic ">Thanu Mahee</a>.
+            </p>
           </div>
         </motion.div>
       </motion.div>

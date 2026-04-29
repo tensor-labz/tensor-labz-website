@@ -4,6 +4,8 @@ import navData from "./nav_data";
 import heroBg from "../assets/images/Page/Home/Hero/hero_bg.webp"
 import ContactLgBg from "../assets/images/Page/ContactUs/ContactusBgLG.png"
 import ContactMdBg from "../assets/images/Page/ContactUs/ContactusBgMd.webp"
+import ProjectHero from "../assets/images/Page/Project/ProjectHero.jpg"
+import ServiceHero from "../assets/images/Page/Insights/HeroImage.png"
 import ContactSmBg from "../assets/images/Page/ContactUs/ContactusBgSM.webp"
 import TopProductTitle from "../assets/images/Page/Home/TopProduct/topproductbg.jpg";
 const data: any = {
@@ -37,8 +39,8 @@ const data: any = {
     insight: {
         hero: {
             hero_bg: {
-                lg: "https://tensor-labz-store.s3.eu-north-1.amazonaws.com/Insights/insightBg.mp4",
-                sm:"https://tensor-labz-store.s3.eu-north-1.amazonaws.com/Insights/ServicePageSm.jpg"
+                lg: "https://tensor-labz-store.s3.eu-north-1.amazonaws.com/Insights/service_hero.webm",
+                sm:ServiceHero
             },
             title: "Insights",
             description: "Stay updated with our latest insights and articles.",
@@ -48,7 +50,7 @@ const data: any = {
     },
     aboutus: {
         title: "Transforming Visions into Realities",
-        content:"We are a passionate team of innovators dedicated to crafting cutting-edge digital solutions that drive business growth and technological advancement.",
+        content:"We are a passionate team of innovators dedicated to crafting cutting-edge solutions that drive business growth and technological advancement.",
         bg: {
             lg: "https://tensor-labz-store.s3.eu-north-1.amazonaws.com/about-us/aboutusBg.mp4",
         md:"https://tensor-labz-store.s3.eu-north-1.amazonaws.com/about-us/aboutusbgSm.jpg"
@@ -61,12 +63,12 @@ const data: any = {
             sm:ContactSmBg
         },
         quote: "Bridging innovation and technology to transform your business challenges into breakthrough solutions.",
-        title:"Contact InnovateTech"
+        title:"Reach Out to Tensor Labs"
     },
     project: {
         hero: {
             bg: {
-                sm:"https://tensor-labz-store.s3.eu-north-1.amazonaws.com/Home/LatestProjectBg.jpg"
+                sm:ProjectHero
             }
         }
     }

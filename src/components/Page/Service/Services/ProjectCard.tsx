@@ -164,7 +164,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
           onClick={handleExplore}
         >
           <motion.div
-            className="flex items-center overflow-hidden rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 shadow-md text-white"
+            className="flex items-center overflow-hidden rounded-full bg-gradient-to-r from-blue-600 to-[#092B4A] shadow-md text-white"
             variants={{
               initial: { width: 40 },
               expanded: { width: 160 }

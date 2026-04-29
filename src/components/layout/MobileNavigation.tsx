@@ -26,7 +26,7 @@ const NavItem: React.FC<NavItemProps> = memo(({ icon, nav, to, onNavigate }) => 
       whileTap={{ scale: 0.95 }}
       onClick={handleNavigation}
     >
-      <div className="mr-4 text-xl text-blue-600">{icon}</div>
+      <div className="mr-4 text-xl text-[#092B4A]">{icon}</div>
       <span className="text-sm md:text-md font-semibold text-gray-800">
         {nav}
       </span>
@@ -43,6 +43,7 @@ const MobileNavigation: React.FC = memo(() => {
   const { pathname } = useLocation();
   const isVisible = useScroll();
   const ishome = pathname === "/";
+  const isservice=pathname.search("services")>0
   return (
     <>
       {/* Mobile Menu Toggle */}
@@ -50,7 +51,7 @@ const MobileNavigation: React.FC = memo(() => {
         <motion.button
           whileTap={{ scale: 0.9 }}
           onClick={toggleDrawer}
-          className={`text-xl ${ishome && !isVisible?"text-blue-600":"text-white"}  focus:outline-none`}
+          className={`text-xl ${(ishome || isservice) && !isVisible?"text-[#092B4A]":"text-white"}  focus:outline-none`}
         >
           {isOpen ? <FaTimes /> : <FaBars />}
         </motion.button>

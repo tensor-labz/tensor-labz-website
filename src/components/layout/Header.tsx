@@ -1,20 +1,27 @@
-import React, { memo, useEffect, useState } from 'react';
+import React, {
+  memo,
+  useEffect, useState
+} from 'react';
 import { motion} from 'framer-motion';
 import logo from '../../assets/images/logo.png';
 import logo1 from '../../assets/images/logo1.png';
 import useScroll from '../../base/hooks/useScroll';
 import NavBar from './NavBar';
 import MobileNavigation from './MobileNavigation';
-import { Link, useLocation } from 'react-router-dom';
+import {
+  Link,
+  useLocation
+} from 'react-router-dom';
 
 
 // Header Component
 const Header: React.FC<{ className?: string }> = memo(({ className = '' }) => {
   const isVisible = useScroll();
   const path=useLocation()
-  const [ishome,setisHome] = useState(path.pathname === "/");
+  const [ishome,setisHome] = useState(path.pathname === "/about-us" || path.pathname=="/contact-us");
   useEffect(() => {
-setisHome(path.pathname === "/");
+    setisHome(path.pathname === "/about-us" || path.pathname == "/contact-us");
+    console.log(ishome)
   }, [path]);
   return (
     <motion.header
@@ -34,13 +41,22 @@ setisHome(path.pathname === "/");
       <Link to="/" className="flex items-center">
 
       <motion.img
-        src={isVisible?logo:ishome?logo1:logo}
+        src={isVisible?logo:logo1}
         alt="Logo"
         loading="lazy"
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ delay: 0.2, type: 'spring', stiffness: 300 }}
-        className="md:h-12 h-8 object-contain"
+        className="md:h-12 h-8 object-contain sm:inline-block hidden"
+        />
+        <motion.img
+        src={isVisible?logo:ishome?logo:logo1}
+        alt="Logo"
+        loading="lazy"
+        initial={{ scale: 0.8, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ delay: 0.2, type: 'spring', stiffness: 300 }}
+        className="md:h-12 h-8 object-contain inline-block sm:hidden"
       />
       </Link>
 

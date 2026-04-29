@@ -18,7 +18,7 @@ const ContactUs: React.FC = memo(() => {
           <source media="(min-width: 480px)" srcSet={Data?.contactus?.bg?.md} />
           <img src={Data?.contactus?.bg?.sm} alt="" className="w-full h-full object-cover" />
         </picture>
-        <div className="max-w-4xl w-full space-y-10 relative  p-4 rounded-2xl shadow-2xl backdrop-blur-md mt-10 flex items-center justify-center flex-col">
+        <div className="max-w-4xl w-full space-y-10 relative  p-4 rounded-2xl shadow-2xl md:backdrop-blur-lg backdrop-blur-md mt-10 flex items-center justify-center flex-col">
 
           <motion.h1
             initial={{ opacity: 0, y: -50 }}
@@ -47,7 +47,7 @@ const ContactUs: React.FC = memo(() => {
             transition={{ delay: 0.5 }}
             className="text-center"
           >
-          <p className="text-white sm:text-gray-600 italic text-sm md:text-xl max-w-2xl mx-auto sm:font-medium font-bold">
+          <p className="text-white sm:text-gray-900 italic text-sm md:text-xl max-w-2xl mx-auto sm:font-medium font-bold">
   {Data?.contactus?.quote}
 </p>
 
