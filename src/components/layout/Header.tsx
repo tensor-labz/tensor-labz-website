@@ -14,7 +14,8 @@ const Header: React.FC<{ className?: string }> = memo(({ className = '' }) => {
       initial={{ opacity: 0, y: -16 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, ease: 'easeOut' }}
-      className={`fixed top-0 left-0 w-full z-50 transition-all duration-300
+      style={{ backgroundColor: 'rgba(9, 43, 74, 0.8)' }}
+      className={`fixed top-0 left-0 w-full z-50 transition-colors duration-300
         ${isScrolled
           ? 'bg-[#092B4A] shadow-[0_1px_0_rgba(255,255,255,0.06)]'
           : 'bg-[#092B4A]/80 backdrop-blur-md'

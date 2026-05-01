@@ -15,19 +15,10 @@ import {
 } from 'react-icons/fa';
 
 const sectionVariants: Variants = {
-  hidden: {
-    opacity: 0,
-    background: "white"
-  },
+  hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    background: `url('${Data.Home.hero.hero_bg}')`,
-    backgroundPosition: 'center',
-    backgroundSize: "cover",
-    transition: {
-      duration: 1.0,
-      ease: "easeInOut"
-    }
+    transition: { duration: 1.0, ease: "easeInOut" }
   }
 };
 
@@ -97,12 +88,16 @@ const HeroSection: React.FC = memo(() => {
       text-gray-800  pt-28 pb-16 sm:pt-32 sm:pb-20 lg:pt-36 lg:pb-24 px-6 md:px-8 lg:px-12
       min-h-screen flex lg:flex-row flex-col-reverse items-center justify-center gap-x-8 gap-y-4 overflow-hidden"
     >
-   <motion.div
+      <motion.div
         variants={sectionVariants}
         initial="hidden"
         animate={controls}
-        className=" absolute inset-0
-        pointer-events-none z-0 animate-border-shine"
+        style={{
+          backgroundImage: `url('${Data.Home.hero.hero_bg}')`,
+          backgroundPosition: 'center',
+          backgroundSize: 'cover',
+        }}
+        className="absolute inset-0 pointer-events-none z-0"
       />
 
       {/* Enhanced Hero Content */}
