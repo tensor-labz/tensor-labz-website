@@ -33,23 +33,43 @@ const HeroSection: React.FC = memo(() => {
   return (
     <Section
       ref={ref}
-      className="relative min-h-screen flex items-center overflow-hidden
-        pt-28 pb-16 sm:pt-32 sm:pb-20 lg:pt-36 lg:pb-24 px-6 md:px-8 lg:px-12"
+      className="relative min-h-screen flex items-center justify-center overflow-hidden
+        pt-24 pb-16 sm:pt-28 sm:pb-20 lg:pt-36 lg:pb-24 px-6 md:px-8 lg:px-12"
       style={{ backgroundColor: 'var(--bg-base)' }}
     >
-      {/* Radial gradient for depth — global animation shows through */}
+      {/* Radial gradient for depth */}
       <div
         className="absolute inset-0 z-0 pointer-events-none"
         style={{
-          background: 'radial-gradient(ellipse 70% 60% at 60% 40%, transparent 0%, var(--bg-base) 70%)',
+          background: 'radial-gradient(ellipse 80% 60% at 50% 40%, transparent 0%, var(--bg-base) 70%)',
         }}
       />
 
-      {/* Content */}
-      <div className="relative z-10 max-w-7xl mx-auto w-full flex lg:flex-row flex-col-reverse items-center gap-x-12 gap-y-10">
+      {/* Content — single centered column */}
+      <div className="relative z-10 max-w-3xl mx-auto w-full flex flex-col items-center gap-8">
 
-        {/* Left — text */}
-        <div className="flex flex-col lg:w-6/12 w-full">
+        {/* Image */}
+        <motion.div
+          initial={{ opacity: 0, y: 24, scale: 0.96 }}
+          animate={inView ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: 24, scale: 0.96 }}
+          transition={{ duration: 1.0, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
+          className="w-full relative h-[220px] sm:h-[320px] md:h-[380px] z-10"
+        >
+          <div
+            className="absolute inset-0 rounded-2xl blur-3xl opacity-20 scale-90"
+            style={{ background: 'radial-gradient(circle, var(--accent) 0%, transparent 70%)' }}
+          />
+          <motion.div
+            whileHover={{ scale: 1.015 }}
+            transition={{ duration: 0.4, ease: 'easeOut' }}
+            className="w-full h-full relative rounded-2xl overflow-hidden"
+          >
+            <HeroImageSlider />
+          </motion.div>
+        </motion.div>
+
+        {/* Text */}
+        <div className="w-full flex flex-col items-center text-center">
 
           {/* Eyebrow */}
           <motion.span
@@ -69,7 +89,7 @@ const HeroSection: React.FC = memo(() => {
             variants={textVariants}
             initial="hidden"
             animate={inView ? 'visible' : 'hidden'}
-            className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold leading-[1.1] tracking-tight mb-2"
+            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-[1.1] tracking-tight mb-2"
             style={{ color: 'var(--text-primary)', fontFamily: '"Syne", sans-serif' }}
           >
             {Data?.Home?.hero?.title?.map((line: string, i: number) => (
@@ -82,7 +102,7 @@ const HeroSection: React.FC = memo(() => {
             initial={{ width: 0 }}
             animate={inView ? { width: '3.5rem' } : { width: 0 }}
             transition={{ delay: 0.8, duration: 0.6, ease: 'easeOut' }}
-            className="h-1 rounded-full mb-6"
+            className="h-1 rounded-full mb-6 mx-auto"
             style={{ backgroundColor: 'var(--accent)' }}
           />
 
@@ -92,7 +112,7 @@ const HeroSection: React.FC = memo(() => {
             variants={textVariants}
             initial="hidden"
             animate={inView ? 'visible' : 'hidden'}
-            className="mb-8"
+            className="mb-8 w-full"
           >
             <HeroKeyPoint />
           </motion.div>
@@ -103,7 +123,7 @@ const HeroSection: React.FC = memo(() => {
             variants={textVariants}
             initial="hidden"
             animate={inView ? 'visible' : 'hidden'}
-            className="flex gap-8 md:gap-10"
+            className="flex justify-center gap-8 md:gap-12"
           >
             {stats.map(({ value, label, icon: Icon, loading }) =>
               loading ? (
@@ -120,7 +140,7 @@ const HeroSection: React.FC = memo(() => {
                   <Icon className="text-xl shrink-0" style={{ color: 'var(--accent)' }} />
                   <div>
                     <div
-                      className="font-display text-xl font-bold leading-none"
+                      className="text-xl font-bold leading-none"
                       style={{ color: 'var(--text-primary)', fontFamily: '"Syne", sans-serif' }}
                     >
                       {value}
@@ -134,27 +154,6 @@ const HeroSection: React.FC = memo(() => {
             )}
           </motion.div>
         </div>
-
-        {/* Right — image */}
-        <motion.div
-          initial={{ opacity: 0, x: 40, scale: 0.96 }}
-          animate={inView ? { opacity: 1, x: 0, scale: 1 } : { opacity: 0, x: 40, scale: 0.96 }}
-          transition={{ duration: 1.0, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
-          className="lg:w-6/12 w-full relative min-h-[360px] sm:min-h-[460px] z-10"
-        >
-          {/* Glow behind image */}
-          <div
-            className="absolute inset-0 rounded-2xl blur-3xl opacity-20 scale-90"
-            style={{ background: 'radial-gradient(circle, var(--accent) 0%, transparent 70%)' }}
-          />
-          <motion.div
-            whileHover={{ scale: 1.015 }}
-            transition={{ duration: 0.4, ease: 'easeOut' }}
-            className="w-full h-full relative rounded-2xl overflow-hidden"
-          >
-            <HeroImageSlider />
-          </motion.div>
-        </motion.div>
       </div>
     </Section>
   );
