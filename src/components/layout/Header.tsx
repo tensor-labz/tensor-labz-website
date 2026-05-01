@@ -14,11 +14,12 @@ const Header: React.FC<{ className?: string }> = memo(({ className = '' }) => {
       initial={{ opacity: 0, y: -12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, ease: 'easeOut' }}
-      style={{ backgroundColor: 'rgba(15, 23, 42, 0.92)' }}
-      className={`fixed top-0 left-0 w-full z-50 border-b transition-colors duration-300
+      className={`fixed top-0 left-0 w-full z-50 border-b
+        transition-[border-color,box-shadow] duration-300
+        bg-slate-900/90 backdrop-blur-md
         ${isScrolled
-          ? 'bg-slate-900 border-white/8 shadow-lg shadow-black/20'
-          : 'bg-slate-900/90 backdrop-blur-md border-white/5'
+          ? 'border-white/[0.08] shadow-lg shadow-black/30'
+          : 'border-white/[0.04]'
         } ${className}`}
     >
       <div className="max-w-7xl mx-auto px-6 lg:px-10 py-3.5 flex items-center justify-between">
