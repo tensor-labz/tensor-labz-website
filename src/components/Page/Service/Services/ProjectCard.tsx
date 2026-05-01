@@ -1,9 +1,9 @@
 import React, { memo, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useNavigate } from 'react-router-dom';
-import { FiArrowRight,FiEye } from 'react-icons/fi';
+import { FiArrowRight, FiEye } from 'react-icons/fi';
 import { AiTwotoneCrown } from "react-icons/ai";
-// Define the type for project data
+
 interface ProjectCardProps {
   id: string | number;
   title: string;
@@ -15,70 +15,36 @@ interface ProjectCardProps {
   onExplore?: () => void;
 }
 
-// Create the component
 const ProjectCard: React.FC<ProjectCardProps> = ({
-  title,
-  imageURL,
-  description,
-  services,
-  slug,
-  isTop = false,
-  onExplore
+  title, imageURL, description, services, slug, isTop = false, onExplore,
 }) => {
   const navigate = useNavigate();
   const [isHovered, setIsHovered] = useState(false);
 
-  // Animation variants
-  const cardVariants = {
-    initial: { opacity: 0, y: 20 },
-    animate: { opacity: 1, y: 0 },
-    exit: { opacity: 0, y: 20 }
-  };
-
-  const imageVariants = {
-    hover: { scale: 1.05, transition: { duration: 0.5 } },
-    initial: { scale: 1, transition: { duration: 0.5 } }
-  };
-
-  const serviceTagVariants = {
-    initial: { opacity: 0, x: -5 },
-    animate: (index: number) => ({
-      opacity: 1,
-      x: 0,
-      transition: { delay: 0.05 * index, duration: 0.3 }
-    })
-  };
-
-  // Handle the explore button click
   const handleExplore = () => {
-    if (onExplore) {
-      onExplore();
-    } else {
-      // Redirect to the project detail page
-      navigate(`/project/${slug}`);
-    }
+    if (onExplore) { onExplore(); } else { navigate(`/project/${slug}`); }
   };
 
   return (
     <motion.div
-      className="bg-white  rounded-2xl shadow-lg overflow-hidden w-full h-full flex flex-col"
-      variants={cardVariants}
-      initial="initial"
-      animate="animate"
-      exit="exit"
+      className="rounded-2xl shadow-lg overflow-hidden w-full h-full flex flex-col"
+      style={{ backgroundColor: 'var(--bg-surface)', border: '1px solid var(--border)' }}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: 20 }}
       transition={{ duration: 0.4 }}
       onHoverStart={() => setIsHovered(true)}
       onHoverEnd={() => setIsHovered(false)}
       layoutId={`project-card-${slug}`}
     >
-      {/* Image container with overlay on hover */}
+      {/* Image */}
       <div className="relative overflow-hidden aspect-video">
         <motion.img
           src={imageURL}
           alt={title}
           className="w-full h-full object-cover"
-          variants={imageVariants}
-          animate={isHovered ? "hover" : "initial"}
+          animate={{ scale: isHovered ? 1.05 : 1 }}
+          transition={{ duration: 0.5 }}
         />
         <motion.div
           className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end"
@@ -89,20 +55,14 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
           <div className="p-4 w-full">
             <motion.button
               onClick={handleExplore}
-              className="px-4 py-2 bg-white text-gray-900 rounded-full font-medium text-sm flex items-center justify-center gap-2 group"
+              className="px-4 py-2 rounded-full font-medium text-sm flex items-center gap-2"
+              style={{ backgroundColor: 'var(--bg-surface)', color: 'var(--text-primary)' }}
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
             >
-              <FiEye className="text-blue-600" />
+              <FiEye style={{ color: 'var(--accent)' }} />
               <span>Quick View</span>
-              <motion.span
-                className="inline-block"
-                initial={{ x: 0 }}
-                animate={{ x: isHovered ? 3 : 0 }}
-                transition={{ repeat: isHovered ? Infinity : 0, repeatType: "reverse", duration: 0.6 }}
-              >
-                <FiArrowRight className="h-4 w-4 text-blue-600" />
-              </motion.span>
+              <FiArrowRight className="h-4 w-4" style={{ color: 'var(--accent)' }} />
             </motion.button>
           </div>
         </motion.div>
@@ -116,37 +76,37 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
             animate={{ scale: 1, opacity: 1 }}
             transition={{ delay: 0.2 }}
           >
-
             <AiTwotoneCrown className="h-3 w-3" />
             <span>Premium</span>
           </motion.div>
         )}
 
-        {/* Title */}
-        <h3 className="text-xl md:text-2xl font-bold text-gray-800  mb-2 line-clamp-1 pr-16">{title}</h3>
+        <h3
+          className="text-xl md:text-2xl font-bold mb-2 line-clamp-1 pr-16"
+          style={{ color: 'var(--text-primary)' }}
+        >
+          {title}
+        </h3>
 
-        {/* Service tags */}
         <div className="flex flex-wrap gap-2 mb-4">
           <AnimatePresence>
             {services.slice(0, 3).map((service, index) => (
               <motion.span
                 key={index}
-                className="px-3 py-1 text-xs font-medium rounded-full bg-blue-50  text-blue-600 "
-                variants={serviceTagVariants}
-                initial="initial"
-                animate="animate"
-                custom={index}
+                className="px-3 py-1 text-xs font-medium rounded-full"
+                style={{ backgroundColor: 'var(--accent-soft)', color: 'var(--accent)' }}
+                initial={{ opacity: 0, x: -5 }}
+                animate={{ opacity: 1, x: 0, transition: { delay: 0.05 * index } }}
               >
                 {service}
               </motion.span>
             ))}
             {services.length > 3 && (
               <motion.span
-                variants={serviceTagVariants}
-                initial="initial"
-                animate="animate"
-                custom={3}
-                className="px-3 py-1 text-xs font-medium rounded-full bg-gray-100  text-gray-600 "
+                className="px-3 py-1 text-xs font-medium rounded-full"
+                style={{ backgroundColor: 'var(--bg-raised)', color: 'var(--text-muted)' }}
+                initial={{ opacity: 0, x: -5 }}
+                animate={{ opacity: 1, x: 0 }}
               >
                 +{services.length - 3} more
               </motion.span>
@@ -154,9 +114,11 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
           </AnimatePresence>
         </div>
 
-        <p className="text-gray-600  mb-10 line-clamp-2 flex-grow">{description}</p>
+        <p className="mb-10 line-clamp-2 flex-grow text-sm" style={{ color: 'var(--text-muted)' }}>
+          {description}
+        </p>
 
-        {/* Explore button - corner icon that expands on hover */}
+        {/* Explore button */}
         <motion.div
           className="absolute bottom-4 left-4 cursor-pointer"
           initial="initial"
@@ -164,27 +126,20 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
           onClick={handleExplore}
         >
           <motion.div
-            className="flex items-center overflow-hidden rounded-full bg-gradient-to-r from-blue-600 to-[#092B4A] shadow-md text-white"
-            variants={{
-              initial: { width: 40 },
-              expanded: { width: 160 }
-            }}
+            className="flex items-center overflow-hidden rounded-full shadow-md text-white"
+            style={{ background: 'linear-gradient(to right, var(--accent), #0c4a6e)' }}
+            variants={{ initial: { width: 40 }, expanded: { width: 160 } }}
             transition={{ type: "spring", stiffness: 500, damping: 30 }}
           >
             <motion.button
-
               className="h-10 w-10 flex items-center relative justify-center rounded-full"
               whileTap={{ scale: 0.9 }}
             >
               <FiArrowRight className="h-5 w-5" />
             </motion.button>
-
             <motion.span
               className="whitespace-nowrap pr-4 pl-1 font-medium mx-auto"
-              variants={{
-                initial: { opacity: 0, x: -20 },
-                expanded: { opacity: 1, x: 0 }
-              }}
+              variants={{ initial: { opacity: 0, x: -20 }, expanded: { opacity: 1, x: 0 } }}
               transition={{ delay: 0.1 }}
             >
               Explore Project
@@ -196,19 +151,14 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
   );
 };
 
-// Add custom comparison function to optimize re-renders
-const arePropsEqual = (prevProps: ProjectCardProps, nextProps: ProjectCardProps) => {
-  return (
-    prevProps.id === nextProps.id &&
-    prevProps.title === nextProps.title &&
-    prevProps.imageURL === nextProps.imageURL &&
-    prevProps.description === nextProps.description &&
-    prevProps.services.length === nextProps.services.length &&
-    prevProps.services.every((service, index) => service === nextProps.services[index]) &&
-    prevProps.isTop === nextProps.isTop &&
-    prevProps.onExplore === nextProps.onExplore
-  );
-};
+const arePropsEqual = (prev: ProjectCardProps, next: ProjectCardProps) =>
+  prev.id === next.id &&
+  prev.title === next.title &&
+  prev.imageURL === next.imageURL &&
+  prev.description === next.description &&
+  prev.services.length === next.services.length &&
+  prev.services.every((s, i) => s === next.services[i]) &&
+  prev.isTop === next.isTop &&
+  prev.onExplore === next.onExplore;
 
-// Export the memoized component
 export default memo(ProjectCard, arePropsEqual);

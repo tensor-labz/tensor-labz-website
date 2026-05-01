@@ -2,56 +2,33 @@ import React, { memo } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useHeroContext } from "../../../../contexts/HeroContext";
 
-// Animation variants with consistent durations
 const titleVariants = {
-  initial: {
-    opacity: 0,
-    y: 20,
-    textShadow: "1px 1px 1px grey"
-  },
-  animate: {
-    opacity: 1,
-    y: 0,
-    textShadow: "none",
-    transition: {
-      duration: 0.8,
-      ease: "easeOut"
-    }
-  },
-  exit: {
-    opacity: 0,
-    y: -20,
-    textShadow: "1px 1px 1px grey",
-    transition: {
-      duration: 0.8,
-      ease: "easeOut"
-    }
-  }
+  initial: { opacity: 0, y: 16 },
+  animate: { opacity: 1, y: 0, transition: { duration: 0.7, ease: 'easeOut' } },
+  exit:    { opacity: 0, y: -12, transition: { duration: 0.5, ease: 'easeOut' } },
 };
 
-// Memoized component with performance optimizations
 const HeroKeyPoint: React.FC = memo(() => {
   const { currentSlide, slider } = useHeroContext();
 
   return (
     <div className="min-h-[60px] relative">
       <AnimatePresence mode="wait">
-        <motion.h1
+        <motion.h2
           key={currentSlide}
           variants={titleVariants}
           initial="initial"
           animate="animate"
           exit="exit"
-          className="text-2xl md:text-3xl lg:text-4xl lg:text-justify text-center font-bold text-blue-900 drop-shadow-lg absolute w-full"
+          className="text-xl md:text-2xl lg:text-3xl font-semibold absolute w-full"
+          style={{ color: 'var(--text-primary)' }}
         >
           {slider?.title}
-        </motion.h1>
+        </motion.h2>
       </AnimatePresence>
     </div>
   );
 });
 
-// Add display name for better debugging
 HeroKeyPoint.displayName = 'HeroKeyPoint';
-
 export default HeroKeyPoint;

@@ -6,10 +6,17 @@ interface AboutUsSectionProps {
 }
 
 const AboutUsSectionItem = memo(({ title, description }: AboutUsSectionProps) => (
-  <div className="bg-white/80 p-6 rounded-xl border border-gray-300 shadow-lg w-full">
-    <h3 className="text-2xl font-semibold text-blue-900 mb-3 break-words">{title}</h3>
-    <p className="text-gray-800 leading-relaxed w-full break-words hyphens-auto">{description}</p>
+  <div
+    className="p-6 rounded-xl shadow-lg w-full backdrop-blur-sm"
+    style={{
+      backgroundColor: 'rgba(255,255,255,0.10)',
+      border: '1px solid rgba(255,255,255,0.15)',
+    }}
+  >
+    <h3 className="text-xl font-semibold mb-3 break-words text-white">{title}</h3>
+    <p className="text-white/75 leading-relaxed w-full break-words hyphens-auto text-sm">{description}</p>
   </div>
 ));
 
+AboutUsSectionItem.displayName = 'AboutUsSectionItem';
 export default AboutUsSectionItem;

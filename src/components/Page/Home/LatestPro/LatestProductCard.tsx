@@ -9,36 +9,17 @@ const LatestProductCard: React.FC<projectProps> = memo((project) => {
   const navigate = useNavigate();
 
   const customAnimation = {
-    initial: {
-      opacity: 0,
-      scale: 0.95,
-      x: safeid % 2 !== 0 ? 50 : -50,
-    },
-    whileInView: {
-      opacity: 1,
-      x: 0,
-      scale: 1,
-    },
-    transition: {
-      type: "spring",
-      stiffness: 300,
-      damping: 20,
-    },
+    initial: { opacity: 0, scale: 0.95, x: safeid % 2 !== 0 ? 50 : -50 },
+    whileInView: { opacity: 1, x: 0, scale: 1 },
+    transition: { type: "spring", stiffness: 300, damping: 20 },
   };
 
   return (
     <Card
       animation={customAnimation}
-      className={`
-        relative
-        flex flex-col md:flex-row
-        w-full md:max-w-2xl
-        bg-white border border-gray-200 rounded-xl shadow-[0_10px_25px_-5px_rgba(0,0,0,0.1)]
-        overflow-hidden
-        md:h-[300px]
-        cursor-pointer
-        transition-all duration-300
-      `}
+      className="relative flex flex-col md:flex-row w-full md:max-w-2xl rounded-xl shadow-md
+        overflow-hidden md:h-[300px] cursor-pointer transition-all duration-300"
+      style={{ backgroundColor: 'var(--bg-surface)', border: '1px solid var(--border)' }}
       onClick={() => navigate(`/project/${project.slug}`)}
     >
       {/* IMAGE */}
@@ -46,34 +27,22 @@ const LatestProductCard: React.FC<projectProps> = memo((project) => {
         <img
           src={project.imageURL}
           alt="Project Illustration"
-          className="
-            object-cover w-full h-full
-            transition-transform duration-300
-          "
+          className="object-cover w-full h-full transition-transform duration-300"
         />
 
-        {/* OVERLAY ON MD+ */}
-        <div
-          className="
-            hidden md:flex
-            absolute inset-0 flex-col justify-end
-            bg-gradient-to-t from-black/50 to-transparent
-            p-6
-          "
-        >
-          <h5 className="text-white text-2xl font-bold mb-2">
-            {project.title}
-          </h5>
+        {/* Overlay on md+ */}
+        <div className="hidden md:flex absolute inset-0 flex-col justify-end bg-gradient-to-t from-black/55 to-transparent p-6">
+          <h5 className="text-white text-2xl font-bold mb-2">{project.title}</h5>
           <FiArrowRight className="text-white w-6 h-6" />
         </div>
       </div>
 
-      {/* CONTENT FOR MOBILE ONLY */}
+      {/* Mobile content */}
       <div className="flex flex-col p-4 md:hidden">
-        <h5 className="mb-2 text-xl font-bold text-gray-900">
+        <h5 className="mb-2 text-xl font-bold" style={{ color: 'var(--text-primary)' }}>
           {project.title}
         </h5>
-        <p className="text-gray-700 text-base">{project.description}</p>
+        <p className="text-sm" style={{ color: 'var(--text-muted)' }}>{project.description}</p>
       </div>
     </Card>
   );
