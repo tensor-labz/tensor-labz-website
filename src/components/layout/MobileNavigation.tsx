@@ -4,6 +4,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { RiCloseLine, RiMenu3Line } from 'react-icons/ri';
 import navData from '../../data/nav_data';
 import logo from '../../assets/images/logo.png';
+// logo1 no longer needed — header is always dark
 
 interface MobileNavItemProps {
   nav: string;
