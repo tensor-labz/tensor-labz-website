@@ -50,7 +50,7 @@ const HeroSection: React.FC = memo(() => {
            Desktop: two columns — text left, image right  */}
       <div className="relative z-10 max-w-7xl mx-auto w-full
         flex flex-col items-center gap-8
-        lg:flex-row lg:items-center lg:gap-x-12">
+        lg:flex-row lg:items-stretch lg:gap-x-12">
 
         {/* ── Left / bottom on mobile: text ── */}
         <div className="lg:w-6/12 w-full flex flex-col
@@ -147,7 +147,7 @@ const HeroSection: React.FC = memo(() => {
           animate={inView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.96 }}
           transition={{ duration: 1.0, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
           className="lg:w-6/12 w-full relative z-10
-            h-[180px] sm:h-[260px] lg:h-[500px]"
+            h-[180px] sm:h-[260px] lg:h-full"
         >
           {/* Glow */}
           <div
