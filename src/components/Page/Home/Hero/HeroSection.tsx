@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useMemo } from 'react';
+import React, { memo, useCallback } from 'react';
 import { motion, useAnimation, Variants } from "motion/react";
 import { useInView } from "react-intersection-observer";
 import Section from "../../../../components/resuable/Section";
@@ -9,11 +9,8 @@ import Data from "../../../../data/data"
 import { useProjectDataContext } from "../../../../contexts/Api/ProjectDataContext";
 import {useServiceDataContext } from "../../../../contexts/Api/ServiceApiContext";
 import {
-  FaMicrochip,
   FaRobot,
   FaCube,
-  FaWifi,
-  FaCode,
   FaBolt
 } from 'react-icons/fa';
 
@@ -67,19 +64,6 @@ const imageVariants: Variants = {
   }
 };
 
-// New floating icon variants
-const floatingIconVariants: Variants = {
-  hidden: { opacity: 0, scale: 0 },
-  visible: (index: number) => ({
-    opacity: 0.6,
-    scale: 1,
-    transition: {
-      duration: 0.6,
-      delay: 1.2 + index * 0.1,
-      ease: "easeOut"
-    }
-  })
-};
 
 const HeroSection: React.FC = memo(() => {
   const [ref, inView] = useInView({
@@ -92,47 +76,25 @@ const HeroSection: React.FC = memo(() => {
   const controls = useAnimation();
   const imageControls = useAnimation();
   const textControls = useAnimation();
-  const iconControls = useAnimation();
   const triggerAnimations = useCallback(async () => {
     if (inView) {
       await controls.start("visible");
       await textControls.start("visible");
       await imageControls.start("visible");
-      iconControls.start("visible");
     }
-  }, [inView, controls, imageControls, textControls, iconControls]);
+  }, [inView, controls, imageControls, textControls]);
 
   React.useEffect(() => {
     triggerAnimations();
   }, [inView, triggerAnimations]);
 
-  // Pre-computed particle data to avoid Math.random() on every render
-  const particles = useMemo(
-    () =>
-      Array.from({ length: 12 }, () => ({
-        left: `${Math.random() * 100}%`,
-        top: `${Math.random() * 100}%`,
-        duration: 6 + Math.random() * 4,
-        delay: Math.random() * 3,
-      })),
-    []
-  );
 
-  // Tech icons for floating animation
-  const techIcons = [
-    { icon: FaMicrochip, position: { top: '15%', left: '8%' } },
-    { icon: FaRobot, position: { top: '25%', right: '12%' } },
-    { icon: FaCube, position: { bottom: '30%', left: '5%' } },
-    { icon: FaWifi, position: { bottom: '20%', right: '8%' } },
-    { icon: FaCode, position: { top: '40%', left: '3%' } },
-    { icon: FaBolt, position: { top: '60%', right: '15%' } }
-  ];
 
   return (
     <Section
       ref={ref}
       className="relative md:bg-gradient-to-br from-white to-sky-50
-      text-gray-800  py-10 sm:py-20 md:py-18 lg:py-24 px-6 md:px-8 lg:px-12
+      text-gray-800  pt-28 pb-16 sm:pt-32 sm:pb-20 lg:pt-36 lg:pb-24 px-6 md:px-8 lg:px-12
       min-h-screen flex lg:flex-row flex-col-reverse items-center justify-center gap-x-8 gap-y-4 overflow-hidden"
     >
    <motion.div
@@ -142,60 +104,6 @@ const HeroSection: React.FC = memo(() => {
         className=" absolute inset-0
         pointer-events-none z-0 animate-border-shine"
       />
-
-      {/* Floating Particles */}
-      <div className="absolute inset-0 pointer-events-none">
-        {particles.map((p, i) => (
-          <motion.div
-            key={i}
-            className="absolute w-1 h-1 bg-sky-400 rounded-full opacity-40"
-            style={{
-              left: p.left,
-              top: p.top,
-            }}
-            animate={{
-              y: [0, -30, 0],
-              x: [0, 15, 0],
-              opacity: [0.2, 0.8, 0.2],
-              scale: [1, 1.5, 1],
-            }}
-            transition={{
-              duration: p.duration,
-              repeat: Infinity,
-              delay: p.delay,
-              ease: "easeInOut"
-            }}
-          />
-        ))}
-      </div>
-
-      {/* Floating Tech Icons */}
-      {techIcons.map((tech, index) => (
-        <motion.div
-          key={index}
-          custom={index}
-          variants={floatingIconVariants}
-          initial="hidden"
-          animate={iconControls}
-          className="absolute hidden lg:block z-5 text-sky-500 "
-          style={tech.position}
-        >
-          <motion.div
-            animate={{
-              y: [0, -8, 0],
-              rotate: [0, 5, -5, 0],
-            }}
-            transition={{
-              duration: 4 + index * 0.5,
-              repeat: Infinity,
-              ease: "easeInOut"
-            }}
-            className="md:text-2xl text-lg opacity-30 hover:opacity-60 hover:scale-110 transition-all duration-300"
-          >
-            <tech.icon />
-          </motion.div>
-        </motion.div>
-      ))}
 
       {/* Enhanced Hero Content */}
       <div className="flex flex-col justify-center lg:w-7/12 w-full z-20 relative  md:min-h-[200px]">

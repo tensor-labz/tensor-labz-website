@@ -14,8 +14,8 @@ const Services = memo(() => {
   useEffect(() => {
     controls.start({
       opacity: 1,
-      background: "linear-gradient(to top right, #092B4A 0%, #ffffff 25%)",
-      transition: { duration: 0.8, ease: "easeInOut" },
+      backgroundColor: '#092B4A',
+      transition: { duration: 0.6, ease: 'easeOut' },
     });
   }, []);
 
@@ -25,7 +25,7 @@ const Services = memo(() => {
       <motion.div
         initial={{ opacity: 0 }}
         animate={controls}
-        className="min-h-screen flex flex-col items-center"
+        className="min-h-screen flex flex-col items-center bg-[#092B4A]"
       >
           {/* Grouping Hero & Tabs for Consistency */}
           <div className="w-full">
