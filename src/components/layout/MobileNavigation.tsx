@@ -1,120 +1,133 @@
-import React, { useState, memo } from "react";
-import { motion, AnimatePresence } from "motion/react";
-import { FaBars, FaTimes } from "react-icons/fa";
-import { useLocation, useNavigate } from "react-router-dom";
-import navData from "../../data/nav_data";
-import useScroll from "../../base/hooks/useScroll";
-import logo1 from "../../assets/images/logo1.png"; // Replace with your actual logo path
-interface NavItemProps {
-  icon: React.ReactNode;
+import React, { memo, useState } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { RiCloseLine, RiMenu3Line } from 'react-icons/ri';
+import navData from '../../data/nav_data';
+import logo from '../../assets/images/logo.png';
+
+interface MobileNavItemProps {
   nav: string;
   to: string;
+  index: number;
+  isActive: boolean;
   onNavigate: () => void;
 }
 
-const NavItem: React.FC<NavItemProps> = memo(({ icon, nav, to, onNavigate }) => {
-  const navigate = useNavigate();
+const MobileNavItem: React.FC<MobileNavItemProps> = memo(
+  ({ nav, to, index, isActive, onNavigate }) => {
+    const navigate = useNavigate();
 
-  const handleNavigation = () => {
-    onNavigate(); // Close the drawer
-    setTimeout(() => navigate(to), 300); // Navigate after drawer close animation
-  };
+    const handleClick = () => {
+      onNavigate();
+      setTimeout(() => navigate(to), 260);
+    };
 
-  return (
-    <motion.div
-      className="flex items-center p-4 hover:bg-blue-100 transition-colors cursor-pointer rounded-lg"
-      whileTap={{ scale: 0.95 }}
-      onClick={handleNavigation}
-    >
-      <div className="mr-4 text-xl text-[#092B4A]">{icon}</div>
-      <span className="text-sm md:text-md font-semibold text-gray-800">
+    return (
+      <motion.button
+        type="button"
+        initial={{ opacity: 0, x: 24 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ delay: index * 0.06 + 0.1, duration: 0.3, ease: 'easeOut' }}
+        onClick={handleClick}
+        className={`w-full text-left px-6 py-4 text-xs font-semibold tracking-widest uppercase
+          border-b border-white/8 transition-colors duration-200
+          ${isActive ? 'text-white bg-white/8' : 'text-white/60 hover:text-white hover:bg-white/5'}`}
+      >
         {nav}
-      </span>
-    </motion.div>
-  );
-});
+      </motion.button>
+    );
+  }
+);
+
+MobileNavItem.displayName = 'MobileNavItem';
 
 const MobileNavigation: React.FC = memo(() => {
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
-  const toggleDrawer = () => setIsOpen(!isOpen);
-
-  const closeDrawer = () => setIsOpen(false);
   const { pathname } = useLocation();
-  const isVisible = useScroll();
-  const ishome = pathname === "/";
-  const isservice=pathname.search("services")>0
+
+  const close = () => setIsOpen(false);
+  const toggle = () => setIsOpen(v => !v);
+
   return (
     <>
-      {/* Mobile Menu Toggle */}
-      <div className="md:hidden fixed top-4 right-4 z-50">
+      {/* Hamburger */}
+      <div className="md:hidden">
         <motion.button
+          type="button"
           whileTap={{ scale: 0.9 }}
-          onClick={toggleDrawer}
-          className={`text-xl ${(ishome || isservice) && !isVisible?"text-[#092B4A]":"text-white"}  focus:outline-none`}
+          onClick={toggle}
+          aria-label="Toggle navigation"
+          className="text-white/80 hover:text-white text-2xl focus:outline-none transition-colors"
         >
-          {isOpen ? <FaTimes /> : <FaBars />}
+          {isOpen ? <RiCloseLine /> : <RiMenu3Line />}
         </motion.button>
       </div>
 
-      {/* Drawer Overlay and Navigation */}
+      {/* Overlay + Drawer */}
       <AnimatePresence>
         {isOpen && (
           <>
-            {/* Overlay */}
             <motion.div
+              key="overlay"
               initial={{ opacity: 0 }}
-              animate={{ opacity: 0.5 }}
+              animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.5 }}
-              onClick={closeDrawer}
-              className="fixed inset-0 bg-black z-40"
+              transition={{ duration: 0.25 }}
+              onClick={close}
+              className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40"
             />
 
-            {/* Drawer */}
             <motion.div
-              initial={{ x: "100%" }}
+              key="drawer"
+              initial={{ x: '100%' }}
               animate={{ x: 0 }}
-              exit={{ x: "100%" }}
-              transition={{ type: "spring", damping: 20, stiffness: 300 }}
-              className="fixed top-0 right-0 h-full bg-white shadow-xl z-50 w-full sm:w-72"
+              exit={{ x: '100%' }}
+              transition={{ type: 'spring', damping: 28, stiffness: 280 }}
+              className="fixed top-0 right-0 h-full w-72 bg-[#092B4A] z-50 flex flex-col"
             >
-              {/* Drawer Header */}
-              <div className="flex items-center justify-between p-4 border-b border-gray-200">
+              {/* Drawer header */}
+              <div className="flex items-center justify-between px-6 py-5 border-b border-white/10">
                 <button
                   type="button"
                   className="bg-transparent border-0 p-0 cursor-pointer"
-                  onClick={() => {
-                    navigate("/");
-                    closeDrawer();
-                  }}
+                  onClick={() => { navigate('/'); close(); }}
                 >
-                  <img
-                    src={logo1}
-                    alt="Logo"
-                    className="h-10 w-auto object-contain"
-                  />
+                  <img src={logo} alt="Tensor Labs" className="h-9 w-auto object-contain" />
                 </button>
                 <motion.button
+                  type="button"
                   whileTap={{ scale: 0.9 }}
-                  onClick={closeDrawer}
-                  className="text-xl text-gray-600"
+                  onClick={close}
+                  className="text-white/60 hover:text-white text-2xl transition-colors"
                 >
-                  <FaTimes />
+                  <RiCloseLine />
                 </motion.button>
               </div>
 
-              {/* Navigation Items */}
-              <div className="mt-6">
-                {navData.map((item, index) => (
-                  <NavItem
-                    key={index}
-                    icon={item.icon}
+              {/* Nav items */}
+              <nav className="flex flex-col mt-2">
+                {navData.map((item, i) => (
+                  <MobileNavItem
+                    key={i}
                     nav={item.nav}
                     to={item.to}
-                    onNavigate={closeDrawer}
+                    index={i}
+                    isActive={
+                      item.to === '/'
+                        ? pathname === '/'
+                        : pathname.startsWith(item.to)
+                    }
+                    onNavigate={close}
                   />
                 ))}
+              </nav>
+
+              {/* Footer note */}
+              <div className="mt-auto px-6 py-6 border-t border-white/10">
+                <p className="text-white/30 text-[10px] tracking-widest uppercase">
+                  Tensor Labs
+                </p>
               </div>
             </motion.div>
           </>
@@ -124,6 +137,5 @@ const MobileNavigation: React.FC = memo(() => {
   );
 });
 
-MobileNavigation.displayName = "MobileNavigation";
-
+MobileNavigation.displayName = 'MobileNavigation';
 export default MobileNavigation;

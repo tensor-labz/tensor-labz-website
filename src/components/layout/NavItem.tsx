@@ -1,48 +1,36 @@
 import React, { memo } from 'react';
-import { NavLink,
-//  useLocation
-} from 'react-router-dom';
-import useScroll from '../../base/hooks/useScroll';
-import {motion } from 'motion/react';
-type NavItemType = {
-    nav: string;
-    to: string;
-    icon: React.ReactNode;
-}
-const NavItem: React.FC<NavItemType> = memo((navItem: NavItemType) => {
-      const isVisible = useScroll();
-    // const { pathname } = useLocation()
-    // const isattack= /services/g.test(pathname)
+import { NavLink } from 'react-router-dom';
 
-  return (
-        <NavLink
-        to={navItem.to}
-        className="group relative inline-block overflow-hidden"
-      >
-        {isVisible ? (
-          <motion.span
-            className={`file:inline-block text-lg font-semibold text-white relative  after:content-['']
-after:rounded-xl
-after:absolute
-after:left-0 after:bottom-0
-after:h-0.5 sm:after:h-1 after:w-0
-after:bg-white
-after:transition-all after:duration-300 hover:after:w-3/4 `}
-          >
-            {navItem.nav}
-          </motion.span>
-        ) : (
-          <motion.span
-            className={`block p-2 text-xl ${
-              //isattack ? "text-white" :
-               "text-blue-900 hover:shadow-lg"} transition-all duration-300`}
-          >
-            {navItem.icon}
-          </motion.span>
-        )}
-      </NavLink>
-    )
-})
+type NavItemType = {
+  nav: string;
+  to: string;
+  icon?: React.ReactNode;
+  isButton?: boolean;
+}
+
+const NavItem: React.FC<NavItemType> = memo(({ nav, to, isButton = false }) => (
+  <NavLink
+    to={to}
+    className={({ isActive }) => {
+      if (isButton) {
+        return `text-xs font-semibold tracking-widest uppercase px-5 py-2 rounded-sm border transition-all duration-300
+          ${isActive
+            ? 'border-white text-white bg-white/10'
+            : 'border-white/40 text-white/80 hover:border-white hover:text-white hover:bg-white/10'
+          }`;
+      }
+      return `relative text-xs font-semibold tracking-widest uppercase transition-colors duration-300
+        after:absolute after:-bottom-1 after:left-0 after:h-px after:bg-white
+        after:transition-all after:duration-300
+        ${isActive
+          ? 'text-white after:w-full'
+          : 'text-white/60 hover:text-white after:w-0 hover:after:w-full'
+        }`;
+    }}
+  >
+    {nav}
+  </NavLink>
+));
 
 NavItem.displayName = 'NavItem';
 export default NavItem;

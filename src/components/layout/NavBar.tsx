@@ -1,36 +1,18 @@
 import navData from '../../data/nav_data';
-import {AnimatePresence,motion } from 'motion/react';
 import NavItem from './NavItem';
 
 const NavBar: React.FC = () => {
-
-
+  const mainLinks = navData.slice(0, -1);
+  const ctaLink = navData[navData.length - 1];
 
   return (
-    <nav className="md:flex hidden items-center space-x-6">
-      <AnimatePresence>
-        {navData.map((navItem, index) => (
-          <motion.div
-            key={index}
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -20 }}
-            transition={{
-              delay: index * 0.1,
-              type: 'spring',
-              stiffness: 300
-            }}
-          >
-            <NavItem
-              nav={navItem.nav}
-              to={navItem.to}
-              icon={navItem.icon} />
-
-          </motion.div>
-        ))}
-      </AnimatePresence>
+    <nav className="hidden md:flex items-center gap-8">
+      {mainLinks.map((item, i) => (
+        <NavItem key={i} nav={item.nav} to={item.to} />
+      ))}
+      <NavItem nav={ctaLink.nav} to={ctaLink.to} isButton />
     </nav>
   );
 };
 
-export default NavBar
+export default NavBar;
