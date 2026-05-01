@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { motion } from 'motion/react';
 import { useParams } from 'react-router-dom';
 import DOMPurify from 'dompurify';
@@ -7,6 +7,7 @@ import ProjectHero from '../components/Page/Project/ProjectHero';
 import ProjectLoadingPlaceholder from '../components/Page/Project/ProjectPageLoading';
 import ProjectNotFound from '../components/Page/Project/ProjectNotFound';
 import HeaderHelmet from "../base/Head";
+import WireframeScene from '../components/three/WireframeScene';
 
 const ProjectPage = () => {
   const { slug } = useParams();
@@ -30,18 +31,25 @@ const ProjectPage = () => {
   if (!projectdata) return <ProjectNotFound />;
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: 'var(--bg-base)' }}>
+    <div className="relative min-h-screen" style={{ backgroundColor: 'var(--bg-base)' }}>
+      {/* Three.js wireframe background */}
+      <Suspense fallback={null}>
+        <WireframeScene />
+      </Suspense>
+
       <HeaderHelmet title={projectdata.title} />
 
-      <ProjectHero
-        title={projectdata.title}
-        description={projectdata?.description}
-        tags={projectdata.tags}
-        is_top={projectdata.is_top}
-        serviceName={projectdata.service}
-      />
+      <div className="relative z-10">
+        <ProjectHero
+          title={projectdata.title}
+          description={projectdata?.description}
+          tags={projectdata.tags}
+          is_top={projectdata.is_top}
+          serviceName={projectdata.service}
+        />
+      </div>
 
-      <main className="max-w-6xl mx-auto py-12 px-4 md:px-8">
+      <main className="relative z-10 max-w-6xl mx-auto py-12 px-4 md:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
 
           {/* Main content */}
