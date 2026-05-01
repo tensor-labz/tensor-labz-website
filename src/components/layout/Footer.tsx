@@ -139,8 +139,8 @@ const Footer = () => {
         </div>
 
         {/* Bottom bar */}
-        <div className="mt-16 pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <p className="text-xs text-white/30">
+        <div className="mt-16 pt-6 border-t border-white/10 flex justify-center">
+          <p className="text-xs text-white/30 text-center">
             &copy; {new Date().getFullYear()} Tensor Labs. All rights reserved.
           </p>
         </div>
