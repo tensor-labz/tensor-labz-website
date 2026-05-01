@@ -19,7 +19,7 @@ const textVariants = {
 };
 
 const HeroSection: React.FC = memo(() => {
-  const [ref, inView] = useInView({ threshold: 0.15, triggerOnce: true });
+  const [ref, inView] = useInView({ threshold: 0.1, triggerOnce: true });
   const projects = useProjectDataContext();
   const services = useServiceDataContext();
   const { Data } = useRootContext();
@@ -34,10 +34,10 @@ const HeroSection: React.FC = memo(() => {
     <Section
       ref={ref}
       className="relative min-h-screen flex items-center
-        pt-24 pb-16 sm:pt-28 sm:pb-20 lg:pt-36 lg:pb-24 px-6 md:px-8 lg:px-12"
+        pt-20 pb-12 sm:pt-24 sm:pb-16 lg:pt-36 lg:pb-24 px-6 md:px-8 lg:px-12"
       style={{ backgroundColor: 'var(--bg-base)' }}
     >
-      {/* Radial gradient for depth */}
+      {/* Radial gradient */}
       <div
         className="absolute inset-0 z-0 pointer-events-none"
         style={{
@@ -46,18 +46,40 @@ const HeroSection: React.FC = memo(() => {
       />
 
       {/* Content
-           Mobile : single column, everything centered
-           Desktop: two columns — text left, image right  */}
+          Mobile : flex-col — image first (top), text second (bottom), everything centered
+          Desktop: flex-row — text left (order-1), image right (order-2)            */}
       <div className="relative z-10 max-w-7xl mx-auto w-full
-        flex flex-col items-center gap-8
+        flex flex-col items-center gap-6
         lg:flex-row lg:items-stretch lg:gap-x-12">
 
-        {/* ── Left / bottom on mobile: text ── */}
-        <div className="lg:w-6/12 w-full flex flex-col
+        {/* IMAGE — first in DOM so it appears at top on mobile */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.96 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 1.0, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+          className="w-full relative z-10
+            order-1 lg:order-2 lg:w-6/12
+            h-[220px] sm:h-[300px] lg:h-full"
+        >
+          <div
+            className="absolute inset-0 rounded-2xl blur-3xl opacity-20 scale-90 pointer-events-none"
+            style={{ background: 'radial-gradient(circle, var(--accent) 0%, transparent 70%)' }}
+          />
+          <motion.div
+            whileHover={{ scale: 1.015 }}
+            transition={{ duration: 0.4, ease: 'easeOut' }}
+            className="w-full h-full relative rounded-2xl overflow-hidden"
+          >
+            <HeroImageSlider />
+          </motion.div>
+        </motion.div>
+
+        {/* TEXT — second in DOM, below image on mobile */}
+        <div className="w-full flex flex-col
+          order-2 lg:order-1 lg:w-6/12
           items-center text-center
           lg:items-start lg:text-left">
 
-          {/* Eyebrow */}
           <motion.span
             custom={0}
             variants={textVariants}
@@ -69,7 +91,6 @@ const HeroSection: React.FC = memo(() => {
             Mechatronics & Engineering
           </motion.span>
 
-          {/* Headline */}
           <motion.h1
             custom={1}
             variants={textVariants}
@@ -83,7 +104,6 @@ const HeroSection: React.FC = memo(() => {
             ))}
           </motion.h1>
 
-          {/* Accent line */}
           <motion.div
             initial={{ width: 0 }}
             animate={inView ? { width: '3.5rem' } : { width: 0 }}
@@ -92,7 +112,6 @@ const HeroSection: React.FC = memo(() => {
             style={{ backgroundColor: 'var(--accent)' }}
           />
 
-          {/* Key point */}
           <motion.div
             custom={2}
             variants={textVariants}
@@ -103,7 +122,6 @@ const HeroSection: React.FC = memo(() => {
             <HeroKeyPoint />
           </motion.div>
 
-          {/* Stats */}
           <motion.div
             custom={3}
             variants={textVariants}
@@ -140,29 +158,6 @@ const HeroSection: React.FC = memo(() => {
             )}
           </motion.div>
         </div>
-
-        {/* ── Right / top on mobile: image ── */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.96 }}
-          animate={inView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.96 }}
-          transition={{ duration: 1.0, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
-          className="lg:w-6/12 w-full relative z-10
-            h-[180px] sm:h-[260px] lg:h-full"
-        >
-          {/* Glow */}
-          <div
-            className="absolute inset-0 rounded-2xl blur-3xl opacity-20 scale-90 pointer-events-none"
-            style={{ background: 'radial-gradient(circle, var(--accent) 0%, transparent 70%)' }}
-          />
-          {/* Image frame — fills the outer height */}
-          <motion.div
-            whileHover={{ scale: 1.015 }}
-            transition={{ duration: 0.4, ease: 'easeOut' }}
-            className="w-full h-full relative rounded-2xl overflow-hidden"
-          >
-            <HeroImageSlider />
-          </motion.div>
-        </motion.div>
 
       </div>
     </Section>
