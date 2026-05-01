@@ -1,5 +1,5 @@
 import React, { memo, forwardRef } from 'react';
-import { motion, Variants, MotionProps } from "framer-motion";
+import { motion, Variants, MotionProps } from "motion/react";
 
 type AnimationType = 'default' | 'staggered' | 'cascade';
 

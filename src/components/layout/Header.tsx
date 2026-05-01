@@ -2,7 +2,7 @@ import React, {
   memo,
   useEffect, useState
 } from 'react';
-import { motion} from 'framer-motion';
+import { motion} from 'motion/react';
 import logo from '../../assets/images/logo.png';
 import logo1 from '../../assets/images/logo1.png';
 import useScroll from '../../base/hooks/useScroll';

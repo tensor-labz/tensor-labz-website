@@ -1,5 +1,5 @@
 import React, { memo, useCallback, useMemo } from 'react';
-import { motion, useAnimation, Variants } from "framer-motion";
+import { motion, useAnimation, Variants } from "motion/react";
 import { useInView } from "react-intersection-observer";
 import Section from "../../../../components/resuable/Section";
 import HeroImageSlider from "./HeroImageSlider";

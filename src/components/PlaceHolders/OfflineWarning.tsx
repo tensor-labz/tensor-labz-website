@@ -1,5 +1,5 @@
 import React, { memo, useState, useEffect, useRef } from 'react';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import { MdSignalWifiOff, MdRefresh } from 'react-icons/md';
 import { throttle } from '../../base/util/Throttle';
 

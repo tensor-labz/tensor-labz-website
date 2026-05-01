@@ -1,5 +1,5 @@
 import { memo, useState, FC, useRef, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "motion/react";
 import { useServiceContext } from "../../../../contexts/ServiceContext";
 import { IoFilterSharp } from "react-icons/io5";
 import { useServiceDataContext } from "../../../../contexts/Api/ServiceApiContext";

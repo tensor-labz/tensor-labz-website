@@ -1,5 +1,5 @@
 import React, { memo, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'motion/react';
 import { useNavigate } from 'react-router-dom';
 import { FiArrowRight,FiEye } from 'react-icons/fi';
 import { AiTwotoneCrown } from "react-icons/ai";

@@ -1,5 +1,5 @@
 import { FC,memo, useMemo } from 'react';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import { useRootContext } from '../../../../contexts/RootContext';
 import { useServiceDataContext } from "../../../../contexts/Api/ServiceApiContext";
 import { useServiceContext } from "../../../../contexts/ServiceContext";

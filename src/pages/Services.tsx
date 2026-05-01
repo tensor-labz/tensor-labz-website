@@ -1,5 +1,5 @@
 import { memo, useEffect } from "react";
-import { motion, useAnimation } from "framer-motion";
+import { motion, useAnimation } from "motion/react";
 import Page from "../components/resuable/Page";
 import ServiceHero from "../components/Page/Service/Hero/ServiceHero";
 import TabBar from "../components/Page/Service/Tabs/TabBar";

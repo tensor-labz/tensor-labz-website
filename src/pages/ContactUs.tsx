@@ -1,5 +1,5 @@
 import React, { memo } from 'react';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import Page from "../components/resuable/Page";
 import { useRootContext } from '../contexts/RootContext';
 import { useAppContext } from '../contexts/Api/AppContext';

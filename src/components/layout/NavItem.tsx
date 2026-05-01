@@ -3,7 +3,7 @@ import { NavLink,
 //  useLocation
 } from 'react-router-dom';
 import useScroll from '../../base/hooks/useScroll';
-import {motion } from 'framer-motion';
+import {motion } from 'motion/react';
 type NavItemType = {
     nav: string;
     to: string;

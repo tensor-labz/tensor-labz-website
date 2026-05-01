@@ -1,5 +1,5 @@
 import React, { memo } from 'react';
-import { motion, MotionProps } from 'framer-motion';
+import { motion, MotionProps } from 'motion/react';
 import HeaderHelment from "../../base/Head";
 import  HeaderHelmentProps  from "../../base/type/HeaderHelmentProps.d";
 

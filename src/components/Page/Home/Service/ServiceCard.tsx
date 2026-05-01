@@ -1,5 +1,5 @@
 import React, { memo } from 'react';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import { ServiceCardProps } from "../../../../base/type/ServiceProps.d";
 import Card from "../../../../components/resuable/Card";
 import { useNavigate } from 'react-router-dom';

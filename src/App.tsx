@@ -1,5 +1,5 @@
 import React, { memo } from 'react';
-import {AnimatePresence } from 'framer-motion';
+import {AnimatePresence } from 'motion/react';
 import { RootContextProvider } from './contexts/RootContext';
 import OfflineWarning from './components/PlaceHolders/OfflineWarning';
 import Layout from './components/layout/Layout';

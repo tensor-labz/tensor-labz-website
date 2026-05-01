@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import { FaFacebookF, FaLinkedinIn, FaInstagram, FaMapMarkerAlt, FaEnvelope, FaPhone, FaClock,FaWhatsapp,FaTiktok,FaYoutube } from 'react-icons/fa';
 import logo from "../../assets/images/logo.png";
 import { useServiceDataContext } from '../../contexts/Api/ServiceApiContext';
