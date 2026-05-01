@@ -4,7 +4,6 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { RiCloseLine, RiMenu3Line } from 'react-icons/ri';
 import navData from '../../data/nav_data';
 import logo from '../../assets/images/logo.png';
-// logo1 no longer needed — header is always dark
 
 interface MobileNavItemProps {
   nav: string;
@@ -26,13 +25,16 @@ const MobileNavItem: React.FC<MobileNavItemProps> = memo(
     return (
       <motion.button
         type="button"
-        initial={{ opacity: 0, x: 24 }}
+        initial={{ opacity: 0, x: 20 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ delay: index * 0.06 + 0.1, duration: 0.3, ease: 'easeOut' }}
         onClick={handleClick}
         className={`w-full text-left px-6 py-4 text-xs font-semibold tracking-widest uppercase
-          border-b border-white/8 transition-colors duration-200
-          ${isActive ? 'text-white bg-white/8' : 'text-white/60 hover:text-white hover:bg-white/5'}`}
+          border-b border-white/5 transition-colors duration-200
+          ${isActive
+            ? 'text-sky-400 bg-sky-500/10'
+            : 'text-slate-300 hover:text-white hover:bg-white/5'
+          }`}
       >
         {nav}
       </motion.button>
@@ -59,7 +61,7 @@ const MobileNavigation: React.FC = memo(() => {
           whileTap={{ scale: 0.9 }}
           onClick={toggle}
           aria-label="Toggle navigation"
-          className="text-white/80 hover:text-white text-2xl focus:outline-none transition-colors"
+          className="text-slate-300 hover:text-white text-2xl focus:outline-none transition-colors"
         >
           {isOpen ? <RiCloseLine /> : <RiMenu3Line />}
         </motion.button>
@@ -76,7 +78,7 @@ const MobileNavigation: React.FC = memo(() => {
               exit={{ opacity: 0 }}
               transition={{ duration: 0.25 }}
               onClick={close}
-              className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40"
+              className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40"
             />
 
             <motion.div
@@ -85,10 +87,10 @@ const MobileNavigation: React.FC = memo(() => {
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
               transition={{ type: 'spring', damping: 28, stiffness: 280 }}
-              className="fixed top-0 right-0 h-full w-72 bg-[#092B4A] z-50 flex flex-col"
+              className="fixed top-0 right-0 h-full w-72 bg-slate-900 border-l border-white/8 z-50 flex flex-col"
             >
               {/* Drawer header */}
-              <div className="flex items-center justify-between px-6 py-5 border-b border-white/10">
+              <div className="flex items-center justify-between px-6 py-5 border-b border-white/8">
                 <button
                   type="button"
                   className="bg-transparent border-0 p-0 cursor-pointer"
@@ -100,7 +102,7 @@ const MobileNavigation: React.FC = memo(() => {
                   type="button"
                   whileTap={{ scale: 0.9 }}
                   onClick={close}
-                  className="text-white/60 hover:text-white text-2xl transition-colors"
+                  className="text-slate-400 hover:text-white text-2xl transition-colors"
                 >
                   <RiCloseLine />
                 </motion.button>
@@ -125,9 +127,12 @@ const MobileNavigation: React.FC = memo(() => {
               </nav>
 
               {/* Footer note */}
-              <div className="mt-auto px-6 py-6 border-t border-white/10">
-                <p className="text-white/30 text-[10px] tracking-widest uppercase">
+              <div className="mt-auto px-6 py-6 border-t border-white/8">
+                <p className="text-slate-500 text-[10px] tracking-widest uppercase">
                   Tensor Labs
+                </p>
+                <p className="text-slate-600 text-[10px] mt-1">
+                  Engineering & Technology
                 </p>
               </div>
             </motion.div>
