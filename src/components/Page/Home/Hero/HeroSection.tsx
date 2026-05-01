@@ -63,7 +63,7 @@ const HeroSection: React.FC = memo(() => {
           <motion.div
             whileHover={{ scale: 1.015 }}
             transition={{ duration: 0.4, ease: 'easeOut' }}
-            className="w-full aspect-video rounded-2xl overflow-hidden"
+            className="w-full aspect-[4/3] sm:aspect-video relative rounded-2xl overflow-hidden"
           >
             <HeroImageSlider />
           </motion.div>

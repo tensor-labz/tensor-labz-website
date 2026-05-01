@@ -37,7 +37,7 @@ const HeroImageSlider: React.FC = memo(() => {
   };
 
   return (
-    <div className="absolute inset-0">
+    <div className="absolute inset-0 w-full h-full">
       <AnimatePresence mode="wait">
         <motion.div
           key={currentSlide}
