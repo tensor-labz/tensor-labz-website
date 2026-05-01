@@ -22,7 +22,7 @@ const AboutUs: React.FC = memo(() => {
             <source media="(min-width: 480px)" srcSet={Data?.contactus?.bg?.md} />
             <img src={Data?.contactus?.bg?.sm} alt="" className="w-full h-full object-cover" />
           </picture>
-          <div className="absolute inset-0 bg-slate-950/60 dark:bg-slate-950/70" />
+          <div className="absolute inset-0 dark:bg-slate-950/70" />
         </div>
 
         {/* Content */}
