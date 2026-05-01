@@ -1,25 +1,28 @@
 import React, { memo } from 'react';
 import { motion } from 'motion/react';
 import { Link } from 'react-router-dom';
+import { RiSunLine, RiMoonLine } from 'react-icons/ri';
 import logo from '../../assets/images/logo.png';
 import useScroll from '../../base/hooks/useScroll';
+import { useTheme } from '../../contexts/ThemeContext';
 import NavBar from './NavBar';
 import MobileNavigation from './MobileNavigation';
 
 const Header: React.FC<{ className?: string }> = memo(({ className = '' }) => {
   const isScrolled = useScroll();
+  const { theme, toggleTheme } = useTheme();
 
   return (
     <motion.header
       initial={{ opacity: 0, y: -12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, ease: 'easeOut' }}
-      className={`fixed top-0 left-0 w-full z-50 border-b
+      style={{ backgroundColor: 'var(--header-bg)' }}
+      className={`fixed top-0 left-0 w-full z-50 border-b backdrop-blur-md
         transition-[border-color,box-shadow] duration-300
-        bg-slate-900/90 backdrop-blur-md
         ${isScrolled
-          ? 'border-white/[0.08] shadow-lg shadow-black/30'
-          : 'border-white/[0.04]'
+          ? 'border-[var(--border)] shadow-lg shadow-black/10 dark:shadow-black/40'
+          : 'border-transparent'
         } ${className}`}
     >
       <div className="max-w-7xl mx-auto px-6 lg:px-10 py-3.5 flex items-center justify-between">
@@ -35,8 +38,25 @@ const Header: React.FC<{ className?: string }> = memo(({ className = '' }) => {
           />
         </Link>
 
-        <NavBar />
-        <MobileNavigation />
+        <div className="flex items-center gap-3">
+          <NavBar />
+
+          {/* Theme toggle */}
+          <motion.button
+            type="button"
+            whileTap={{ scale: 0.88 }}
+            onClick={toggleTheme}
+            aria-label="Toggle theme"
+            className="w-8 h-8 flex items-center justify-center rounded
+              text-[var(--text-muted)] hover:text-[var(--accent)]
+              bg-[var(--bg-raised)] border border-[var(--border)]
+              transition-colors duration-200 text-base shrink-0"
+          >
+            {theme === 'dark' ? <RiSunLine /> : <RiMoonLine />}
+          </motion.button>
+
+          <MobileNavigation />
+        </div>
       </div>
     </motion.header>
   );

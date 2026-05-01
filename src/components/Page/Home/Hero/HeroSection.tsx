@@ -1,226 +1,172 @@
-import React, { memo, useCallback } from 'react';
-import { motion, useAnimation, Variants } from "motion/react";
-import { useInView } from "react-intersection-observer";
-import Section from "../../../../components/resuable/Section";
-import HeroImageSlider from "./HeroImageSlider";
-import HeroKeyPoint from "./HeroKeyPoint";
-import { useRootContext } from "../../../../contexts/RootContext";
-import Data from "../../../../data/data"
-import { useProjectDataContext } from "../../../../contexts/Api/ProjectDataContext";
-import {useServiceDataContext } from "../../../../contexts/Api/ServiceApiContext";
-import {
-  FaRobot,
-  FaCube,
-  FaBolt
-} from 'react-icons/fa';
+import React, { memo, Suspense } from 'react';
+import { motion } from 'motion/react';
+import { useInView } from 'react-intersection-observer';
+import Section from '../../../../components/resuable/Section';
+import HeroImageSlider from './HeroImageSlider';
+import HeroKeyPoint from './HeroKeyPoint';
+import { useRootContext } from '../../../../contexts/RootContext';
+import { useProjectDataContext } from '../../../../contexts/Api/ProjectDataContext';
+import { useServiceDataContext } from '../../../../contexts/Api/ServiceApiContext';
+import ParticleField from '../../../three/ParticleField';
+import { FaRobot, FaCube, FaBolt } from 'react-icons/fa';
 
-const sectionVariants: Variants = {
-  hidden: { opacity: 0 },
-  visible: {
+const textVariants = {
+  hidden: { opacity: 0, y: 24 },
+  visible: (i: number) => ({
     opacity: 1,
-    transition: { duration: 1.0, ease: "easeInOut" }
-  }
-};
-
-const textVariants: Variants = {
-  hidden: { opacity: 0, x: -50, y: 20 },
-  visible: (index: number) => ({
-    opacity: 1,
-    x: 0,
     y: 0,
-    transition: {
-      duration: 0.8,
-      delay: index * 0.15,
-      ease: "easeOut"
-    }
-  })
+    transition: { duration: 0.7, delay: i * 0.14, ease: [0.22, 1, 0.36, 1] },
+  }),
 };
-
-const imageVariants: Variants = {
-  hidden: {
-    opacity: 0,
-    x: 50,
-    scale: 0.9,
-    rotate: 8
-  },
-  visible: {
-    opacity: 1,
-    x: 0,
-    scale: 1,
-    rotate: 0,
-    transition: {
-      duration: 1.4,
-      ease: "easeOut"
-    }
-  }
-};
-
 
 const HeroSection: React.FC = memo(() => {
-  const [ref, inView] = useInView({
-    threshold: 0.2,
-    triggerOnce: true
-  });
+  const [ref, inView] = useInView({ threshold: 0.15, triggerOnce: true });
   const projects = useProjectDataContext();
-  const services=useServiceDataContext();
+  const services = useServiceDataContext();
   const { Data } = useRootContext();
-  const controls = useAnimation();
-  const imageControls = useAnimation();
-  const textControls = useAnimation();
-  const triggerAnimations = useCallback(async () => {
-    if (inView) {
-      await controls.start("visible");
-      await textControls.start("visible");
-      await imageControls.start("visible");
-    }
-  }, [inView, controls, imageControls, textControls]);
 
-  React.useEffect(() => {
-    triggerAnimations();
-  }, [inView, triggerAnimations]);
-
-
+  const stats = [
+    { value: `${projects.rawProjects?.length ?? 0}+`, label: 'Projects',  icon: FaCube,  loading: projects.isLoading },
+    { value: `${services?.service_data?.length ?? 0}+`, label: 'Services', icon: FaRobot, loading: services?.isLoading },
+    { value: `${new Date().getFullYear() - 2023}+`,    label: 'Years',    icon: FaBolt,  loading: false },
+  ];
 
   return (
     <Section
       ref={ref}
-      className="relative md:bg-gradient-to-br from-white to-sky-50
-      text-gray-800  pt-28 pb-16 sm:pt-32 sm:pb-20 lg:pt-36 lg:pb-24 px-6 md:px-8 lg:px-12
-      min-h-screen flex lg:flex-row flex-col-reverse items-center justify-center gap-x-8 gap-y-4 overflow-hidden"
+      className="relative min-h-screen flex items-center overflow-hidden
+        pt-28 pb-16 sm:pt-32 sm:pb-20 lg:pt-36 lg:pb-24 px-6 md:px-8 lg:px-12"
+      style={{ backgroundColor: 'var(--bg-base)' }}
     >
-      <motion.div
-        variants={sectionVariants}
-        initial="hidden"
-        animate={controls}
-        style={{
-          backgroundImage: `url('${Data.Home.hero.hero_bg}')`,
-          backgroundPosition: 'center',
-          backgroundSize: 'cover',
-        }}
-        className="absolute inset-0 pointer-events-none z-0"
-      />
-
-      {/* Enhanced Hero Content */}
-      <div className="flex flex-col justify-center lg:w-7/12 w-full z-20 relative  md:min-h-[200px]">
-
-        <motion.h1
-          custom={0}
-          variants={textVariants}
-          initial="hidden"
-          animate={textControls}
-          className="hero relative"
-        >
-          {Data.Home.hero.title?.map((line:string, index:number) => (
-            <span key={index} className="block no-wrap">
-              {line}</span>
-          ))}
-
-          {/* Subtle text decoration */}
-          <motion.div
-            initial={{ width: 0 }}
-            animate={{ width: "100%" }}
-            transition={{ delay: 1.5, duration: 1.2, ease: "easeOut" }}
-            className="absolute -bottom-6 left-0 h-0.5 bg-gradient-to-r from-sky-500 to-blue-600 opacity-20 md:block hidden"
-          />
-        </motion.h1>
-<div className="mt-4 md:mt-10 flex flex-col  justify-center lg:w-7/12 w-full">
-        <motion.div
-          initial="hidden"
-          animate={textControls}
-          variants={textVariants}
-          custom={1}
-          className="md:min-h-[60px] min-h-[40px]  relative"
-        >
-          <HeroKeyPoint />
-
-          {/* Subtle glow effect */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: [0, 0.1, 0] }}
-            transition={{ delay: 2, duration: 3, repeat: Infinity }}
-            className="absolute inset-0 bg-gradient-to-r from-sky-200 to-blue-200   blur-xl -z-10"
-          />
-        </motion.div>
-
-        {/* Enhanced Stats/Metrics */}
-        <motion.div
-          custom={2}
-          variants={textVariants}
-          initial="hidden"
-          animate={textControls}
-          className="md:mt-10 mt-4 flex gap-8 md:gap-12 text-sm lg:self-start self-center"
-        >
-          {[
-            { value: `${projects.rawProjects?.length}+`, label: "Projects", icon: FaCube },
-            { value: `${services?.service_data?.length}+`, label: "Services", icon: FaRobot },
-            { value: `${new Date().getFullYear()-2023}+`, label: "Years", icon: FaBolt }
-          ].map((stat, index) => (
-            [projects?.isLoading,services?.isLoading].some(item=>item==true) ? ( <motion.div
-      className="w-4 h-4 rounded-full bg-gray-400"
-      animate={{
-        scale: [1, 1.4, 1],
-        opacity: [1, 0.6, 1],
-      }}
-      transition={{
-        duration: 1,
-        repeat: Infinity,
-        ease: 'easeInOut',
-      }}
-    />): <motion.div
-              key={stat.label}
-              animate={{
-                y: [0, -2, 0],
-              }}
-              transition={{
-                duration: 3,
-                repeat: Infinity,
-                delay: index * 0.5,
-                ease: "easeInOut"
-              }}
-              className="flex items-center justify-center gap-2 md:gap-3 text-sky-600"
-            >
-              <stat.icon className="text-lg md:text-4xl" />
-              <div>
-                <div className="font-bold text-base md:text-2xl">{stat.value}</div>
-                <div className="md:text-xl text-sm opacity-70">{stat.label}</div>
-              </div>
-            </motion.div>
-          ))}
-          </motion.div>
-          </div>
+      {/* Three.js particle field */}
+      <div className="absolute inset-0 z-0">
+        <Suspense fallback={null}>
+          <ParticleField />
+        </Suspense>
       </div>
 
-      {/* Enhanced Hero Image */}
-      <motion.div
-        variants={imageVariants}
-        initial="hidden"
-        animate={imageControls}
-        className="lg:w-5/12 w-full z-10 overflow-hidden min-h-[500px]  relative "
-        style={{ perspective: "1000px" }}
-      >
-        {/* Subtle glow behind image */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: [0, 0.3, 0] }}
-          transition={{ delay: 1.8, duration: 4, repeat: Infinity }}
-          className="absolute inset-0 bg-gradient-to-br from-sky-300 to-blue-500 blur-3xl -z-10 scale-75"
-        />
+      {/* Radial gradient for depth */}
+      <div
+        className="absolute inset-0 z-0 pointer-events-none"
+        style={{
+          background: 'radial-gradient(ellipse 70% 60% at 60% 40%, transparent 0%, var(--bg-base) 70%)',
+        }}
+      />
 
-        {/* Image container with subtle hover effect */}
+      {/* Content */}
+      <div className="relative z-10 max-w-7xl mx-auto w-full flex lg:flex-row flex-col-reverse items-center gap-x-12 gap-y-10">
+
+        {/* Left — text */}
+        <div className="flex flex-col lg:w-6/12 w-full">
+
+          {/* Eyebrow */}
+          <motion.span
+            custom={0}
+            variants={textVariants}
+            initial="hidden"
+            animate={inView ? 'visible' : 'hidden'}
+            className="text-[10px] font-semibold tracking-[0.3em] uppercase mb-4"
+            style={{ color: 'var(--accent)' }}
+          >
+            Mechatronics & Engineering
+          </motion.span>
+
+          {/* Headline */}
+          <motion.h1
+            custom={1}
+            variants={textVariants}
+            initial="hidden"
+            animate={inView ? 'visible' : 'hidden'}
+            className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold leading-[1.1] tracking-tight mb-2"
+            style={{ color: 'var(--text-primary)', fontFamily: '"Syne", sans-serif' }}
+          >
+            {Data?.Home?.hero?.title?.map((line: string, i: number) => (
+              <span key={i} className="block">{line}</span>
+            ))}
+          </motion.h1>
+
+          {/* Accent line */}
+          <motion.div
+            initial={{ width: 0 }}
+            animate={inView ? { width: '3.5rem' } : { width: 0 }}
+            transition={{ delay: 0.8, duration: 0.6, ease: 'easeOut' }}
+            className="h-1 rounded-full mb-6"
+            style={{ backgroundColor: 'var(--accent)' }}
+          />
+
+          {/* Key point */}
+          <motion.div
+            custom={2}
+            variants={textVariants}
+            initial="hidden"
+            animate={inView ? 'visible' : 'hidden'}
+            className="mb-8"
+          >
+            <HeroKeyPoint />
+          </motion.div>
+
+          {/* Stats */}
+          <motion.div
+            custom={3}
+            variants={textVariants}
+            initial="hidden"
+            animate={inView ? 'visible' : 'hidden'}
+            className="flex gap-8 md:gap-10"
+          >
+            {stats.map(({ value, label, icon: Icon, loading }) =>
+              loading ? (
+                <div key={label} className="flex items-center gap-2">
+                  <motion.div
+                    className="w-3 h-3 rounded-full"
+                    style={{ backgroundColor: 'var(--accent)' }}
+                    animate={{ scale: [1, 1.4, 1], opacity: [1, 0.5, 1] }}
+                    transition={{ duration: 1, repeat: Infinity, ease: 'easeInOut' }}
+                  />
+                </div>
+              ) : (
+                <div key={label} className="flex items-center gap-2.5">
+                  <Icon className="text-xl shrink-0" style={{ color: 'var(--accent)' }} />
+                  <div>
+                    <div
+                      className="font-display text-xl font-bold leading-none"
+                      style={{ color: 'var(--text-primary)', fontFamily: '"Syne", sans-serif' }}
+                    >
+                      {value}
+                    </div>
+                    <div className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>
+                      {label}
+                    </div>
+                  </div>
+                </div>
+              )
+            )}
+          </motion.div>
+        </div>
+
+        {/* Right — image */}
         <motion.div
-          whileHover={{ scale: 1.02, rotateY: 2 }}
-          transition={{ duration: 0.3 }}
-          className="w-full h-full relative"
+          initial={{ opacity: 0, x: 40, scale: 0.96 }}
+          animate={inView ? { opacity: 1, x: 0, scale: 1 } : { opacity: 0, x: 40, scale: 0.96 }}
+          transition={{ duration: 1.0, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
+          className="lg:w-6/12 w-full relative min-h-[360px] sm:min-h-[460px] z-10"
         >
-          <HeroImageSlider />
+          {/* Glow behind image */}
+          <div
+            className="absolute inset-0 rounded-2xl blur-3xl opacity-20 scale-90"
+            style={{ background: 'radial-gradient(circle, var(--accent) 0%, transparent 70%)' }}
+          />
+          <motion.div
+            whileHover={{ scale: 1.015 }}
+            transition={{ duration: 0.4, ease: 'easeOut' }}
+            className="w-full h-full relative rounded-2xl overflow-hidden"
+          >
+            <HeroImageSlider />
+          </motion.div>
         </motion.div>
-
-
-      </motion.div>
+      </div>
     </Section>
   );
 });
 
 HeroSection.displayName = 'HeroSection';
-
 export default HeroSection;

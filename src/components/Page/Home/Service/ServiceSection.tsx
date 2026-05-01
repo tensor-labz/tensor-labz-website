@@ -41,8 +41,15 @@ const ServiceSection: React.FC = memo(() => {
   return (
     <Section className='md:px-14 px-0'>
       <div className='px-4 text-center mb-4 mt-6'>
-      <h1 className="sm:text-4xl text-xl sm:font-bold font-semibold text-blue-900">What We Offer</h1>
-      <h3 className="sm:text-lg text-base text-gray-500">Innovative solutions tailored to your digital transformation needs.</h3>
+      <h1
+        className="sm:text-4xl text-xl sm:font-bold font-semibold"
+        style={{ color: 'var(--text-primary)', fontFamily: '"Syne", sans-serif' }}
+      >
+        What We Offer
+      </h1>
+      <h3 className="sm:text-lg text-base" style={{ color: 'var(--text-muted)' }}>
+        Innovative solutions tailored to your digital transformation needs.
+      </h3>
       </div>
 
       <motion.div

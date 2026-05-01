@@ -12,7 +12,7 @@ function ServiceContainer() {
     if (isLoading) return <ServiceLoading/>
     return (
         <div className='mt-4 mb-6 mx-12 sm:mx-4 lg:mx-8 xl:mx-16'>
-            <h1 className="text-2xl font-bold text-gray-800 mb-4">{ Data.insight.title}</h1>
+            <h1 className="text-2xl font-bold mb-4" style={{ color: 'var(--text-primary)' }}>{ Data.insight.title}</h1>
             <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
                 {/* Project Card */}
                 {

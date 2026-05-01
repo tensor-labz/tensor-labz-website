@@ -15,8 +15,8 @@ const ServiceHero: FC = memo(() => {
   }, [service_data, activeTab.slug]);
 
   return (
-    <div className="relative w-full h-44 sm:h-52 md:h-72 pt-20">
-      {/* Background Image */}
+    <div className="relative w-full h-48 sm:h-56 md:h-72 pt-20 overflow-hidden">
+      {/* Background image */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -28,24 +28,27 @@ const ServiceHero: FC = memo(() => {
           alt="Hero Background"
           className="w-full h-full object-cover"
         />
+        {/* Dark overlay for text readability on image */}
+        <div className="absolute inset-0 bg-slate-950/55" />
       </motion.div>
 
       {/* Content */}
-      <div className="relative z-10 flex flex-col items-center justify-center h-full text-blue-900 px-4">
+      <div className="relative z-10 flex flex-col items-center justify-center h-full px-4">
         <motion.h1
-          initial={{ y: -50, opacity: 0 }}
+          initial={{ y: -30, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.3 }}
-          className="text-2xl md:text-5xl font-bold text-center mb-4"
+          transition={{ duration: 0.7, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+          className="text-2xl md:text-5xl font-bold text-center text-white mb-3"
+          style={{ fontFamily: '"Syne", sans-serif' }}
         >
           {selectedService?.service_name}
         </motion.h1>
 
         <motion.p
-          initial={{ y: 50, opacity: 0 }}
+          initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.5 }}
-          className="text-sm md:text-lg text-center max-w-2xl md:block hidden"
+          transition={{ duration: 0.7, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
+          className="text-sm md:text-base text-center max-w-2xl md:block hidden text-white/70"
         >
           {selectedService?.description}
         </motion.p>

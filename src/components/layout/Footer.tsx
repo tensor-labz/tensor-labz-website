@@ -42,7 +42,10 @@ const Footer = () => {
       }));
 
   return (
-    <footer className="bg-[#092B4A] text-white/70 border-t border-white/10">
+    <footer
+      style={{ backgroundColor: 'var(--footer-bg)', borderColor: 'rgba(148,163,184,0.12)' }}
+      className="text-slate-400 border-t"
+    >
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -57,7 +60,7 @@ const Footer = () => {
             <Link to="/">
               <img src={logo} alt="Tensor Labs" className="h-10 w-auto object-contain" loading="lazy" />
             </Link>
-            <p className="text-sm leading-relaxed text-white/50 max-w-xs">
+            <p className="text-sm leading-relaxed text-slate-500 max-w-xs">
               Empowering creators and problem-solvers through research, innovation, and practical application.
             </p>
             <div className="flex items-center gap-3 pt-1">
@@ -68,8 +71,9 @@ const Footer = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={label}
-                  className="w-8 h-8 flex items-center justify-center rounded-sm bg-white/8 text-white/50
-                    hover:bg-white/15 hover:text-white transition-all duration-200 text-sm"
+                  className="w-8 h-8 flex items-center justify-center rounded
+                    bg-white/5 text-slate-500 hover:bg-sky-500/20 hover:text-sky-400
+                    transition-all duration-200 text-sm border border-white/5 hover:border-sky-500/30"
                 >
                   <Icon />
                 </a>
@@ -79,7 +83,7 @@ const Footer = () => {
 
           {/* Services */}
           <div className="flex flex-col gap-4">
-            <h4 className="text-xs font-semibold tracking-widest uppercase text-white">Services</h4>
+            <h4 className="text-xs font-semibold tracking-widest uppercase text-slate-300">Services</h4>
             <ul className="flex flex-col gap-2.5">
               {serviceLinks.length === 0 && isLoading
                 ? Array.from({ length: 4 }).map((_, i) => (
@@ -89,7 +93,7 @@ const Footer = () => {
                     <li key={s.link}>
                       <Link
                         to={s.link}
-                        className="text-sm text-white/50 hover:text-white transition-colors duration-200"
+                        className="text-sm text-slate-500 hover:text-sky-400 transition-colors duration-200"
                       >
                         {s.title}
                       </Link>
@@ -100,13 +104,13 @@ const Footer = () => {
 
           {/* Company */}
           <div className="flex flex-col gap-4">
-            <h4 className="text-xs font-semibold tracking-widest uppercase text-white">Company</h4>
+            <h4 className="text-xs font-semibold tracking-widest uppercase text-slate-300">Company</h4>
             <ul className="flex flex-col gap-2.5">
               {companyLinks.map(({ title, link }) => (
                 <li key={link}>
                   <Link
                     to={link}
-                    className="text-sm text-white/50 hover:text-white transition-colors duration-200"
+                    className="text-sm text-slate-500 hover:text-sky-400 transition-colors duration-200"
                   >
                     {title}
                   </Link>
@@ -117,20 +121,20 @@ const Footer = () => {
 
           {/* Contact */}
           <div className="flex flex-col gap-4">
-            <h4 className="text-xs font-semibold tracking-widest uppercase text-white">Contact</h4>
+            <h4 className="text-xs font-semibold tracking-widest uppercase text-slate-300">Contact</h4>
             <ul className="flex flex-col gap-3">
               {contactInfo.map(({ icon: Icon, text, href }) => (
                 <li key={text} className="flex items-start gap-3">
-                  <Icon className="text-white/30 mt-0.5 shrink-0 text-sm" />
+                  <Icon className="text-slate-600 mt-0.5 shrink-0 text-sm" />
                   {href ? (
                     <a
                       href={href}
-                      className="text-sm text-white/50 hover:text-white transition-colors duration-200 leading-snug"
+                      className="text-sm text-slate-500 hover:text-sky-400 transition-colors duration-200 leading-snug"
                     >
                       {text}
                     </a>
                   ) : (
-                    <span className="text-sm text-white/50 leading-snug">{text}</span>
+                    <span className="text-sm text-slate-500 leading-snug">{text}</span>
                   )}
                 </li>
               ))}
@@ -139,8 +143,8 @@ const Footer = () => {
         </div>
 
         {/* Bottom bar */}
-        <div className="mt-16 pt-6 border-t border-white/10 flex justify-center">
-          <p className="text-xs text-white/30 text-center">
+        <div className="mt-16 pt-6 border-t border-white/5 flex justify-center">
+          <p className="text-xs text-slate-600 text-center">
             &copy; {new Date().getFullYear()} Tensor Labs. All rights reserved.
           </p>
         </div>
