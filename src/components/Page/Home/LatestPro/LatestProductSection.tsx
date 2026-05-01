@@ -13,10 +13,6 @@ const LatestProductSection: React.FC = memo(() => {
   const  topData = useTopProjects();
   const device = useDeviceContext();
 
-  // const isLarge = useMemo(
-  //   () => device === "lg" || device === "xl" || device === "2xl",
-  //   [device]
-  // );
   const isMobile = useMemo(
     () => device === "xs" || device === "sm",
     [device]
@@ -77,9 +73,6 @@ const LatestProductSection: React.FC = memo(() => {
         >
           Our Latest Top Insights
         </h1>
-        {/* <h3 className="sm:text-lg text-base text-gray-500">
-          Innovative solutions tailored to your digital transformation needs.
-        </h3> */}
       </div>
 
       <motion.div

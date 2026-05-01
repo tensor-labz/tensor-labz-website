@@ -1,8 +1,4 @@
-import {
-    FaHome, FaInfo,
-    //FaPhone
-} from "react-icons/fa";
-//import { FaGear } from "react-icons/fa6";
+import { FaHome, FaInfo } from "react-icons/fa";
 import { FaScrewdriverWrench } from "react-icons/fa6";
 import { MdOutlineSupportAgent } from "react-icons/md";
 const navData=[
@@ -14,7 +10,6 @@ const navData=[
     {
         nav:"insights",
         to:"/services/all",
-        // icon:<FaGear/>
         icon:<FaScrewdriverWrench />
     },
     {
@@ -26,7 +21,6 @@ const navData=[
         nav:"Contact Us",
         to:"/contact-us",
         icon: <MdOutlineSupportAgent size={ 25} />
-        // icon:<FaPhone/>
     }
 ]
 export default navData

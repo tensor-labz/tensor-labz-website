@@ -58,19 +58,6 @@ const Section = memo(forwardRef<HTMLElement, SectionProps>((
     }
   };
 
-  // Child element variants
-  // const childVariants: Variants = {
-  //   initial: { opacity: 0, y: 20 },
-  //   animate: { 
-  //     opacity: 1, 
-  //     y: 0,
-  //     transition: { 
-  //       type: "tween",
-  //       duration: 0.5 
-  //     }
-  //   }
-  // };
-
   return (
     <motion.section
       ref={sectionRef}
