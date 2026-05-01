@@ -1,25 +1,27 @@
-import { FC,memo, useMemo } from 'react';
+import { FC, memo, useMemo } from 'react';
 import { motion } from 'motion/react';
 import { useRootContext } from '../../../../contexts/RootContext';
 import { useServiceDataContext } from "../../../../contexts/Api/ServiceApiContext";
 import { useServiceContext } from "../../../../contexts/ServiceContext";
 
-
-const ServiceHero: FC =memo( () => {
-  const { Data } = useRootContext()
+const ServiceHero: FC = memo(() => {
+  const { Data } = useRootContext();
   const { service_data } = useServiceDataContext();
   const { activeTab } = useServiceContext();
-  const selctedservice = useMemo(() => {
-    return service_data?.find((se: any) => se.slug === activeTab.slug) ?? { service_name: Data.insight.hero.title, description: Data.insight.hero.description };
+
+  const selectedService = useMemo(() => {
+    return service_data?.find((se: any) => se.slug === activeTab.slug)
+      ?? { service_name: Data.insight.hero.title, description: Data.insight.hero.description };
   }, [service_data, activeTab.slug]);
+
   return (
     <div className="relative w-full h-44 sm:h-52 md:h-72 pt-20">
-      {/* Background for small screens (Image) */}
+      {/* Background Image */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1 }}
-        className="absolute inset-0 z-0 "
+        className="absolute inset-0 z-0"
       >
         <img
           src={Data.insight.hero.hero_bg.sm}
@@ -28,17 +30,15 @@ const ServiceHero: FC =memo( () => {
         />
       </motion.div>
 
-      <div className="absolute inset-0 bg-[#092B4A]/60 z-[1]" />
-
       {/* Content */}
-      <div className="relative z-10 flex flex-col items-center justify-center h-full text-white px-4">
+      <div className="relative z-10 flex flex-col items-center justify-center h-full text-blue-900 px-4">
         <motion.h1
           initial={{ y: -50, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.8, delay: 0.3 }}
-          className="text-xl md:text-4xl font-bold text-center mb-4"
+          className="text-2xl md:text-5xl font-bold text-center mb-4"
         >
-          {selctedservice?.service_name}
+          {selectedService?.service_name}
         </motion.h1>
 
         <motion.p
@@ -47,11 +47,12 @@ const ServiceHero: FC =memo( () => {
           transition={{ duration: 0.8, delay: 0.5 }}
           className="text-sm md:text-lg text-center max-w-2xl md:block hidden"
         >
-          {selctedservice?.description}
+          {selectedService?.description}
         </motion.p>
       </div>
     </div>
   );
 });
-ServiceHero.displayName = "ServiceHero"; // For better debugging in React DevTools
+
+ServiceHero.displayName = "ServiceHero";
 export default ServiceHero;
