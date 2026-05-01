@@ -12,16 +12,22 @@ const Services = memo(() => {
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 0.4, ease: 'easeOut' }}
-        className="min-h-screen flex flex-col items-center"
-        style={{ backgroundColor: 'var(--bg-base)' }}
+        transition={{ duration: 0.5, ease: 'easeOut' }}
+        className="min-h-screen flex flex-col"
       >
-        <div className="w-full">
-          <ServiceHero />
+        {/* Hero */}
+        <ServiceHero />
+
+        {/* Filter bar */}
+        <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 mt-6">
           <TabBar />
           <ServiceDropDown />
         </div>
-        <ServiceContainer />
+
+        {/* Project grid */}
+        <div className="flex-1">
+          <ServiceContainer />
+        </div>
       </motion.div>
     </Page>
   );

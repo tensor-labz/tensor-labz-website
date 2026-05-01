@@ -1,5 +1,5 @@
 import { FC, memo, useMemo } from 'react';
-import { motion } from 'motion/react';
+import { motion, AnimatePresence } from 'motion/react';
 import { useRootContext } from '../../../../contexts/RootContext';
 import { useServiceDataContext } from "../../../../contexts/Api/ServiceApiContext";
 import { useServiceContext } from "../../../../contexts/ServiceContext";
@@ -15,44 +15,53 @@ const ServiceHero: FC = memo(() => {
   }, [service_data, activeTab.slug]);
 
   return (
-    <div className="relative w-full h-48 sm:h-56 md:h-72 pt-20 overflow-hidden">
-      {/* Background image */}
-      <motion.div
+    <div className="w-full pt-28 pb-12 sm:pt-32 sm:pb-14 px-4 text-center">
+      <motion.span
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 1 }}
-        className="absolute inset-0 z-0"
+        transition={{ duration: 0.5 }}
+        className="text-[10px] font-semibold tracking-[0.3em] uppercase block mb-4"
+        style={{ color: 'var(--accent)' }}
       >
-        <img
-          src={Data.insight.hero.hero_bg.sm}
-          alt="Hero Background"
-          className="w-full h-full object-cover"
-        />
-        {/* Dark overlay for text readability on image */}
-        <div className="absolute inset-0 bg-slate-950/55" />
-      </motion.div>
+        Insights & Services
+      </motion.span>
 
-      {/* Content */}
-      <div className="relative z-10 flex flex-col items-center justify-center h-full px-4">
+      <AnimatePresence mode="wait">
         <motion.h1
-          initial={{ y: -30, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.7, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-          className="text-2xl md:text-5xl font-bold text-center text-white mb-3"
-          style={{ fontFamily: '"Syne", sans-serif' }}
+          key={activeTab.slug}
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -10 }}
+          transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+          className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4"
+          style={{ color: 'var(--text-primary)', fontFamily: '"Syne", sans-serif' }}
         >
           {selectedService?.service_name}
         </motion.h1>
+      </AnimatePresence>
 
+      {/* Accent line */}
+      <motion.div
+        initial={{ width: 0 }}
+        animate={{ width: '3rem' }}
+        transition={{ delay: 0.3, duration: 0.5, ease: 'easeOut' }}
+        className="h-1 rounded-full mx-auto mb-5"
+        style={{ backgroundColor: 'var(--accent)' }}
+      />
+
+      <AnimatePresence mode="wait">
         <motion.p
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.7, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
-          className="text-sm md:text-base text-center max-w-2xl md:block hidden text-white/70"
+          key={`desc-${activeTab.slug}`}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.4, delay: 0.15 }}
+          className="text-sm md:text-base max-w-2xl mx-auto"
+          style={{ color: 'var(--text-muted)' }}
         >
           {selectedService?.description}
         </motion.p>
-      </div>
+      </AnimatePresence>
     </div>
   );
 });
