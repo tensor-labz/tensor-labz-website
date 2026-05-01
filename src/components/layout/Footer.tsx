@@ -143,17 +143,6 @@ const Footer = () => {
           <p className="text-xs text-white/30">
             &copy; {new Date().getFullYear()} Tensor Labs. All rights reserved.
           </p>
-          <p className="text-xs text-white/30">
-            Powered by{' '}
-            <a
-              href="https://www.linkedin.com/in/thanumahee12/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-white/50 hover:text-white transition-colors duration-200"
-            >
-              Thanu Mahee
-            </a>
-          </p>
         </div>
       </motion.div>
     </footer>
