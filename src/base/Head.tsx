@@ -1,5 +1,5 @@
 import appData from '../data/app_data';
-import { Helmet } from 'react-helmet';
+import { Helmet } from 'react-helmet-async';
 import HeaderHelmentProps from './type/HeaderHelmentProps.d';
 
 
