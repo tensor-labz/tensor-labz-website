@@ -16,7 +16,7 @@ type RootContextProviderType = {
     children: React.ReactNode;
 }
 const RootContext = createContext<RootContextType>(null as any);
-const sheetUrl="https://script.google.com/macros/s/AKfycbytPoq9QIY-9e844pm5Li3gZXEkxulVNyFJ_wLTo8yBtXCBYiJ0mCEjnG82AuJxqUwT_w/exec?sheetName="
+const sheetUrl = import.meta.env.VITE_SHEET_URL as string;
 export const RootContextProvider: React.FC<RootContextProviderType> = ({children}) => {
     return (
         <RootContext.Provider value={{ Data:data,googleSheet_URl:sheetUrl }}>
