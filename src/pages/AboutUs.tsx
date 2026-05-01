@@ -1,11 +1,10 @@
-import React, { memo, Suspense } from "react";
+import React, { memo } from "react";
 import { motion } from "motion/react";
 import Page from "../components/resuable/Page";
 import { useRootContext } from "../contexts/RootContext";
 import AboutUsSectionItem from "../components/Page/Aboutus/AboutUsSection";
 import { useAboutusDataContext } from "../contexts/Api/AboutusDataContext";
 import Placeholder from "../components/Page/Aboutus/LoadingPlaceHolder";
-import PageBackground from "../components/three/PageBackground";
 
 const AboutUs: React.FC = memo(() => {
   const { aboutus_data, isLoading } = useAboutusDataContext();
@@ -13,17 +12,9 @@ const AboutUs: React.FC = memo(() => {
 
   return (
     <Page HeadProps={{ title: "About Us" }}>
-      <div
-        className="relative min-h-screen w-full"
-        style={{ backgroundColor: 'var(--bg-base)' }}
-      >
-        {/* Three.js animated background */}
-        <Suspense fallback={null}>
-          <PageBackground />
-        </Suspense>
-
-        {/* Content */}
-        <div className="relative z-10 flex items-center justify-center min-h-screen py-32 px-4">
+      <div className="relative min-h-screen w-full">
+        {/* Content — global animation shows through */}
+        <div className="flex items-center justify-center min-h-screen py-32 px-4">
           <motion.div
             initial={{ opacity: 0, y: 32 }}
             animate={{ opacity: 1, y: 0 }}

@@ -1,4 +1,4 @@
-import React, { memo, Suspense } from 'react';
+import React, { memo } from 'react';
 import { motion } from 'motion/react';
 import Page from "../components/resuable/Page";
 import { useRootContext } from '../contexts/RootContext';
@@ -6,7 +6,6 @@ import { useAppContext } from '../contexts/Api/AppContext';
 import ContactInfoItem, { contactInfoIcon } from '../components/Page/Contactus/ContactInfo';
 import SocialMediaLinks from '../components/Page/Contactus/SocialMediaLinks';
 import ContactusPlaceholder from '../components/Page/Contactus/ContactUsPlaceHolder';
-import PageBackground from '../components/three/PageBackground';
 
 const ContactUs: React.FC = memo(() => {
   const { Data } = useRootContext();
@@ -14,16 +13,8 @@ const ContactUs: React.FC = memo(() => {
 
   return (
     <Page HeadProps={{ title: "Contact Us" }}>
-      <div
-        className="relative min-h-screen flex items-center justify-center px-4 py-32"
-        style={{ backgroundColor: 'var(--bg-base)' }}
-      >
-        {/* Three.js animated background */}
-        <Suspense fallback={null}>
-          <PageBackground />
-        </Suspense>
-
-        {/* Content */}
+      <div className="min-h-screen flex items-center justify-center px-4 py-32">
+        {/* Global animation shows through */}
         <motion.div
           initial={{ opacity: 0, y: 32 }}
           animate={{ opacity: 1, y: 0 }}

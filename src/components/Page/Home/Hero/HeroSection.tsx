@@ -1,4 +1,4 @@
-import React, { memo, Suspense } from 'react';
+import React, { memo } from 'react';
 import { motion } from 'motion/react';
 import { useInView } from 'react-intersection-observer';
 import Section from '../../../../components/resuable/Section';
@@ -7,7 +7,6 @@ import HeroKeyPoint from './HeroKeyPoint';
 import { useRootContext } from '../../../../contexts/RootContext';
 import { useProjectDataContext } from '../../../../contexts/Api/ProjectDataContext';
 import { useServiceDataContext } from '../../../../contexts/Api/ServiceApiContext';
-import ParticleField from '../../../three/ParticleField';
 import { FaRobot, FaCube, FaBolt } from 'react-icons/fa';
 
 const textVariants = {
@@ -38,14 +37,7 @@ const HeroSection: React.FC = memo(() => {
         pt-28 pb-16 sm:pt-32 sm:pb-20 lg:pt-36 lg:pb-24 px-6 md:px-8 lg:px-12"
       style={{ backgroundColor: 'var(--bg-base)' }}
     >
-      {/* Three.js particle field */}
-      <div className="absolute inset-0 z-0">
-        <Suspense fallback={null}>
-          <ParticleField />
-        </Suspense>
-      </div>
-
-      {/* Radial gradient for depth */}
+      {/* Radial gradient for depth — global animation shows through */}
       <div
         className="absolute inset-0 z-0 pointer-events-none"
         style={{
