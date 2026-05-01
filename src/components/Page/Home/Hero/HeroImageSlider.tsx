@@ -37,7 +37,7 @@ const HeroImageSlider: React.FC = memo(() => {
   };
 
   return (
-    <div className="w-full h-full relative overflow-hidden min-h-[500px]" >
+    <div className="absolute inset-0">
       <AnimatePresence mode="wait">
         <motion.div
           key={currentSlide}
@@ -45,14 +45,14 @@ const HeroImageSlider: React.FC = memo(() => {
           initial="initial"
           animate="animate"
           exit="exit"
-          className="w-full h-full absolute inset-0"
+          className="absolute inset-0"
         >
           {/* Make sure slider.img is defined */}
           {slider && slider.img && (
             <img
               src={slider.img}
               alt={`Hero Image ${slider.title || ''}`}
-              className="w-full h-full object-fill object-center"
+              className="w-full h-full object-cover object-center"
               draggable={false}
             />
           )}

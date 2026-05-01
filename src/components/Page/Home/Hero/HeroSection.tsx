@@ -33,7 +33,7 @@ const HeroSection: React.FC = memo(() => {
   return (
     <Section
       ref={ref}
-      className="relative min-h-screen flex items-center justify-center overflow-hidden
+      className="relative min-h-screen flex items-center justify-center
         pt-24 pb-16 sm:pt-28 sm:pb-20 lg:pt-36 lg:pb-24 px-6 md:px-8 lg:px-12"
       style={{ backgroundColor: 'var(--bg-base)' }}
     >
@@ -53,16 +53,17 @@ const HeroSection: React.FC = memo(() => {
           initial={{ opacity: 0, y: 24, scale: 0.96 }}
           animate={inView ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: 24, scale: 0.96 }}
           transition={{ duration: 1.0, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
-          className="w-full relative h-[220px] sm:h-[320px] md:h-[380px] z-10"
+          className="w-full relative z-10"
         >
+          {/* Glow */}
           <div
-            className="absolute inset-0 rounded-2xl blur-3xl opacity-20 scale-90"
+            className="absolute inset-0 rounded-2xl blur-3xl opacity-20 scale-90 pointer-events-none"
             style={{ background: 'radial-gradient(circle, var(--accent) 0%, transparent 70%)' }}
           />
           <motion.div
             whileHover={{ scale: 1.015 }}
             transition={{ duration: 0.4, ease: 'easeOut' }}
-            className="w-full h-full relative rounded-2xl overflow-hidden"
+            className="w-full aspect-video rounded-2xl overflow-hidden"
           >
             <HeroImageSlider />
           </motion.div>
