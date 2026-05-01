@@ -19,11 +19,7 @@ export const contactInfoIcon = {
 };
 
 const ContactInfoItem = memo(({
-  icon: Icon,
-  title,
-  value,
-  link,
-  linkType = 'default',
+  icon: Icon, title, value, link, linkType = 'default',
 }: {
   icon: IconType;
   title: string;
@@ -42,39 +38,47 @@ const ContactInfoItem = memo(({
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 40 }}
+      initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="rounded-2xl sm:p-6 p-4 flex sm:flex-row flex-col items-center justify-center sm:space-x-6
-        hover:shadow-xl transition-all duration-300 group backdrop-blur-sm"
+      className="rounded-2xl sm:p-6 p-4 flex sm:flex-row flex-col items-center sm:space-x-5
+        hover:shadow-lg transition-all duration-300 group"
       style={{
-        backgroundColor: 'rgba(255,255,255,0.08)',
-        border: '1px solid rgba(255,255,255,0.15)',
+        backgroundColor: 'rgba(255,255,255,0.05)',
+        border: '1px solid rgba(255,255,255,0.08)',
+        backdropFilter: 'blur(8px)',
       }}
     >
       <div
-        className="p-3 rounded-full transition-colors"
+        className="p-3 rounded-full shrink-0 mb-3 sm:mb-0 transition-colors"
         style={{ backgroundColor: 'var(--accent-soft)' }}
       >
-        <Icon
-          className="sm:w-9 sm:h-9 w-7 h-7 transition-colors"
-          style={{ color: 'var(--accent)' }}
-        />
+        <Icon className="w-7 h-7 sm:w-8 sm:h-8 transition-colors" style={{ color: 'var(--accent)' }} />
       </div>
 
-      <div className="flex-grow w-full sm:w-auto sm:text-justify text-center">
-        <h3 className="text-base sm:text-lg font-semibold mb-1 text-white">{title}</h3>
+      <div className="flex-grow w-full sm:w-auto sm:text-left text-center">
+        <h3
+          className="text-sm sm:text-base font-semibold mb-1"
+          style={{ color: 'var(--text-primary)' }}
+        >
+          {title}
+        </h3>
         {link ? (
           <a
             href={getLinkHref()}
             target={linkType === 'whatsapp' ? '_blank' : undefined}
             rel={linkType === 'whatsapp' ? 'noopener noreferrer' : undefined}
-            className="text-xs sm:text-sm break-words inline-block w-full transition-colors text-white/70 hover:text-white"
+            className="text-xs sm:text-sm break-words inline-block w-full transition-colors"
+            style={{ color: 'var(--text-muted)' }}
+            onMouseEnter={e => (e.currentTarget.style.color = 'var(--accent)')}
+            onMouseLeave={e => (e.currentTarget.style.color = 'var(--text-muted)')}
           >
             {value}
           </a>
         ) : (
-          <p className="text-xs sm:text-sm break-words w-full text-white/60">{value}</p>
+          <p className="text-xs sm:text-sm break-words w-full" style={{ color: 'var(--text-muted)' }}>
+            {value}
+          </p>
         )}
       </div>
     </motion.div>
