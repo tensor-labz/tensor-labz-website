@@ -6,7 +6,7 @@ import {
   useContext,
   useEffect,
 } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 // Define the types
 export interface ServiceTab {
@@ -29,12 +29,16 @@ const ServiceContext = createContext<ServiceContextType | undefined>(undefined);
 const ServiceProvider: FC<ServiceProviderProps> = ({ children }) => {
   const [activeTab, setActiveTab] = useState<ServiceTab>({ title: "All" });
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     if (activeTab.slug) {
-      navigate(`/services/${activeTab.slug}`);
+      const target = `/services/${activeTab.slug}`;
+      if (location.pathname !== target) {
+        navigate(target);
+      }
     }
-  }, [activeTab.slug]); // cleaner dependency
+  }, [activeTab.slug, navigate]); // cleaner dependency
 
   return (
     <ServiceContext.Provider value={{ activeTab, setActiveTab }}>

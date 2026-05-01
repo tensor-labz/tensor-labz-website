@@ -75,12 +75,12 @@ export default function AppContextProvider({ children }: AppContextProviderProps
     [fetchData]
   );
 
-  // Initial data fetch
+  // Initial data fetch (no debounce — fires once on mount)
   useEffect(() => {
     const controller = new AbortController();
-    debouncedFetchData(controller.signal);
+    fetchData(controller.signal);
     return () => controller.abort();
-  }, [debouncedFetchData]);
+  }, [fetchData]);
 
   // Function to manually refresh data if needed
   const refreshData = useCallback(() => {

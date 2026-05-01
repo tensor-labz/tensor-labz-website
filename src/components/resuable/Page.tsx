@@ -28,9 +28,9 @@ const Page: React.FC<PageProps> = memo(({
       width: "100%",
       transition: { duration: 0.3 }
     },
-    exit: { 
+    exit: {
       opacity: 0,
-      x: typeof window !== 'undefined' ? window.innerWidth : 0,
+      x: "100vw",
       transition: { duration: 0.4 }
     }
   };
