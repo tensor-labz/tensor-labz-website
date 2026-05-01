@@ -20,7 +20,7 @@ const HeroKeyPoint: React.FC = memo(() => {
           initial="initial"
           animate="animate"
           exit="exit"
-          className="text-xl md:text-2xl lg:text-3xl font-semibold absolute w-full text-center"
+          className="text-xl md:text-2xl lg:text-3xl font-semibold absolute w-full text-center lg:text-left"
           style={{ color: 'var(--text-primary)' }}
         >
           {slider?.title}

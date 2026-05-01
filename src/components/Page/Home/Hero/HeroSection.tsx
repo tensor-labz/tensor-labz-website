@@ -33,7 +33,7 @@ const HeroSection: React.FC = memo(() => {
   return (
     <Section
       ref={ref}
-      className="relative min-h-screen flex items-center justify-center
+      className="relative min-h-screen flex items-center
         pt-24 pb-16 sm:pt-28 sm:pb-20 lg:pt-36 lg:pb-24 px-6 md:px-8 lg:px-12"
       style={{ backgroundColor: 'var(--bg-base)' }}
     >
@@ -41,36 +41,21 @@ const HeroSection: React.FC = memo(() => {
       <div
         className="absolute inset-0 z-0 pointer-events-none"
         style={{
-          background: 'radial-gradient(ellipse 80% 60% at 50% 40%, transparent 0%, var(--bg-base) 70%)',
+          background: 'radial-gradient(ellipse 70% 60% at 60% 40%, transparent 0%, var(--bg-base) 70%)',
         }}
       />
 
-      {/* Content — single centered column */}
-      <div className="relative z-10 max-w-3xl mx-auto w-full flex flex-col items-center gap-8">
+      {/* Content
+           Mobile : single column, everything centered
+           Desktop: two columns — text left, image right  */}
+      <div className="relative z-10 max-w-7xl mx-auto w-full
+        flex flex-col items-center gap-8
+        lg:flex-row lg:items-center lg:gap-x-12">
 
-        {/* Image */}
-        <motion.div
-          initial={{ opacity: 0, y: 24, scale: 0.96 }}
-          animate={inView ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: 24, scale: 0.96 }}
-          transition={{ duration: 1.0, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
-          className="w-full relative z-10"
-        >
-          {/* Glow */}
-          <div
-            className="absolute inset-0 rounded-2xl blur-3xl opacity-20 scale-90 pointer-events-none"
-            style={{ background: 'radial-gradient(circle, var(--accent) 0%, transparent 70%)' }}
-          />
-          <motion.div
-            whileHover={{ scale: 1.015 }}
-            transition={{ duration: 0.4, ease: 'easeOut' }}
-            className="w-full aspect-[4/3] sm:aspect-video relative rounded-2xl overflow-hidden"
-          >
-            <HeroImageSlider />
-          </motion.div>
-        </motion.div>
-
-        {/* Text */}
-        <div className="w-full flex flex-col items-center text-center">
+        {/* ── Left / bottom on mobile: text ── */}
+        <div className="lg:w-6/12 w-full flex flex-col
+          items-center text-center
+          lg:items-start lg:text-left">
 
           {/* Eyebrow */}
           <motion.span
@@ -90,7 +75,7 @@ const HeroSection: React.FC = memo(() => {
             variants={textVariants}
             initial="hidden"
             animate={inView ? 'visible' : 'hidden'}
-            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-[1.1] tracking-tight mb-2"
+            className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold leading-[1.1] tracking-tight mb-2"
             style={{ color: 'var(--text-primary)', fontFamily: '"Syne", sans-serif' }}
           >
             {Data?.Home?.hero?.title?.map((line: string, i: number) => (
@@ -103,7 +88,7 @@ const HeroSection: React.FC = memo(() => {
             initial={{ width: 0 }}
             animate={inView ? { width: '3.5rem' } : { width: 0 }}
             transition={{ delay: 0.8, duration: 0.6, ease: 'easeOut' }}
-            className="h-1 rounded-full mb-6 mx-auto"
+            className="h-1 rounded-full mb-6 mx-auto lg:mx-0"
             style={{ backgroundColor: 'var(--accent)' }}
           />
 
@@ -124,7 +109,7 @@ const HeroSection: React.FC = memo(() => {
             variants={textVariants}
             initial="hidden"
             animate={inView ? 'visible' : 'hidden'}
-            className="flex justify-center gap-8 md:gap-12"
+            className="flex justify-center lg:justify-start gap-8 md:gap-10"
           >
             {stats.map(({ value, label, icon: Icon, loading }) =>
               loading ? (
@@ -155,6 +140,27 @@ const HeroSection: React.FC = memo(() => {
             )}
           </motion.div>
         </div>
+
+        {/* ── Right / top on mobile: image ── */}
+        <motion.div
+          initial={{ opacity: 0, x: 0, scale: 0.96 }}
+          animate={inView ? { opacity: 1, x: 0, scale: 1 } : { opacity: 0, x: 0, scale: 0.96 }}
+          transition={{ duration: 1.0, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
+          className="lg:w-6/12 w-full relative z-10"
+        >
+          <div
+            className="absolute inset-0 rounded-2xl blur-3xl opacity-20 scale-90 pointer-events-none"
+            style={{ background: 'radial-gradient(circle, var(--accent) 0%, transparent 70%)' }}
+          />
+          <motion.div
+            whileHover={{ scale: 1.015 }}
+            transition={{ duration: 0.4, ease: 'easeOut' }}
+            className="w-full aspect-[4/3] sm:aspect-[16/9] lg:aspect-auto lg:min-h-[460px] relative rounded-2xl overflow-hidden"
+          >
+            <HeroImageSlider />
+          </motion.div>
+        </motion.div>
+
       </div>
     </Section>
   );
