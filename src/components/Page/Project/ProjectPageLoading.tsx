@@ -21,7 +21,7 @@ export default function ProfessionalLoading() {
         const newProgress = Math.min(prev + increment, 100);
 
         // Update loading text based on progress
-        const currentStage = loadingStages.reverse().find(stage => newProgress >= stage.threshold);
+        const currentStage = [...loadingStages].reverse().find(stage => newProgress >= stage.threshold);
         if (currentStage) {
           setLoadingText(currentStage.text);
         }

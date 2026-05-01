@@ -10,7 +10,7 @@ const ServiceHero: FC =memo( () => {
   const { service_data } = useServiceDataContext();
   const { activeTab } = useServiceContext();
   const selctedservice = useMemo(() => {
-    return service_data?.find((se: any) => se.slug == activeTab.slug) ?? { service_name: Data.insight.hero.title, description: Data.insight.hero.description };
+    return service_data?.find((se: any) => se.slug === activeTab.slug) ?? { service_name: Data.insight.hero.title, description: Data.insight.hero.description };
   }, [service_data, activeTab.slug]);
   return (
     <div className="relative w-full h-32 sm:h-40 md:h-60">

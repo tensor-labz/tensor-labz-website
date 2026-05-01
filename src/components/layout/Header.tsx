@@ -18,10 +18,9 @@ import {
 const Header: React.FC<{ className?: string }> = memo(({ className = '' }) => {
   const isVisible = useScroll();
   const path=useLocation()
-  const [ishome,setisHome] = useState(path.pathname === "/about-us" || path.pathname=="/contact-us");
+  const [ishome,setisHome] = useState(path.pathname === "/about-us" || path.pathname === "/contact-us");
   useEffect(() => {
-    setisHome(path.pathname === "/about-us" || path.pathname == "/contact-us");
-    console.log(ishome)
+    setisHome(path.pathname === "/about-us" || path.pathname === "/contact-us");
   }, [path]);
   return (
     <motion.header

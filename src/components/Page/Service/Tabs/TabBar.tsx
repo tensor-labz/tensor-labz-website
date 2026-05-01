@@ -43,7 +43,7 @@ const TabBar: FC = memo(() => {
               {isActive && (
                 <motion.div
                   layoutId="activeTabIndicator"
-                  className="absolute bottom-0 left-0 right-0 h-1 bg-[]"
+                  className="absolute bottom-0 left-0 right-0 h-1 bg-[#092B4A]"
                 />
               )}
             </motion.button>

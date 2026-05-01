@@ -26,6 +26,8 @@ const ProjectDataProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const { googleSheet_URl } = useRootContext();
 
   useEffect(() => {
+    const controller = new AbortController();
+
     const fetchProjects = async () => {
       if (!googleSheet_URl) {
         setError(new Error("Google Sheet URL not defined"));
@@ -34,12 +36,13 @@ const ProjectDataProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
       setIsLoading(true);
       try {
-        const response = await fetch(`${googleSheet_URl}ProjectData`);
+        const response = await fetch(`${googleSheet_URl}ProjectData`, { signal: controller.signal });
         if (!response.ok) throw new Error(`HTTP error ${response.status}`);
 
         const result = await response.json();
         setRawProjects(result?.data || []);
       } catch (err) {
+        if (err instanceof Error && err.name === 'AbortError') return;
         setError(err instanceof Error ? err : new Error("Unknown error"));
       } finally {
         setIsLoading(false);
@@ -47,6 +50,7 @@ const ProjectDataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
 
     fetchProjects();
+    return () => controller.abort();
   }, [googleSheet_URl]);
 
   const contextValue = useMemo(

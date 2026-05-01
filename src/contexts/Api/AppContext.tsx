@@ -44,12 +44,13 @@ export default function AppContextProvider({ children }: AppContextProviderProps
   const [error, setError] = useState<Error | null>(null);
   const {googleSheet_URl}=useRootContext();
   // Define fetchData function outside useEffect
-  const fetchData = useCallback(async () => {
+  const fetchData = useCallback(async (signal?: AbortSignal) => {
     setIsLoading(true);
     setError(null);
     try {
       const response = await fetch(
-        `${googleSheet_URl}ContactData`
+        `${googleSheet_URl}ContactData`,
+        { signal }
       );
 
       if (!response.ok) {
@@ -58,6 +59,7 @@ export default function AppContextProvider({ children }: AppContextProviderProps
       const result = await response.json();
       setData(result?.data);
     } catch (err) {
+      if (err instanceof Error && err.name === 'AbortError') return;
       setError(err instanceof Error ? err : new Error('An unknown error occurred'));
       console.error('Error fetching data:', err);
     } finally {
@@ -67,15 +69,17 @@ export default function AppContextProvider({ children }: AppContextProviderProps
 
   // Create debounced version of fetchData
   const debouncedFetchData = useCallback(
-    debounce(() => {
-      fetchData();
+    debounce((signal?: AbortSignal) => {
+      fetchData(signal);
     }, 500),
     [fetchData]
   );
 
   // Initial data fetch
   useEffect(() => {
-    debouncedFetchData();
+    const controller = new AbortController();
+    debouncedFetchData(controller.signal);
+    return () => controller.abort();
   }, [debouncedFetchData]);
 
   // Function to manually refresh data if needed

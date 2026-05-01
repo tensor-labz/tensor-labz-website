@@ -70,7 +70,7 @@ const SocialMediaLinks = memo(() => {
     },
     {
       icon: FaInstagram,
-      social_media: "Instragram", // Fixed typo
+      social_media: "Instagram",
       color: "text-pink-600 hover:text-pink-800",
     },
     {
