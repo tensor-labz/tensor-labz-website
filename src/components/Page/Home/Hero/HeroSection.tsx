@@ -1,5 +1,5 @@
-import React, { memo, useCallback } from 'react';
-import { motion, useAnimation, Variants } from "framer-motion";
+import React, { memo, useCallback, useMemo } from 'react';
+import { motion, useAnimation, Variants } from "motion/react";
 import { useInView } from "react-intersection-observer";
 import Section from "../../../../components/resuable/Section";
 import HeroImageSlider from "./HeroImageSlider";
@@ -106,6 +106,18 @@ const HeroSection: React.FC = memo(() => {
     triggerAnimations();
   }, [inView, triggerAnimations]);
 
+  // Pre-computed particle data to avoid Math.random() on every render
+  const particles = useMemo(
+    () =>
+      Array.from({ length: 12 }, () => ({
+        left: `${Math.random() * 100}%`,
+        top: `${Math.random() * 100}%`,
+        duration: 6 + Math.random() * 4,
+        delay: Math.random() * 3,
+      })),
+    []
+  );
+
   // Tech icons for floating animation
   const techIcons = [
     { icon: FaMicrochip, position: { top: '15%', left: '8%' } },
@@ -133,13 +145,13 @@ const HeroSection: React.FC = memo(() => {
 
       {/* Floating Particles */}
       <div className="absolute inset-0 pointer-events-none">
-        {[...Array(12)].map((_, i) => (
+        {particles.map((p, i) => (
           <motion.div
             key={i}
             className="absolute w-1 h-1 bg-sky-400 rounded-full opacity-40"
             style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
+              left: p.left,
+              top: p.top,
             }}
             animate={{
               y: [0, -30, 0],
@@ -148,9 +160,9 @@ const HeroSection: React.FC = memo(() => {
               scale: [1, 1.5, 1],
             }}
             transition={{
-              duration: 6 + Math.random() * 4,
+              duration: p.duration,
               repeat: Infinity,
-              delay: Math.random() * 3,
+              delay: p.delay,
               ease: "easeInOut"
             }}
           />

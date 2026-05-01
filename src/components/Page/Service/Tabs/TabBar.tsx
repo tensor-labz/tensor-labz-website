@@ -1,5 +1,5 @@
 import { memo, FC } from "react";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import { useServiceContext } from "../../../../contexts/ServiceContext";
 import { useServiceDataContext } from "../../../../contexts/Api/ServiceApiContext";
 import { ServiceCardProps } from "../../../../base/type/ServiceProps.d";
@@ -43,7 +43,7 @@ const TabBar: FC = memo(() => {
               {isActive && (
                 <motion.div
                   layoutId="activeTabIndicator"
-                  className="absolute bottom-0 left-0 right-0 h-1 bg-[]"
+                  className="absolute bottom-0 left-0 right-0 h-1 bg-[#092B4A]"
                 />
               )}
             </motion.button>

@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export default function ProjectNotFound() {
   const [countdown, setCountdown] = useState(10);
+  const navigate = useNavigate();
 
   const goToProjects = () => {
-
-    window.location.href = '/services';
+    navigate('/services/all', { replace: true });
   };
 
   const goBack = () => {

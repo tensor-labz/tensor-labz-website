@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import { FaFacebookF, FaLinkedinIn, FaInstagram, FaMapMarkerAlt, FaEnvelope, FaPhone, FaClock,FaWhatsapp,FaTiktok,FaYoutube } from 'react-icons/fa';
 import logo from "../../assets/images/logo.png";
 import { useServiceDataContext } from '../../contexts/Api/ServiceApiContext';
@@ -17,7 +17,7 @@ const Footer = () => {
   ];
 
   const footerLinks = [
-    { title: "Services", links: isLoading ? [] : service_data?.map((service: any) => ({ title: service?.service_name, link: `/services${service?.slug}` })) },
+    { title: "Services", links: isLoading ? [] : service_data?.map((service: any) => ({ title: service?.service_name, link: `/services/${service?.slug}` })) },
     { title: "Company", links: [{ title: "About Us", link: "/about-us" }, { title: "Insights", link: "/services" }, { title: "Contact", link: "/contact-us" }] },
   ];
 

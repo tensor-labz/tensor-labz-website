@@ -22,12 +22,13 @@ export default function AboutusDataContextProvider({ children }: AboutusDataCont
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<Error | null>(null);
   const { googleSheet_URl } = useRootContext();
-  const fetchData = useCallback(async () => {
+  const fetchData = useCallback(async (signal?: AbortSignal) => {
     setIsLoading(true);
     setError(null);
     try {
       const response = await fetch(
-        `${googleSheet_URl}AboutusData`
+        `${googleSheet_URl}AboutusData`,
+        { signal }
       );
 
       if (!response.ok) {
@@ -37,6 +38,7 @@ export default function AboutusDataContextProvider({ children }: AboutusDataCont
       const result = await response.json();
       setData(result?.data);
     } catch (err) {
+      if (err instanceof Error && err.name === 'AbortError') return;
       setError(err instanceof Error ? err : new Error('An unknown error occurred'));
       console.error('Error fetching aboutus_data:', err);
     } finally {
@@ -45,7 +47,9 @@ export default function AboutusDataContextProvider({ children }: AboutusDataCont
   }, []);
 
   useEffect(() => {
-    fetchData();
+    const controller = new AbortController();
+    fetchData(controller.signal);
+    return () => controller.abort();
   }, [fetchData]);
 
   const contextValue = useMemo(

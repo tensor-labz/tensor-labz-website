@@ -1,5 +1,6 @@
 import { memo, useEffect, useState, useCallback } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { useDeviceContext } from "../../../../contexts/DeviceContext";
 import {
   FiChevronsLeft,
   FiChevronLeft,
@@ -35,16 +36,9 @@ const Pagination = memo(({ totalItems, itemsPerPage }: PaginationProps) => {
     setCurrentPage(getCurrentPage());
   }, [location.search, totalPages]);
 
-  // Handle resize for responsive design
-  const [windowWidth, setWindowWidth] = useState(0);
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      setWindowWidth(window.innerWidth);
-      const handleResize = () => setWindowWidth(window.innerWidth);
-      window.addEventListener("resize", handleResize);
-      return () => window.removeEventListener("resize", handleResize);
-    }
-  }, []);
+  // Use DeviceContext for responsive design instead of a local resize listener
+  const deviceType = useDeviceContext();
+  const isWide = deviceType === "md" || deviceType === "lg" || deviceType === "xl" || deviceType === "2xl";
 
   // Navigate correctly
   const handlePageChange = useCallback(
@@ -125,7 +119,7 @@ const Pagination = memo(({ totalItems, itemsPerPage }: PaginationProps) => {
         <FiChevronLeft size={20} />
       </button>
 
-      {windowWidth >= 768 ? (
+      {isWide ? (
         <div className="flex space-x-2">{renderPageNumbers()}</div>
       ) : (
         <span className="px-3 py-2 rounded-md bg-blue-600 text-white font-medium">

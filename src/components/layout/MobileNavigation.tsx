@@ -1,5 +1,5 @@
 import React, { useState, memo } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "motion/react";
 import { FaBars, FaTimes } from "react-icons/fa";
 import { useLocation, useNavigate } from "react-router-dom";
 import navData from "../../data/nav_data";
@@ -81,15 +81,20 @@ const MobileNavigation: React.FC = memo(() => {
             >
               {/* Drawer Header */}
               <div className="flex items-center justify-between p-4 border-b border-gray-200">
-                <img
-                  src={logo1}
-                  alt="Logo"
-                  className="h-10 w-auto object-contain"
+                <button
+                  type="button"
+                  className="bg-transparent border-0 p-0 cursor-pointer"
                   onClick={() => {
                     navigate("/");
                     closeDrawer();
                   }}
-                />
+                >
+                  <img
+                    src={logo1}
+                    alt="Logo"
+                    className="h-10 w-auto object-contain"
+                  />
+                </button>
                 <motion.button
                   whileTap={{ scale: 0.9 }}
                   onClick={closeDrawer}

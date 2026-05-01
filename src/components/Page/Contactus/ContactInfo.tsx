@@ -1,6 +1,6 @@
 // Define a type for contact info
 import  { memo } from 'react';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import { IconType } from 'react-icons';
 import {
   MdEmail,

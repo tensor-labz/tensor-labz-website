@@ -1,6 +1,6 @@
 import React, { memo } from 'react';
 import { BsRobot } from "react-icons/bs";
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 
 const EmptyServices: React.FC = memo(() => {
   return (

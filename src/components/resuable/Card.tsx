@@ -1,5 +1,5 @@
 import React, { memo } from 'react';
-import { motion, HTMLMotionProps } from 'framer-motion';
+import { motion, HTMLMotionProps } from 'motion/react';
 
 // Enhanced type definition for more precise prop typing
 interface CardProps extends HTMLMotionProps<'div'> {

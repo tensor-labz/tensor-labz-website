@@ -1,5 +1,5 @@
 import React, { memo, useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "motion/react";
 import LatestProductCard from "./LatestProductCard";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
 import { useTopProjects } from './../../../../contexts/Api/useTopProjects';

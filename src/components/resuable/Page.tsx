@@ -1,5 +1,5 @@
 import React, { memo } from 'react';
-import { motion, MotionProps } from 'framer-motion';
+import { motion, MotionProps } from 'motion/react';
 import HeaderHelment from "../../base/Head";
 import  HeaderHelmentProps  from "../../base/type/HeaderHelmentProps.d";
 
@@ -28,9 +28,9 @@ const Page: React.FC<PageProps> = memo(({
       width: "100%",
       transition: { duration: 0.3 }
     },
-    exit: { 
+    exit: {
       opacity: 0,
-      x: typeof window !== 'undefined' ? window.innerWidth : 0,
+      x: "100vw",
       transition: { duration: 0.4 }
     }
   };

@@ -1,5 +1,5 @@
 import React, { memo } from 'react';
-import { motion, Variants } from "framer-motion";
+import { motion, Variants } from "motion/react";
 import { ServiceCardProps } from "../../../../base/type/ServiceProps.d";
 import Section from "../../../resuable/Section";
 import ServiceCard from "./ServiceCard";

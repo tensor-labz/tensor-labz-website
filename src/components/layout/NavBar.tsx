@@ -1,5 +1,5 @@
 import navData from '../../data/nav_data';
-import {AnimatePresence,motion } from 'framer-motion';
+import {AnimatePresence,motion } from 'motion/react';
 import NavItem from './NavItem';
 
 const NavBar: React.FC = () => {

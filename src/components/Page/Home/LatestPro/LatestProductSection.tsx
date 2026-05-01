@@ -1,5 +1,5 @@
 import React, { useState, useEffect, memo, useMemo } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "motion/react";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import Section from "../../../../components/resuable/Section";
 import { useDeviceContext } from "../../../../contexts/DeviceContext";

@@ -1,5 +1,5 @@
 import React, { memo, useEffect, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "motion/react";
 import { useRootContext } from "../../../../contexts/RootContext";
 
 const LatestHero: React.FC = memo(() => {
@@ -10,18 +10,21 @@ const LatestHero: React.FC = memo(() => {
   const { googleSheet_URl } = useRootContext();
 
   useEffect(() => {
+    const controller = new AbortController();
     const fetchLatestNews = async () => {
       try {
-        const response = await fetch(`${googleSheet_URl}LatestData`);
+        const response = await fetch(`${googleSheet_URl}LatestData`, { signal: controller.signal });
         const data = await response.json();
         setLatestNews(data.data[0]);
       } catch (error) {
+        if (error instanceof Error && error.name === 'AbortError') return;
         console.error("Error fetching latest news:", error);
       } finally {
         setIsLoading(false);
       }
     };
     fetchLatestNews();
+    return () => controller.abort();
   }, [googleSheet_URl]);
 
   const getImages = () => {

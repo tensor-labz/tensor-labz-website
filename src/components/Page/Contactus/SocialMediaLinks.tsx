@@ -1,5 +1,5 @@
 import { memo } from "react";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import {
   FaLinkedin,
   FaFacebook,
@@ -70,7 +70,7 @@ const SocialMediaLinks = memo(() => {
     },
     {
       icon: FaInstagram,
-      social_media: "Instragram", // Fixed typo
+      social_media: "Instagram",
       color: "text-pink-600 hover:text-pink-800",
     },
     {
