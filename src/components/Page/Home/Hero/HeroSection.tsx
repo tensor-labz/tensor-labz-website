@@ -147,7 +147,7 @@ const HeroSection: React.FC = memo(() => {
           animate={inView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.96 }}
           transition={{ duration: 1.0, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
           className="lg:w-6/12 w-full relative z-10
-            h-[260px] sm:h-[360px] lg:h-[500px]"
+            h-[180px] sm:h-[260px] lg:h-[500px]"
         >
           {/* Glow */}
           <div
