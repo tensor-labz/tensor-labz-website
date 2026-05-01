@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useParams } from 'react-router-dom';
+import DOMPurify from 'dompurify';
 import { useProjectDataContext } from '../contexts/Api/ProjectDataContext';
 import ProjectHero from '../components/Page/Project/ProjectHero';
 import ProjectLoadingPlaceholder from '../components/Page/Project/ProjectPageLoading';
@@ -94,7 +95,7 @@ const ProjectPage = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3, duration: 0.5 }}
-                dangerouslySetInnerHTML={{ __html: projectdata.content || '' }}
+                dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(projectdata.content || '') }}
               />
             ) : (
               <motion.p

@@ -17,7 +17,7 @@ const Footer = () => {
   ];
 
   const footerLinks = [
-    { title: "Services", links: isLoading ? [] : service_data?.map((service: any) => ({ title: service?.service_name, link: `/services${service?.slug}` })) },
+    { title: "Services", links: isLoading ? [] : service_data?.map((service: any) => ({ title: service?.service_name, link: `/services/${service?.slug}` })) },
     { title: "Company", links: [{ title: "About Us", link: "/about-us" }, { title: "Insights", link: "/services" }, { title: "Contact", link: "/contact-us" }] },
   ];
 
