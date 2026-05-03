@@ -1,0 +1,37 @@
+name: Release
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write   # needed to create and push tags
+
+jobs:
+  release:
+    name: Bump version & tag
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout (full history for tag analysis)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Run version bump script
+        id: bump
+        run: |
+          chmod +x scripts/bump-version.sh
+          bash scripts/bump-version.sh
+
+      - name: Summary
+        if: steps.bump.outputs.new_tag != ''
+        run: |
+          echo "## Release Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| | |" >> $GITHUB_STEP_SUMMARY
+          echo "|---|---|" >> $GITHUB_STEP_SUMMARY
+          echo "| Previous tag | \`${{ steps.bump.outputs.prev_tag }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| New tag      | \`${{ steps.bump.outputs.new_tag }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| Bump type    | \`${{ steps.bump.outputs.bump_type }}\` |" >> $GITHUB_STEP_SUMMARY
