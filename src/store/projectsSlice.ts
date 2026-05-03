@@ -57,8 +57,7 @@ export const { setActiveServiceSlug, setCurrentPage } = projectsSlice.actions;
 export default projectsSlice.reducer;
 
 export const selectAllProjects = (state: RootState) => state.projects.items;
-export const selectProjectsStatus = (state: RootState) =>
-  state.projects.status;
+export const selectProjectsStatus = (state: RootState) => state.projects.status;
 export const selectActiveSlug = (state: RootState) =>
   state.projects.activeServiceSlug;
 export const selectCurrentPage = (state: RootState) =>

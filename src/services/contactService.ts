@@ -4,5 +4,6 @@ export interface ContactItem {
   [key: string]: unknown;
 }
 
-export const fetchContactData = (signal?: AbortSignal): Promise<ContactItem[]> =>
-  fetchSheet<ContactItem>('ContactData', signal);
+export const fetchContactData = (
+  signal?: AbortSignal
+): Promise<ContactItem[]> => fetchSheet<ContactItem>('ContactData', signal);

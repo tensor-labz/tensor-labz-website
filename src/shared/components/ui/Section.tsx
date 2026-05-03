@@ -13,25 +13,40 @@ type SectionProps = MotionProps & {
 const containerVariants: Record<AnimationType, Variants> = {
   default: {
     initial: { opacity: 0, y: 50 },
-    animate: { opacity: 1, y: 0, transition: { duration: 0.6, ease: 'easeOut' } },
+    animate: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.6, ease: 'easeOut' },
+    },
   },
   staggered: {
     initial: { opacity: 0 },
-    animate: { opacity: 1, transition: { delayChildren: 0.3, staggerChildren: 0.2 } },
+    animate: {
+      opacity: 1,
+      transition: { delayChildren: 0.3, staggerChildren: 0.2 },
+    },
   },
   cascade: {
     initial: { opacity: 0, scale: 0.9 },
     animate: {
       opacity: 1,
       scale: 1,
-      transition: { type: 'spring', stiffness: 100, damping: 10, staggerChildren: 0.1 },
+      transition: {
+        type: 'spring',
+        stiffness: 100,
+        damping: 10,
+        staggerChildren: 0.1,
+      },
     },
   },
 };
 
 const Section = memo(
   forwardRef<HTMLElement, SectionProps>(
-    ({ children, id, className = '', animationType = 'default', ...props }, sectionRef) => (
+    (
+      { children, id, className = '', animationType = 'default', ...props },
+      sectionRef
+    ) => (
       <motion.section
         ref={sectionRef}
         id={id}

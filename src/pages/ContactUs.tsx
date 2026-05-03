@@ -1,20 +1,20 @@
 import React, { memo } from 'react';
 import { motion } from 'motion/react';
-import Page from "../components/resuable/Page";
-import { useRootContext } from '../contexts/RootContext';
-import { useAppContext } from '../contexts/Api/AppContext';
-import ContactInfoItem, { contactInfoIcon } from '../components/Page/Contactus/ContactInfo';
-import SocialMediaLinks from '../components/Page/Contactus/SocialMediaLinks';
-import ContactusPlaceholder from '../components/Page/Contactus/ContactUsPlaceHolder';
+import Page from '../components/resuable/Page';
+import ContactInfoItem, {
+  contactInfoIcon,
+} from '../features/contact/components/ContactInfo';
+import SocialMediaLinks from '../features/contact/components/SocialMediaLinks';
+import ContactUsPlaceholder from '../features/contact/components/ContactUsPlaceholder';
+import { useContactController } from '../features/contact/hooks/useContactController';
+import data from '../data/data';
 
 const ContactUs: React.FC = memo(() => {
-  const { Data } = useRootContext();
-  const { data, isLoading } = useAppContext();
+  const { contactData, isLoading } = useContactController();
 
   return (
-    <Page HeadProps={{ title: "Contact Us" }}>
+    <Page HeadProps={{ title: 'Contact Us' }}>
       <div className="min-h-screen flex items-center justify-center px-4 py-32">
-        {/* Global animation shows through */}
         <motion.div
           initial={{ opacity: 0, y: 32 }}
           animate={{ opacity: 1, y: 0 }}
@@ -42,9 +42,12 @@ const ContactUs: React.FC = memo(() => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
               className="text-3xl md:text-5xl font-bold"
-              style={{ color: 'var(--text-primary)', fontFamily: '"Syne", sans-serif' }}
+              style={{
+                color: 'var(--text-primary)',
+                fontFamily: '"Syne", sans-serif',
+              }}
             >
-              {Data?.contactus?.title || "Contact Us"}
+              {data?.contactus?.title || 'Contact Us'}
             </motion.h1>
 
             <motion.div
@@ -58,15 +61,27 @@ const ContactUs: React.FC = memo(() => {
 
           <div className="grid md:grid-cols-2 gap-6 w-full">
             {isLoading
-              ? Array(4).fill("").map((_, i) => <ContactusPlaceholder key={i} />)
-              : data?.map((contact: any, index: number) => (
+              ? Array.from({ length: 4 }).map((_, i) => (
+                  <ContactUsPlaceholder key={i} />
+                ))
+              : contactData.map((contact, index) => (
                   <ContactInfoItem
                     key={`contactus-${index}`}
-                    icon={contactInfoIcon[contact?.contact as keyof typeof contactInfoIcon]}
-                    title={contact?.title}
-                    value={contact.value}
-                    link={contact.value}
-                    linkType={contact.contact}
+                    icon={
+                      contactInfoIcon[
+                        contact.contact as keyof typeof contactInfoIcon
+                      ] ?? contactInfoIcon.default
+                    }
+                    title={String(contact.title ?? '')}
+                    value={String(contact.value ?? '')}
+                    link={String(contact.value ?? '')}
+                    linkType={
+                      contact.contact as
+                        | 'email'
+                        | 'phone'
+                        | 'whatsapp'
+                        | 'default'
+                    }
                   />
                 ))}
           </div>
@@ -78,7 +93,7 @@ const ContactUs: React.FC = memo(() => {
             className="text-center italic text-sm md:text-base max-w-2xl"
             style={{ color: 'var(--text-muted)' }}
           >
-            {Data?.contactus?.quote}
+            {data?.contactus?.quote}
           </motion.p>
 
           <SocialMediaLinks />

@@ -1,7 +1,12 @@
 import React, { memo, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { RiCloseLine, RiMenu3Line, RiSunLine, RiMoonLine } from 'react-icons/ri';
+import {
+  RiCloseLine,
+  RiMenu3Line,
+  RiSunLine,
+  RiMoonLine,
+} from 'react-icons/ri';
 import navData from '../../../data/nav_data';
 import logo from '../../../assets/images/logo.png';
 import { useTheme } from '../../hooks/useTheme';
@@ -28,7 +33,11 @@ const MobileNavItem: React.FC<MobileNavItemProps> = memo(
         type="button"
         initial={{ opacity: 0, x: 20 }}
         animate={{ opacity: 1, x: 0 }}
-        transition={{ delay: index * 0.06 + 0.1, duration: 0.3, ease: 'easeOut' }}
+        transition={{
+          delay: index * 0.06 + 0.1,
+          duration: 0.3,
+          ease: 'easeOut',
+        }}
         onClick={handleClick}
         className={`w-full text-left px-6 py-4 text-xs font-semibold tracking-widest uppercase
           border-b border-[var(--border)] transition-colors duration-200
@@ -87,7 +96,10 @@ const MobileNavigation: React.FC = memo(() => {
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
               transition={{ type: 'spring', damping: 28, stiffness: 280 }}
-              style={{ backgroundColor: 'var(--bg-surface)', borderColor: 'var(--border)' }}
+              style={{
+                backgroundColor: 'var(--bg-surface)',
+                borderColor: 'var(--border)',
+              }}
               className="fixed top-0 right-0 h-full w-72 border-l z-50 flex flex-col"
             >
               <div
@@ -97,9 +109,16 @@ const MobileNavigation: React.FC = memo(() => {
                 <button
                   type="button"
                   className="bg-transparent border-0 p-0 cursor-pointer"
-                  onClick={() => { navigate('/'); close(); }}
+                  onClick={() => {
+                    navigate('/');
+                    close();
+                  }}
                 >
-                  <img src={logo} alt="Tensor Labs" className="h-9 w-auto object-contain" />
+                  <img
+                    src={logo}
+                    alt="Tensor Labs"
+                    className="h-9 w-auto object-contain"
+                  />
                 </button>
                 <div className="flex items-center gap-2">
                   <motion.button
@@ -132,13 +151,20 @@ const MobileNavigation: React.FC = memo(() => {
                     nav={item.nav}
                     to={item.to}
                     index={i}
-                    isActive={item.to === '/' ? pathname === '/' : pathname.startsWith(item.to)}
+                    isActive={
+                      item.to === '/'
+                        ? pathname === '/'
+                        : pathname.startsWith(item.to)
+                    }
                     onNavigate={close}
                   />
                 ))}
               </nav>
 
-              <div style={{ borderColor: 'var(--border)' }} className="mt-auto px-6 py-6 border-t">
+              <div
+                style={{ borderColor: 'var(--border)' }}
+                className="mt-auto px-6 py-6 border-t"
+              >
                 <p className="text-[var(--text-muted)] text-[10px] tracking-widest uppercase">
                   Tensor Labs
                 </p>

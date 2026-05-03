@@ -29,10 +29,16 @@ export const heroSlice = createSlice({
   initialState,
   reducers: {
     nextSlide(state) {
-      state.currentIndex = normalise(state.currentIndex + 1, state.slides.length);
+      state.currentIndex = normalise(
+        state.currentIndex + 1,
+        state.slides.length
+      );
     },
     prevSlide(state) {
-      state.currentIndex = normalise(state.currentIndex - 1, state.slides.length);
+      state.currentIndex = normalise(
+        state.currentIndex - 1,
+        state.slides.length
+      );
     },
     setSlide(state, action: PayloadAction<number>) {
       state.currentIndex = normalise(action.payload, state.slides.length);

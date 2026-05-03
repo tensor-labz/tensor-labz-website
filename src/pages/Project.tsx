@@ -1,69 +1,78 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
-import { useParams } from 'react-router-dom';
 import DOMPurify from 'dompurify';
-import { useProjectDataContext } from '../contexts/Api/ProjectDataContext';
-import ProjectHero from '../components/Page/Project/ProjectHero';
-import ProjectLoadingPlaceholder from '../components/Page/Project/ProjectPageLoading';
-import ProjectNotFound from '../components/Page/Project/ProjectNotFound';
-import HeaderHelmet from "../base/Head";
+import ProjectHero from '../features/project-detail/components/ProjectHero';
+import ProjectPageLoading from '../features/project-detail/components/ProjectPageLoading';
+import ProjectNotFound from '../features/project-detail/components/ProjectNotFound';
+import { useProjectDetailController } from '../features/project-detail/hooks/useProjectDetailController';
+import HeaderHelmet from '../base/Head';
 
 const ProjectPage = () => {
-  const { slug } = useParams();
-  const { rawProjects, isLoading } = useProjectDataContext();
-  const projectdata = rawProjects?.find((data: any) => data.slug === slug);
+  const { project, isLoading } = useProjectDetailController();
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const sampleImages = projectdata?.sample_images || [];
+  const sampleImages = project?.extraImages ?? [];
 
   const nextImage = () => {
-    if (sampleImages.length > 0) setCurrentImageIndex(p => p === sampleImages.length - 1 ? 0 : p + 1);
+    if (sampleImages.length > 0)
+      setCurrentImageIndex((p) => (p === sampleImages.length - 1 ? 0 : p + 1));
   };
   const prevImage = () => {
-    if (sampleImages.length > 0) setCurrentImageIndex(p => p === 0 ? sampleImages.length - 1 : p - 1);
+    if (sampleImages.length > 0)
+      setCurrentImageIndex((p) => (p === 0 ? sampleImages.length - 1 : p - 1));
   };
 
-  useEffect(() => { setCurrentImageIndex(0); }, [slug, projectdata]);
-  useEffect(() => { window.scrollTo(0, 0); }, [slug]);
+  useEffect(() => {
+    setCurrentImageIndex(0);
+  }, [project?.slug]);
 
-  if (isLoading) return <ProjectLoadingPlaceholder />;
-  if (!projectdata) return <ProjectNotFound />;
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [project?.slug]);
+
+  if (isLoading) return <ProjectPageLoading />;
+  if (!project) return <ProjectNotFound />;
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: 'transparent' }}>
-      <HeaderHelmet title={projectdata.title} />
+      <HeaderHelmet title={project.title} />
 
       <ProjectHero
-          title={projectdata.title}
-          description={projectdata?.description}
-          tags={projectdata.tags}
-          is_top={projectdata.is_top}
-          serviceName={projectdata.service}
-        />
+        title={project.title}
+        description={project.description}
+        tags={project.tags}
+        is_top={project.is_top}
+        serviceName={project.service}
+      />
 
       <main className="max-w-6xl mx-auto py-12 px-4 md:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-
           {/* Main content */}
           <div className="lg:col-span-2">
-            {projectdata.imageURL && (
+            {project.imageURL && (
               <motion.div
                 className="rounded-xl overflow-hidden shadow-lg mb-10"
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.5 }}
               >
-                <img src={projectdata.imageURL} alt={projectdata?.title} className="w-full h-auto" />
+                <img
+                  src={project.imageURL}
+                  alt={project.title}
+                  className="w-full h-auto"
+                />
               </motion.div>
             )}
 
-            {projectdata?.content ? (
+            {project.content ? (
               <motion.div
                 className="project-content max-w-none mb-10"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3, duration: 0.5 }}
-                dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(projectdata.content || '') }}
+                dangerouslySetInnerHTML={{
+                  __html: DOMPurify.sanitize(project.content),
+                }}
               />
             ) : (
               <motion.p
@@ -73,20 +82,25 @@ const ProjectPage = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3, duration: 0.5 }}
               >
-                {projectdata?.description || 'No description available.'}
+                {project.description ?? 'No description available.'}
               </motion.p>
             )}
 
-            {projectdata.vedio_demo && (
+            {project.vedio_demo && (
               <motion.div
                 className="rounded-xl overflow-hidden shadow-lg mb-10"
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.5, duration: 0.5 }}
               >
-                <h2 className="text-2xl font-bold mb-4" style={{ color: 'var(--text-primary)' }}>Demo</h2>
+                <h2
+                  className="text-2xl font-bold mb-4"
+                  style={{ color: 'var(--text-primary)' }}
+                >
+                  Demo
+                </h2>
                 <iframe
-                  src={projectdata.vedio_demo}
+                  src={project.vedio_demo}
                   title="YouTube Demo"
                   className="w-full h-64 md:h-96 rounded-lg"
                   allowFullScreen
@@ -104,24 +118,33 @@ const ProjectPage = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4, duration: 0.5 }}
               >
-                <h2 className="text-2xl font-bold mb-4" style={{ color: 'var(--text-primary)' }}>
+                <h2
+                  className="text-2xl font-bold mb-4"
+                  style={{ color: 'var(--text-primary)' }}
+                >
                   Project Gallery
                 </h2>
                 {sampleImages.length > 0 ? (
                   <div className="grid grid-cols-2 gap-4">
-                    {sampleImages.map((image: string, index: number) => (
+                    {sampleImages.map((image, index) => (
                       <motion.div
                         key={index}
                         className="rounded-lg overflow-hidden shadow-md"
                         whileHover={{ scale: 1.04 }}
                         transition={{ duration: 0.3 }}
                       >
-                        <img src={image} alt={`Project image ${index + 1}`} className="w-full h-auto" />
+                        <img
+                          src={image}
+                          alt={`Project image ${index + 1}`}
+                          className="w-full h-auto"
+                        />
                       </motion.div>
                     ))}
                   </div>
                 ) : (
-                  <p style={{ color: 'var(--text-muted)' }}>No gallery images available.</p>
+                  <p style={{ color: 'var(--text-muted)' }}>
+                    No gallery images available.
+                  </p>
                 )}
               </motion.div>
             </div>
@@ -133,14 +156,17 @@ const ProjectPage = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4, duration: 0.5 }}
               >
-                <h2 className="text-2xl font-bold mb-4" style={{ color: 'var(--text-primary)' }}>
+                <h2
+                  className="text-2xl font-bold mb-4"
+                  style={{ color: 'var(--text-primary)' }}
+                >
                   Project Gallery
                 </h2>
                 {sampleImages.length > 0 ? (
                   <div className="relative">
                     <motion.div
-                      className="rounded-lg overflow-hidden shadow-md"
                       key={currentImageIndex}
+                      className="rounded-lg overflow-hidden shadow-md"
                       initial={{ opacity: 0.5, x: 60 }}
                       animate={{ opacity: 1, x: 0 }}
                       exit={{ opacity: 0.5, x: -60 }}
@@ -163,7 +189,10 @@ const ProjectPage = () => {
                         >
                           ←
                         </button>
-                        <span className="font-medium text-sm" style={{ color: 'var(--text-muted)' }}>
+                        <span
+                          className="font-medium text-sm"
+                          style={{ color: 'var(--text-muted)' }}
+                        >
                           {currentImageIndex + 1} / {sampleImages.length}
                         </span>
                         <button
@@ -178,7 +207,9 @@ const ProjectPage = () => {
                     )}
                   </div>
                 ) : (
-                  <p style={{ color: 'var(--text-muted)' }}>No gallery images available.</p>
+                  <p style={{ color: 'var(--text-muted)' }}>
+                    No gallery images available.
+                  </p>
                 )}
               </motion.div>
             </div>

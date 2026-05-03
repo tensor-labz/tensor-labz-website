@@ -76,7 +76,11 @@ const GlobalBackground: React.FC = memo(() => {
     lineGeo.setAttribute('position', new THREE.BufferAttribute(lineBuf, 3));
     const lineSegs = new THREE.LineSegments(
       lineGeo,
-      new THREE.LineBasicMaterial({ color: accent, transparent: true, opacity: lineOpacity })
+      new THREE.LineBasicMaterial({
+        color: accent,
+        transparent: true,
+        opacity: lineOpacity,
+      })
     );
     scene.add(lineSegs);
 
@@ -115,11 +119,18 @@ const GlobalBackground: React.FC = memo(() => {
       const cd2 = CONNECT_DIST * CONNECT_DIST;
       for (let a = 0; a < PARTICLE_COUNT; a++) {
         for (let b = a + 1; b < PARTICLE_COUNT; b++) {
-          const pa = particles[a], pb = particles[b];
-          const dx = pa.x - pb.x, dy = pa.y - pb.y, dz = pa.z - pb.z;
+          const pa = particles[a],
+            pb = particles[b];
+          const dx = pa.x - pb.x,
+            dy = pa.y - pb.y,
+            dz = pa.z - pb.z;
           if (dx * dx + dy * dy + dz * dz < cd2) {
-            lineBuf[li++] = pa.x; lineBuf[li++] = pa.y; lineBuf[li++] = pa.z;
-            lineBuf[li++] = pb.x; lineBuf[li++] = pb.y; lineBuf[li++] = pb.z;
+            lineBuf[li++] = pa.x;
+            lineBuf[li++] = pa.y;
+            lineBuf[li++] = pa.z;
+            lineBuf[li++] = pb.x;
+            lineBuf[li++] = pb.y;
+            lineBuf[li++] = pb.z;
           }
         }
       }
@@ -141,7 +152,8 @@ const GlobalBackground: React.FC = memo(() => {
       lineGeo.dispose();
       dotMat.dispose();
       renderer.dispose();
-      if (mount.contains(renderer.domElement)) mount.removeChild(renderer.domElement);
+      if (mount.contains(renderer.domElement))
+        mount.removeChild(renderer.domElement);
     };
   }, [theme]);
 

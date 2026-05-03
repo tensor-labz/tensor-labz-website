@@ -23,7 +23,12 @@ const defaultAnimationVariants: CardProps['animation'] = {
 };
 
 const Card: React.FC<CardProps> = memo(
-  ({ children, className = '', animation = defaultAnimationVariants, ...rest }) => {
+  ({
+    children,
+    className = '',
+    animation = defaultAnimationVariants,
+    ...rest
+  }) => {
     const mergedAnimation = { ...defaultAnimationVariants, ...animation };
     return (
       <motion.div

@@ -30,7 +30,9 @@ export const DeviceProvider: React.FC<{ children: React.ReactNode }> = ({
     return () => window.removeEventListener('resize', update);
   }, []);
 
-  return <DeviceContext.Provider value={device}>{children}</DeviceContext.Provider>;
+  return (
+    <DeviceContext.Provider value={device}>{children}</DeviceContext.Provider>
+  );
 };
 
 export const useDevice = () => useContext(DeviceContext);

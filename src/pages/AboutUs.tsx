@@ -1,19 +1,17 @@
-import React, { memo } from "react";
-import { motion } from "motion/react";
-import Page from "../components/resuable/Page";
-import { useRootContext } from "../contexts/RootContext";
-import AboutUsSectionItem from "../components/Page/Aboutus/AboutUsSection";
-import { useAboutusDataContext } from "../contexts/Api/AboutusDataContext";
-import Placeholder from "../components/Page/Aboutus/LoadingPlaceHolder";
+import React, { memo } from 'react';
+import { motion } from 'motion/react';
+import Page from '../components/resuable/Page';
+import AboutUsSectionItem from '../features/about/components/AboutUsSection';
+import AboutLoading from '../features/about/components/AboutLoading';
+import { useAboutController } from '../features/about/hooks/useAboutController';
+import data from '../data/data';
 
 const AboutUs: React.FC = memo(() => {
-  const { aboutus_data, isLoading } = useAboutusDataContext();
-  const { Data } = useRootContext();
+  const { aboutData, isLoading } = useAboutController();
 
   return (
-    <Page HeadProps={{ title: "About Us" }}>
+    <Page HeadProps={{ title: 'About Us' }}>
       <div className="relative min-h-screen w-full">
-        {/* Content — global animation shows through */}
         <div className="flex items-center justify-center min-h-screen py-32 px-4">
           <motion.div
             initial={{ opacity: 0, y: 32 }}
@@ -41,12 +39,14 @@ const AboutUs: React.FC = memo(() => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
               className="text-4xl md:text-6xl font-bold mb-6 leading-tight"
-              style={{ color: 'var(--text-primary)', fontFamily: '"Syne", sans-serif' }}
+              style={{
+                color: 'var(--text-primary)',
+                fontFamily: '"Syne", sans-serif',
+              }}
             >
-              {Data?.aboutus?.title ?? "About Us"}
+              {data?.aboutus?.title ?? 'About Us'}
             </motion.h1>
 
-            {/* Accent line */}
             <motion.div
               initial={{ width: 0 }}
               animate={{ width: '3rem' }}
@@ -62,18 +62,19 @@ const AboutUs: React.FC = memo(() => {
               className="text-base md:text-lg mb-12 leading-relaxed max-w-3xl mx-auto"
               style={{ color: 'var(--text-muted)' }}
             >
-              {Data?.aboutus?.content ?? "About us description not available."}
+              {data?.aboutus?.content ?? 'About us description not available.'}
             </motion.p>
 
-            {/* Section items */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 text-center">
               {isLoading
-                ? Array(3).fill("").map((_, i) => <Placeholder key={i} />)
-                : aboutus_data?.map((section: any, index: number) => (
+                ? Array.from({ length: 3 }).map((_, i) => (
+                    <AboutLoading key={i} />
+                  ))
+                : aboutData.map((section, index) => (
                     <AboutUsSectionItem
                       key={`aboutus-${index}`}
-                      title={section?.components}
-                      description={section?.value}
+                      title={String(section.components ?? '')}
+                      description={String(section.value ?? '')}
                     />
                   ))}
             </div>
@@ -84,5 +85,5 @@ const AboutUs: React.FC = memo(() => {
   );
 });
 
-AboutUs.displayName = "AboutUs";
+AboutUs.displayName = 'AboutUs';
 export default AboutUs;

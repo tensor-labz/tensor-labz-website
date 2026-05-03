@@ -39,5 +39,4 @@ export const contactSlice = createSlice({
 export default contactSlice.reducer;
 
 export const selectContactData = (state: RootState) => state.contact.data;
-export const selectContactStatus = (state: RootState) =>
-  state.contact.status;
+export const selectContactStatus = (state: RootState) => state.contact.status;
