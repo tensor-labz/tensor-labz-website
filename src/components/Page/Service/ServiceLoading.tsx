@@ -9,7 +9,7 @@ const ServiceLoading: React.FC = memo(() => {
         className="relative"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, ease: "easeOut" }}
+        transition={{ duration: 0.6, ease: 'easeOut' }}
         style={{ perspective: '1000px' }}
       >
         <motion.div
@@ -21,7 +21,7 @@ const ServiceLoading: React.FC = memo(() => {
           transition={{
             duration: 3,
             repeat: Infinity,
-            ease: "linear"
+            ease: 'linear',
           }}
           style={{
             transformStyle: 'preserve-3d',
@@ -83,15 +83,15 @@ const ServiceLoading: React.FC = memo(() => {
               key={i}
               className="absolute w-2 h-2 bg-[#092B4A]/30 rounded-full"
               animate={{
-                x: [0, Math.cos(i * 60 * Math.PI / 180) * 40],
-                y: [0, Math.sin(i * 60 * Math.PI / 180) * 40],
+                x: [0, Math.cos((i * 60 * Math.PI) / 180) * 40],
+                y: [0, Math.sin((i * 60 * Math.PI) / 180) * 40],
                 opacity: [0.3, 0.8, 0.3],
               }}
               transition={{
                 duration: 2,
                 repeat: Infinity,
                 delay: i * 0.2,
-                ease: "easeInOut"
+                ease: 'easeInOut',
               }}
               style={{
                 left: '50%',
@@ -113,7 +113,7 @@ const ServiceLoading: React.FC = memo(() => {
         transition={{
           duration: 2,
           repeat: Infinity,
-          ease: "easeInOut"
+          ease: 'easeInOut',
         }}
       />
     </div>

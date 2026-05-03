@@ -25,9 +25,24 @@ const HeroSection: React.FC = memo(() => {
   const { Data } = useRootContext();
 
   const stats = [
-    { value: `${projects.rawProjects?.length ?? 0}+`, label: 'Projects',  icon: FaCube,  loading: projects.isLoading },
-    { value: `${services?.service_data?.length ?? 0}+`, label: 'Services', icon: FaRobot, loading: services?.isLoading },
-    { value: `${new Date().getFullYear() - 2023}+`,    label: 'Years',    icon: FaBolt,  loading: false },
+    {
+      value: `${projects.rawProjects?.length ?? 0}+`,
+      label: 'Projects',
+      icon: FaCube,
+      loading: projects.isLoading,
+    },
+    {
+      value: `${services?.service_data?.length ?? 0}+`,
+      label: 'Services',
+      icon: FaRobot,
+      loading: services?.isLoading,
+    },
+    {
+      value: `${new Date().getFullYear() - 2023}+`,
+      label: 'Years',
+      icon: FaBolt,
+      loading: false,
+    },
   ];
 
   return (
@@ -41,17 +56,19 @@ const HeroSection: React.FC = memo(() => {
       <div
         className="absolute inset-0 z-0 pointer-events-none"
         style={{
-          background: 'radial-gradient(ellipse 70% 60% at 60% 40%, transparent 0%, var(--bg-base) 70%)',
+          background:
+            'radial-gradient(ellipse 70% 60% at 60% 40%, transparent 0%, var(--bg-base) 70%)',
         }}
       />
 
       {/* Content
           Mobile : flex-col — image first (top), text second (bottom), everything centered
           Desktop: flex-row — text left (order-1), image right (order-2)            */}
-      <div className="relative z-10 max-w-7xl mx-auto w-full
+      <div
+        className="relative z-10 max-w-7xl mx-auto w-full
         flex flex-col items-center gap-6
-        lg:flex-row lg:items-stretch lg:gap-x-12">
-
+        lg:flex-row lg:items-stretch lg:gap-x-12"
+      >
         {/* IMAGE — first in DOM so it appears at top on mobile */}
         <motion.div
           initial={{ opacity: 0, scale: 0.96 }}
@@ -63,7 +80,10 @@ const HeroSection: React.FC = memo(() => {
         >
           <div
             className="absolute inset-0 rounded-2xl blur-3xl opacity-20 scale-90 pointer-events-none"
-            style={{ background: 'radial-gradient(circle, var(--accent) 0%, transparent 70%)' }}
+            style={{
+              background:
+                'radial-gradient(circle, var(--accent) 0%, transparent 70%)',
+            }}
           />
           <motion.div
             whileHover={{ scale: 1.015 }}
@@ -75,11 +95,12 @@ const HeroSection: React.FC = memo(() => {
         </motion.div>
 
         {/* TEXT — second in DOM, below image on mobile */}
-        <div className="w-full flex flex-col
+        <div
+          className="w-full flex flex-col
           order-2 lg:order-1 lg:w-6/12
           items-center text-center
-          lg:items-start lg:text-left">
-
+          lg:items-start lg:text-left"
+        >
           <motion.span
             custom={0}
             variants={textVariants}
@@ -97,10 +118,15 @@ const HeroSection: React.FC = memo(() => {
             initial="hidden"
             animate={inView ? 'visible' : 'hidden'}
             className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold leading-[1.1] tracking-tight mb-2"
-            style={{ color: 'var(--text-primary)', fontFamily: '"Syne", sans-serif' }}
+            style={{
+              color: 'var(--text-primary)',
+              fontFamily: '"Syne", sans-serif',
+            }}
           >
             {Data?.Home?.hero?.title?.map((line: string, i: number) => (
-              <span key={i} className="block">{line}</span>
+              <span key={i} className="block">
+                {line}
+              </span>
             ))}
           </motion.h1>
 
@@ -136,20 +162,33 @@ const HeroSection: React.FC = memo(() => {
                     className="w-3 h-3 rounded-full"
                     style={{ backgroundColor: 'var(--accent)' }}
                     animate={{ scale: [1, 1.4, 1], opacity: [1, 0.5, 1] }}
-                    transition={{ duration: 1, repeat: Infinity, ease: 'easeInOut' }}
+                    transition={{
+                      duration: 1,
+                      repeat: Infinity,
+                      ease: 'easeInOut',
+                    }}
                   />
                 </div>
               ) : (
                 <div key={label} className="flex items-center gap-2.5">
-                  <Icon className="text-xl shrink-0" style={{ color: 'var(--accent)' }} />
+                  <Icon
+                    className="text-xl shrink-0"
+                    style={{ color: 'var(--accent)' }}
+                  />
                   <div>
                     <div
                       className="text-xl font-bold leading-none"
-                      style={{ color: 'var(--text-primary)', fontFamily: '"Syne", sans-serif' }}
+                      style={{
+                        color: 'var(--text-primary)',
+                        fontFamily: '"Syne", sans-serif',
+                      }}
                     >
                       {value}
                     </div>
-                    <div className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>
+                    <div
+                      className="text-xs mt-0.5"
+                      style={{ color: 'var(--text-muted)' }}
+                    >
                       {label}
                     </div>
                   </div>
@@ -158,7 +197,6 @@ const HeroSection: React.FC = memo(() => {
             )}
           </motion.div>
         </div>
-
       </div>
     </Section>
   );

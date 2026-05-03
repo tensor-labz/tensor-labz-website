@@ -9,8 +9,8 @@ import { useTheme } from '../../contexts/ThemeContext';
  */
 
 const PARTICLE_COUNT = 70;
-const CONNECT_DIST   = 0.30;
-const BASE_SPEED     = 0.00065;
+const CONNECT_DIST = 0.3;
+const BASE_SPEED = 0.00065;
 
 const GlobalBackground: React.FC = memo(() => {
   const mountRef = useRef<HTMLDivElement>(null);
@@ -30,21 +30,33 @@ const GlobalBackground: React.FC = memo(() => {
     mount.appendChild(renderer.domElement);
 
     // ── Scene / Camera ────────────────────────────────────
-    const scene  = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 100);
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(
+      60,
+      window.innerWidth / window.innerHeight,
+      0.1,
+      100
+    );
     camera.position.z = 2.0;
 
     // ── Theme colours ─────────────────────────────────────
-    const accent      = isDark ? 0x38bdf8 : 0x0ea5e9;
-    const dotOpacity  = isDark ? 0.50 : 0.35;
+    const accent = isDark ? 0x38bdf8 : 0x0ea5e9;
+    const dotOpacity = isDark ? 0.5 : 0.35;
     const lineOpacity = isDark ? 0.13 : 0.09;
 
     // ── Particles ─────────────────────────────────────────
-    interface P { x: number; y: number; z: number; vx: number; vy: number; vz: number }
+    interface P {
+      x: number;
+      y: number;
+      z: number;
+      vx: number;
+      vy: number;
+      vz: number;
+    }
     const particles: P[] = Array.from({ length: PARTICLE_COUNT }, () => ({
-      x:  (Math.random() - 0.5) * 3.2,
-      y:  (Math.random() - 0.5) * 2.2,
-      z:  (Math.random() - 0.5) * 0.8,
+      x: (Math.random() - 0.5) * 3.2,
+      y: (Math.random() - 0.5) * 2.2,
+      z: (Math.random() - 0.5) * 0.8,
       vx: (Math.random() - 0.5) * BASE_SPEED,
       vy: (Math.random() - 0.5) * BASE_SPEED,
       vz: (Math.random() - 0.5) * BASE_SPEED * 0.3,
@@ -56,26 +68,34 @@ const GlobalBackground: React.FC = memo(() => {
     dotGeo.setAttribute('position', new THREE.BufferAttribute(dotPos, 3));
 
     const dotMat = new THREE.PointsMaterial({
-      color: accent, size: 0.020, sizeAttenuation: true,
-      transparent: true, opacity: dotOpacity,
+      color: accent,
+      size: 0.02,
+      sizeAttenuation: true,
+      transparent: true,
+      opacity: dotOpacity,
     });
     scene.add(new THREE.Points(dotGeo, dotMat));
 
     // Line geometry
-    const maxSegs  = (PARTICLE_COUNT * (PARTICLE_COUNT - 1)) / 2;
-    const lineBuf  = new Float32Array(maxSegs * 6);
-    const lineGeo  = new THREE.BufferGeometry();
+    const maxSegs = (PARTICLE_COUNT * (PARTICLE_COUNT - 1)) / 2;
+    const lineBuf = new Float32Array(maxSegs * 6);
+    const lineGeo = new THREE.BufferGeometry();
     lineGeo.setAttribute('position', new THREE.BufferAttribute(lineBuf, 3));
 
-    const lineSegs = new THREE.LineSegments(lineGeo, new THREE.LineBasicMaterial({
-      color: accent, transparent: true, opacity: lineOpacity,
-    }));
+    const lineSegs = new THREE.LineSegments(
+      lineGeo,
+      new THREE.LineBasicMaterial({
+        color: accent,
+        transparent: true,
+        opacity: lineOpacity,
+      })
+    );
     scene.add(lineSegs);
 
     // ── Mouse parallax ────────────────────────────────────
     const mouse = { x: 0, y: 0 };
     const onMouseMove = (e: MouseEvent) => {
-      mouse.x = (e.clientX / window.innerWidth  - 0.5) * 2;
+      mouse.x = (e.clientX / window.innerWidth - 0.5) * 2;
       mouse.y = (e.clientY / window.innerHeight - 0.5) * 2;
     };
     window.addEventListener('mousemove', onMouseMove);
@@ -111,11 +131,18 @@ const GlobalBackground: React.FC = memo(() => {
       const cd2 = CONNECT_DIST * CONNECT_DIST;
       for (let a = 0; a < PARTICLE_COUNT; a++) {
         for (let b = a + 1; b < PARTICLE_COUNT; b++) {
-          const pa = particles[a], pb = particles[b];
-          const dx = pa.x - pb.x, dy = pa.y - pb.y, dz = pa.z - pb.z;
-          if (dx*dx + dy*dy + dz*dz < cd2) {
-            lineBuf[li++] = pa.x; lineBuf[li++] = pa.y; lineBuf[li++] = pa.z;
-            lineBuf[li++] = pb.x; lineBuf[li++] = pb.y; lineBuf[li++] = pb.z;
+          const pa = particles[a],
+            pb = particles[b];
+          const dx = pa.x - pb.x,
+            dy = pa.y - pb.y,
+            dz = pa.z - pb.z;
+          if (dx * dx + dy * dy + dz * dz < cd2) {
+            lineBuf[li++] = pa.x;
+            lineBuf[li++] = pa.y;
+            lineBuf[li++] = pa.z;
+            lineBuf[li++] = pb.x;
+            lineBuf[li++] = pb.y;
+            lineBuf[li++] = pb.z;
           }
         }
       }
@@ -135,9 +162,12 @@ const GlobalBackground: React.FC = memo(() => {
       cancelAnimationFrame(animId);
       window.removeEventListener('mousemove', onMouseMove);
       window.removeEventListener('resize', onResize);
-      dotGeo.dispose(); lineGeo.dispose(); dotMat.dispose();
+      dotGeo.dispose();
+      lineGeo.dispose();
+      dotMat.dispose();
       renderer.dispose();
-      if (mount.contains(renderer.domElement)) mount.removeChild(renderer.domElement);
+      if (mount.contains(renderer.domElement))
+        mount.removeChild(renderer.domElement);
     };
   }, [theme]);
 

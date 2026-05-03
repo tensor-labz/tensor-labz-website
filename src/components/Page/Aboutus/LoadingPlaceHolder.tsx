@@ -1,5 +1,3 @@
-
-
 const Placeholder = () => {
   return (
     <div className="w-full h-32 bg-gray-100 rounded-lg overflow-hidden shadow-sm relative mb-3">

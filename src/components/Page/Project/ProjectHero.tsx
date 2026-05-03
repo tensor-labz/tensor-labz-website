@@ -1,10 +1,10 @@
-import React, { useState, useEffect, memo, useMemo } from "react";
-import { Link } from "react-router-dom";
-import { useRootContext } from "../../../contexts/RootContext";
-import { useServiceDataContext } from "../../../contexts/Api/ServiceApiContext";
-import { FaCrown } from "react-icons/fa";
-import { FiArrowRight, FiMessageCircle, FiPhone } from "react-icons/fi";
-import { FcOnlineSupport } from "react-icons/fc";
+import React, { useState, useEffect, memo, useMemo } from 'react';
+import { Link } from 'react-router-dom';
+import { useRootContext } from '../../../contexts/RootContext';
+import { useServiceDataContext } from '../../../contexts/Api/ServiceApiContext';
+import { FaCrown } from 'react-icons/fa';
+import { FiArrowRight, FiMessageCircle, FiPhone } from 'react-icons/fi';
+import { FcOnlineSupport } from 'react-icons/fc';
 
 interface ProjectHeroProps {
   title: string;
@@ -16,7 +16,13 @@ interface ProjectHeroProps {
 }
 
 const GetSupportButton: React.FC<{ title: string }> = memo(({ title }) => {
-  const message = useMemo(() => encodeURIComponent(`Hello, I need assistance with the project: ${title}.`), [title]);
+  const message = useMemo(
+    () =>
+      encodeURIComponent(
+        `Hello, I need assistance with the project: ${title}.`
+      ),
+    [title]
+  );
   return (
     <Link
       to={`https://wa.me/+94705359369?text=${message}`}
@@ -34,13 +40,20 @@ const GetSupportButton: React.FC<{ title: string }> = memo(({ title }) => {
 GetSupportButton.displayName = 'GetSupportButton';
 
 const ProjectHero: React.FC<ProjectHeroProps> = ({
-  title, tags = [], className = "", is_top = false, serviceName, description,
+  title,
+  tags = [],
+  className = '',
+  is_top = false,
+  serviceName,
+  description,
 }) => {
   const { Data } = useRootContext();
   const { service_data } = useServiceDataContext();
   const [isVisible, setIsVisible] = useState(false);
 
-  useEffect(() => { setIsVisible(true); }, []);
+  useEffect(() => {
+    setIsVisible(true);
+  }, []);
 
   const fade = (delay = 0) => ({
     opacity: isVisible ? 1 : 0,
@@ -49,8 +62,8 @@ const ProjectHero: React.FC<ProjectHeroProps> = ({
 
   const slideDown = {
     opacity: isVisible ? 1 : 0,
-    transform: isVisible ? "translateY(0)" : "translateY(-40px)",
-    transition: "opacity 0.6s ease, transform 0.6s ease",
+    transform: isVisible ? 'translateY(0)' : 'translateY(-40px)',
+    transition: 'opacity 0.6s ease, transform 0.6s ease',
   };
 
   return (
@@ -71,12 +84,18 @@ const ProjectHero: React.FC<ProjectHeroProps> = ({
       {/* Content */}
       <div className="max-w-6xl mx-auto relative z-10 mt-6">
         {serviceName && (
-          <div className="mb-2 text-sm md:text-base opacity-80" style={fade(0.1)}>
+          <div
+            className="mb-2 text-sm md:text-base opacity-80"
+            style={fade(0.1)}
+          >
             <Link
               to={`/services/${serviceName}`}
               className="hover:underline font-medium text-sky-300"
             >
-              {service_data?.find((s: any) => s.slug === serviceName)?.service_name}
+              {
+                service_data?.find((s: any) => s.slug === serviceName)
+                  ?.service_name
+              }
             </Link>
             <span className="mx-2 opacity-50">›</span>
           </div>
@@ -99,7 +118,10 @@ const ProjectHero: React.FC<ProjectHeroProps> = ({
                 <span
                   key={index}
                   className="px-3 py-1 rounded-full text-xs font-medium backdrop-blur-sm text-white"
-                  style={{ backgroundColor: 'rgba(255,255,255,0.12)', border: '1px solid rgba(255,255,255,0.2)' }}
+                  style={{
+                    backgroundColor: 'rgba(255,255,255,0.12)',
+                    border: '1px solid rgba(255,255,255,0.2)',
+                  }}
                 >
                   {tag.trim()}
                 </span>
@@ -108,11 +130,15 @@ const ProjectHero: React.FC<ProjectHeroProps> = ({
           </div>
 
           {/* Contact buttons */}
-          <div className="flex flex-col items-center lg:items-end gap-3 mt-4 lg:mt-0" style={fade(0.3)}>
+          <div
+            className="flex flex-col items-center lg:items-end gap-3 mt-4 lg:mt-0"
+            style={fade(0.3)}
+          >
             <GetSupportButton title={title} />
             <div className="flex items-center gap-2">
               <Link to="/contact-us">
-                <div className="p-2 rounded-full transition-all duration-300 cursor-pointer
+                <div
+                  className="p-2 rounded-full transition-all duration-300 cursor-pointer
                   bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/25 text-white"
                 >
                   <FcOnlineSupport className="text-2xl" />
@@ -130,7 +156,8 @@ const ProjectHero: React.FC<ProjectHeroProps> = ({
         </div>
 
         {description && (
-          <p className="text-base md:text-lg opacity-80 text-center w-full leading-relaxed text-white mt-2"
+          <p
+            className="text-base md:text-lg opacity-80 text-center w-full leading-relaxed text-white mt-2"
             style={fade(0.4)}
           >
             {description}

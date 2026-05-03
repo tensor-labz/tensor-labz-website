@@ -1,22 +1,19 @@
-import React, { useState, useEffect, memo, useMemo } from "react";
-import { motion, AnimatePresence } from "motion/react";
-import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
-import Section from "../../../../components/resuable/Section";
-import { useDeviceContext } from "../../../../contexts/DeviceContext";
-import MobileTopCarousel from "./MobileTopCarsaole";
-import LatestProductCard from "./LatestProductCard";
-import LatestHero from "./LatestHero";
+import React, { useState, useEffect, memo, useMemo } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
+import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
+import Section from '../../../../components/resuable/Section';
+import { useDeviceContext } from '../../../../contexts/DeviceContext';
+import MobileTopCarousel from './MobileTopCarsaole';
+import LatestProductCard from './LatestProductCard';
+import LatestHero from './LatestHero';
 import { useTopProjects } from './../../../../contexts/Api/useTopProjects';
 
 const LatestProductSection: React.FC = memo(() => {
   const [currentPage, setCurrentPage] = useState(0);
-  const  topData = useTopProjects();
+  const topData = useTopProjects();
   const device = useDeviceContext();
 
-  const isMobile = useMemo(
-    () => device === "xs" || device === "sm",
-    [device]
-  );
+  const isMobile = useMemo(() => device === 'xs' || device === 'sm', [device]);
 
   const topProjects = topData ?? [];
 
@@ -51,8 +48,8 @@ const LatestProductSection: React.FC = memo(() => {
       y: 0,
       transition: {
         duration: 1,
-        ease: "easeOut",
-        when: "beforeChildren",
+        ease: 'easeOut',
+        when: 'beforeChildren',
         staggerChildren: 0.3,
       },
     },
@@ -69,7 +66,10 @@ const LatestProductSection: React.FC = memo(() => {
       <div className="px-4 text-center mb-4 mt-6">
         <h1
           className="sm:text-4xl text-xl sm:font-bold font-semibold"
-          style={{ color: 'var(--text-primary)', fontFamily: '"Syne", sans-serif' }}
+          style={{
+            color: 'var(--text-primary)',
+            fontFamily: '"Syne", sans-serif',
+          }}
         >
           Our Latest Top Insights
         </h1>
@@ -85,7 +85,10 @@ const LatestProductSection: React.FC = memo(() => {
         {/* LEFT HERO */}
         <motion.div
           className="w-10/12 mx-auto lg:w-2/5 max-w-full relative rounded-2xl overflow-hidden shadow-[0_10px_25px_-5px_rgba(0,0,0,0.15)] md:px-0"
-          style={{ border: '1px solid var(--border)', backgroundColor: 'var(--bg-surface)' }}
+          style={{
+            border: '1px solid var(--border)',
+            backgroundColor: 'var(--bg-surface)',
+          }}
           variants={sectionVariants}
         >
           <LatestHero />
@@ -111,7 +114,13 @@ const LatestProductSection: React.FC = memo(() => {
                   {currentProjects.map(
                     (project, i) =>
                       project && (
-                          <LatestProductCard imageURL={project.imageURL} title={project.title} description={project.description } slug={project.slug}  key={i}  />
+                        <LatestProductCard
+                          imageURL={project.imageURL}
+                          title={project.title}
+                          description={project.description}
+                          slug={project.slug}
+                          key={i}
+                        />
                       )
                   )}
                 </motion.div>
@@ -141,7 +150,8 @@ const LatestProductSection: React.FC = memo(() => {
                   <div
                     key={i}
                     style={{
-                      backgroundColor: i === currentPage ? 'var(--accent)' : 'var(--border)',
+                      backgroundColor:
+                        i === currentPage ? 'var(--accent)' : 'var(--border)',
                     }}
                     className="w-2.5 h-2.5 rounded-full transition-colors"
                   ></div>
@@ -155,6 +165,6 @@ const LatestProductSection: React.FC = memo(() => {
   );
 });
 
-LatestProductSection.displayName = "LatestProductSection";
+LatestProductSection.displayName = 'LatestProductSection';
 
 export default LatestProductSection;

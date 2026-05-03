@@ -8,22 +8,23 @@ Built with React 18, TypeScript, Vite, and Tailwind CSS.
 
 ## Tech Stack
 
-| Layer | Technology |
-|-------|-----------|
-| Framework | React 18 + TypeScript 5 |
-| Build tool | Vite 6 |
-| Styling | Tailwind CSS 3 |
-| Animations | Motion (motion/react) |
-| Routing | React Router v7 |
-| Icons | React Icons |
-| SEO | React Helmet |
-| Data | Google Sheets API (via Apps Script) |
+| Layer      | Technology                          |
+| ---------- | ----------------------------------- |
+| Framework  | React 18 + TypeScript 5             |
+| Build tool | Vite 6                              |
+| Styling    | Tailwind CSS 3                      |
+| Animations | Motion (motion/react)               |
+| Routing    | React Router v7                     |
+| Icons      | React Icons                         |
+| SEO        | React Helmet                        |
+| Data       | Google Sheets API (via Apps Script) |
 
 ---
 
 ## Getting Started
 
 ### Prerequisites
+
 - Node.js 18+
 - npm
 
@@ -41,8 +42,8 @@ Copy the example env file and fill in your Google Sheets script URL:
 cp .env.example .env
 ```
 
-| Variable | Description |
-|----------|-------------|
+| Variable         | Description                                              |
+| ---------------- | -------------------------------------------------------- |
 | `VITE_SHEET_URL` | Google Apps Script web app URL (ends with `?sheetName=`) |
 
 ### Run locally
@@ -91,13 +92,13 @@ src/
 
 ## Pages
 
-| Route | Page |
-|-------|------|
-| `/` | Home |
-| `/about-us` | About Us |
-| `/contact-us` | Contact Us |
-| `/services/:slug` | Services (dynamic) |
-| `/project/:slug` | Project detail (dynamic) |
+| Route             | Page                     |
+| ----------------- | ------------------------ |
+| `/`               | Home                     |
+| `/about-us`       | About Us                 |
+| `/contact-us`     | Contact Us               |
+| `/services/:slug` | Services (dynamic)       |
+| `/project/:slug`  | Project detail (dynamic) |
 
 ---
 

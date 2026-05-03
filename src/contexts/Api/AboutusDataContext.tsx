@@ -1,5 +1,12 @@
-import { useRootContext } from "../RootContext";
-import { createContext, useContext, useEffect, useState, useCallback, useMemo } from "react";
+import { useRootContext } from '../RootContext';
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  useCallback,
+  useMemo,
+} from 'react';
 
 interface AboutusDataContextType {
   aboutus_data: any | null;
@@ -17,7 +24,9 @@ type AboutusDataContextProviderProps = {
   children: React.ReactNode;
 };
 
-export default function AboutusDataContextProvider({ children }: AboutusDataContextProviderProps) {
+export default function AboutusDataContextProvider({
+  children,
+}: AboutusDataContextProviderProps) {
   const [aboutus_data, setData] = useState<any>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<Error | null>(null);
@@ -26,10 +35,7 @@ export default function AboutusDataContextProvider({ children }: AboutusDataCont
     setIsLoading(true);
     setError(null);
     try {
-      const response = await fetch(
-        `${googleSheet_URl}AboutusData`,
-        { signal }
-      );
+      const response = await fetch(`${googleSheet_URl}AboutusData`, { signal });
 
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
@@ -39,7 +45,9 @@ export default function AboutusDataContextProvider({ children }: AboutusDataCont
       setData(result?.data);
     } catch (err) {
       if (err instanceof Error && err.name === 'AbortError') return;
-      setError(err instanceof Error ? err : new Error('An unknown error occurred'));
+      setError(
+        err instanceof Error ? err : new Error('An unknown error occurred')
+      );
       console.error('Error fetching aboutus_data:', err);
     } finally {
       setIsLoading(false);

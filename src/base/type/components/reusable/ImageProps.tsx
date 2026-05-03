@@ -1,5 +1,5 @@
-import { ImageProps } from "../../CommonType";
+import { ImageProps } from '../../CommonType';
 
-export type HeroImageProps=ImageProps &{
-duration?:number;
-}
+export type HeroImageProps = ImageProps & {
+  duration?: number;
+};

@@ -1,6 +1,6 @@
 import React from 'react';
-import { motion, Variants } from "motion/react";
-import Section from "../../../../components/resuable/Section";
+import { motion, Variants } from 'motion/react';
+import Section from '../../../../components/resuable/Section';
 
 // Loading animation variants
 const loadingVariants: Variants = {
@@ -8,9 +8,9 @@ const loadingVariants: Variants = {
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.2
-    }
-  }
+      staggerChildren: 0.2,
+    },
+  },
 };
 
 const pulseVariants: Variants = {
@@ -21,23 +21,24 @@ const pulseVariants: Variants = {
     transition: {
       yoyo: Infinity,
       duration: 1.2,
-      ease: "easeInOut"
-    }
-  }
+      ease: 'easeInOut',
+    },
+  },
 };
 
 const LoadingHeroPlaceholder: React.FC = () => {
   return (
-    <Section className="relative bg-white dark:bg-gray-900
+    <Section
+      className="relative bg-white dark:bg-gray-900
       text-gray-800 dark:text-gray-100 py-10 sm:py-20 md:py-18 lg:py-24 px-6 md:px-8 lg:px-12
-      min-h-screen flex md:flex-row flex-col-reverse items-center justify-center gap-x-8 gap-y-4 overflow-hidden">
-
+      min-h-screen flex md:flex-row flex-col-reverse items-center justify-center gap-x-8 gap-y-4 overflow-hidden"
+    >
       <motion.div
         variants={loadingVariants}
         initial="hidden"
         animate="visible"
-        className="w-full flex md:flex-row flex-col-reverse items-center justify-center gap-8">
-
+        className="w-full flex md:flex-row flex-col-reverse items-center justify-center gap-8"
+      >
         {/* Placeholder Content */}
         <div className="lg:w-7/12 w-full z-20 relative">
           <motion.div
@@ -63,5 +64,5 @@ const LoadingHeroPlaceholder: React.FC = () => {
     </Section>
   );
 };
-LoadingHeroPlaceholder.displayName = "LoadingHeroPlaceholder";
+LoadingHeroPlaceholder.displayName = 'LoadingHeroPlaceholder';
 export default LoadingHeroPlaceholder;

@@ -20,9 +20,10 @@ const Header: React.FC<{ className?: string }> = memo(({ className = '' }) => {
       style={{ backgroundColor: 'var(--header-bg)' }}
       className={`fixed top-0 left-0 w-full z-50 border-b backdrop-blur-md
         transition-[border-color,box-shadow] duration-300
-        ${isScrolled
-          ? 'border-[var(--border)] shadow-lg shadow-black/10 dark:shadow-black/40'
-          : 'border-transparent'
+        ${
+          isScrolled
+            ? 'border-[var(--border)] shadow-lg shadow-black/10 dark:shadow-black/40'
+            : 'border-transparent'
         } ${className}`}
     >
       <div className="max-w-7xl mx-auto px-6 lg:px-10 py-3.5 flex items-center justify-between">

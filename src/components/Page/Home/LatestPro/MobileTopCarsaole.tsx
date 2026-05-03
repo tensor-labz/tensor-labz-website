@@ -1,23 +1,25 @@
-import React, { memo, useState, useEffect } from "react";
-import { motion, AnimatePresence } from "motion/react";
-import LatestProductCard from "./LatestProductCard";
-import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
+import React, { memo, useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
+import LatestProductCard from './LatestProductCard';
+import { FaAngleLeft, FaAngleRight } from 'react-icons/fa';
 import { useTopProjects } from './../../../../contexts/Api/useTopProjects';
 
 const MobileTopCarousel: React.FC = memo(() => {
   const topData = useTopProjects();
-  const topProjects =topData?.map((project: any) => ({
-        title: project?.title ?? "",
-        description: project?.description ?? "",
-        imageURL: project?.imageURL
-        ?? "",
-        ...project
-      })) || [];
+  const topProjects =
+    topData?.map((project: any) => ({
+      title: project?.title ?? '',
+      description: project?.description ?? '',
+      imageURL: project?.imageURL ?? '',
+      ...project,
+    })) || [];
 
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  const goNext = () => setCurrentIndex((prev) => (prev + 1) % topProjects.length);
-  const goPrev = () => setCurrentIndex((prev) => (prev === 0 ? topProjects.length - 1 : prev - 1));
+  const goNext = () =>
+    setCurrentIndex((prev) => (prev + 1) % topProjects.length);
+  const goPrev = () =>
+    setCurrentIndex((prev) => (prev === 0 ? topProjects.length - 1 : prev - 1));
 
   // Auto-slide functionality
   useEffect(() => {
@@ -30,8 +32,16 @@ const MobileTopCarousel: React.FC = memo(() => {
   // Variants for carousel transitions
   const carouselVariants = {
     enter: { x: 300, opacity: 0 },
-    center: { x: 0, opacity: 1, transition: { duration: 0.8, ease: "easeOut" } },
-    exit: { x: -300, opacity: 0, transition: { duration: 0.8, ease: "easeIn" } },
+    center: {
+      x: 0,
+      opacity: 1,
+      transition: { duration: 0.8, ease: 'easeOut' },
+    },
+    exit: {
+      x: -300,
+      opacity: 0,
+      transition: { duration: 0.8, ease: 'easeIn' },
+    },
   };
 
   // If no projects or still loading, show placeholder or nothing
@@ -63,20 +73,20 @@ const MobileTopCarousel: React.FC = memo(() => {
         {[
           {
             icon: <FaAngleLeft size={16} />,
-            position: "left-2",
-            onClick: goPrev
+            position: 'left-2',
+            onClick: goPrev,
           },
           {
             icon: <FaAngleRight size={16} />,
-            position: "right-2",
-            onClick: goNext
-          }
+            position: 'right-2',
+            onClick: goNext,
+          },
         ].map((navi, index) => (
           <button
             onClick={navi.onClick}
             className={`hover:text-white text-slate-300 absolute bg-transparent hover:bg-blue-900 top-1/2 -translate-y-1/2 p-2 rounded-full cursor-pointer ${navi.position} z-10`}
             key={`navi${index}`}
-            aria-label={index === 0 ? "Previous slide" : "Next slide"}
+            aria-label={index === 0 ? 'Previous slide' : 'Next slide'}
           >
             {navi.icon}
           </button>
@@ -86,11 +96,11 @@ const MobileTopCarousel: React.FC = memo(() => {
       {/* Indicators */}
       {topProjects.length > 1 && (
         <div className="flex justify-center gap-2 mt-4">
-          {topProjects.map((_:any, index:number) => (
+          {topProjects.map((_: any, index: number) => (
             <motion.div
               key={index}
               className={`h-1 rounded-full cursor-pointer ${
-                index === currentIndex ? "bg-blue-500 w-6" : "bg-gray-300 w-3"
+                index === currentIndex ? 'bg-blue-500 w-6' : 'bg-gray-300 w-3'
               }`}
               onClick={() => setCurrentIndex(index)}
               whileHover={{ scale: 1.2 }}
@@ -102,5 +112,5 @@ const MobileTopCarousel: React.FC = memo(() => {
   );
 });
 
-MobileTopCarousel.displayName = "MobileTopCarousel";
+MobileTopCarousel.displayName = 'MobileTopCarousel';
 export default MobileTopCarousel;

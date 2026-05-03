@@ -5,8 +5,8 @@ import {
   FC,
   useContext,
   useEffect,
-} from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+} from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 // Define the types
 export interface ServiceTab {
@@ -27,7 +27,7 @@ interface ServiceProviderProps {
 const ServiceContext = createContext<ServiceContextType | undefined>(undefined); // safer than non-null default
 
 const ServiceProvider: FC<ServiceProviderProps> = ({ children }) => {
-  const [activeTab, setActiveTab] = useState<ServiceTab>({ title: "All" });
+  const [activeTab, setActiveTab] = useState<ServiceTab>({ title: 'All' });
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -51,7 +51,7 @@ const ServiceProvider: FC<ServiceProviderProps> = ({ children }) => {
 export const useServiceContext = () => {
   const context = useContext(ServiceContext);
   if (!context) {
-    throw new Error("useServiceContext must be used within a ServiceProvider");
+    throw new Error('useServiceContext must be used within a ServiceProvider');
   }
   return context;
 };

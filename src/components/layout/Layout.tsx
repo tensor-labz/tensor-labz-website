@@ -8,7 +8,10 @@ const Layout: React.FC = memo(() => {
   return (
     <div
       className="relative"
-      style={{ backgroundColor: 'var(--bg-base)', color: 'var(--text-primary)' }}
+      style={{
+        backgroundColor: 'var(--bg-base)',
+        color: 'var(--text-primary)',
+      }}
     >
       {/* Single animation — runs on every page */}
       <Suspense fallback={null}>

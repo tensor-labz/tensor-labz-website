@@ -3,72 +3,71 @@
 @tailwind utilities;
 
 /* Typography */
-.h{
+.h {
   @apply md:font-bold font-semibold text-blue-900;
 }
-.h1{
-    @apply  text-2xl md:text-4xl h;
+.h1 {
+  @apply text-2xl md:text-4xl h;
 }
 
-.h2{
-    @apply  text-lg md:text-3xl h;
+.h2 {
+  @apply text-lg md:text-3xl h;
 }
-.h3{
-    @apply  text-base md:text-2xl h;
+.h3 {
+  @apply text-base md:text-2xl h;
 }
-.h4{
-    @apply  text-xs md:text-xl h;
+.h4 {
+  @apply text-xs md:text-xl h;
 }
-.h5{
-    @apply  text-[13px] md:text-lg h;
+.h5 {
+  @apply text-[13px] md:text-lg h;
 }
-.h6{
-    @apply  text-xs md:text-base h;
+.h6 {
+  @apply text-xs md:text-base h;
 }
-.hero{
-    @apply sm:text-3xl text-xl lg:text-left text-center md:text-6xl font-bold leading-snug bg-gradient-to-tr from-blue-500 via-sky-900 to-blue-800 bg-clip-text text-transparent py-2 flex flex-col lg:justify-start lg:items-start justify-center md:space-y-4 space-y-2;
+.hero {
+  @apply sm:text-3xl text-xl lg:text-left text-center md:text-6xl font-bold leading-snug bg-gradient-to-tr from-blue-500 via-sky-900 to-blue-800 bg-clip-text text-transparent py-2 flex flex-col lg:justify-start lg:items-start justify-center md:space-y-4 space-y-2;
 }
-.title{
+.title {
   @apply font-extrabold md:text-7xl text-4xl;
 }
-.p{
-    @apply text-sm md:text-base break-all;
+.p {
+  @apply text-sm md:text-base break-all;
 }
 /* Components */
 @layer components {
-    /* Common styles for all buttons */
-    .btn {
-      @apply px-4 py-2 font-medium rounded shadow inline-flex items-center justify-center transition-all duration-150 ease-in-out;
-    }
-
-    /* Primary button */
-    .btn-normal {
-      @apply bg-blue-500 text-white border border-blue-600 hover:bg-blue-600 hover:border-blue-700;
-    }
-
-    /* Outline button */
-    .btn-outline {
-      @apply bg-transparent border border-gray-500 text-gray-500 hover:bg-gray-100 hover:text-gray-700;
-    }
-
-    /* Small button */
-    .btn-small {
-      @apply text-sm px-2 py-1;
-    }
-
-    /* Transparent button */
-    .btn-transparent {
-      @apply bg-transparent text-blue-500 hover:text-blue-700;
-    }
-
-    /* Danger button */
-    .btn-danger {
-      @apply bg-red-500 text-white border border-red-600 hover:bg-red-600 hover:border-red-700;
-    }
-
-    /* Disabled button */
-    .btn-disabled {
-      @apply bg-gray-300 text-gray-500 border border-gray-400 cursor-not-allowed opacity-50;
-    }
-
+  /* Common styles for all buttons */
+  .btn {
+    @apply px-4 py-2 font-medium rounded shadow inline-flex items-center justify-center transition-all duration-150 ease-in-out;
   }
+
+  /* Primary button */
+  .btn-normal {
+    @apply bg-blue-500 text-white border border-blue-600 hover:bg-blue-600 hover:border-blue-700;
+  }
+
+  /* Outline button */
+  .btn-outline {
+    @apply bg-transparent border border-gray-500 text-gray-500 hover:bg-gray-100 hover:text-gray-700;
+  }
+
+  /* Small button */
+  .btn-small {
+    @apply text-sm px-2 py-1;
+  }
+
+  /* Transparent button */
+  .btn-transparent {
+    @apply bg-transparent text-blue-500 hover:text-blue-700;
+  }
+
+  /* Danger button */
+  .btn-danger {
+    @apply bg-red-500 text-white border border-red-600 hover:bg-red-600 hover:border-red-700;
+  }
+
+  /* Disabled button */
+  .btn-disabled {
+    @apply bg-gray-300 text-gray-500 border border-gray-400 cursor-not-allowed opacity-50;
+  }
+}

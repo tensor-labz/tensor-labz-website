@@ -1,18 +1,21 @@
-import { memo, FC } from "react";
-import { motion } from "motion/react";
-import { useServiceContext } from "../../../../contexts/ServiceContext";
-import { useServiceDataContext } from "../../../../contexts/Api/ServiceApiContext";
-import { ServiceCardProps } from "../../../../base/type/ServiceProps.d";
+import { memo, FC } from 'react';
+import { motion } from 'motion/react';
+import { useServiceContext } from '../../../../contexts/ServiceContext';
+import { useServiceDataContext } from '../../../../contexts/Api/ServiceApiContext';
+import { ServiceCardProps } from '../../../../base/type/ServiceProps.d';
 
 const TabBar: FC = memo(() => {
   const { activeTab, setActiveTab } = useServiceContext();
   const { service_data } = useServiceDataContext();
 
   const tabs = [
-    { title: "All", slug: "all" },
+    { title: 'All', slug: 'all' },
     ...(Array.isArray(service_data)
-      ? service_data.map((s: ServiceCardProps) => ({ title: s?.service_name || "Untitled", slug: s?.slug || "" }))
-      : [])
+      ? service_data.map((s: ServiceCardProps) => ({
+          title: s?.service_name || 'Untitled',
+          slug: s?.slug || '',
+        }))
+      : []),
   ];
 
   return (
@@ -31,14 +34,18 @@ const TabBar: FC = memo(() => {
             whileTap={{ scale: 0.95 }}
             className="relative px-5 py-2 text-xs font-semibold tracking-wider uppercase
               rounded whitespace-nowrap flex-shrink-0 transition-colors duration-200"
-            style={isActive ? {
-              backgroundColor: 'var(--accent)',
-              color: '#fff',
-            } : {
-              backgroundColor: 'rgba(255,255,255,0.05)',
-              color: 'var(--text-muted)',
-              border: '1px solid var(--border)',
-            }}
+            style={
+              isActive
+                ? {
+                    backgroundColor: 'var(--accent)',
+                    color: '#fff',
+                  }
+                : {
+                    backgroundColor: 'rgba(255,255,255,0.05)',
+                    color: 'var(--text-muted)',
+                    border: '1px solid var(--border)',
+                  }
+            }
           >
             {tab.title}
           </motion.button>

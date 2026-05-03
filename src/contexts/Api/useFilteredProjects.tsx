@@ -1,7 +1,7 @@
-import { useMemo } from "react";
-import { useProjectDataContext } from "./ProjectDataContext";
-import { useServiceContext } from "../ServiceContext";
-import { useLocation } from "react-router-dom";
+import { useMemo } from 'react';
+import { useProjectDataContext } from './ProjectDataContext';
+import { useServiceContext } from '../ServiceContext';
+import { useLocation } from 'react-router-dom';
 
 interface ProjectItem {
   id: string;
@@ -27,14 +27,14 @@ export const useFilteredProjects = (): UseFilteredProjectsResult => {
 
     let result: ProjectItem[] = rawProjects;
 
-    if (activeTab?.slug && activeTab.slug !== "all") {
-      result = result.filter(item => item.service === activeTab.slug);
+    if (activeTab?.slug && activeTab.slug !== 'all') {
+      result = result.filter((item) => item.service === activeTab.slug);
     }
 
     const totalItems = result.length;
 
     const urlSearchParams = new URLSearchParams(location.search);
-    const page = urlSearchParams.get("page") ?? '1';
+    const page = urlSearchParams.get('page') ?? '1';
     const pageNumber = parseInt(page, 10) || 1;
     const perPage = 6;
     const start = (pageNumber - 1) * perPage;

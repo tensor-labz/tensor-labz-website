@@ -1,8 +1,8 @@
-import React, { memo } from "react";
-import { useNavigate } from "react-router-dom";
-import Card from "../../../../components/resuable/Card";
-import projectProps from "../../../../base/type/ProjectProps.d";
-import { FiArrowRight } from "react-icons/fi";
+import React, { memo } from 'react';
+import { useNavigate } from 'react-router-dom';
+import Card from '../../../../components/resuable/Card';
+import projectProps from '../../../../base/type/ProjectProps.d';
+import { FiArrowRight } from 'react-icons/fi';
 
 const LatestProductCard: React.FC<projectProps> = memo((project) => {
   const safeid = project.id ?? 0;
@@ -11,7 +11,7 @@ const LatestProductCard: React.FC<projectProps> = memo((project) => {
   const customAnimation = {
     initial: { opacity: 0, scale: 0.95, x: safeid % 2 !== 0 ? 50 : -50 },
     whileInView: { opacity: 1, x: 0, scale: 1 },
-    transition: { type: "spring", stiffness: 300, damping: 20 },
+    transition: { type: 'spring', stiffness: 300, damping: 20 },
   };
 
   return (
@@ -19,7 +19,10 @@ const LatestProductCard: React.FC<projectProps> = memo((project) => {
       animation={customAnimation}
       className="relative flex flex-col md:flex-row w-full md:max-w-2xl rounded-xl shadow-md
         overflow-hidden md:h-[300px] cursor-pointer transition-all duration-300"
-      style={{ backgroundColor: 'var(--bg-surface)', border: '1px solid var(--border)' }}
+      style={{
+        backgroundColor: 'var(--bg-surface)',
+        border: '1px solid var(--border)',
+      }}
       onClick={() => navigate(`/project/${project.slug}`)}
     >
       {/* IMAGE */}
@@ -32,21 +35,28 @@ const LatestProductCard: React.FC<projectProps> = memo((project) => {
 
         {/* Overlay on md+ */}
         <div className="hidden md:flex absolute inset-0 flex-col justify-end bg-gradient-to-t from-black/55 to-transparent p-6">
-          <h5 className="text-white text-2xl font-bold mb-2">{project.title}</h5>
+          <h5 className="text-white text-2xl font-bold mb-2">
+            {project.title}
+          </h5>
           <FiArrowRight className="text-white w-6 h-6" />
         </div>
       </div>
 
       {/* Mobile content */}
       <div className="flex flex-col p-4 md:hidden">
-        <h5 className="mb-2 text-xl font-bold" style={{ color: 'var(--text-primary)' }}>
+        <h5
+          className="mb-2 text-xl font-bold"
+          style={{ color: 'var(--text-primary)' }}
+        >
           {project.title}
         </h5>
-        <p className="text-sm" style={{ color: 'var(--text-muted)' }}>{project.description}</p>
+        <p className="text-sm" style={{ color: 'var(--text-muted)' }}>
+          {project.description}
+        </p>
       </div>
     </Card>
   );
 });
 
-LatestProductCard.displayName = "LatestProductCard";
+LatestProductCard.displayName = 'LatestProductCard';
 export default LatestProductCard;

@@ -1,6 +1,6 @@
-import React, { memo, useEffect, useState } from "react";
-import { motion, AnimatePresence } from "motion/react";
-import { useRootContext } from "../../../../contexts/RootContext";
+import React, { memo, useEffect, useState } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
+import { useRootContext } from '../../../../contexts/RootContext';
 
 const LatestHero: React.FC = memo(() => {
   const [latestNews, setLatestNews] = useState<any>(null);
@@ -13,12 +13,14 @@ const LatestHero: React.FC = memo(() => {
     const controller = new AbortController();
     const fetchLatestNews = async () => {
       try {
-        const response = await fetch(`${googleSheet_URl}LatestData`, { signal: controller.signal });
+        const response = await fetch(`${googleSheet_URl}LatestData`, {
+          signal: controller.signal,
+        });
         const data = await response.json();
         setLatestNews(data.data[0]);
       } catch (error) {
         if (error instanceof Error && error.name === 'AbortError') return;
-        console.error("Error fetching latest news:", error);
+        console.error('Error fetching latest news:', error);
       } finally {
         setIsLoading(false);
       }
@@ -34,13 +36,13 @@ const LatestHero: React.FC = memo(() => {
       return latestNews.Value;
     }
 
-    if (typeof latestNews.Value === "string") {
+    if (typeof latestNews.Value === 'string') {
       try {
         const parsed = JSON.parse(latestNews.Value);
         return Array.isArray(parsed) ? parsed : [latestNews.Value];
       } catch {
-        return latestNews.Value.includes(",")
-          ? latestNews.Value.split(",").map((img: string) => img.trim())
+        return latestNews.Value.includes(',')
+          ? latestNews.Value.split(',').map((img: string) => img.trim())
           : [latestNews.Value];
       }
     }
@@ -74,13 +76,13 @@ const LatestHero: React.FC = memo(() => {
       }
     };
 
-    if (latestNews?.type === "slider" || !latestNews?.type) {
+    if (latestNews?.type === 'slider' || !latestNews?.type) {
       loadAspectRatios();
     }
   }, [latestNews]);
 
   useEffect(() => {
-    if (latestNews?.type !== "slider") return;
+    if (latestNews?.type !== 'slider') return;
 
     const images = getImages();
     if (images.length <= 1) return;
@@ -105,17 +107,17 @@ const LatestHero: React.FC = memo(() => {
   // Get responsive image classes based on aspect ratio
   const getImageClasses = (aspectRatio: number) => {
     // Container aspect ratio (approximate for mobile)
-    const containerAspectRatio = window.innerWidth < 768 ? 16/9 : 16/9; // Adjust based on your container
+    const containerAspectRatio = window.innerWidth < 768 ? 16 / 9 : 16 / 9; // Adjust based on your container
 
     if (aspectRatio > containerAspectRatio * 1.2) {
       // Wide landscape image - contain to show full width
-      return "w-full h-full object-contain object-center bg-gray-100";
+      return 'w-full h-full object-contain object-center bg-gray-100';
     } else if (aspectRatio < containerAspectRatio * 0.8) {
       // Portrait or very tall image - contain to show full height
-      return "w-full h-full object-contain object-center bg-gray-100";
+      return 'w-full h-full object-contain object-center bg-gray-100';
     } else {
       // Aspect ratio is close to container - cover is fine
-      return "w-full h-full object-cover object-center";
+      return 'w-full h-full object-cover object-center';
     }
   };
 
@@ -123,12 +125,12 @@ const LatestHero: React.FC = memo(() => {
     return (
       <motion.div
         className="w-full h-[300px] md:h-full relative rounded-2xl overflow-hidden bg-gray-200"
-        animate={{ backgroundPosition: ["-200% 0", "200% 0"] }}
-        transition={{ repeat: Infinity, duration: 1.5, ease: "linear" }}
+        animate={{ backgroundPosition: ['-200% 0', '200% 0'] }}
+        transition={{ repeat: Infinity, duration: 1.5, ease: 'linear' }}
         style={{
           backgroundImage:
-            "linear-gradient(90deg, #e5e7eb 0%, #f3f4f6 50%, #e5e7eb 100%)",
-          backgroundSize: "200% 100%",
+            'linear-gradient(90deg, #e5e7eb 0%, #f3f4f6 50%, #e5e7eb 100%)',
+          backgroundSize: '200% 100%',
         }}
       />
     );
@@ -136,7 +138,7 @@ const LatestHero: React.FC = memo(() => {
 
   return (
     <div className="relative w-full h-[300px] md:h-full overflow-hidden rounded-2xl md:p-2 p-4">
-      {latestNews?.type === "video" ? (
+      {latestNews?.type === 'video' ? (
         <video
           src={latestNews?.Value}
           className="w-full h-full object-cover object-center rounded-2xl"
@@ -145,7 +147,7 @@ const LatestHero: React.FC = memo(() => {
           loop
           playsInline
         />
-      ) : latestNews?.type === "slider" ? (
+      ) : latestNews?.type === 'slider' ? (
         <div className="relative w-full h-full rounded-2xl overflow-hidden bg-gray-100">
           <AnimatePresence>
             {getImages().length > 0 && (
@@ -160,7 +162,9 @@ const LatestHero: React.FC = memo(() => {
                 <img
                   src={getImages()[currentIndex]}
                   alt={`Slide ${currentIndex + 1}`}
-                  className={getImageClasses(imageAspectRatios[currentIndex] || 1)}
+                  className={getImageClasses(
+                    imageAspectRatios[currentIndex] || 1
+                  )}
                   style={{
                     maxWidth: '100%',
                     maxHeight: '100%',
@@ -212,7 +216,7 @@ const LatestHero: React.FC = memo(() => {
                     d="M9 5l7 7-7 7"
                   />
                 </motion.svg>
-                </motion.button>
+              </motion.button>
 
               <div className="absolute bottom-3 md:bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
                 {getImages().map((_: any, index: number) => (
@@ -220,7 +224,7 @@ const LatestHero: React.FC = memo(() => {
                     key={index}
                     onClick={() => setCurrentIndex(index)}
                     className={`w-2 h-2 rounded-full ${
-                      index === currentIndex ? "bg-white" : "bg-white/50"
+                      index === currentIndex ? 'bg-white' : 'bg-white/50'
                     }`}
                     whileHover={{ scale: 1.2 }}
                     whileTap={{ scale: 0.8 }}
@@ -231,9 +235,9 @@ const LatestHero: React.FC = memo(() => {
               <motion.div
                 className="absolute top-0 left-0 h-0.5 bg-gradient-to-r from-blue-400 to-purple-500 rounded-full"
                 key={currentIndex}
-                initial={{ width: "0%" }}
-                animate={{ width: "100%" }}
-                transition={{ duration: 4, ease: "linear" }}
+                initial={{ width: '0%' }}
+                animate={{ width: '100%' }}
+                transition={{ duration: 4, ease: 'linear' }}
               />
             </>
           )}
@@ -259,7 +263,7 @@ const LatestHero: React.FC = memo(() => {
         transition={{
           duration: 6,
           repeat: Infinity,
-          ease: "easeInOut",
+          ease: 'easeInOut',
         }}
       />
 
@@ -273,13 +277,13 @@ const LatestHero: React.FC = memo(() => {
         transition={{
           duration: 10,
           repeat: Infinity,
-          ease: "easeInOut",
+          ease: 'easeInOut',
         }}
       />
     </div>
   );
 });
 
-LatestHero.displayName = "LatestHero";
+LatestHero.displayName = 'LatestHero';
 
 export default LatestHero;

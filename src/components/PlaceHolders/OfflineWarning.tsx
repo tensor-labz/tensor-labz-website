@@ -3,7 +3,6 @@ import { motion } from 'motion/react';
 import { MdSignalWifiOff, MdRefresh } from 'react-icons/md';
 import { throttle } from '../../base/util/Throttle';
 
-
 const OfflineWarning: React.FC = memo(() => {
   const [isOnline, setIsOnline] = useState(navigator.onLine);
   const setOnlineStatus = useRef(() => setIsOnline(navigator.onLine));

@@ -1,5 +1,11 @@
-import { createContext, useContext, useEffect, useState, useReducer} from "react";
-import { useRootContext } from "./RootContext";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  useReducer,
+} from 'react';
+import { useRootContext } from './RootContext';
 // Define proper types
 interface SliderState {
   currentSlide: number;
@@ -32,17 +38,17 @@ const sliderReducer = (
     case 'NEXT':
       return {
         ...state,
-        currentSlide: normalise(state.currentSlide + 1, length)
+        currentSlide: normalise(state.currentSlide + 1, length),
       };
     case 'PREV':
       return {
         ...state,
-        currentSlide: normalise(state.currentSlide - 1, length)
+        currentSlide: normalise(state.currentSlide - 1, length),
       };
     case 'SET':
       return {
         ...state,
-        currentSlide: normalise(action.payload, length)
+        currentSlide: normalise(action.payload, length),
       };
     default:
       return state;
@@ -55,7 +61,7 @@ const HeroContext = createContext<HeroContextType>({
   setCurrentSlide: () => {},
   slider: null,
   isLoading: false,
-  error: null
+  error: null,
 });
 
 type HeroContextProviderProps = {
@@ -66,20 +72,22 @@ type HeroContextProviderProps = {
 // HeroContextProvider component
 export default function HeroContextProvider({
   children,
-  delay = 5000 // Default delay of 5 seconds if not provided
+  delay = 5000, // Default delay of 5 seconds if not provided
 }: HeroContextProviderProps) {
   // State for fetched data
   const [sliderData, setSliderData] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<Error | null>(null);
- const { googleSheet_URl } = useRootContext();
+  const { googleSheet_URl } = useRootContext();
   // useReducer to manage the current slide
   const [state, dispatch] = useReducer(sliderReducer, { currentSlide: 0 });
 
   // Wrapper that automatically injects the current slide count so the reducer
   // can normalise in-place without a secondary effect.
   const dispatchWithLength = (action: SliderAction) => {
-    dispatch({ ...action, length: sliderData.length } as SliderAction & { length: number });
+    dispatch({ ...action, length: sliderData.length } as SliderAction & {
+      length: number;
+    });
   };
 
   // Fetch slider data
@@ -97,11 +105,13 @@ export default function HeroContextProvider({
         if (result?.data && Array.isArray(result.data)) {
           setSliderData(result.data);
         } else {
-          throw new Error("Invalid data format received");
+          throw new Error('Invalid data format received');
         }
       } catch (err) {
-        setError(err instanceof Error ? err : new Error('An unknown error occurred'));
-        console.error("Error fetching slider data:", err);
+        setError(
+          err instanceof Error ? err : new Error('An unknown error occurred')
+        );
+        console.error('Error fetching slider data:', err);
       } finally {
         setIsLoading(false);
       }
@@ -122,9 +132,10 @@ export default function HeroContextProvider({
   }, [delay, sliderData.length]);
 
   // Get the current slide data
-  const currentSliderItem = sliderData.length > 0 && state.currentSlide < sliderData.length
-    ? sliderData[state.currentSlide]
-    : null;
+  const currentSliderItem =
+    sliderData.length > 0 && state.currentSlide < sliderData.length
+      ? sliderData[state.currentSlide]
+      : null;
 
   // Context value
   const contextValue: HeroContextType = {
@@ -132,13 +143,11 @@ export default function HeroContextProvider({
     setCurrentSlide: dispatchWithLength,
     slider: currentSliderItem,
     isLoading,
-    error
+    error,
   };
 
   return (
-    <HeroContext.Provider value={contextValue}>
-      {children}
-    </HeroContext.Provider>
+    <HeroContext.Provider value={contextValue}>{children}</HeroContext.Provider>
   );
 }
 
