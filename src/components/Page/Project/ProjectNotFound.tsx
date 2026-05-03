@@ -14,12 +14,11 @@ export default function ProjectNotFound() {
   };
 
   useEffect(() => {
-
     if (countdown > 0) {
       const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
       return () => clearTimeout(timer);
     } else if (countdown === 0) {
-      goToProjects(); 
+      goToProjects();
     }
   }, [countdown]);
 
@@ -28,17 +27,30 @@ export default function ProjectNotFound() {
       <div className="max-w-md w-full text-center">
         {/* Error Icon */}
         <div className="mb-6 text-red-500">
-          <svg className="w-24 h-24 mx-auto" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+          <svg
+            className="w-24 h-24 mx-auto"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.5"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"
+            />
           </svg>
         </div>
 
         {/* Error Title */}
-        <h1 className="text-4xl font-bold text-gray-800 mb-2">Project Not Found</h1>
+        <h1 className="text-4xl font-bold text-gray-800 mb-2">
+          Project Not Found
+        </h1>
 
         {/* Error Description */}
         <p className="text-gray-600 mb-8">
-          We couldn't find the project you're looking for. It may have been deleted, moved, or never existed.
+          We couldn&apos;t find the project you&apos;re looking for. It may have
+          been deleted, moved, or never existed.
         </p>
 
         {/* Action Buttons */}
@@ -57,8 +69,6 @@ export default function ProjectNotFound() {
             View All Projects
           </button>
         </div>
-
-
 
         {/* Auto Redirect Notice */}
         <p className="text-sm text-gray-500">
