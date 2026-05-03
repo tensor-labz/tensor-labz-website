@@ -5,11 +5,11 @@ on:
     branches: [main]
 
 permissions:
-  contents: write   # needed to create and push tags
+  contents: write   # push changelog commit + tag back to main
 
 jobs:
   release:
-    name: Bump version & tag
+    name: Bump version, update changelog & tag
     runs-on: ubuntu-latest
 
     steps:
@@ -19,7 +19,7 @@ jobs:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Run version bump script
+      - name: Run version bump & changelog update
         id: bump
         run: |
           chmod +x scripts/bump-version.sh
@@ -28,10 +28,10 @@ jobs:
       - name: Summary
         if: steps.bump.outputs.new_tag != ''
         run: |
-          echo "## Release Summary" >> $GITHUB_STEP_SUMMARY
+          echo "## Release ${{ steps.bump.outputs.new_tag }}" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "| | |" >> $GITHUB_STEP_SUMMARY
           echo "|---|---|" >> $GITHUB_STEP_SUMMARY
-          echo "| Previous tag | \`${{ steps.bump.outputs.prev_tag }}\` |" >> $GITHUB_STEP_SUMMARY
-          echo "| New tag      | \`${{ steps.bump.outputs.new_tag }}\` |" >> $GITHUB_STEP_SUMMARY
-          echo "| Bump type    | \`${{ steps.bump.outputs.bump_type }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| Previous | \`${{ steps.bump.outputs.prev_tag }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| Released | \`${{ steps.bump.outputs.new_tag }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| Bump type | \`${{ steps.bump.outputs.bump_type }}\` |" >> $GITHUB_STEP_SUMMARY
