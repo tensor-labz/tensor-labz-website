@@ -55,10 +55,12 @@ The backend is Google Sheets via `VITE_SHEET_URL`. Exact sheet tab names (case-s
 | Projects      | `ProjectData` |
 | About Us      | `AboutusData` |
 | Contact       | `ContactData` |
-| Social links  | `LinkData`    |
+| Social links  | `LinkData`    | ⚠️ nested — see below |
 | Latest news   | `LatestData`  |
 
 > **Common mistake:** `AboutData` is wrong — it must be `AboutusData`.
+
+> **`LinkData` is special:** it returns `{ data: { social_media: [...] } }` — `result.data` is an object, not an array. Do NOT use `sheetsClient` for this sheet — fetch directly and access `result.data.social_media`.
 
 ## Sheet Field Names
 
