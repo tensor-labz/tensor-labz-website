@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk, createSelector } from '@reduxjs/toolkit';
 import { fetchServices } from '../services/servicesService';
 import type { ServiceCardProps } from '../shared/types/service';
 import type { RootState } from '../app/store';
@@ -45,7 +45,8 @@ export default servicesSlice.reducer;
 
 export const selectServices = (state: RootState) => state.services.items;
 export const selectServicesStatus = (state: RootState) => state.services.status;
-export const selectHomeServices = (state: RootState) =>
-  state.services.items.filter(
-    (s) => s.show_in_home === 'true' || s.show_in_home === '1'
-  );
+export const selectHomeServices = createSelector(
+  selectServices,
+  (items) =>
+    items.filter((s) => s.show_in_home === 'true' || s.show_in_home === '1')
+);

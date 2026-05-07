@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk, createSelector, PayloadAction } from '@reduxjs/toolkit';
 import { fetchProjects } from '../services/projectsService';
 import type { ProjectItem } from '../shared/types/project';
 import type { RootState } from '../app/store';
@@ -62,8 +62,10 @@ export const selectActiveSlug = (state: RootState) =>
   state.projects.activeServiceSlug;
 export const selectCurrentPage = (state: RootState) =>
   state.projects.currentPage;
-export const selectTopProjects = (state: RootState) =>
-  state.projects.items.filter((p) => p.is_top);
+export const selectTopProjects = createSelector(
+  selectAllProjects,
+  (items) => items.filter((p) => p.is_top)
+);
 export const selectProjectBySlug =
   (slug: string) =>
   (state: RootState): ProjectItem | null =>
