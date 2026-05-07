@@ -19,7 +19,7 @@ interface SocialLink {
   icon: IconType;
   social_media: string;
   color: string;
-  href?: string;
+  href: string;
 }
 
 const socialMediaConfig: Omit<SocialLink, 'href'>[] = [
