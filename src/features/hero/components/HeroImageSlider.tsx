@@ -37,10 +37,10 @@ const HeroImageSlider: React.FC = memo(() => {
           exit="exit"
           className="absolute inset-0"
         >
-          {slide?.imageURL && (
+          {slide?.img && (
             <img
-              src={slide.imageURL as string}
-              alt={(slide.title as string) ?? 'Hero'}
+              src={slide.img}
+              alt={slide.title ?? 'Hero'}
               className="w-full h-full object-cover object-center"
               draggable={false}
             />

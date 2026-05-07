@@ -2,7 +2,7 @@ import { fetchSheet } from './sheetsClient';
 
 export interface HeroSlide {
   id: string;
-  imageURL: string;
+  img: string;
   title?: string;
   subtitle?: string;
   [key: string]: unknown;
