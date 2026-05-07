@@ -6,60 +6,22 @@ on:
 
 jobs:
   deploy:
-    name: Build & Deploy to AWS Amplify
+    name: Mirror to Bitbucket → Amplify builds
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4
-
-      - uses: actions/setup-node@v4
         with:
-          node-version: 20
-          cache: npm
+          fetch-depth: 0
 
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Type check
-        run: npx tsc --noEmit
-
-      - name: Build
-        run: npm run build
-        env:
-          VITE_SHEET_URL: ${{ secrets.VITE_SHEET_URL }}
-          VITE_FIREBASE_API_KEY: ${{ secrets.VITE_FIREBASE_API_KEY }}
-          VITE_FIREBASE_AUTH_DOMAIN: ${{ secrets.VITE_FIREBASE_AUTH_DOMAIN }}
-          VITE_FIREBASE_PROJECT_ID: ${{ secrets.VITE_FIREBASE_PROJECT_ID }}
-          VITE_FIREBASE_STORAGE_BUCKET: ${{ secrets.VITE_FIREBASE_STORAGE_BUCKET }}
-          VITE_FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.VITE_FIREBASE_MESSAGING_SENDER_ID }}
-          VITE_FIREBASE_APP_ID: ${{ secrets.VITE_FIREBASE_APP_ID }}
-          VITE_IMAGE_LAMBDA_URL: ${{ secrets.VITE_IMAGE_LAMBDA_URL }}
-
-      - name: Zip dist
-        run: cd dist && zip -r ../deploy.zip . && cd ..
-
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: eu-north-1
-
-      - name: Deploy to Amplify
+      - name: Set up SSH for Bitbucket
         run: |
-          DEPLOYMENT=$(aws amplify create-deployment \
-            --app-id d2t8tfeziiszi8 \
-            --branch-name main \
-            --output json)
+          mkdir -p ~/.ssh
+          echo "${{ secrets.BITBUCKET_SSH_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan bitbucket.org >> ~/.ssh/known_hosts
 
-          JOB_ID=$(echo $DEPLOYMENT | python3 -c "import sys,json; print(json.load(sys.stdin)['jobId'])")
-          UPLOAD_URL=$(echo $DEPLOYMENT | python3 -c "import sys,json; print(json.load(sys.stdin)['zipUploadUrl'])")
-
-          curl -T deploy.zip "$UPLOAD_URL"
-
-          aws amplify start-deployment \
-            --app-id d2t8tfeziiszi8 \
-            --branch-name main \
-            --job-id "$JOB_ID"
-
-          echo "Deployed job $JOB_ID to https://main.d2t8tfeziiszi8.amplifyapp.com"
+      - name: Push to Bitbucket (triggers Amplify build)
+        run: |
+          git remote add bitbucket git@bitbucket.org:thanumahee12/tensor-labz-website.git
+          git push bitbucket main:main --force
