@@ -186,9 +186,11 @@ const Login = () => {
                 animate={{ opacity: 1, y: 0 }}
                 className="text-sm text-red-400 text-center"
               >
-                {error.includes('invalid-credential') || error.includes('wrong-password')
+                {error.includes('Invalid login credentials') || error.includes('invalid_credentials')
                   ? 'Invalid email or password.'
-                  : error.includes('too-many-requests')
+                  : error.includes('Email not confirmed')
+                  ? 'Please confirm your email before signing in.'
+                  : error.includes('rate limit') || error.includes('too many')
                   ? 'Too many attempts. Please try again later.'
                   : 'Sign in failed. Please try again.'}
               </motion.p>
