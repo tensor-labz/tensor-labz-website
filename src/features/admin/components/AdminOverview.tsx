@@ -307,7 +307,7 @@ const AdminOverview = memo(() => {
                 </span>
               </div>
             </div>
-            <div className="h-[220px]">
+            <div className="h-[220px] min-w-0">
               <ResponsiveContainer width="100%" height="100%">
                 <AreaChart data={MONTHLY_ACTIVITY} margin={{ top: 4, right: 4, left: -22, bottom: 0 }}>
                   <defs>
@@ -340,7 +340,7 @@ const AdminOverview = memo(() => {
         <FadeIn delay={0.36} className="flex">
           <Card className="flex-1 flex flex-col">
             <CardHeader title="Content Distribution" sub="Records per module" />
-            <div className="h-[170px] flex items-center justify-center">
+            <div className="h-[170px] min-w-0 flex items-center justify-center">
               <ResponsiveContainer width="100%" height="100%">
                 <RadialBarChart
                   cx="50%" cy="50%"
@@ -390,7 +390,7 @@ const AdminOverview = memo(() => {
         <FadeIn delay={0.44} className="flex">
           <Card className="flex-1 flex flex-col">
             <CardHeader title="Records by Module" sub="Total content entries per section" />
-            <div className="h-[210px]">
+            <div className="h-[210px] min-w-0">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart
                   data={MODULE_COUNTS.map((m) => ({ name: m.name, count: m.count, color: m.color }))}
