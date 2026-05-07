@@ -1,40 +1,9 @@
-import { memo } from 'react';
+import { memo, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { motion } from 'motion/react';
 import { FaPlus, FaImage } from 'react-icons/fa';
 import { MODULES } from '../config/modules';
-
-/* ── mock rows per module so the table looks populated ── */
-const MOCK_DATA: Record<string, Record<string, unknown>[]> = {
-  hero: [
-    { id: '1', img: 'https://via.placeholder.com/80x80?text=Slide+1', title: 'Creating Sustainable Impact', subtitle: 'Through Technology' },
-    { id: '2', img: 'https://via.placeholder.com/80x80?text=Slide+2', title: 'Innovation Driven', subtitle: 'Engineering solutions for tomorrow' },
-  ],
-  services: [
-    { id: '1', imageURL: 'https://via.placeholder.com/80x80?text=SVC', title: 'AI & Machine Learning', description: 'End-to-end ML pipelines and model deployment', slug: 'ai-ml', show_in_home: 'true' },
-    { id: '2', imageURL: 'https://via.placeholder.com/80x80?text=SVC', title: 'Robotics & Automation', description: 'Custom robotic systems and industrial automation', slug: 'robotics', show_in_home: 'true' },
-    { id: '3', imageURL: '', title: 'IoT Solutions', description: 'Connected device ecosystems and real-time dashboards', slug: 'iot', show_in_home: 'false' },
-  ],
-  projects: [
-    { id: '1', imageURL: 'https://via.placeholder.com/80x80?text=PRJ', title: 'Smart Farm Monitor', description: 'Real-time crop monitoring using IoT sensors and ML', slug: 'smart-farm', is_top: true },
-    { id: '2', imageURL: 'https://via.placeholder.com/80x80?text=PRJ', title: 'Autonomous Delivery Bot', description: 'Last-mile delivery robot with obstacle avoidance', slug: 'delivery-bot', is_top: false },
-  ],
-  about: [
-    { id: '1', components: 'Our Mission', value: 'Transforming visions into realities through technology.' },
-    { id: '2', components: 'Our Vision', value: 'A world where technology enables sustainable growth.' },
-    { id: '3', components: 'Years of Experience', value: '3+ years building innovative solutions.' },
-  ],
-  contact: [
-    { id: '1', contact: 'email', title: 'Email Us', value: 'hello@tensorlabz.com' },
-    { id: '2', contact: 'phone', title: 'Call Us', value: '+94 77 048 4739' },
-    { id: '3', contact: 'address', title: 'Visit Us', value: 'Colombo, Sri Lanka' },
-  ],
-  social: [
-    { id: '1', social_media: 'Linkedin', value: 'https://linkedin.com/company/tensor-labz' },
-    { id: '2', social_media: 'Instagram', value: 'https://instagram.com/tensorlabz' },
-    { id: '3', social_media: 'Youtube', value: 'https://youtube.com/@tensorlabz' },
-  ],
-};
+import { supabase } from '../../../lib/supabase';
 
 const rowVariants = {
   hidden: { opacity: 0, y: 10 },
@@ -50,7 +19,20 @@ const AdminDataTable = memo(() => {
   const { module: moduleId = 'hero' } = useParams();
 
   const mod = MODULES.find((m) => m.id === moduleId);
-  const rows = MOCK_DATA[moduleId] ?? [];
+  const [rows, setRows] = useState<Record<string, unknown>[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setLoading(true);
+    supabase
+      .from(moduleId)
+      .select('*')
+      .order('id')
+      .then(({ data, error }) => {
+        if (!error && data) setRows(data as Record<string, unknown>[]);
+      })
+      .finally(() => setLoading(false));
+  }, [moduleId]);
 
   if (!mod) {
     return (
@@ -72,7 +54,7 @@ const AdminDataTable = memo(() => {
             {mod.label}
           </h2>
           <p className="text-sm mt-0.5" style={{ color: 'var(--text-muted)' }}>
-            {rows.length} {rows.length === 1 ? 'record' : 'records'}
+            {loading ? 'Loading…' : `${rows.length} ${rows.length === 1 ? 'record' : 'records'}`}
           </p>
         </div>
         <motion.button
@@ -109,7 +91,11 @@ const AdminDataTable = memo(() => {
         </div>
 
         {/* Rows */}
-        {rows.length === 0 ? (
+        {loading ? (
+          <div className="flex items-center justify-center py-16">
+            <p className="text-sm" style={{ color: 'var(--text-muted)' }}>Loading…</p>
+          </div>
+        ) : rows.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-16 gap-3">
             <FaImage size={32} style={{ color: 'var(--text-muted)', opacity: 0.3 }} />
             <p className="text-sm" style={{ color: 'var(--text-muted)' }}>
@@ -157,7 +143,7 @@ const AdminDataTable = memo(() => {
                   )}
                 </div>
 
-                {/* Col 2 — Title (clickable hint) */}
+                {/* Col 2 — Title */}
                 <div className="min-w-0">
                   <p
                     className="font-semibold text-sm truncate group-hover:underline"
