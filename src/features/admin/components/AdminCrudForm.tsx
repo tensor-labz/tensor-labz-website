@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { FaArrowLeft, FaTrash, FaSave, FaEye, FaEyeSlash, FaCloudUploadAlt, FaLink, FaImage, FaTimes } from 'react-icons/fa';
 import { MODULES, FieldConfig } from '../config/modules';
 import { supabase } from '../../../lib/supabase';
+import { uploadImage, moduleFolder } from '../../../lib/imageUpload';
 
 
 /* ── Delete confirm modal ── */
@@ -77,14 +78,18 @@ const DeleteModal = ({
 const ImageField = ({
   value,
   onChange,
+  folder,
 }: {
   value: unknown;
   onChange: (val: unknown) => void;
+  folder: string;
 }) => {
   const [mode, setMode] = useState<'upload' | 'url'>('upload');
   const [dragging, setDragging] = useState(false);
   const [preview, setPreview] = useState<string>(String(value ?? ''));
   const [fileName, setFileName] = useState<string>('');
+  const [uploading, setUploading] = useState(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const inputStyle = {
@@ -94,13 +99,22 @@ const ImageField = ({
     outline: 'none',
   };
 
-  const handleFile = useCallback((file: File) => {
+  const handleFile = useCallback(async (file: File) => {
     if (!file.type.startsWith('image/')) return;
-    const url = URL.createObjectURL(file);
-    setPreview(url);
+    setUploading(true);
+    setUploadError(null);
     setFileName(file.name);
-    onChange(url); // TODO: replace with actual S3/Storage upload result
-  }, [onChange]);
+    setPreview(URL.createObjectURL(file)); // optimistic local preview
+    try {
+      const { publicUrl } = await uploadImage(file, folder, String(value ?? ''));
+      setPreview(publicUrl);
+      onChange(publicUrl);
+    } catch (err) {
+      setUploadError(err instanceof Error ? err.message : 'Upload failed');
+    } finally {
+      setUploading(false);
+    }
+  }, [onChange, folder, value]);
 
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
@@ -166,22 +180,28 @@ const ImageField = ({
             className="hidden"
             onChange={(e) => { const f = e.target.files?.[0]; if (f) handleFile(f); }}
           />
-          <FaCloudUploadAlt size={22} style={{ color: dragging ? 'var(--accent)' : 'var(--text-muted)' }} />
-          <div className="text-center px-4">
-            <p className="text-sm font-medium" style={{ color: dragging ? 'var(--accent)' : 'var(--text-primary)' }}>
-              {dragging ? 'Drop image here' : 'Drag & drop or click to browse'}
-            </p>
-            <p className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>
-              PNG, JPG, WebP, GIF — max 10 MB
-            </p>
-          </div>
-          {fileName && (
-            <span
-              className="text-xs px-2 py-0.5 rounded-full"
-              style={{ backgroundColor: 'var(--glass-bg)', color: 'var(--text-muted)', border: '1px solid var(--glass-border)' }}
-            >
-              {fileName}
-            </span>
+          {uploading ? (
+            <p className="text-sm font-medium" style={{ color: 'var(--accent)' }}>Uploading…</p>
+          ) : (
+            <>
+              <FaCloudUploadAlt size={22} style={{ color: dragging ? 'var(--accent)' : 'var(--text-muted)' }} />
+              <div className="text-center px-4">
+                <p className="text-sm font-medium" style={{ color: dragging ? 'var(--accent)' : 'var(--text-primary)' }}>
+                  {dragging ? 'Drop image here' : 'Drag & drop or click to browse'}
+                </p>
+                <p className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>
+                  PNG, JPG, WebP, GIF — max 10 MB
+                </p>
+              </div>
+              {fileName && (
+                <span
+                  className="text-xs px-2 py-0.5 rounded-full"
+                  style={{ backgroundColor: 'var(--glass-bg)', color: 'var(--text-muted)', border: '1px solid var(--glass-border)' }}
+                >
+                  {fileName}
+                </span>
+              )}
+            </>
           )}
         </div>
       )}
@@ -242,6 +262,9 @@ const ImageField = ({
           <FaImage size={20} style={{ color: 'var(--text-muted)', opacity: 0.3 }} />
         </div>
       )}
+      {uploadError && (
+        <p className="text-xs" style={{ color: '#ef4444' }}>{uploadError}</p>
+      )}
     </div>
   );
 };
@@ -250,13 +273,17 @@ const ImageField = ({
 const MultiImageField = ({
   value,
   onChange,
+  folder,
 }: {
   value: unknown;
   onChange: (val: string[]) => void;
+  folder: string;
 }) => {
   const [addMode, setAddMode] = useState<'upload' | 'url' | null>(null);
   const [urlInput, setUrlInput] = useState('');
   const [dragging, setDragging] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const images: string[] = Array.isArray(value)
@@ -273,13 +300,23 @@ const MultiImageField = ({
     onChange(images.filter((_, i) => i !== idx));
   };
 
-  const handleFiles = (files: FileList | null) => {
+  const handleFiles = async (files: FileList | null) => {
     if (!files) return;
-    const urls = Array.from(files)
-      .filter((f) => f.type.startsWith('image/'))
-      .map((f) => URL.createObjectURL(f));
-    addImages(urls);
+    const validFiles = Array.from(files).filter((f) => f.type.startsWith('image/'));
+    if (!validFiles.length) return;
+    setUploading(true);
+    setUploadError(null);
     setAddMode(null);
+    try {
+      const results = await Promise.all(
+        validFiles.map((f) => uploadImage(f, folder))
+      );
+      addImages(results.map((r) => r.publicUrl));
+    } catch (err) {
+      setUploadError(err instanceof Error ? err.message : 'Upload failed');
+    } finally {
+      setUploading(false);
+    }
   };
 
   const handleUrlAdd = () => {
@@ -431,7 +468,13 @@ const MultiImageField = ({
         </div>
       )}
 
-      {images.length > 0 && addMode === null && (
+      {uploading && (
+        <p className="text-xs" style={{ color: 'var(--accent)' }}>Uploading…</p>
+      )}
+      {uploadError && (
+        <p className="text-xs" style={{ color: '#ef4444' }}>{uploadError}</p>
+      )}
+      {images.length > 0 && addMode === null && !uploading && (
         <p className="text-xs" style={{ color: 'var(--text-muted)' }}>
           {images.length} image{images.length > 1 ? 's' : ''}
         </p>
@@ -445,10 +488,12 @@ const Field = ({
   field,
   value,
   onChange,
+  folder,
 }: {
   field: FieldConfig;
   value: unknown;
   onChange: (val: unknown) => void;
+  folder: string;
 }) => {
   const [showPreview, setShowPreview] = useState(false);
   const str = String(value ?? '');
@@ -461,11 +506,11 @@ const Field = ({
   };
 
   if (field.type === 'image') {
-    return <ImageField value={value} onChange={onChange} />;
+    return <ImageField value={value} onChange={onChange} folder={folder} />;
   }
 
   if (field.type === 'images') {
-    return <MultiImageField value={value} onChange={(val) => onChange(val)} />;
+    return <MultiImageField value={value} onChange={(val) => onChange(val)} folder={folder} />;
   }
 
   if (field.type === 'toggle') {
@@ -690,6 +735,7 @@ const AdminCrudForm = memo(() => {
                 <Field
                   field={field}
                   value={values[field.key]}
+                  folder={moduleFolder(moduleId, String(values.slug ?? ''))}
                   onChange={(val) => handleChange(field.key, val)}
                 />
               </div>
