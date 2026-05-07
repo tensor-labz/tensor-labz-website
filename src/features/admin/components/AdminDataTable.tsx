@@ -6,6 +6,7 @@ import { FiSearch, FiX } from 'react-icons/fi';
 import { HiArrowsUpDown } from 'react-icons/hi2';
 import { MODULES } from '../config/modules';
 import { supabase } from '../../../lib/supabase';
+import type { TableColumnConfig } from '../../../shared/types/tableConfig';
 
 type SortKey = 'id-asc' | 'id-desc' | 'title-asc' | 'title-desc';
 
@@ -31,12 +32,13 @@ const AdminDataTable = memo(() => {
 
   const mod = MODULES.find((m) => m.id === moduleId);
 
-  const [rows,    setRows]    = useState<Record<string, unknown>[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [search,  setSearch]  = useState('');
-  const [sort,    setSort]    = useState<SortKey>('id-asc');
+  const [rows,       setRows]       = useState<Record<string, unknown>[]>([]);
+  const [loading,    setLoading]    = useState(true);
+  const [search,     setSearch]     = useState('');
+  const [sort,       setSort]       = useState<SortKey>('id-asc');
+  const [colConfig,  setColConfig]  = useState<TableColumnConfig[] | null>(null);
 
-  /* ── fetch ── */
+  /* ── fetch rows ── */
   useEffect(() => {
     setLoading(true);
     setSearch('');
@@ -48,6 +50,19 @@ const AdminDataTable = memo(() => {
         if (!error && data) setRows(data as Record<string, unknown>[]);
       })
       .finally(() => setLoading(false));
+  }, [moduleId]);
+
+  /* ── fetch column config ── */
+  useEffect(() => {
+    setColConfig(null);
+    supabase
+      .from('table_config')
+      .select('columns')
+      .eq('module_id', moduleId)
+      .maybeSingle()
+      .then(({ data }) => {
+        if (data?.columns) setColConfig(data.columns as TableColumnConfig[]);
+      });
   }, [moduleId]);
 
   /* ── filter + sort (client-side) ── */
@@ -179,25 +194,36 @@ const AdminDataTable = memo(() => {
         style={{ backgroundColor: 'var(--glass-bg)', border: '1px solid var(--glass-border)' }}
       >
         {/* Column headers */}
-        <div
-          className="grid gap-3 px-4 sm:px-5 py-3 text-xs font-semibold tracking-widest uppercase"
-          style={{
-            gridTemplateColumns: mod.imageField
-              ? '48px 1fr'
-              : '1fr',
-            color: 'var(--text-muted)',
-            borderBottom: '1px solid var(--glass-border)',
-            backgroundColor: 'var(--glass-bg-subtle)',
-          }}
-        >
-          {mod.imageField && <span>Image</span>}
-          <div className={`grid gap-3 ${mod.descriptionField ? 'grid-cols-[1fr_1fr]' : ''}`}>
-            <span>{mod.titleField === 'social_media' ? 'Platform' : 'Title'}</span>
-            {mod.descriptionField && (
-              <span className="hidden sm:block">Description</span>
-            )}
-          </div>
-        </div>
+        {(() => {
+          const imgLabel   = colConfig?.find((c) => c.key === mod.imageField)?.label       ?? 'Image';
+          const titleLabel = colConfig?.find((c) => c.key === mod.titleField)?.label       ?? (mod.titleField === 'social_media' ? 'Platform' : 'Title');
+          const descLabel  = colConfig?.find((c) => c.key === mod.descriptionField)?.label ?? 'Description';
+          const imgVisible  = mod.imageField       ? (colConfig?.find((c) => c.key === mod.imageField)?.visible       ?? true) : false;
+          const descVisible = mod.descriptionField ? (colConfig?.find((c) => c.key === mod.descriptionField)?.visible ?? true) : false;
+          const titleAlign  = colConfig?.find((c) => c.key === mod.titleField)?.align       ?? 'left';
+          const descAlign   = colConfig?.find((c) => c.key === mod.descriptionField)?.align ?? 'left';
+          const alignClass  = { left: 'text-left', center: 'text-center', right: 'text-right' };
+
+          return (
+            <div
+              className="grid gap-3 px-4 sm:px-5 py-3 text-xs font-semibold tracking-widest uppercase"
+              style={{
+                gridTemplateColumns: imgVisible ? '48px 1fr' : '1fr',
+                color: 'var(--text-muted)',
+                borderBottom: '1px solid var(--glass-border)',
+                backgroundColor: 'var(--glass-bg-subtle)',
+              }}
+            >
+              {imgVisible && <span>{imgLabel}</span>}
+              <div className={`grid gap-3 ${descVisible ? 'grid-cols-[1fr_1fr]' : ''}`}>
+                <span className={alignClass[titleAlign]}>{titleLabel}</span>
+                {descVisible && (
+                  <span className={`hidden sm:block ${alignClass[descAlign]}`}>{descLabel}</span>
+                )}
+              </div>
+            </div>
+          );
+        })()}
 
         {/* Body */}
         {loading ? (
@@ -243,10 +269,14 @@ const AdminDataTable = memo(() => {
             {filtered.map((row, i) => {
               const imgSrc = mod.imageField ? String(row[mod.imageField] ?? '') : '';
               const title  = String(row[mod.titleField] ?? '—');
-              const desc   = mod.descriptionField
-                ? String(row[mod.descriptionField] ?? '')
-                : '';
-              const id = String(row.id ?? i);
+              const desc   = mod.descriptionField ? String(row[mod.descriptionField] ?? '') : '';
+              const id     = String(row.id ?? i);
+
+              const imgVisible  = mod.imageField       ? (colConfig?.find((c) => c.key === mod.imageField)?.visible       ?? true) : false;
+              const descVisible = mod.descriptionField ? (colConfig?.find((c) => c.key === mod.descriptionField)?.visible ?? true) : false;
+              const titleAlign  = colConfig?.find((c) => c.key === mod.titleField)?.align       ?? 'left';
+              const descAlign   = colConfig?.find((c) => c.key === mod.descriptionField)?.align ?? 'left';
+              const alignClass  = { left: 'text-left', center: 'text-center', right: 'text-right' };
 
               return (
                 <motion.div
@@ -258,7 +288,7 @@ const AdminDataTable = memo(() => {
                   exit="exit"
                   className="grid gap-3 px-4 sm:px-5 py-3 sm:py-4 items-center cursor-pointer group"
                   style={{
-                    gridTemplateColumns: mod.imageField ? '48px 1fr' : '1fr',
+                    gridTemplateColumns: imgVisible ? '48px 1fr' : '1fr',
                     borderBottom: i < filtered.length - 1
                       ? '1px solid var(--glass-border-subtle)'
                       : 'none',
@@ -267,7 +297,7 @@ const AdminDataTable = memo(() => {
                   whileHover={{ backgroundColor: 'var(--glass-bg-hover)' }}
                 >
                   {/* Image */}
-                  {mod.imageField && (
+                  {imgVisible && (
                     <div
                       className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg overflow-hidden shrink-0 flex items-center justify-center"
                       style={{ backgroundColor: 'var(--glass-bg-raised)' }}
@@ -288,24 +318,24 @@ const AdminDataTable = memo(() => {
                   )}
 
                   {/* Title + description */}
-                  <div className={`min-w-0 grid gap-3 ${mod.descriptionField ? 'grid-cols-1 sm:grid-cols-[1fr_1fr]' : ''}`}>
+                  <div className={`min-w-0 grid gap-3 ${descVisible ? 'grid-cols-1 sm:grid-cols-[1fr_1fr]' : ''}`}>
                     <div className="min-w-0">
                       <p
-                        className="font-semibold text-sm truncate group-hover:underline"
+                        className={`font-semibold text-sm truncate group-hover:underline ${alignClass[titleAlign]}`}
                         style={{ color: 'var(--text-primary)' }}
                       >
                         {title}
                       </p>
                       {/* Mobile: show desc below title */}
-                      {desc && mod.descriptionField && (
-                        <p className="text-xs truncate mt-0.5 sm:hidden" style={{ color: 'var(--text-muted)' }}>
+                      {desc && descVisible && (
+                        <p className={`text-xs truncate mt-0.5 sm:hidden ${alignClass[descAlign]}`} style={{ color: 'var(--text-muted)' }}>
                           {desc}
                         </p>
                       )}
                     </div>
-                    {mod.descriptionField && (
+                    {descVisible && (
                       <div className="min-w-0 hidden sm:block">
-                        <p className="text-sm truncate" style={{ color: 'var(--text-muted)' }}>
+                        <p className={`text-sm truncate ${alignClass[descAlign]}`} style={{ color: 'var(--text-muted)' }}>
                           {desc || '—'}
                         </p>
                       </div>

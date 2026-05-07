@@ -11,10 +11,14 @@ import { IconType } from 'react-icons';
 export interface FieldConfig {
   key: string;
   label: string;
-  type: 'text' | 'textarea' | 'url' | 'image' | 'images' | 'toggle' | 'tags' | 'richtext';
+  type:
+    | 'text' | 'textarea' | 'url' | 'image' | 'images'
+    | 'toggle' | 'checkbox' | 'tags' | 'multiinput'
+    | 'richtext' | 'radio' | 'select';
   placeholder?: string;
   required?: boolean;
   span?: 'full' | 'half';
+  options?: string[];
 }
 
 export interface ModuleConfig {
