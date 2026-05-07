@@ -1,35 +1,10 @@
-import { memo, useState, useRef, useCallback } from 'react';
+import { memo, useState, useRef, useCallback, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import { FaArrowLeft, FaTrash, FaSave, FaEye, FaEyeSlash, FaCloudUploadAlt, FaLink, FaImage, FaTimes } from 'react-icons/fa';
 import { MODULES, FieldConfig } from '../config/modules';
+import { supabase } from '../../../lib/supabase';
 
-/* ── same mock data ── */
-const MOCK_DATA: Record<string, Record<string, unknown>[]> = {
-  hero: [
-    { id: '1', img: '', title: 'Creating Sustainable Impact', subtitle: 'Through Technology' },
-    { id: '2', img: '', title: 'Innovation Driven', subtitle: 'Engineering solutions for tomorrow' },
-  ],
-  services: [
-    { id: '1', imageURL: '', title: 'AI & Machine Learning', description: 'End-to-end ML pipelines', slug: 'ai-ml', show_in_home: 'true' },
-    { id: '2', imageURL: '', title: 'Robotics & Automation', description: 'Custom robotic systems', slug: 'robotics', show_in_home: 'true' },
-  ],
-  projects: [
-    { id: '1', imageURL: '', title: 'Smart Farm Monitor', description: 'Real-time crop monitoring', slug: 'smart-farm', is_top: true, content: '', vedio_demo: '', service: 'iot', tags: 'IoT, ML' },
-    { id: '2', imageURL: '', title: 'Autonomous Delivery Bot', description: 'Last-mile delivery robot', slug: 'delivery-bot', is_top: false, content: '', vedio_demo: '', service: 'robotics', tags: 'Robotics' },
-  ],
-  about: [
-    { id: '1', components: 'Our Mission', value: 'Transforming visions into realities.' },
-    { id: '2', components: 'Our Vision', value: 'A world where technology enables growth.' },
-  ],
-  contact: [
-    { id: '1', contact: 'email', title: 'Email Us', value: 'hello@tensorlabz.com' },
-    { id: '2', contact: 'phone', title: 'Call Us', value: '+94 77 048 4739' },
-  ],
-  social: [
-    { id: '1', social_media: 'Linkedin', value: 'https://linkedin.com' },
-  ],
-};
 
 /* ── Delete confirm modal ── */
 const DeleteModal = ({
@@ -598,38 +573,58 @@ const AdminCrudForm = memo(() => {
   const isNew = id === 'new';
 
   const mod = MODULES.find((m) => m.id === moduleId);
-  const existingRows = MOCK_DATA[moduleId] ?? [];
-  const existingRecord = isNew ? null : existingRows.find((r) => String(r.id) === id) ?? null;
-
-  const initialValues = mod?.fields.reduce<Record<string, unknown>>((acc, f) => {
-    acc[f.key] = existingRecord?.[f.key] ?? '';
+  const emptyValues = mod?.fields.reduce<Record<string, unknown>>((acc, f) => {
+    acc[f.key] = f.type === 'images' ? [] : '';
     return acc;
   }, {}) ?? {};
 
-  const [values, setValues] = useState<Record<string, unknown>>(initialValues);
+  const [values, setValues] = useState<Record<string, unknown>>(emptyValues);
   const [showDelete, setShowDelete] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [loadError, setLoadError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (isNew || !mod) return;
+    supabase
+      .from(moduleId)
+      .select('*')
+      .eq('id', id!)
+      .single()
+      .then(({ data, error }) => {
+        if (error) { setLoadError(error.message); return; }
+        if (data) {
+          const filled = mod.fields.reduce<Record<string, unknown>>((acc, f) => {
+            const raw = (data as Record<string, unknown>)[f.key];
+            acc[f.key] = raw !== undefined && raw !== null ? raw : (f.type === 'images' ? [] : '');
+            return acc;
+          }, {});
+          setValues(filled);
+        }
+      });
+  }, [moduleId, id, isNew, mod]);
 
   const handleChange = (key: string, val: unknown) => {
     setValues((prev) => ({ ...prev, [key]: val }));
   };
 
-  const handleSave = (e: React.FormEvent) => {
+  const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     setSaving(true);
-    // TODO: wire to Firestore
-    setTimeout(() => {
-      setSaving(false);
-      navigate(`/admin/${moduleId}`);
-    }, 800);
+    const payload = isNew ? values : { ...values, id };
+    const { error } = await supabase.from(moduleId).upsert(payload as Record<string, unknown>);
+    setSaving(false);
+    if (!error) navigate(`/admin/${moduleId}`);
   };
 
-  const handleDelete = () => {
-    // TODO: wire to Firestore
+  const handleDelete = async () => {
+    await supabase.from(moduleId).delete().eq('id', id!);
     navigate(`/admin/${moduleId}`);
   };
 
   if (!mod) return null;
+  if (loadError) return (
+    <div className="p-6 text-sm" style={{ color: '#ef4444' }}>Failed to load record: {loadError}</div>
+  );
 
   return (
     <>

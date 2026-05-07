@@ -1,4 +1,3 @@
-import { useRootContext } from '../RootContext';
 import {
   createContext,
   useContext,
@@ -7,9 +6,10 @@ import {
   useCallback,
   useMemo,
 } from 'react';
+import { fetchSocialLinks } from '../../services/socialService';
 
 interface SocialMediaDataContextType {
-  link_data: any | null;
+  link_data: { social_media: { social_media: string; value: string }[] } | null;
   isLoading: boolean;
   error: Error | null;
 }
@@ -27,28 +27,19 @@ type SocialMediaDataContextProviderProps = {
 export default function SocialMediaDataContextProvider({
   children,
 }: SocialMediaDataContextProviderProps) {
-  const [link_data, setData] = useState<any>(null);
+  const [link_data, setData] = useState<SocialMediaDataContextType['link_data']>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<Error | null>(null);
-  const { googleSheet_URl } = useRootContext();
+
   const fetchData = useCallback(async (signal?: AbortSignal) => {
     setIsLoading(true);
     setError(null);
     try {
-      const response = await fetch(`${googleSheet_URl}LinkData`, { signal });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-
-      const result = await response.json();
-      setData(result?.data);
+      const rows = await fetchSocialLinks(signal);
+      setData({ social_media: rows });
     } catch (err) {
       if (err instanceof Error && err.name === 'AbortError') return;
-      setError(
-        err instanceof Error ? err : new Error('An unknown error occurred')
-      );
-      console.error('Error fetching link_data:', err);
+      setError(err instanceof Error ? err : new Error('An unknown error occurred'));
     } finally {
       setIsLoading(false);
     }
@@ -61,11 +52,7 @@ export default function SocialMediaDataContextProvider({
   }, [fetchData]);
 
   const contextValue = useMemo(
-    () => ({
-      link_data,
-      isLoading,
-      error,
-    }),
+    () => ({ link_data, isLoading, error }),
     [link_data, isLoading, error]
   );
 
