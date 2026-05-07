@@ -167,7 +167,16 @@ Images uploaded in the admin form (`type: 'image'` fields) will be stored in S3:
 
 **AWS S3 image upload (`ImageField`):**
 
-The Lambda is **already built** at `../tensor-labz-image-lambda/` (separate repo — `ThanuMahee12/tensor-labz-image-lambda`, private).
+The Lambda is **deployed and live** at `../tensor-labz-image-lambda/` (separate repo — `ThanuMahee12/tensor-labz-image-lambda`, private).
+
+| Resource | Value |
+|---|---|
+| Lambda function | `tensor-labz-image-handler` (eu-north-1) |
+| API Gateway | HTTP API `ewf03ybvmc` |
+| **Base URL** | `https://ewf03ybvmc.execute-api.eu-north-1.amazonaws.com` |
+| IAM role | `tensor-labz-lambda-exec` |
+
+> ⚠️ **Firebase credentials not yet set.** Lambda is deployed but env vars `FIREBASE_CLIENT_EMAIL` and `FIREBASE_PRIVATE_KEY` are placeholders — all requests will return 401 until you fill these in the Lambda console under Configuration → Environment variables.
 
 Bucket: `tensor-labz-store` (eu-north-1). Folder structure:
 - `Home/Hero/` — hero slide images
@@ -188,19 +197,21 @@ Frontend wiring steps:
 4. On record delete, call `DELETE /image` with all image keys for that record (including `extraImages` array)
 5. On image replace, call `POST /image/replace` with `oldKey` to clean up stale S3 objects
 
-Deploy the Lambda:
+Redeploy Lambda after code changes:
 ```bash
 cd ../tensor-labz-image-lambda
 npm run build:zip
-aws lambda update-function-code \
+aws --profile tensor lambda update-function-code \
+  --region eu-north-1 \
   --function-name tensor-labz-image-handler \
   --zip-file fileb://function.zip
 ```
 
-Lambda IAM needs: `s3:PutObject` and `s3:DeleteObject` on `arn:aws:s3:::tensor-labz-store/*`
+Lambda IAM role `tensor-labz-lambda-exec` already has `s3:PutObject` and `s3:DeleteObject` on `arn:aws:s3:::tensor-labz-store/*`.
 
 **Environment variables to add to `.env`:**
 ```
+VITE_IMAGE_LAMBDA_URL=https://ewf03ybvmc.execute-api.eu-north-1.amazonaws.com
 VITE_SUPABASE_URL=https://your-project.supabase.co
 VITE_SUPABASE_ANON_KEY=your-anon-key
 VITE_S3_BUCKET=tensor-labz-store
