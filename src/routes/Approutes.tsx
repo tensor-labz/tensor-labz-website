@@ -22,7 +22,7 @@ export default function AppRoutes() {
       <Route path="/project/:slug" element={<Project />} />
       <Route path="/login" element={<Login />} />
       <Route
-        path="/admin"
+        path="/admin/*"
         element={
           <ProtectedRoute>
             <AdminDashboard />

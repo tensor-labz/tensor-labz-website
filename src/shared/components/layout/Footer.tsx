@@ -93,7 +93,7 @@ const Footer = () => {
       >
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12">
           {/* Brand */}
-          <div className="flex flex-col gap-5">
+          <div className="flex flex-col items-center sm:items-start gap-5">
             <Link to="/">
               <img
                 src={logo}
@@ -102,11 +102,11 @@ const Footer = () => {
                 loading="lazy"
               />
             </Link>
-            <p className="text-sm leading-relaxed text-slate-500 max-w-xs">
+            <p className="text-sm leading-relaxed text-slate-500 max-w-xs text-center sm:text-left">
               Empowering creators and problem-solvers through research,
               innovation, and practical application.
             </p>
-            <div className="flex items-center gap-3 pt-1">
+            <div className="flex items-center justify-center sm:justify-start gap-3 pt-1">
               {socialLinks.map(({ icon: Icon, href, label }) => (
                 <a
                   key={label}
@@ -125,11 +125,11 @@ const Footer = () => {
           </div>
 
           {/* Services */}
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col items-center sm:items-start gap-4">
             <h4 className="text-xs font-semibold tracking-widest uppercase text-slate-300">
               Services
             </h4>
-            <ul className="flex flex-col gap-2.5">
+            <ul className="flex flex-col items-center sm:items-start gap-2.5">
               {isLoading
                 ? Array.from({ length: 4 }).map((_, i) => (
                     <li
@@ -151,11 +151,11 @@ const Footer = () => {
           </div>
 
           {/* Company */}
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col items-center sm:items-start gap-4">
             <h4 className="text-xs font-semibold tracking-widest uppercase text-slate-300">
               Company
             </h4>
-            <ul className="flex flex-col gap-2.5">
+            <ul className="flex flex-col items-center sm:items-start gap-2.5">
               {companyLinks.map(({ title, link }) => (
                 <li key={link}>
                   <Link
@@ -170,11 +170,11 @@ const Footer = () => {
           </div>
 
           {/* Contact */}
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col items-center sm:items-start gap-4">
             <h4 className="text-xs font-semibold tracking-widest uppercase text-slate-300">
               Contact
             </h4>
-            <ul className="flex flex-col gap-3">
+            <ul className="flex flex-col items-center sm:items-start gap-3">
               {contactInfo.map(({ icon: Icon, text, href }) => (
                 <li key={text} className="flex items-start gap-3">
                   <Icon className="text-slate-600 mt-0.5 shrink-0 text-sm" />

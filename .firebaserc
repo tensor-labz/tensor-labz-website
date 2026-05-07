@@ -1,0 +1,9 @@
+{
+  "projects": {
+    "default": "tensor-labz-website",
+    "staging": "tensor-labz-website",
+    "production": "tensor-labz-website"
+  },
+  "targets": {},
+  "etags": {}
+}
