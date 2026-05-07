@@ -5,4 +5,4 @@ export interface AboutItem {
 }
 
 export const fetchAboutData = (signal?: AbortSignal): Promise<AboutItem[]> =>
-  fetchSheet<AboutItem>('AboutData', signal);
+  fetchSheet<AboutItem>('AboutusData', signal);
