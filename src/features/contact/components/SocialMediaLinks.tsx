@@ -8,7 +8,7 @@ import {
   FaTiktok,
 } from 'react-icons/fa';
 import { IconType } from 'react-icons';
-import { fetchSheet } from '../../../services/sheetsClient';
+const BASE_URL = import.meta.env.VITE_SHEET_URL as string;
 
 interface SocialMediaItem {
   social_media: string;
@@ -70,8 +70,12 @@ const SocialMediaLinks = memo(() => {
 
   useEffect(() => {
     const controller = new AbortController();
-    fetchSheet<SocialMediaItem>('LinkData', controller.signal)
-      .then((data) => setItems(data))
+    fetch(`${BASE_URL}LinkData`, { signal: controller.signal })
+      .then((res) => res.json())
+      .then((result) => {
+        const list = result?.data?.social_media;
+        if (Array.isArray(list)) setItems(list);
+      })
       .catch((err) => {
         if (err instanceof Error && err.name !== 'AbortError') {
           console.error('Error fetching social media links:', err);
