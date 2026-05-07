@@ -4,6 +4,9 @@ import Home from '../pages/Home';
 import { Route, Routes, Navigate } from 'react-router-dom';
 import Services from '../pages/Services';
 import Project from '../pages/Project';
+import Login from '../pages/Login';
+import AdminDashboard from '../pages/AdminDashboard';
+import ProtectedRoute from '../components/ProtectedRoute';
 
 export default function AppRoutes() {
   return (
@@ -17,6 +20,15 @@ export default function AppRoutes() {
       />
       <Route path="/services/:slug" element={<Services />} />
       <Route path="/project/:slug" element={<Project />} />
+      <Route path="/login" element={<Login />} />
+      <Route
+        path="/admin"
+        element={
+          <ProtectedRoute>
+            <AdminDashboard />
+          </ProtectedRoute>
+        }
+      />
     </Routes>
   );
 }
