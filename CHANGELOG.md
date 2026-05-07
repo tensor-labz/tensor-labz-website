@@ -4,7 +4,109 @@ All notable changes to the Tensor Labs website are documented here.
 
 ---
 
-## [Unreleased] — fix/code-review-issues
+## [Unreleased]
+
+---
+## [v1.1.0] — 2026-05-07
+
+### Added
+
+- add admin dashboard, login, auth guard, Firebase config, and all admin components
+- add multi-image field type with gallery grid for extraImages
+- full dark/light mode support — glass CSS vars, theme toggle on login and admin
+- login and admin inherit Three.js bg, no public header/footer on admin routes
+- add login page and admin dashboard with Firebase auth
+- add Firebase hosting config and staging deploy script
+- add shared/components (ui, layout, feedback, three)
+- add Redux store, service layer, shared hooks/types/utils
+- shared PageBackground Three.js animation for About Us and Contact Us
+- Three.js wireframe scene background on project detail page
+- full site refactor with dark/light mode and Three.js particles
+- add ErrorBoundary component to prevent blank screen on render errors
+
+### Bug Fixes
+
+- social media links — fetch LinkData directly, read result.data.social_media
+- SocialLink href required not optional
+- social media links — fetch full array not data[0]
+- about page sheet name AboutData → AboutusData
+- hero image field name img not imageURL — matches actual sheet column
+- hero image not visible on desktop — replace lg:h-full with lg:h-[520px]
+- resolve ESLint config errors for CI
+- image first in DOM so it appears above text on mobile
+- hero image uses lg:h-full with items-stretch so it matches text column height on desktop
+- explicit heights on image container so h-full chain resolves on all breakpoints
+- restore desktop two-column hero, center-align mobile only
+- hero image fills container — add relative to aspect wrapper, use 4:3 on mobile
+- hero image no longer clipped — use aspect-video and remove overflow-hidden from section
+- routing cleanup and full dark/light mode across all components
+- remove inline style overriding Tailwind bg classes on header
+- replace react-helmet with react-helmet-async, remove duplicate AnimatePresence keys
+- resolve motion animation errors — backgroundColor and backgroundPosition
+- add header offset, dark overlays, consistent text colors across all hero sections
+- header always dark — semi-transparent before scroll, solid after
+- resolve all code review issues (security, bugs, performance)
+- performance, architecture and accessibility improvements
+- UI bugs, typos, console.log cleanup, accessibility improvements
+- XSS sanitization, nav links, missing services route, footer URLs
+
+### Security
+
+- move Google Sheets URL to environment variable
+
+### Performance
+
+- memoize selectHomeServices and selectTopProjects with createSelector
+
+### Refactor
+
+- decouple architecture into features/Redux/services layers
+- remove dead code and unused files
+- services page consistent with site design system
+- single GlobalBackground animation across entire site
+- header redesign — slate-900 base, sky-400 accent, soft mechatronics color schema
+- remove Powered by credit from footer
+- redesign footer — clean 4-column grid, uniform socials, no duplicate code
+- redesign navbar — clean text links, CTA button, dark mobile drawer
+- standardize all animation imports to motion/react
+
+### Style
+
+- hero title — increase line-height, accent last line
+- reduce hero image height on mobile to fit frame
+- center hero section content at all breakpoints
+- set dark as default theme
+- remove overlay on about us page in light mode
+- center copyright text in footer
+
+### Chore
+
+- apply prettier formatting to remaining files
+- add @reduxjs/toolkit and react-redux
+
+### CI / Build
+
+- simplify production workflow — Amplify now builds directly from GitHub main
+- replace ZIP deploy with Bitbucket mirror for Amplify production
+- add Amplify ZIP deploy workflow for production (main branch)
+- add staging auto-deploy workflow and all GitHub secret vars
+- update release workflow to auto-update CHANGELOG on tag bump
+- add CI workflow and semantic version bump on release
+
+### Other
+
+- merge staging → main — admin dashboard, CI/CD, Lambda integration, multi-image support
+- add deployed Lambda API Gateway URL and setup details
+- update S3 bucket/region to tensor-labz-store eu-north-1 with folder map
+- document LinkData nested response format in CLAUDE.md
+- update CLAUDE.md with Redux architecture, sheet names, and deployment workflow
+- customtailwind.css and its import in index.css
+- restore original color schema for AboutUs, ContactUs, ServiceHero
+- add CLAUDE.md, update README.md, add CHANGELOG.md
+- Merge pull request #3 from ThanuMahee12/stagging
+- Merge pull request #2 from ThanuMahee12/HEAD
+
+
 
 ### Security
 
