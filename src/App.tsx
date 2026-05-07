@@ -1,14 +1,22 @@
-import React, { memo } from 'react';
+import React, { memo, Suspense } from 'react';
 import { AppProviders } from './app/providers';
 import OfflineWarning from './components/PlaceHolders/OfflineWarning';
 import Layout from './shared/components/layout/Layout';
 import ErrorBoundary from './components/PlaceHolders/ErrorBoundary';
+import GlobalBackground from './shared/components/three/GlobalBackground';
 
 const App: React.FC = memo(() => {
   return (
     <ErrorBoundary>
       <AppProviders>
-        <div className="min-h-screen flex flex-col">
+        <div
+          className="min-h-screen flex flex-col relative"
+          style={{ backgroundColor: 'var(--bg-base)', color: 'var(--text-primary)' }}
+        >
+          {/* Three.js background — fixed, always behind everything */}
+          <Suspense fallback={null}>
+            <GlobalBackground />
+          </Suspense>
           <OfflineWarning />
           <Layout />
         </div>

@@ -1,26 +1,25 @@
-import React, { memo, Suspense } from 'react';
+import React, { memo } from 'react';
+import { useLocation } from 'react-router-dom';
 import Header from './Header';
 import Footer from './Footer';
 import AppRoutes from '../../../routes/Approutes';
-import GlobalBackground from '../three/GlobalBackground';
 
-const Layout: React.FC = memo(() => (
-  <div
-    className="relative"
-    style={{ backgroundColor: 'var(--bg-base)', color: 'var(--text-primary)' }}
-  >
-    <Suspense fallback={null}>
-      <GlobalBackground />
-    </Suspense>
+const ADMIN_ROUTES = ['/login', '/admin'];
+
+const Layout: React.FC = memo(() => {
+  const { pathname } = useLocation();
+  const isAdminRoute = ADMIN_ROUTES.some((r) => pathname.startsWith(r));
+
+  return (
     <div className="relative" style={{ zIndex: 1 }}>
-      <Header />
+      {!isAdminRoute && <Header />}
       <main className="flex-grow">
         <AppRoutes />
       </main>
-      <Footer />
+      {!isAdminRoute && <Footer />}
     </div>
-  </div>
-));
+  );
+});
 
 Layout.displayName = 'Layout';
 export default Layout;
