@@ -5,22 +5,26 @@ import { HelmetProvider } from 'react-helmet-async';
 import { store } from './store';
 import { ThemeProvider } from '../shared/hooks/useTheme';
 import { DeviceProvider } from '../shared/hooks/useDevice';
-import { auth } from '../lib/firebase';
-import { onAuthStateChanged } from 'firebase/auth';
+import { supabase } from '../lib/supabase';
 import { setUser } from '../store/authSlice';
 
 function AuthListener({ children }: { children: React.ReactNode }) {
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      const user = session?.user ?? null;
       store.dispatch(
         setUser(
           user
-            ? { uid: user.uid, email: user.email, displayName: user.displayName }
+            ? {
+                uid: user.id,
+                email: user.email ?? null,
+                displayName: (user.user_metadata?.full_name as string) ?? null,
+              }
             : null
         )
       );
     });
-    return unsubscribe;
+    return () => subscription.unsubscribe();
   }, []);
   return <>{children}</>;
 }

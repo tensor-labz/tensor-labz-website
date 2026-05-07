@@ -1,9 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import {
-  signInWithEmailAndPassword,
-  signOut as firebaseSignOut,
-} from 'firebase/auth';
-import { auth } from '../lib/firebase';
+import { supabase } from '../lib/supabase';
 import type { RootState } from '../app/store';
 
 interface AuthUser {
@@ -16,7 +12,7 @@ interface AuthState {
   user: AuthUser | null;
   status: 'idle' | 'loading' | 'succeeded' | 'failed';
   error: string | null;
-  initialized: boolean; // true after first onAuthStateChanged fires
+  initialized: boolean;
 }
 
 const initialState: AuthState = {
@@ -29,14 +25,15 @@ const initialState: AuthState = {
 export const signIn = createAsyncThunk(
   'auth/signIn',
   async ({ email, password }: { email: string; password: string }) => {
-    const credential = await signInWithEmailAndPassword(auth, email, password);
-    const { uid, email: userEmail, displayName } = credential.user;
-    return { uid, email: userEmail, displayName };
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+    if (error) throw new Error(error.message);
+    const { id, email: userEmail, user_metadata } = data.user;
+    return { uid: id, email: userEmail ?? null, displayName: (user_metadata?.full_name as string) ?? null };
   }
 );
 
 export const signOut = createAsyncThunk('auth/signOut', async () => {
-  await firebaseSignOut(auth);
+  await supabase.auth.signOut();
 });
 
 const authSlice = createSlice({
