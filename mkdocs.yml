@@ -1,7 +1,7 @@
 site_name: Tensor Labz — Developer Docs
 site_description: End-to-end documentation for the Tensor Labz website platform
-site_url: https://ThanuMahee12.github.io/tensor-labz-website/
-repo_url: https://github.com/ThanuMahee12/tensor-labz-website
+site_url: https://tensor-labz.github.io/tensor-labz-website/
+repo_url: https://github.com/tensor-labz/tensor-labz-website
 repo_name: tensor-labz-website
 edit_uri: edit/main/docs/
 
@@ -95,4 +95,4 @@ nav:
 extra:
   social:
     - icon: fontawesome/brands/github
-      link: https://github.com/ThanuMahee12
+      link: https://github.com/tensor-labz
