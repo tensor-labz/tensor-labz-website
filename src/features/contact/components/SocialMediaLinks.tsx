@@ -15,10 +15,6 @@ interface SocialMediaItem {
   value: string;
 }
 
-interface SocialMediaData {
-  social_media?: SocialMediaItem[];
-}
-
 interface SocialLink {
   icon: IconType;
   social_media: string;
@@ -69,13 +65,13 @@ const LoadingSkeleton = () => (
 );
 
 const SocialMediaLinks = memo(() => {
-  const [linkData, setLinkData] = useState<SocialMediaData | null>(null);
+  const [items, setItems] = useState<SocialMediaItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const controller = new AbortController();
-    fetchSheet<SocialMediaData>('LinkData', controller.signal)
-      .then((data) => setLinkData(data[0] ?? null))
+    fetchSheet<SocialMediaItem>('LinkData', controller.signal)
+      .then((data) => setItems(data))
       .catch((err) => {
         if (err instanceof Error && err.name !== 'AbortError') {
           console.error('Error fetching social media links:', err);
@@ -87,14 +83,14 @@ const SocialMediaLinks = memo(() => {
 
   if (isLoading) return <LoadingSkeleton />;
 
-  const socialLinks: SocialLink[] = (
-    linkData?.social_media?.map((item) => {
+  const socialLinks: SocialLink[] = items
+    .map((item) => {
       const config = socialMediaConfig.find(
         (c) => c.social_media === item.social_media
       );
       return config ? { ...config, href: item.value } : null;
-    }) ?? []
-  ).filter((x): x is NonNullable<typeof x> => x !== null) as SocialLink[];
+    })
+    .filter((x): x is SocialLink => x !== null);
 
   if (!socialLinks.length) {
     return (
