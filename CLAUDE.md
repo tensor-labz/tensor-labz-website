@@ -117,6 +117,7 @@ src/features/admin/
 | `richtext` | Textarea with HTML preview toggle                                       |
 | `url`      | URL input (for non-image links e.g. video embed URLs)                  |
 | `image`    | Tab toggle: **Upload File** (drag & drop) or **S3 / URL** with preview |
+| `images`   | Multi-image gallery: grid of previews, add via drag & drop or URL, remove individual, stores `string[]` |
 | `toggle`   | Animated switch (stores `true`/`false`)                                 |
 | `tags`     | Comma-separated text input                                              |
 
