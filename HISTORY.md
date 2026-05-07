@@ -157,9 +157,20 @@ create policy "admin write" on form_config for all using (auth.role() = 'authent
 
 ---
 
-## Pending / Next Steps
+## Completed Steps (2026-05-07 end of day)
 
-- [ ] Set `FIREBASE_CLIENT_EMAIL` + `FIREBASE_PRIVATE_KEY` in Lambda env vars (currently placeholders — image upload returns 401)
-- [ ] Enable GitHub Pages: repo Settings → Pages → Source: `gh-pages` branch
-- [ ] Merge `staging → main` via PR to trigger Amplify production deploy
-- [ ] Run the Supabase SQL above if tables don't exist yet
+- [x] Enable GitHub Pages: repo Settings → Pages → Source: `gh-pages` branch — **done**
+- [x] Run Supabase SQL for `table_config` and `form_config` tables — **done**
+- [x] Merge `staging → main` via PR — **done, Amplify production deploy triggered**
+- [x] MkDocs docs site deployed to `https://tensor-labz.github.io/tensor-labz-website/` — **done**
+- [x] All source files pushed to `staging` branch — **done**
+
+---
+
+## Deferred to Tomorrow
+
+- [ ] **Lambda auth** — Set `FIREBASE_CLIENT_EMAIL` + `FIREBASE_PRIVATE_KEY` in Lambda env vars (Lambda console → Configuration → Environment variables). Until this is done, image uploads return 401.
+- [ ] **End-to-end test** — Test the full admin flow: login → CRUD on each module → image upload → verify S3 URL saved in Supabase.
+- [ ] **Dynamic form config test** — Open Admin Settings → Forms, configure fields for one module, save to `form_config`, verify the CRUD form updates accordingly.
+- [ ] **Dynamic table config test** — Open Admin Settings → Tables, toggle column visibility and alignment, verify AdminDataTable reflects changes.
+- [ ] **Review open PRs** — Check if staging → main PR is merged and Amplify production deploy completed successfully.
