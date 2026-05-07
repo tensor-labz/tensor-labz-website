@@ -122,14 +122,22 @@ const HeroSection: React.FC = memo(() => {
             variants={textVariants}
             initial="hidden"
             animate={inView ? 'visible' : 'hidden'}
-            className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold leading-[1.1] tracking-tight mb-2"
+            className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold leading-[1.2] tracking-tight mb-4"
             style={{
               color: 'var(--text-primary)',
               fontFamily: '"Syne", sans-serif',
             }}
           >
             {data?.Home?.hero?.title?.map((line: string, i: number) => (
-              <span key={i} className="block">
+              <span
+                key={i}
+                className="block"
+                style={
+                  i === (data?.Home?.hero?.title?.length ?? 0) - 1
+                    ? { color: 'var(--accent)' }
+                    : undefined
+                }
+              >
                 {line}
               </span>
             ))}
