@@ -83,7 +83,7 @@ const HeroSection: React.FC = memo(() => {
           initial={{ opacity: 0, scale: 0.96 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 1.0, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-          className="w-full relative z-10 order-1 lg:order-2 lg:w-6/12 h-[220px] sm:h-[300px] lg:h-full"
+          className="w-full relative z-10 order-1 lg:order-2 lg:w-6/12 h-[220px] sm:h-[300px] lg:h-[520px]"
         >
           <div
             className="absolute inset-0 rounded-2xl blur-3xl opacity-20 scale-90 pointer-events-none"
