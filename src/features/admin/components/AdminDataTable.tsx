@@ -158,9 +158,9 @@ const AdminDataTable = memo(() => {
             onChange={(e) => setSort(e.target.value as SortKey)}
             className="text-sm py-2 pl-2 pr-7 rounded-lg outline-none appearance-none cursor-pointer"
             style={{
-              backgroundColor: 'var(--glass-bg)',
+              backgroundColor: '#ffffff',
               border: '1px solid var(--glass-border)',
-              color: 'var(--text-primary)',
+              color: '#111',
               backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23888'/%3E%3C/svg%3E")`,
               backgroundRepeat: 'no-repeat',
               backgroundPosition: 'right 8px center',
