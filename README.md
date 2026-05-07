@@ -1,50 +1,120 @@
-# React + TypeScript + Vite
+# Tensor Labs Website
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Official website for **Tensor Labs** — Engineering & Technology Solutions.
 
-Currently, two official plugins are available:
+Built with React 18, TypeScript, Vite, and Tailwind CSS.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## Expanding the ESLint configuration
+## Tech Stack
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+| Layer      | Technology                          |
+| ---------- | ----------------------------------- |
+| Framework  | React 18 + TypeScript 5             |
+| Build tool | Vite 6                              |
+| Styling    | Tailwind CSS 3                      |
+| Animations | Motion (motion/react)               |
+| Routing    | React Router v7                     |
+| Icons      | React Icons                         |
+| SEO        | React Helmet                        |
+| Data       | Google Sheets API (via Apps Script) |
 
-- Configure the top-level `parserOptions` property like this:
+---
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+## Getting Started
+
+### Prerequisites
+
+- Node.js 18+
+- npm
+
+### Install dependencies
+
+```bash
+npm install
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+### Environment variables
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+Copy the example env file and fill in your Google Sheets script URL:
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
+```bash
+cp .env.example .env
 ```
+
+| Variable         | Description                                              |
+| ---------------- | -------------------------------------------------------- |
+| `VITE_SHEET_URL` | Google Apps Script web app URL (ends with `?sheetName=`) |
+
+### Run locally
+
+```bash
+npm run dev
+```
+
+### Build for production
+
+```bash
+npm run build
+```
+
+### Preview production build
+
+```bash
+npm run preview
+```
+
+---
+
+## Project Structure
+
+```
+src/
+├── pages/              # Route-level page components
+├── components/
+│   ├── layout/         # Header, Footer, NavBar, MobileNavigation
+│   ├── Page/           # Page-specific sections (Home, Service, Project, etc.)
+│   ├── resuable/       # Shared wrapper components (Page, Section)
+│   └── PlaceHolders/   # Loading states and ErrorBoundary
+├── contexts/
+│   ├── Api/            # Data contexts (AppContext, ServiceApiContext, etc.)
+│   ├── DeviceContext   # Responsive breakpoint detection
+│   ├── HeroContext     # Hero slider state
+│   └── ServiceContext  # Active service tab state
+├── data/               # Static config (nav, services, app meta)
+├── base/               # Custom hooks, TypeScript types, utilities
+├── routes/             # AppRoutes component
+├── styles/             # Global CSS
+└── assets/             # Images organized by page
+```
+
+---
+
+## Pages
+
+| Route             | Page                     |
+| ----------------- | ------------------------ |
+| `/`               | Home                     |
+| `/about-us`       | About Us                 |
+| `/contact-us`     | Contact Us               |
+| `/services/:slug` | Services (dynamic)       |
+| `/project/:slug`  | Project detail (dynamic) |
+
+---
+
+## Branch Strategy
+
+```
+main          ← production
+└── staging   ← pre-production review
+    └── fix/* / feat/* / style/*  ← feature/fix branches
+```
+
+---
+
+## Contributing
+
+1. Branch off `staging` (never directly off `main`)
+2. Follow commit convention: `type: description` (e.g. `fix:`, `feat:`, `style:`)
+3. Do not commit `.env` files
+4. Open a PR targeting `staging`

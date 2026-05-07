@@ -1,73 +1,89 @@
-import React, { memo } from "react";
-import Section from "../components/resuable/Section";
-import Page from "../components/resuable/Page";
-import { useRootContext } from "../contexts/RootContext";
-import AboutUsSectionItem from "../components/Page/Aboutus/AboutUsSection";
-import { useAboutusDataContext } from "../contexts/Api/AboutusDataContext";
-import Placeholder from "../components/Page/Aboutus/LoadingPlaceHolder";
-
-
+import React, { memo } from 'react';
+import { motion } from 'motion/react';
+import Page from '../components/resuable/Page';
+import AboutUsSectionItem from '../features/about/components/AboutUsSection';
+import AboutLoading from '../features/about/components/AboutLoading';
+import { useAboutController } from '../features/about/hooks/useAboutController';
+import data from '../data/data';
 
 const AboutUs: React.FC = memo(() => {
-  const { aboutus_data ,isLoading} = useAboutusDataContext()
-  const {Data}=useRootContext()
+  const { aboutData, isLoading } = useAboutController();
+
   return (
-    <Page HeadProps={{ title: "About Us" }}>
-      <div className="relative min-h-screen h-[1250px] md:h-[900px] lg:h-screen w-full">
-        {/* Background Video/Image Container */}
-        <div className="absolute inset-0 z-0">
-          {/* Video for larger screens (>=768px) */}
-          {/* <video
-            autoPlay
-            loop
-            muted
-            playsInline
-            className="hidden md:block absolute w-full h-full object-cover brightness-100"
+    <Page HeadProps={{ title: 'About Us' }}>
+      <div className="relative min-h-screen w-full">
+        <div className="flex items-center justify-center min-h-screen py-32 px-4">
+          <motion.div
+            initial={{ opacity: 0, y: 32 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+            className="w-full max-w-5xl mx-auto text-center rounded-2xl p-8 sm:p-12"
+            style={{
+              backgroundColor: 'var(--glass-bg)',
+              border: '1px solid var(--glass-border)',
+              backdropFilter: 'blur(12px)',
+            }}
           >
-            <source src={Data?.aboutus?.bg?.lg} type="video/mp4" />
-          </video>
- */}
-          {/* Background image for smaller screens (<768px) */}
-        {/*}  <img
-            src={Data?.aboutus?.bg?.md}
-            alt="Background"
-            className="md:hidden w-full h-full object-cover"
-          /> */}
-          <picture className="absolute inset-0 -z-10">
-          <source media="(min-width: 768px)" srcSet={Data?.contactus?.bg?.lg} />
-          <source media="(min-width: 480px)" srcSet={Data?.contactus?.bg?.md} />
-          <img src={Data?.contactus?.bg?.sm} alt="" className="w-full h-full object-cover" />
-        </picture>
-        </div>
+            <motion.span
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.05 }}
+              className="text-[10px] font-semibold tracking-[0.3em] uppercase mb-4 block"
+              style={{ color: 'var(--accent)' }}
+            >
+              Who We Are
+            </motion.span>
 
-        {/* Content Section */}
-        <Section className="relative z-10 flex items-center justify-center h-full">
-          {/* Overlay */}
-          {/* <div className="absolute inset-0 bg-gradient-to-b from-blue-200/50 via-white/80 to-blue-200/50 z-0" /> */}
-          <div className="w-11/12 relative  mx-auto text-center p-8 sm:mt-0 lg:mt-8 md:mt-14 rounded-2xl shadow-2xl backdrop-blur-md">
-            <h1 className="text-4xl md:text-6xl font-bold mb-6 md:text-blue-900 text-white shadow-sm leading-relaxed">
-              {Data?.aboutus?.title?? "About Us"}
-            </h1>
-            <p className="text-lg md:text-xl mb-8 md:text-gray-800 text-slate-100 leading-relaxed">
-            {Data?.aboutus?.content?? "About us description not available."}
-            </p>
+            <motion.h1
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              className="text-4xl md:text-6xl font-bold mb-6 leading-tight"
+              style={{
+                color: 'var(--text-primary)',
+                fontFamily: '"Syne", sans-serif',
+              }}
+            >
+              {data?.aboutus?.title ?? 'About Us'}
+            </motion.h1>
 
-            {/* Section Items */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 text-center ">
-              {isLoading ? (Array(3).fill("").map((_, i) => (<Placeholder key={ i} />))):aboutus_data?.map((section:any, index:number) => (
-                <AboutUsSectionItem
-                  key={`aboutus-${index}`}
-                  title={section?.components}
-                  description={section?.value}
-                />
-              ))}
+            <motion.div
+              initial={{ width: 0 }}
+              animate={{ width: '3rem' }}
+              transition={{ delay: 0.5, duration: 0.5, ease: 'easeOut' }}
+              className="h-1 rounded-full mx-auto mb-8"
+              style={{ backgroundColor: 'var(--accent)' }}
+            />
+
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.6, delay: 0.25 }}
+              className="text-base md:text-lg mb-12 leading-relaxed max-w-3xl mx-auto"
+              style={{ color: 'var(--text-muted)' }}
+            >
+              {data?.aboutus?.content ?? 'About us description not available.'}
+            </motion.p>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 text-center">
+              {isLoading
+                ? Array.from({ length: 3 }).map((_, i) => (
+                    <AboutLoading key={i} />
+                  ))
+                : aboutData.map((section, index) => (
+                    <AboutUsSectionItem
+                      key={`aboutus-${index}`}
+                      title={String(section.components ?? '')}
+                      description={String(section.value ?? '')}
+                    />
+                  ))}
             </div>
-          </div>
-        </Section>
+          </motion.div>
+        </div>
       </div>
     </Page>
   );
 });
 
-AboutUs.displayName = "AboutUs";
+AboutUs.displayName = 'AboutUs';
 export default AboutUs;

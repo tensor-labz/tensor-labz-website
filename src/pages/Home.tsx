@@ -1,18 +1,14 @@
-import ServiceSection from "../components/Page/Home/Service/ServiceSection";
-import HeroSection from "../components/Page/Home/Hero/HeroSection";
-import Page from "../components/resuable/Page";
-// import ReveiwSection from "../components/Page/Home/Reveiws/ReveiwSection";
-import LatestProductSection from "../components/Page/Home/LatestPro/LatestProductSection";
+import Page from '../components/resuable/Page';
+import HeroSection from '../features/hero/components/HeroSection';
+import ServiceSection from '../features/home-services/components/ServiceSection';
+import LatestProductSection from '../features/home-projects/components/LatestProductSection';
 
 export default function Home() {
-
   return (
-    <Page HeadProps={{title:"Home"}}>
-       <HeroSection />
-       <ServiceSection />
-       <LatestProductSection/>
-       {/* <ReveiwSection /> */}
-
+    <Page HeadProps={{ title: 'Home' }}>
+      <HeroSection />
+      <ServiceSection />
+      <LatestProductSection />
     </Page>
-  )
+  );
 }

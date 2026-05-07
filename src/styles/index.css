@@ -1,35 +1,109 @@
-@import url('https://fonts.googleapis.com/css2?family=Exo:ital,wght@0,100..900;1,100..900&display=swap');
-@import "./customtailwind.css";
+@import url('https://fonts.googleapis.com/css2?family=Exo:ital,wght@0,100..900;1,100..900&family=Syne:wght@400;500;600;700;800&display=swap');
+@import './customtailwind.css';
 
-*{
-     font-family: "Exo", sans-serif !important;
+/* ─── Theme tokens ─────────────────────────────────────── */
+:root {
+  /* light mode defaults */
+  --bg-base: #f8fafc; /* slate-50  */
+  --bg-surface: #ffffff; /* white     */
+  --bg-raised: #f1f5f9; /* slate-100 */
+  --text-primary: #0f172a; /* slate-900 */
+  --text-muted: #64748b; /* slate-500 */
+  --accent: #0ea5e9; /* sky-500   */
+  --accent-soft: #e0f2fe; /* sky-100   */
+  --border: #e2e8f0; /* slate-200 */
+  --header-bg: rgba(255, 255, 255, 0.88);
+  --footer-bg: #0f172a;
 
+  /* glassmorphism — light */
+  --glass-bg: rgba(0, 0, 0, 0.03);
+  --glass-bg-subtle: rgba(0, 0, 0, 0.02);
+  --glass-bg-raised: rgba(0, 0, 0, 0.05);
+  --glass-bg-hover: rgba(0, 0, 0, 0.05);
+  --glass-bg-hover-strong: rgba(0, 0, 0, 0.09);
+  --glass-border: rgba(0, 0, 0, 0.09);
+  --glass-border-subtle: rgba(0, 0, 0, 0.06);
+  --glass-border-strong: rgba(0, 0, 0, 0.13);
+  --input-bg: rgba(0, 0, 0, 0.04);
+  --input-border: rgba(0, 0, 0, 0.13);
+  --tag-bg: rgba(0, 0, 0, 0.07);
+  --tag-border: rgba(0, 0, 0, 0.13);
 }
-#root{
-    position: relative;
-    padding: 0;
-    margin: 0;
+
+.dark {
+  --bg-base: #020617; /* slate-950 */
+  --bg-surface: #0f172a; /* slate-900 */
+  --bg-raised: #1e293b; /* slate-800 */
+  --text-primary: #f8fafc; /* slate-50  */
+  --text-muted: #94a3b8; /* slate-400 */
+  --accent: #38bdf8; /* sky-400   */
+  --accent-soft: #0c4a6e; /* sky-900   */
+  --border: rgba(148, 163, 184, 0.12);
+  --header-bg: rgba(2, 6, 23, 0.88);
+  --footer-bg: #020617;
+
+  /* glassmorphism — dark */
+  --glass-bg: rgba(255, 255, 255, 0.04);
+  --glass-bg-subtle: rgba(255, 255, 255, 0.03);
+  --glass-bg-raised: rgba(255, 255, 255, 0.06);
+  --glass-bg-hover: rgba(255, 255, 255, 0.06);
+  --glass-bg-hover-strong: rgba(255, 255, 255, 0.14);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-border-subtle: rgba(255, 255, 255, 0.07);
+  --glass-border-strong: rgba(255, 255, 255, 0.12);
+  --input-bg: rgba(255, 255, 255, 0.06);
+  --input-border: rgba(255, 255, 255, 0.12);
+  --tag-bg: rgba(255, 255, 255, 0.12);
+  --tag-border: rgba(255, 255, 255, 0.2);
 }
+
+/* ─── Smooth theme transition ───────────────────────────── */
+*,
+*::before,
+*::after {
+  transition-property: background-color, border-color, color;
+  transition-duration: 200ms;
+  transition-timing-function: ease;
+}
+
+/* ─── Base ───────────────────────────────────────────────── */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--bg-base);
+  color: var(--text-primary);
+  font-family: 'Exo', sans-serif;
+}
+
+#root {
+  position: relative;
+  padding: 0;
+  margin: 0;
+}
+
+/* ─── Project content typography ────────────────────────── */
 .project-content h1 {
-    font-size: 2.5rem;
-    font-weight: 700;
-    margin-bottom: 1rem;
-    color: #333;
-     font-family: "Exo", sans-serif !important;
-  }
-
-  .project-content h2 {
-    font-size: 2rem;
-    font-weight: 600;
-    margin-bottom: 0.75rem;
-  }
-   .project-content h3 {
-    font-size: 1.8rem;
-    font-weight: 500;
-    margin-bottom: 0.6rem;
-  }
-     .project-content h4 {
-    font-size: 1.5rem;
-    font-weight: 500;
-    margin-bottom: 0.5rem;
-  }
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: var(--text-primary);
+  font-family: 'Syne', sans-serif;
+}
+.project-content h2 {
+  font-size: 2rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  font-family: 'Syne', sans-serif;
+}
+.project-content h3 {
+  font-size: 1.8rem;
+  font-weight: 500;
+  margin-bottom: 0.6rem;
+}
+.project-content h4 {
+  font-size: 1.5rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}

@@ -1,26 +1,19 @@
-import React, { useState, useEffect, memo, useMemo } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
-import Section from "../../../../components/resuable/Section";
-import { useDeviceContext } from "../../../../contexts/DeviceContext";
-import MobileTopCarousel from "./MobileTopCarsaole";
-import LatestProductCard from "./LatestProductCard";
-import LatestHero from "./LatestHero";
+import React, { useState, useEffect, memo, useMemo } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
+import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
+import Section from '../../../../components/resuable/Section';
+import { useDeviceContext } from '../../../../contexts/DeviceContext';
+import MobileTopCarousel from './MobileTopCarsaole';
+import LatestProductCard from './LatestProductCard';
+import LatestHero from './LatestHero';
 import { useTopProjects } from './../../../../contexts/Api/useTopProjects';
 
 const LatestProductSection: React.FC = memo(() => {
   const [currentPage, setCurrentPage] = useState(0);
-  const  topData = useTopProjects();
+  const topData = useTopProjects();
   const device = useDeviceContext();
 
-  // const isLarge = useMemo(
-  //   () => device === "lg" || device === "xl" || device === "2xl",
-  //   [device]
-  // );
-  const isMobile = useMemo(
-    () => device === "xs" || device === "sm",
-    [device]
-  );
+  const isMobile = useMemo(() => device === 'xs' || device === 'sm', [device]);
 
   const topProjects = topData ?? [];
 
@@ -55,8 +48,8 @@ const LatestProductSection: React.FC = memo(() => {
       y: 0,
       transition: {
         duration: 1,
-        ease: "easeOut",
-        when: "beforeChildren",
+        ease: 'easeOut',
+        when: 'beforeChildren',
         staggerChildren: 0.3,
       },
     },
@@ -71,12 +64,15 @@ const LatestProductSection: React.FC = memo(() => {
   return (
     <Section className="min-h-screen lg:container flex flex-col items-center justify-center  py-10 sm:py-20 md:py-18 lg:py-24">
       <div className="px-4 text-center mb-4 mt-6">
-        <h1 className="sm:text-4xl text-xl sm:font-bold font-semibold text-blue-900">
+        <h1
+          className="sm:text-4xl text-xl sm:font-bold font-semibold"
+          style={{
+            color: 'var(--text-primary)',
+            fontFamily: '"Syne", sans-serif',
+          }}
+        >
           Our Latest Top Insights
         </h1>
-        {/* <h3 className="sm:text-lg text-base text-gray-500">
-          Innovative solutions tailored to your digital transformation needs.
-        </h3> */}
       </div>
 
       <motion.div
@@ -88,7 +84,11 @@ const LatestProductSection: React.FC = memo(() => {
       >
         {/* LEFT HERO */}
         <motion.div
-          className="w-10/12 mx-auto lg:w-2/5 max-w-full relative rounded-2xl overflow-hidden shadow-[0_10px_25px_-5px_rgba(0,0,0,0.1)] border border-gray-200 bg-white md:px-0 "
+          className="w-10/12 mx-auto lg:w-2/5 max-w-full relative rounded-2xl overflow-hidden shadow-[0_10px_25px_-5px_rgba(0,0,0,0.15)] md:px-0"
+          style={{
+            border: '1px solid var(--border)',
+            backgroundColor: 'var(--bg-surface)',
+          }}
           variants={sectionVariants}
         >
           <LatestHero />
@@ -114,7 +114,13 @@ const LatestProductSection: React.FC = memo(() => {
                   {currentProjects.map(
                     (project, i) =>
                       project && (
-                          <LatestProductCard imageURL={project.imageURL} title={project.title} description={project.description } slug={project.slug}  key={i}  />
+                        <LatestProductCard
+                          imageURL={project.imageURL}
+                          title={project.title}
+                          description={project.description}
+                          slug={project.slug}
+                          key={i}
+                        />
                       )
                   )}
                 </motion.div>
@@ -124,14 +130,16 @@ const LatestProductSection: React.FC = memo(() => {
               <div className="absolute top-1/2 -translate-y-1/2 -left-10 p-2 cursor-pointer">
                 <FiChevronLeft
                   size={32}
-                  className="text-gray-700 font-bold hover:text-blue-600"
+                  style={{ color: 'var(--text-muted)' }}
+                  className="font-bold hover:text-sky-500 transition-colors"
                   onClick={handlePrev}
                 />
               </div>
               <div className="absolute top-1/2 -translate-y-1/2 -right-10 p-2 cursor-pointer">
                 <FiChevronRight
                   size={32}
-                  className="text-gray-700 font-bold hover:text-blue-600"
+                  style={{ color: 'var(--text-muted)' }}
+                  className="font-bold hover:text-sky-500 transition-colors"
                   onClick={handleNext}
                 />
               </div>
@@ -141,11 +149,11 @@ const LatestProductSection: React.FC = memo(() => {
                 {Array.from({ length: pageCount }).map((_, i) => (
                   <div
                     key={i}
-                    className={`w-3 h-3 rounded-full ${
-                      i === currentPage
-                        ? "bg-blue-600"
-                        : "bg-gray-300"
-                    }`}
+                    style={{
+                      backgroundColor:
+                        i === currentPage ? 'var(--accent)' : 'var(--border)',
+                    }}
+                    className="w-2.5 h-2.5 rounded-full transition-colors"
                   ></div>
                 ))}
               </div>
@@ -157,6 +165,6 @@ const LatestProductSection: React.FC = memo(() => {
   );
 });
 
-LatestProductSection.displayName = "LatestProductSection";
+LatestProductSection.displayName = 'LatestProductSection';
 
 export default LatestProductSection;

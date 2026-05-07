@@ -1,6 +1,7 @@
-import { useProjectDataContext } from "./ProjectDataContext";
-import { useServiceContext } from "../ServiceContext";
-import { useLocation } from "react-router-dom";
+import { useMemo } from 'react';
+import { useProjectDataContext } from './ProjectDataContext';
+import { useServiceContext } from '../ServiceContext';
+import { useLocation } from 'react-router-dom';
 
 interface ProjectItem {
   id: string;
@@ -19,31 +20,28 @@ export const useFilteredProjects = (): UseFilteredProjectsResult => {
   const { activeTab } = useServiceContext();
   const location = useLocation();
 
-  if (!rawProjects) {
-    return {
-      filtered: [],
-      totalItems: 0,
-      isLoading,
-    };
-  }
+  const { filtered, totalItems } = useMemo(() => {
+    if (!rawProjects) {
+      return { filtered: [] as ProjectItem[], totalItems: 0 };
+    }
 
-  let filtered: ProjectItem[] = rawProjects;
+    let result: ProjectItem[] = rawProjects;
 
-  if (activeTab?.slug && activeTab.slug !== "all") {
-    filtered = filtered.filter(item => item.service === activeTab.slug);
-  }
+    if (activeTab?.slug && activeTab.slug !== 'all') {
+      result = result.filter((item) => item.service === activeTab.slug);
+    }
 
-  const totalItems = filtered.length;
+    const totalItems = result.length;
 
-  const urlSearchParams = new URLSearchParams(location.search);
-  const page = urlSearchParams.get("page")??'1';
-
-  if (page) {
+    const urlSearchParams = new URLSearchParams(location.search);
+    const page = urlSearchParams.get('page') ?? '1';
     const pageNumber = parseInt(page, 10) || 1;
     const perPage = 6;
     const start = (pageNumber - 1) * perPage;
-    filtered = filtered.slice(start, start + perPage);
-  }
+    result = result.slice(start, start + perPage);
+
+    return { filtered: result, totalItems };
+  }, [rawProjects, activeTab?.slug, location.search]);
 
   return {
     filtered,

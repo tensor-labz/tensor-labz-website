@@ -1,9 +1,15 @@
-const appData={
-    title:"Tensor Labs",
-    description:"This is a React App",
-    keywords:["3D printings","Agriculture","Tensor Labz","Prototyping","CADModeling"],
-    author:"Tesor Labs,Sriniruban,ThanuMahee",
-    logo:"../assets/images/logo.png",
-}
+const appData = {
+  title: 'Tensor Labs',
+  description: 'Tensor Labs — Engineering & Technology Solutions',
+  keywords: [
+    '3D printings',
+    'Agriculture',
+    'Tensor Labz',
+    'Prototyping',
+    'CADModeling',
+  ],
+  author: 'Tensor Labs,Sriniruban,ThanuMahee',
+  logo: '',
+};
 
 export default appData;

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 
 export default function ProfessionalLoading() {
   const [progress, setProgress] = useState(0);
@@ -10,18 +10,21 @@ export default function ProfessionalLoading() {
     { text: 'Loading resources', threshold: 25 },
     { text: 'Preparing interface', threshold: 60 },
     { text: 'Finalizing', threshold: 85 },
-    { text: 'Ready', threshold: 100 }
+    { text: 'Ready', threshold: 100 },
   ];
 
   useEffect(() => {
     const interval = setInterval(() => {
       setProgress((prev) => {
         const remaining = 100 - prev;
-        const increment = remaining > 20 ? Math.random() * 3 + 1 : Math.random() * 1.5 + 0.5;
+        const increment =
+          remaining > 20 ? Math.random() * 3 + 1 : Math.random() * 1.5 + 0.5;
         const newProgress = Math.min(prev + increment, 100);
 
         // Update loading text based on progress
-        const currentStage = loadingStages.reverse().find(stage => newProgress >= stage.threshold);
+        const currentStage = [...loadingStages]
+          .reverse()
+          .find((stage) => newProgress >= stage.threshold);
         if (currentStage) {
           setLoadingText(currentStage.text);
         }
@@ -46,11 +49,15 @@ export default function ProfessionalLoading() {
           <div className="relative">
             <motion.div
               animate={{ rotate: 360 }}
-              transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+              transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
               className="w-16 h-16 rounded-full border-2 border-slate-200 border-t-blue-500"
             />
             <div className="absolute inset-0 flex items-center justify-center">
-              <svg className="w-6 h-6 text-blue-500" viewBox="0 0 24 24" fill="currentColor">
+              <svg
+                className="w-6 h-6 text-blue-500"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+              >
                 <path d="M12 2L2 7L12 12L22 7L12 2Z" opacity="0.8" />
                 <path d="M2 17L12 22L22 17" opacity="0.6" />
                 <path d="M2 12L12 17L22 12" opacity="0.4" />
@@ -73,7 +80,7 @@ export default function ProfessionalLoading() {
                 className="h-full bg-gradient-to-r from-blue-500 to-blue-600 rounded-full"
                 initial={{ width: 0 }}
                 animate={{ width: `${progress}%` }}
-                transition={{ duration: 0.3, ease: "easeOut" }}
+                transition={{ duration: 0.3, ease: 'easeOut' }}
               />
             </div>
           </div>
@@ -108,12 +115,12 @@ export default function ProfessionalLoading() {
               className="w-2 h-2 bg-blue-500 rounded-full"
               animate={{
                 scale: [1, 1.2, 1],
-                opacity: [0.5, 1, 0.5]
+                opacity: [0.5, 1, 0.5],
               }}
               transition={{
                 duration: 1.5,
                 repeat: Infinity,
-                delay: i * 0.2
+                delay: i * 0.2,
               }}
             />
           ))}

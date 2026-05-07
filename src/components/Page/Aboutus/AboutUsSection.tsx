@@ -1,15 +1,35 @@
-import { memo } from "react";
+import { memo } from 'react';
 
 interface AboutUsSectionProps {
   title: string;
   description: string;
 }
 
-const AboutUsSectionItem = memo(({ title, description }: AboutUsSectionProps) => (
-  <div className="bg-white/80 p-6 rounded-xl border border-gray-300 shadow-lg w-full">
-    <h3 className="text-2xl font-semibold text-blue-900 mb-3 break-words">{title}</h3>
-    <p className="text-gray-800 leading-relaxed w-full break-words hyphens-auto">{description}</p>
-  </div>
-));
+const AboutUsSectionItem = memo(
+  ({ title, description }: AboutUsSectionProps) => (
+    <div
+      className="p-6 rounded-xl w-full"
+      style={{
+        backgroundColor: 'rgba(255,255,255,0.05)',
+        border: '1px solid rgba(255,255,255,0.10)',
+        backdropFilter: 'blur(8px)',
+      }}
+    >
+      <h3
+        className="text-lg font-semibold mb-3 break-words"
+        style={{ color: 'var(--text-primary)' }}
+      >
+        {title}
+      </h3>
+      <p
+        className="leading-relaxed w-full break-words hyphens-auto text-sm"
+        style={{ color: 'var(--text-muted)' }}
+      >
+        {description}
+      </p>
+    </div>
+  )
+);
 
+AboutUsSectionItem.displayName = 'AboutUsSectionItem';
 export default AboutUsSectionItem;

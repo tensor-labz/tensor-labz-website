@@ -1,0 +1,201 @@
+import React, { memo, useState } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
+import { useNavigate } from 'react-router-dom';
+import { FiArrowRight, FiEye } from 'react-icons/fi';
+import { AiTwotoneCrown } from 'react-icons/ai';
+
+interface ProjectCardProps {
+  id: string | number;
+  title: string;
+  imageURL: string;
+  description: string;
+  services?: string[];
+  slug: string;
+  isTop?: boolean;
+  onExplore?: () => void;
+}
+
+const ProjectCard: React.FC<ProjectCardProps> = ({
+  title,
+  imageURL,
+  description,
+  services = [],
+  slug,
+  isTop = false,
+  onExplore,
+}) => {
+  const navigate = useNavigate();
+  const [isHovered, setIsHovered] = useState(false);
+
+  const handleExplore = () => {
+    if (onExplore) {
+      onExplore();
+    } else {
+      navigate(`/project/${slug}`);
+    }
+  };
+
+  return (
+    <motion.div
+      className="rounded-2xl shadow-lg overflow-hidden w-full h-full flex flex-col"
+      style={{
+        backgroundColor: 'var(--bg-surface)',
+        border: '1px solid var(--border)',
+      }}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: 20 }}
+      transition={{ duration: 0.4 }}
+      onHoverStart={() => setIsHovered(true)}
+      onHoverEnd={() => setIsHovered(false)}
+      layoutId={`project-card-${slug}`}
+    >
+      {/* Image */}
+      <div className="relative overflow-hidden aspect-video">
+        <motion.img
+          src={imageURL}
+          alt={title}
+          className="w-full h-full object-cover"
+          animate={{ scale: isHovered ? 1.05 : 1 }}
+          transition={{ duration: 0.5 }}
+        />
+        <motion.div
+          className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: isHovered ? 1 : 0 }}
+          transition={{ duration: 0.3 }}
+        >
+          <div className="p-4 w-full">
+            <motion.button
+              onClick={handleExplore}
+              className="px-4 py-2 rounded-full font-medium text-sm flex items-center gap-2"
+              style={{
+                backgroundColor: 'var(--bg-surface)',
+                color: 'var(--text-primary)',
+              }}
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
+            >
+              <FiEye style={{ color: 'var(--accent)' }} />
+              <span>Quick View</span>
+              <FiArrowRight
+                className="h-4 w-4"
+                style={{ color: 'var(--accent)' }}
+              />
+            </motion.button>
+          </div>
+        </motion.div>
+      </div>
+
+      <div className="p-6 flex flex-col flex-grow relative">
+        {isTop && (
+          <motion.div
+            className="absolute top-4 right-4 flex items-center gap-1 bg-gradient-to-r from-amber-500 to-yellow-400 text-white text-xs font-medium py-1 px-2 rounded-full shadow-md"
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ delay: 0.2 }}
+          >
+            <AiTwotoneCrown className="h-3 w-3" />
+            <span>Premium</span>
+          </motion.div>
+        )}
+
+        <h3
+          className="text-xl md:text-2xl font-bold mb-2 line-clamp-1 pr-16"
+          style={{ color: 'var(--text-primary)' }}
+        >
+          {title}
+        </h3>
+
+        <div className="flex flex-wrap gap-2 mb-4">
+          <AnimatePresence>
+            {services.slice(0, 3).map((service, index) => (
+              <motion.span
+                key={index}
+                className="px-3 py-1 text-xs font-medium rounded-full"
+                style={{
+                  backgroundColor: 'var(--accent-soft)',
+                  color: 'var(--accent)',
+                }}
+                initial={{ opacity: 0, x: -5 }}
+                animate={{
+                  opacity: 1,
+                  x: 0,
+                  transition: { delay: 0.05 * index },
+                }}
+              >
+                {service}
+              </motion.span>
+            ))}
+            {services.length > 3 && (
+              <motion.span
+                className="px-3 py-1 text-xs font-medium rounded-full"
+                style={{
+                  backgroundColor: 'var(--bg-raised)',
+                  color: 'var(--text-muted)',
+                }}
+                initial={{ opacity: 0, x: -5 }}
+                animate={{ opacity: 1, x: 0 }}
+              >
+                +{services.length - 3} more
+              </motion.span>
+            )}
+          </AnimatePresence>
+        </div>
+
+        <p
+          className="mb-10 line-clamp-2 flex-grow text-sm"
+          style={{ color: 'var(--text-muted)' }}
+        >
+          {description}
+        </p>
+
+        {/* Explore button */}
+        <motion.div
+          className="absolute bottom-4 left-4 cursor-pointer"
+          initial="initial"
+          whileHover="expanded"
+          onClick={handleExplore}
+        >
+          <motion.div
+            className="flex items-center overflow-hidden rounded-full shadow-md text-white"
+            style={{
+              background: 'linear-gradient(to right, var(--accent), #0c4a6e)',
+            }}
+            variants={{ initial: { width: 40 }, expanded: { width: 160 } }}
+            transition={{ type: 'spring', stiffness: 500, damping: 30 }}
+          >
+            <motion.button
+              className="h-10 w-10 flex items-center relative justify-center rounded-full"
+              whileTap={{ scale: 0.9 }}
+            >
+              <FiArrowRight className="h-5 w-5" />
+            </motion.button>
+            <motion.span
+              className="whitespace-nowrap pr-4 pl-1 font-medium mx-auto"
+              variants={{
+                initial: { opacity: 0, x: -20 },
+                expanded: { opacity: 1, x: 0 },
+              }}
+              transition={{ delay: 0.1 }}
+            >
+              Explore Project
+            </motion.span>
+          </motion.div>
+        </motion.div>
+      </div>
+    </motion.div>
+  );
+};
+
+const arePropsEqual = (prev: ProjectCardProps, next: ProjectCardProps) =>
+  prev.id === next.id &&
+  prev.title === next.title &&
+  prev.imageURL === next.imageURL &&
+  prev.description === next.description &&
+  (prev.services?.length ?? 0) === (next.services?.length ?? 0) &&
+  (prev.services ?? []).every((s, i) => s === (next.services ?? [])[i]) &&
+  prev.isTop === next.isTop &&
+  prev.onExplore === next.onExplore;
+
+export default memo(ProjectCard, arePropsEqual);

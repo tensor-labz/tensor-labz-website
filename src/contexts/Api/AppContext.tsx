@@ -1,10 +1,16 @@
-import { createContext, useContext, useEffect, useState, useCallback } from "react";
-import ServiceDataContextProvider from "./ServiceApiContext";
-import SocialMediaDataContextProvider from "./SocialMediaContext";
-import ProjectDataContextProvider from "./ProjectDataContext";
-import HeroContextProvider from "../HeroContext";
-import AboutusCont from "./AboutusDataContext";
-import {useRootContext} from "../RootContext";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  useCallback,
+} from 'react';
+import ServiceDataContextProvider from './ServiceApiContext';
+import SocialMediaDataContextProvider from './SocialMediaContext';
+import ProjectDataContextProvider from './ProjectDataContext';
+import HeroContextProvider from '../HeroContext';
+import AboutusCont from './AboutusDataContext';
+import { useRootContext } from '../RootContext';
 
 // Define proper types for context
 interface AppContextType {
@@ -19,7 +25,7 @@ const AppContext = createContext<AppContextType>({
   data: null,
   isLoading: false,
   error: null,
-  refreshData: () => {}
+  refreshData: () => {},
 });
 
 type AppContextProviderProps = {
@@ -27,30 +33,31 @@ type AppContextProviderProps = {
 };
 
 // Debounce function
-const debounce = (fn: Function, delay: number) => {
+const debounce = <T extends unknown[]>(
+  fn: (...args: T) => void,
+  delay: number
+) => {
   let timeoutId: ReturnType<typeof setTimeout>;
-  return (...args: any[]) => {
+  return (...args: T) => {
     if (timeoutId) clearTimeout(timeoutId);
-    timeoutId = setTimeout(() => {
-      fn(...args);
-    }, delay);
+    timeoutId = setTimeout(() => fn(...args), delay);
   };
 };
 
 // AppContextProvider component that provides the context to its children
-export default function AppContextProvider({ children }: AppContextProviderProps) {
+export default function AppContextProvider({
+  children,
+}: AppContextProviderProps) {
   const [data, setData] = useState<any>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<Error | null>(null);
-  const {googleSheet_URl}=useRootContext();
+  const { googleSheet_URl } = useRootContext();
   // Define fetchData function outside useEffect
-  const fetchData = useCallback(async () => {
+  const fetchData = useCallback(async (signal?: AbortSignal) => {
     setIsLoading(true);
     setError(null);
     try {
-      const response = await fetch(
-        `${googleSheet_URl}ContactData`
-      );
+      const response = await fetch(`${googleSheet_URl}ContactData`, { signal });
 
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
@@ -58,7 +65,10 @@ export default function AppContextProvider({ children }: AppContextProviderProps
       const result = await response.json();
       setData(result?.data);
     } catch (err) {
-      setError(err instanceof Error ? err : new Error('An unknown error occurred'));
+      if (err instanceof Error && err.name === 'AbortError') return;
+      setError(
+        err instanceof Error ? err : new Error('An unknown error occurred')
+      );
       console.error('Error fetching data:', err);
     } finally {
       setIsLoading(false);
@@ -67,16 +77,18 @@ export default function AppContextProvider({ children }: AppContextProviderProps
 
   // Create debounced version of fetchData
   const debouncedFetchData = useCallback(
-    debounce(() => {
-      fetchData();
+    debounce((signal?: AbortSignal) => {
+      fetchData(signal);
     }, 500),
     [fetchData]
   );
 
-  // Initial data fetch
+  // Initial data fetch (no debounce — fires once on mount)
   useEffect(() => {
-    debouncedFetchData();
-  }, [debouncedFetchData]);
+    const controller = new AbortController();
+    fetchData(controller.signal);
+    return () => controller.abort();
+  }, [fetchData]);
 
   // Function to manually refresh data if needed
   const refreshData = useCallback(() => {
@@ -88,22 +100,20 @@ export default function AppContextProvider({ children }: AppContextProviderProps
     data,
     isLoading,
     error,
-    refreshData
+    refreshData,
   };
 
   return (
     <AppContext.Provider value={contextValue}>
       <AboutusCont>
-      <ServiceDataContextProvider>
-        <ProjectDataContextProvider>
-          <SocialMediaDataContextProvider>
-            <HeroContextProvider delay={5000}>
-            {children}
-            </HeroContextProvider>
-          </SocialMediaDataContextProvider>
+        <ServiceDataContextProvider>
+          <ProjectDataContextProvider>
+            <SocialMediaDataContextProvider>
+              <HeroContextProvider delay={5000}>{children}</HeroContextProvider>
+            </SocialMediaDataContextProvider>
           </ProjectDataContextProvider>
         </ServiceDataContextProvider>
-        </AboutusCont>
+      </AboutusCont>
     </AppContext.Provider>
   );
 }

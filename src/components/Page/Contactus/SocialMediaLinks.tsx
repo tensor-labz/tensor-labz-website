@@ -1,14 +1,14 @@
-import { memo } from "react";
-import { motion } from "framer-motion";
+import { memo } from 'react';
+import { motion } from 'motion/react';
 import {
   FaLinkedin,
   FaFacebook,
   FaInstagram,
   FaYoutube,
-  FaTiktok
+  FaTiktok,
 } from 'react-icons/fa';
 import { useSocialMediaDataContext } from '../../../contexts/Api/SocialMediaContext';
-import { IconType } from "react-icons";
+import { IconType } from 'react-icons';
 
 // Types
 interface SocialMediaItem {
@@ -55,43 +55,45 @@ const ErrorMessage = ({ message }: { message: string }) => (
 );
 
 const SocialMediaLinks = memo(() => {
-  const { link_data, isLoading } = useSocialMediaDataContext() as SocialMediaContextType;
+  const { link_data, isLoading } =
+    useSocialMediaDataContext() as SocialMediaContextType;
   // Social media configuration
   const socialMediaConfig: SocialMediaLink[] = [
     {
       icon: FaLinkedin,
-      social_media: "Linkedin",
-      color: "text-blue-600 hover:text-blue-800",
+      social_media: 'Linkedin',
+      color: 'text-blue-600 hover:text-blue-800',
     },
     {
       icon: FaFacebook,
-      social_media: "FaceBook",
-      color: "text-sky-700 hover:text-sky-900",
+      social_media: 'FaceBook',
+      color: 'text-sky-700 hover:text-sky-900',
     },
     {
       icon: FaInstagram,
-      social_media: "Instragram", // Fixed typo
-      color: "text-pink-600 hover:text-pink-800",
+      social_media: 'Instagram',
+      color: 'text-pink-600 hover:text-pink-800',
     },
     {
       icon: FaYoutube,
-      social_media: "Youtube",
-      color: "text-red-600 hover:text-red-800",
+      social_media: 'Youtube',
+      color: 'text-red-600 hover:text-red-800',
     },
     {
       icon: FaTiktok,
-      social_media: "Tiktok",
-      color: "text-black-400 hover:text-black-600",
-    }
+      social_media: 'Tiktok',
+      color: 'text-black-400 hover:text-black-600',
+    },
   ];
 
   // Map social media data to configured links
-  const socialLinks= link_data?.social_media?.map((social) => {
-    const config = socialMediaConfig.find(
-      link => link.social_media === social?.social_media
-    );
-    return config ? { ...config, href: social.value } : null;
-  }) || [];
+  const socialLinks =
+    link_data?.social_media?.map((social) => {
+      const config = socialMediaConfig.find(
+        (link) => link.social_media === social?.social_media
+      );
+      return config ? { ...config, href: social.value } : null;
+    }) || [];
   // Handle loading state
   if (isLoading) {
     return <LoadingSkeleton />;
@@ -106,7 +108,7 @@ const SocialMediaLinks = memo(() => {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.6, duration: 0.8, ease: "easeInOut" }}
+      transition={{ delay: 0.6, duration: 0.8, ease: 'easeInOut' }}
       className="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-6 mt-10  mx-auto px-4 py-6 rounded-lg"
     >
       <motion.h3
@@ -137,7 +139,7 @@ const SocialMediaLinks = memo(() => {
               whileHover={{
                 scale: 1.2,
                 rotate: 5,
-                transition: { duration: 0.2 }
+                transition: { duration: 0.2 },
               }}
               whileTap={{ scale: 0.95 }}
               initial={{ opacity: 0, y: 20 }}
@@ -145,7 +147,9 @@ const SocialMediaLinks = memo(() => {
               transition={{ delay: 1.2 + index * 0.1, duration: 0.4 }}
               aria-label={`Follow us on ${social?.social_media}`}
             >
-              {IconComponent && <IconComponent className="w-6 h-6 md:w-8 md:h-8" />}
+              {IconComponent && (
+                <IconComponent className="w-6 h-6 md:w-8 md:h-8" />
+              )}
             </motion.a>
           );
         })}
@@ -154,6 +158,6 @@ const SocialMediaLinks = memo(() => {
   );
 });
 
-SocialMediaLinks.displayName = "SocialMediaLinks";
+SocialMediaLinks.displayName = 'SocialMediaLinks';
 
 export default SocialMediaLinks;
