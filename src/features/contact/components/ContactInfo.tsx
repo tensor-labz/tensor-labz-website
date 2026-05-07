@@ -51,8 +51,8 @@ const ContactInfoItem = memo(
         className="rounded-2xl sm:p-6 p-4 flex sm:flex-row flex-col items-center sm:space-x-5
           hover:shadow-lg transition-all duration-300 group"
         style={{
-          backgroundColor: 'rgba(255,255,255,0.05)',
-          border: '1px solid rgba(255,255,255,0.08)',
+          backgroundColor: 'var(--glass-bg-raised)',
+          border: '1px solid var(--glass-border)',
           backdropFilter: 'blur(8px)',
         }}
       >

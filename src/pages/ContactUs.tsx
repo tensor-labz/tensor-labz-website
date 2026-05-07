@@ -21,8 +21,8 @@ const ContactUs: React.FC = memo(() => {
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
           className="relative z-10 max-w-4xl w-full rounded-2xl p-8 sm:p-12 flex flex-col items-center gap-10"
           style={{
-            backgroundColor: 'rgba(255,255,255,0.04)',
-            border: '1px solid rgba(255,255,255,0.08)',
+            backgroundColor: 'var(--glass-bg)',
+            border: '1px solid var(--glass-border)',
             backdropFilter: 'blur(12px)',
           }}
         >

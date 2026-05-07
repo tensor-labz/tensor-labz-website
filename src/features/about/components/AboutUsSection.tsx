@@ -10,8 +10,8 @@ const AboutUsSectionItem = memo(
     <div
       className="p-6 rounded-xl w-full"
       style={{
-        backgroundColor: 'rgba(255,255,255,0.05)',
-        border: '1px solid rgba(255,255,255,0.10)',
+        backgroundColor: 'var(--glass-bg-raised)',
+        border: '1px solid var(--glass-border)',
         backdropFilter: 'blur(8px)',
       }}
     >

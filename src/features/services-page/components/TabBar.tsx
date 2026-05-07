@@ -30,7 +30,7 @@ const TabBar: FC = memo(() => {
               isActive
                 ? { backgroundColor: 'var(--accent)', color: '#fff' }
                 : {
-                    backgroundColor: 'rgba(255,255,255,0.05)',
+                    backgroundColor: 'var(--glass-bg-raised)',
                     color: 'var(--text-muted)',
                     border: '1px solid var(--border)',
                   }
