@@ -5,7 +5,7 @@ import DataTable, {
   createTheme,
   type TableColumn,
 } from 'react-data-table-component';
-import { FiSearch, FiX, FiExternalLink } from 'react-icons/fi';
+import { FiSearch, FiX, FiExternalLink, FiChevronRight } from 'react-icons/fi';
 import { MODULES } from '../config/modules';
 import { supabase } from '../../../lib/supabase';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
@@ -16,6 +16,7 @@ import {
   type AdminRecord,
 } from '../../../store/adminSlice';
 import type { TableColumnConfig } from '../../../shared/types/tableConfig';
+import { useDevice } from '../../../shared/hooks/useDevice';
 
 /* ── Theme — uses CSS vars so it follows light/dark toggle ── */
 createTheme(
@@ -163,6 +164,73 @@ const TableSkeleton = () => (
   </div>
 );
 
+/* ── Mobile card list — used on xs screens instead of DataTable ── */
+const MobileCardList = ({
+  rows,
+  moduleId,
+  loading,
+  search,
+}: {
+  rows: AdminRecord[];
+  moduleId: string;
+  loading: boolean;
+  search: string;
+}) => {
+  const navigate = useNavigate();
+  const mod = MODULES.find((m) => m.id === moduleId);
+
+  if (loading) return <TableSkeleton />;
+
+  if (!rows.length) {
+    return (
+      <div className="py-14 text-sm text-center" style={{ color: 'var(--text-muted)' }}>
+        {search ? `No results for "${search}"` : 'No records yet.'}
+      </div>
+    );
+  }
+
+  return (
+    <div>
+      {rows.map((row, i) => {
+        const title = String(rowVal(row, mod?.titleField ?? 'id') ?? '');
+        const desc = mod?.descriptionField ? String(rowVal(row, mod.descriptionField) ?? '') : '';
+        const imgSrc = mod?.imageField ? resolveImg(rowVal(row, mod.imageField)) : '';
+
+        return (
+          <div
+            key={row.id as number}
+            onClick={() => navigate(`/admin/${moduleId}/${row.id}`)}
+            className="flex items-center gap-3 px-4 py-3 cursor-pointer transition-colors"
+            style={{
+              borderTop: i > 0 ? '1px solid var(--glass-border)' : undefined,
+            }}
+          >
+            {imgSrc && (
+              <img
+                src={imgSrc}
+                alt=""
+                className="w-10 h-10 object-cover rounded-lg shrink-0"
+                onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
+              />
+            )}
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-medium truncate" style={{ color: 'var(--text-primary)' }}>
+                {title || `#${row.id}`}
+              </p>
+              {desc && (
+                <p className="text-xs mt-0.5 truncate" style={{ color: 'var(--text-muted)' }}>
+                  {desc}
+                </p>
+              )}
+            </div>
+            <FiChevronRight size={15} style={{ color: 'var(--text-muted)', flexShrink: 0 }} />
+          </div>
+        );
+      })}
+    </div>
+  );
+};
+
 /* ── CrudTable ── */
 interface CrudTableProps {
   moduleId: string;
@@ -171,6 +239,8 @@ interface CrudTableProps {
 const CrudTable = memo(({ moduleId }: CrudTableProps) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const device = useDevice();
+  const isMobile = device === 'xs';
 
   const mod = MODULES.find((m) => m.id === moduleId);
 
@@ -498,45 +568,53 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
       </p>
       </div>
 
-      {/* Table — overflow-x: auto directly on container preserves border-radius + enables mobile scroll */}
+      {/* Table / Card view */}
       <div
         className="rounded-2xl"
         style={{
           border: '1px solid var(--glass-border)',
           backgroundColor: 'var(--glass-bg)',
-          overflowX: 'auto',
+          overflowX: isMobile ? 'hidden' : 'auto',
         }}
       >
-      <div style={{ minWidth: '580px' }}>
-        {loading ? (
-          <TableSkeleton />
-        ) : (
-          <StyleSheetManager shouldForwardProp={shouldForwardDtcProp}>
-          <DataTable<AdminRecord>
-            columns={columns}
-            data={filtered}
-            theme="adminTheme"
-            customStyles={customStyles}
-            pagination
-            paginationPerPage={pageSize}
-            paginationRowsPerPageOptions={[10, 20, 50, 100]}
-            defaultSortFieldId={defaultSortField}
-            defaultSortAsc
-            highlightOnHover
-            pointerOnHover
-            onRowClicked={(row) => navigate(`/admin/${moduleId}/${row.id}`)}
-            noDataComponent={
-              <div
-                className="py-16 text-sm text-center w-full"
-                style={{ color: 'var(--text-muted)' }}
-              >
-                {search ? `No results for "${search}"` : 'No records yet.'}
-              </div>
-            }
+        {isMobile ? (
+          /* ── Mobile: card list ── */
+          <MobileCardList
+            rows={filtered}
+            moduleId={moduleId}
+            loading={loading}
+            search={search}
           />
-          </StyleSheetManager>
+        ) : (
+          /* ── Desktop/tablet: DataTable with horizontal scroll ── */
+          <div style={{ minWidth: '580px' }}>
+            {loading ? (
+              <TableSkeleton />
+            ) : (
+              <StyleSheetManager shouldForwardProp={shouldForwardDtcProp}>
+                <DataTable<AdminRecord>
+                  columns={columns}
+                  data={filtered}
+                  theme="adminTheme"
+                  customStyles={customStyles}
+                  pagination
+                  paginationPerPage={pageSize}
+                  paginationRowsPerPageOptions={[10, 20, 50, 100]}
+                  defaultSortFieldId={defaultSortField}
+                  defaultSortAsc
+                  highlightOnHover
+                  pointerOnHover
+                  onRowClicked={(row) => navigate(`/admin/${moduleId}/${row.id}`)}
+                  noDataComponent={
+                    <div className="py-16 text-sm text-center w-full" style={{ color: 'var(--text-muted)' }}>
+                      {search ? `No results for "${search}"` : 'No records yet.'}
+                    </div>
+                  }
+                />
+              </StyleSheetManager>
+            )}
+          </div>
         )}
-      </div>
       </div>
     </div>
   );
