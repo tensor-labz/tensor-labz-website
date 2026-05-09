@@ -7,6 +7,15 @@ All notable changes to the Tensor Labs website are documented here.
 ## [Unreleased]
 
 ---
+## [v1.4.0] — 2026-05-09
+
+### Added
+
+- wire admin CRUD through Redux entity adapter and async thunks (#8)
+
+
+
+---
 ## [v1.3.1] — 2026-05-09
 
 ### Chore
