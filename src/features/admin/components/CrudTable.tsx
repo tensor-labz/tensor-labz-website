@@ -128,31 +128,6 @@ const ImageCell = ({ src }: { src: string }) =>
     />
   );
 
-/* ── Edit button cell ── */
-const EditCell = ({
-  row,
-  moduleId,
-  navigate,
-}: {
-  row: AdminRecord;
-  moduleId: string;
-  navigate: (path: string) => void;
-}) => (
-  <button
-    onClick={(e) => {
-      e.stopPropagation();
-      navigate(`/admin/${moduleId}/${row.id}`);
-    }}
-    className="px-3 py-1 rounded-lg text-xs font-semibold transition-colors"
-    style={{
-      backgroundColor: 'var(--glass-bg-raised)',
-      border: '1px solid var(--glass-border)',
-      color: 'var(--accent)',
-    }}
-  >
-    Edit
-  </button>
-);
 
 /* ── Truncated text cell for long descriptions ── */
 const TextCell = ({ value }: { value: string }) => (
@@ -316,20 +291,8 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
       }
     }
 
-    /* Edit action — always last */
-    cols.push({
-      id: '__edit',
-      name: '',
-      width: '70px',
-      sortable: false,
-      right: true,
-      cell: (row) => (
-        <EditCell row={row} moduleId={moduleId} navigate={navigate} />
-      ),
-    });
-
     return cols;
-  }, [mod, colConfig, moduleId, navigate, imageTypeKeys]);
+  }, [mod, colConfig, moduleId, imageTypeKeys]);
 
   /* Default sort: first sortable non-image column */
   const defaultSortField = useMemo(() => {
