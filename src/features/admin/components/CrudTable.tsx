@@ -83,9 +83,15 @@ const customStyles = {
       backgroundColor: 'transparent',
       borderTop: '1px solid var(--glass-border)',
       color: 'var(--text-muted)',
-      fontSize: '0.8rem',
+      fontSize: '0.75rem',
+      minHeight: '40px',
+      paddingTop: '0',
+      paddingBottom: '0',
     },
     pageButtonsStyle: {
+      height: '28px',
+      width: '28px',
+      padding: '0',
       color: 'var(--text-muted)',
       fill: 'var(--text-muted)',
       '&:hover:not(:disabled)': { backgroundColor: 'var(--glass-bg-raised)' },
@@ -263,7 +269,7 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
   useEffect(() => {
     const el = tableWrapRef.current;
     if (!el) return;
-    const update = () => setDtScrollHeight(`${Math.max(120, el.clientHeight - 100)}px`);
+    const update = () => setDtScrollHeight(`${Math.max(120, el.clientHeight - 84)}px`);
     update();
     const obs = new ResizeObserver(update);
     obs.observe(el);
