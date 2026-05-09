@@ -157,70 +157,6 @@ const AboutUs: React.FC = memo(() => {
           >
             {description}
           </motion.p>
-
-          {/* Compact Vision & Mission cards */}
-          {(info.vision || info.mission) && (
-            <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-2xl mx-auto text-left">
-              {info.vision && (
-                <motion.div
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.55, duration: 0.6 }}
-                  className="rounded-2xl p-5"
-                  style={{
-                    backgroundColor: 'var(--glass-bg-raised)',
-                    border: '1px solid var(--glass-border)',
-                    backdropFilter: 'blur(16px)',
-                  }}
-                >
-                  <div className="flex items-center gap-2 mb-2">
-                    <FaLightbulb size={11} style={{ color: 'var(--accent)' }} />
-                    <span
-                      className="text-[9px] font-semibold tracking-[0.3em] uppercase"
-                      style={{ color: 'var(--accent)' }}
-                    >
-                      Vision
-                    </span>
-                  </div>
-                  <p
-                    className="text-xs leading-relaxed line-clamp-3"
-                    style={{ color: 'var(--text-muted)' }}
-                  >
-                    {info.vision}
-                  </p>
-                </motion.div>
-              )}
-              {info.mission && (
-                <motion.div
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.65, duration: 0.6 }}
-                  className="rounded-2xl p-5"
-                  style={{
-                    backgroundColor: 'var(--glass-bg-raised)',
-                    border: '1px solid var(--glass-border)',
-                    backdropFilter: 'blur(16px)',
-                  }}
-                >
-                  <div className="flex items-center gap-2 mb-2">
-                    <FaRocket size={11} style={{ color: 'var(--accent)' }} />
-                    <span
-                      className="text-[9px] font-semibold tracking-[0.3em] uppercase"
-                      style={{ color: 'var(--accent)' }}
-                    >
-                      Mission
-                    </span>
-                  </div>
-                  <p
-                    className="text-xs leading-relaxed line-clamp-3"
-                    style={{ color: 'var(--text-muted)' }}
-                  >
-                    {info.mission}
-                  </p>
-                </motion.div>
-              )}
-            </div>
-          )}
         </div>
 
         {/* Scroll indicator */}
@@ -244,6 +180,89 @@ const AboutUs: React.FC = memo(() => {
           </motion.div>
         </motion.div>
       </section>
+
+      {/* ══════════════════════════════════════════════════
+          VISION & MISSION
+      ══════════════════════════════════════════════════ */}
+      {(info.vision || info.mission) && (
+        <section className="px-6 lg:px-16 py-20 lg:py-28">
+          <div className="max-w-7xl mx-auto">
+            <motion.div {...inView(0)} className="text-center mb-12">
+              <Label>What Drives Us</Label>
+              <h2
+                className="text-3xl md:text-4xl font-bold"
+                style={{
+                  color: 'var(--text-primary)',
+                  fontFamily: '"Syne", sans-serif',
+                }}
+              >
+                Vision &amp; Mission
+              </h2>
+              <Rule center />
+            </motion.div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {info.vision && (
+                <motion.div {...inView(0.1)}>
+                  <Card>
+                    <div
+                      className="w-12 h-12 rounded-xl flex items-center justify-center mb-6"
+                      style={{ backgroundColor: 'var(--accent-soft)' }}
+                    >
+                      <FaLightbulb
+                        size={20}
+                        style={{ color: 'var(--accent)' }}
+                      />
+                    </div>
+                    <h3
+                      className="text-xl font-bold mb-4"
+                      style={{
+                        color: 'var(--text-primary)',
+                        fontFamily: '"Syne", sans-serif',
+                      }}
+                    >
+                      Our Vision
+                    </h3>
+                    <p
+                      className="text-sm leading-relaxed"
+                      style={{ color: 'var(--text-muted)' }}
+                    >
+                      {info.vision}
+                    </p>
+                  </Card>
+                </motion.div>
+              )}
+              {info.mission && (
+                <motion.div {...inView(0.2)}>
+                  <Card>
+                    <div
+                      className="w-12 h-12 rounded-xl flex items-center justify-center mb-6"
+                      style={{ backgroundColor: 'var(--accent-soft)' }}
+                    >
+                      <FaRocket size={20} style={{ color: 'var(--accent)' }} />
+                    </div>
+                    <h3
+                      className="text-xl font-bold mb-4"
+                      style={{
+                        color: 'var(--text-primary)',
+                        fontFamily: '"Syne", sans-serif',
+                      }}
+                    >
+                      Our Mission
+                    </h3>
+                    <p
+                      className="text-sm leading-relaxed"
+                      style={{ color: 'var(--text-muted)' }}
+                    >
+                      {info.mission}
+                    </p>
+                  </Card>
+                </motion.div>
+              )}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* ══════════════════════════════════════════════════
           WHO WE ARE
