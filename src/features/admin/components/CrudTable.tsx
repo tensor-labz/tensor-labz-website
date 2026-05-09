@@ -1,4 +1,5 @@
 import React, { memo, useEffect, useState, useMemo } from 'react';
+import { StyleSheetManager } from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import DataTable, {
   createTheme,
@@ -34,6 +35,11 @@ createTheme(
 );
 
 const DEFAULT_PAGE_SIZE = 20;
+
+/* Prevent react-data-table-component's styled-components from forwarding
+ * non-HTML props (grow, center, right, wrap) to the DOM */
+const DTC_INTERNAL_PROPS = new Set(['grow', 'center', 'right', 'wrap', 'dense', 'pointer']);
+const shouldForwardDtcProp = (prop: string) => !DTC_INTERNAL_PROPS.has(prop);
 
 /* ── Custom styles applied on top of the theme ── */
 const customStyles = {
@@ -168,8 +174,13 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
   const dispatch = useAppDispatch();
 
   const mod = MODULES.find((m) => m.id === moduleId);
-  const rows = useAppSelector(selectModuleRecords(moduleId));
-  const status = useAppSelector(selectModuleStatus(moduleId));
+
+  /* Memoize selector instances — prevents a new createSelector from being
+   * created on every render, which triggers the "different result" warning */
+  const selectRows = useMemo(() => selectModuleRecords(moduleId), [moduleId]);
+  const selectStatus = useMemo(() => selectModuleStatus(moduleId), [moduleId]);
+  const rows = useAppSelector(selectRows);
+  const status = useAppSelector(selectStatus);
   const loading = status === 'idle' || status === 'loading';
 
   const [search, setSearch] = useState('');
@@ -521,6 +532,7 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
         {loading ? (
           <TableSkeleton />
         ) : (
+          <StyleSheetManager shouldForwardProp={shouldForwardDtcProp}>
           <DataTable<AdminRecord>
             columns={columns}
             data={filtered}
@@ -543,6 +555,7 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
               </div>
             }
           />
+          </StyleSheetManager>
         )}
       </div>
       </div>
