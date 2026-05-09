@@ -48,7 +48,7 @@ src/app/hooks.ts                    ← useAppSelector / useAppDispatch
 
 ## Admin Dashboard
 
-The admin panel lives at `/admin/*` (wildcard route in `src/routes/Approutes.tsx`). It requires Firebase Auth — protected by `src/components/ProtectedRoute.tsx`.
+The admin panel lives at `/admin/*` (wildcard route in `src/routes/Approutes.tsx`). It requires **Supabase Auth** — protected by `src/components/ProtectedRoute.tsx`.
 
 ### Route map
 
@@ -135,9 +135,9 @@ All CRUD operations are currently **UI-only with mock data**. Backend is **not y
 
 | Layer | Technology | Status |
 |---|---|---|
-| Auth | Firebase Auth | ✅ Live |
-| Database / CRUD | **Supabase** (PostgreSQL) | ⏳ Planned |
-| Image / file storage | **AWS S3** | ⏳ Planned |
+| Auth | Supabase Auth | ✅ Live |
+| Database / CRUD | **Supabase** (PostgreSQL) | ✅ Live |
+| Image / file storage | **AWS S3 via Lambda** | ✅ Live |
 | Public CMS (read-only) | Google Sheets via `VITE_SHEET_URL` | ✅ Live |
 
 #### Why Supabase (not Firestore)
@@ -367,7 +367,7 @@ firebase deploy --only hosting:tensor-labz-website
 
 - `dangerouslySetInnerHTML` must always be wrapped with `DOMPurify.sanitize(...)`.
 - API URLs and secrets belong in `.env` as `VITE_` prefixed variables, accessed via `import.meta.env.VITE_*`.
-- Admin routes are protected by Firebase Auth via `ProtectedRoute` — never remove this wrapper.
+- Admin routes are protected by Supabase Auth via `ProtectedRoute` — never remove this wrapper.
 
 ## Environment Variables
 
@@ -379,7 +379,13 @@ cp .env.example .env
 
 Key variables:
 
-| Variable            | Purpose                                      |
-|---------------------|----------------------------------------------|
-| `VITE_SHEET_URL`    | Google Sheets API base URL (headless CMS)    |
-| `VITE_FIREBASE_*`   | Firebase project config (auth, firestore)    |
+| Variable                | Purpose                                         |
+|-------------------------|-------------------------------------------------|
+| `VITE_SHEET_URL`        | Google Sheets API base URL (headless CMS)       |
+| `VITE_SUPABASE_URL`     | Supabase project URL                            |
+| `VITE_SUPABASE_ANON_KEY`| Supabase public anon key                        |
+| `VITE_IMAGE_LAMBDA_URL` | Lambda API Gateway base URL (image upload)      |
+| `VITE_S3_BUCKET`        | S3 bucket name (`tensor-labz-store`)            |
+| `VITE_S3_REGION`        | S3 region (`eu-north-1`)                        |
+| `VITE_CDN_URL`          | CDN base URL for stored images                  |
+| `VITE_FIREBASE_*`       | Firebase project config (kept for other uses)   |

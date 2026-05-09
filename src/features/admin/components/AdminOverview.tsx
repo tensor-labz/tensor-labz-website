@@ -1,4 +1,5 @@
-import { memo, useEffect, useState } from 'react';
+import { memo, useEffect, useMemo, useState } from 'react';
+import { supabase } from '../../../lib/supabase';
 import { motion } from 'motion/react';
 import {
   AreaChart,
@@ -25,14 +26,14 @@ import {
   FaArrowDown,
 } from 'react-icons/fa';
 
-/* ── Static dataset ── */
-const MODULE_COUNTS = [
-  { name: 'Hero',     count: 2,  icon: FaImages,         color: '#38bdf8' },
-  { name: 'Services', count: 3,  icon: FaCogs,           color: '#818cf8' },
-  { name: 'Projects', count: 5,  icon: FaProjectDiagram, color: '#34d399' },
-  { name: 'About',    count: 4,  icon: FaInfoCircle,     color: '#fb923c' },
-  { name: 'Contact',  count: 3,  icon: FaEnvelope,       color: '#f472b6' },
-  { name: 'Social',   count: 4,  icon: FaAddressBook,    color: '#a78bfa' },
+/* ── Module metadata (colours + icons, counts loaded live) ── */
+const MODULE_META = [
+  { id: 'hero',     name: 'Hero',     icon: FaImages,         color: '#38bdf8' },
+  { id: 'services', name: 'Services', icon: FaCogs,           color: '#818cf8' },
+  { id: 'projects', name: 'Projects', icon: FaProjectDiagram, color: '#34d399' },
+  { id: 'about',    name: 'About',    icon: FaInfoCircle,     color: '#fb923c' },
+  { id: 'contact',  name: 'Contact',  icon: FaEnvelope,       color: '#f472b6' },
+  { id: 'social',   name: 'Social',   icon: FaAddressBook,    color: '#a78bfa' },
 ];
 
 const MONTHLY_ACTIVITY = [
@@ -50,11 +51,6 @@ const MONTHLY_ACTIVITY = [
   { month: 'Dec', updates: 22, additions: 13 },
 ];
 
-const RADIAL_DATA = MODULE_COUNTS.map((m) => ({
-  name: m.name,
-  value: m.count,
-  fill: m.color,
-}));
 
 const RECENT_ACTIVITY = [
   { module: 'Projects', action: 'Updated', title: 'Smart Farm Monitor',    time: '2 min ago',  type: 'update' },
@@ -65,40 +61,6 @@ const RECENT_ACTIVITY = [
   { module: 'Contact',  action: 'Updated', title: 'Email Us',              time: '3 days ago', type: 'update' },
 ];
 
-const STATS = [
-  {
-    label: 'Total Records',
-    value: MODULE_COUNTS.reduce((a, m) => a + m.count, 0),
-    delta: '+3 this week',
-    up: true,
-    color: '#38bdf8',
-    bg: 'rgba(56,189,248,0.1)',
-  },
-  {
-    label: 'Active Modules',
-    value: MODULE_COUNTS.length,
-    delta: 'All operational',
-    up: true,
-    color: '#34d399',
-    bg: 'rgba(52,211,153,0.1)',
-  },
-  {
-    label: 'Featured Projects',
-    value: 2,
-    delta: '+1 this month',
-    up: true,
-    color: '#818cf8',
-    bg: 'rgba(129,140,248,0.1)',
-  },
-  {
-    label: 'Pending Updates',
-    value: 5,
-    delta: '-2 from last week',
-    up: false,
-    color: '#fb923c',
-    bg: 'rgba(251,146,60,0.1)',
-  },
-];
 
 const actColor: Record<string, string> = {
   update: '#38bdf8',
@@ -224,6 +186,46 @@ const AdminOverview = memo(() => {
   const today = new Date().toLocaleDateString('en-US', {
     weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
   });
+
+  const [counts, setCounts] = useState<Record<string, number>>({});
+  const [featuredCount, setFeaturedCount] = useState(0);
+
+  useEffect(() => {
+    Promise.all(
+      MODULE_META.map(async (m) => {
+        const { count } = await supabase
+          .from(m.id)
+          .select('*', { count: 'exact', head: true });
+        return { id: m.id, count: count ?? 0 };
+      })
+    ).then((results) => {
+      setCounts(Object.fromEntries(results.map((r) => [r.id, r.count])));
+    });
+
+    supabase
+      .from('projects')
+      .select('*', { count: 'exact', head: true })
+      .eq('is_top', true)
+      .then(({ count }) => setFeaturedCount(count ?? 0));
+  }, []);
+
+  const MODULE_COUNTS = useMemo(
+    () => MODULE_META.map((m) => ({ ...m, count: counts[m.id] ?? 0 })),
+    [counts]
+  );
+
+  const totalRecords = MODULE_COUNTS.reduce((a, m) => a + m.count, 0);
+
+  const RADIAL_DATA = MODULE_COUNTS.map((m) => ({
+    name: m.name, value: m.count, fill: m.color,
+  }));
+
+  const STATS = [
+    { label: 'Total Records',    value: totalRecords,         delta: `${MODULE_COUNTS.length} modules`, up: true,  color: '#38bdf8', bg: 'rgba(56,189,248,0.1)'   },
+    { label: 'Active Modules',   value: MODULE_COUNTS.length, delta: 'All operational',                  up: true,  color: '#34d399', bg: 'rgba(52,211,153,0.1)'   },
+    { label: 'Featured Projects',value: featuredCount,        delta: 'Marked is_top',                    up: true,  color: '#818cf8', bg: 'rgba(129,140,248,0.1)'  },
+    { label: 'Hero Slides',      value: counts['hero'] ?? 0,  delta: 'Live on homepage',                 up: true,  color: '#fb923c', bg: 'rgba(251,146,60,0.1)'   },
+  ];
 
   return (
     <div className="p-6 space-y-5 max-w-[1400px] mx-auto">

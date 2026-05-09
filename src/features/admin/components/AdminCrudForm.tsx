@@ -506,6 +506,20 @@ const AdminCrudForm = memo(() => {
   };
 
   const handleDelete = async () => {
+    if (formFields) {
+      const imageKeys = formFields
+        .filter((f) => f.type === 'image' || f.type === 'images')
+        .flatMap((f) => {
+          const v = values[f.key];
+          if (!v) return [];
+          return Array.isArray(v) ? (v as string[]) : [String(v)];
+        })
+        .filter(Boolean);
+      if (imageKeys.length) {
+        const { deleteImages } = await import('../../../lib/imageUpload');
+        await deleteImages(imageKeys).catch(() => {});
+      }
+    }
     await supabase.from(moduleId).delete().eq('id', id!);
     navigate(`/admin/${moduleId}`);
   };
