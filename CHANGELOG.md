@@ -7,6 +7,28 @@ All notable changes to the Tensor Labs website are documented here.
 ## [Unreleased]
 
 ---
+## [v1.7.0] — 2026-05-09
+
+### Added
+
+- auto-rotate gallery randomly every 5s, pause on hover
+- fill hero with vision/mission cards + scroll indicator
+- About Us — Three.js particle hero, media gallery player, vision/mission sections
+- professional About Us — hero, story, vision/mission, facts sections
+
+### Refactor
+
+- move vision/mission to first section after hero
+
+### Other
+
+- Merge pull request #18 from tensor-labz/staging
+- Merge pull request #17 from tensor-labz/dev
+- Merge pull request #16 from tensor-labz/feat/about-refactor
+
+
+
+---
 ## [v1.6.3] — 2026-05-09
 
 ### Bug Fixes
