@@ -321,6 +321,12 @@ const SectionCard = ({
   </div>
 );
 
+const ALIGN_ICONS = {
+  left: <FiAlignLeft size={13} />,
+  center: <FiAlignCenter size={13} />,
+  right: <FiAlignRight size={13} />,
+};
+
 /* ── helpers ── */
 function defaultColumns(moduleId: string): TableColumnConfig[] {
   const mod = MODULES.find((m) => m.id === moduleId);
@@ -348,6 +354,156 @@ function defaultColumns(moduleId: string): TableColumnConfig[] {
     });
   return cols;
 }
+
+/* ── Column row with expandable link input ── */
+const ColRow = memo(
+  ({
+    col,
+    idx,
+    onChange,
+  }: {
+    col: TableColumnConfig;
+    idx: number;
+    onChange: (patch: Partial<TableColumnConfig>) => void;
+  }) => {
+    const [expanded, setExpanded] = useState(false);
+
+    const inputStyle = {
+      backgroundColor: 'var(--input-bg)',
+      border: '1px solid var(--input-border)',
+      color: 'var(--text-primary)',
+      outline: 'none',
+    };
+
+    return (
+      <motion.div
+        initial={{ opacity: 0, y: 6 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: idx * 0.04 }}
+        className="rounded-xl overflow-hidden"
+        style={{
+          backgroundColor: 'var(--glass-bg-raised)',
+          border: '1px solid var(--glass-border-subtle)',
+          opacity: col.visible !== false ? 1 : 0.5,
+        }}
+      >
+        {/* Main row */}
+        <div
+          className="grid gap-3 items-center py-2.5 px-3"
+          style={{ gridTemplateColumns: '1fr 160px 48px 96px 28px' }}
+        >
+          {/* Field badge */}
+          <span
+            className="text-xs font-mono px-2 py-0.5 rounded w-fit truncate"
+            style={{
+              backgroundColor: 'var(--glass-bg)',
+              color: 'var(--text-muted)',
+              border: '1px solid var(--glass-border)',
+            }}
+          >
+            {col.field}
+          </span>
+
+          {/* Title input */}
+          <input
+            type="text"
+            value={col.title}
+            onChange={(e) => onChange({ title: e.target.value })}
+            className="px-2.5 py-1.5 rounded-lg text-xs w-full"
+            style={inputStyle}
+          />
+
+          {/* Visibility */}
+          <div className="flex justify-center">
+            <button
+              type="button"
+              onClick={() => onChange({ visible: col.visible === false ? true : false })}
+              className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors"
+              style={
+                col.visible !== false
+                  ? { backgroundColor: 'var(--accent)', color: '#fff' }
+                  : { backgroundColor: 'var(--glass-bg)', color: 'var(--text-muted)', border: '1px solid var(--glass-border)' }
+              }
+              title={col.visible !== false ? 'Hide column' : 'Show column'}
+            >
+              {col.visible !== false ? <FaEye size={11} /> : <FaEyeSlash size={11} />}
+            </button>
+          </div>
+
+          {/* Alignment */}
+          <div className="flex gap-1 justify-center">
+            {(['left', 'center', 'right'] as const).map((a) => (
+              <button
+                key={a}
+                type="button"
+                onClick={() => onChange({ align: a })}
+                className="w-7 h-7 rounded-lg flex items-center justify-center transition-colors"
+                style={
+                  col.align === a
+                    ? { backgroundColor: 'var(--accent)', color: '#fff' }
+                    : { backgroundColor: 'var(--glass-bg)', color: 'var(--text-muted)', border: '1px solid var(--glass-border)' }
+                }
+                title={a}
+              >
+                {ALIGN_ICONS[a]}
+              </button>
+            ))}
+          </div>
+
+          {/* Expand toggle */}
+          <button
+            type="button"
+            onClick={() => setExpanded((v) => !v)}
+            className="w-7 h-7 flex items-center justify-center rounded-lg"
+            style={
+              expanded
+                ? { backgroundColor: 'var(--accent)', color: '#fff' }
+                : { backgroundColor: 'var(--glass-bg)', color: 'var(--text-muted)', border: '1px solid var(--glass-border)' }
+            }
+            title="Advanced options"
+          >
+            {expanded ? <FaChevronUp size={9} /> : <FaChevronDown size={9} />}
+          </button>
+        </div>
+
+        {/* Expanded: link URL */}
+        {expanded && (
+          <div
+            className="px-3 pb-3 pt-2 space-y-2"
+            style={{ borderTop: '1px solid var(--glass-border-subtle)' }}
+          >
+            <p
+              className="text-[10px] font-semibold uppercase tracking-widest"
+              style={{ color: 'var(--text-muted)' }}
+            >
+              Link URL
+            </p>
+            <input
+              type="text"
+              value={col.link ?? ''}
+              onChange={(e) =>
+                onChange({ link: e.target.value || undefined })
+              }
+              placeholder="/admin/services/${service_id}"
+              className="w-full px-2.5 py-1.5 rounded-lg text-xs font-mono"
+              style={inputStyle}
+            />
+            <p className="text-[10px]" style={{ color: 'var(--text-muted)' }}>
+              Use {'${fieldName}'} for dynamic row values — e.g.{' '}
+              <code
+                className="px-1 py-0.5 rounded"
+                style={{ backgroundColor: 'var(--glass-bg)' }}
+              >
+                /admin/services/$&#123;service_id&#125;
+              </code>
+            </p>
+          </div>
+        )}
+      </motion.div>
+    );
+  }
+);
+ColRow.displayName = 'ColRow';
 
 /* ── Table Columns Section ── */
 const TableColumnsSection = memo(() => {
@@ -399,12 +555,6 @@ const TableColumnsSection = memo(() => {
     setSaving(false);
     setSaved(true);
     setTimeout(() => setSaved(false), 2000);
-  };
-
-  const ALIGN_ICONS = {
-    left: <FiAlignLeft size={13} />,
-    center: <FiAlignCenter size={13} />,
-    right: <FiAlignRight size={13} />,
   };
 
   return (
@@ -470,100 +620,23 @@ const TableColumnsSection = memo(() => {
           className="grid gap-3 mb-3 text-xs font-semibold tracking-widest uppercase"
           style={{
             color: 'var(--text-muted)',
-            gridTemplateColumns: '1fr 160px 48px 96px',
+            gridTemplateColumns: '1fr 160px 48px 96px 28px',
           }}
         >
           <span>Field</span>
           <span>Title</span>
           <span className="text-center">Show</span>
           <span className="text-center">Align</span>
+          <span />
         </div>
 
         {cols.map((col, idx) => (
-          <motion.div
+          <ColRow
             key={col.field}
-            initial={{ opacity: 0, y: 6 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: idx * 0.04 }}
-            className="grid gap-3 items-center py-2.5 px-3 rounded-xl"
-            style={{
-              gridTemplateColumns: '1fr 160px 48px 96px',
-              backgroundColor: 'var(--glass-bg-raised)',
-              border: '1px solid var(--glass-border-subtle)',
-              opacity: col.visible ? 1 : 0.5,
-            }}
-          >
-            {/* Key badge */}
-            <span
-              className="text-xs font-mono px-2 py-0.5 rounded w-fit truncate"
-              style={{
-                backgroundColor: 'var(--glass-bg)',
-                color: 'var(--text-muted)',
-                border: '1px solid var(--glass-border)',
-              }}
-            >
-              {col.field}
-            </span>
-
-            {/* Label input */}
-            <input
-              type="text"
-              value={col.title}
-              onChange={(e) => updateCol(idx, { title: e.target.value })}
-              className="px-2.5 py-1.5 rounded-lg text-xs w-full"
-              style={{
-                backgroundColor: 'var(--input-bg)',
-                border: '1px solid var(--input-border)',
-                color: 'var(--text-primary)',
-                outline: 'none',
-              }}
-            />
-
-            {/* Visibility toggle */}
-            <div className="flex justify-center">
-              <button
-                type="button"
-                onClick={() => updateCol(idx, { visible: !col.visible })}
-                className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors"
-                style={
-                  col.visible
-                    ? { backgroundColor: 'var(--accent)', color: '#fff' }
-                    : {
-                        backgroundColor: 'var(--glass-bg)',
-                        color: 'var(--text-muted)',
-                        border: '1px solid var(--glass-border)',
-                      }
-                }
-                title={col.visible ? 'Hide column' : 'Show column'}
-              >
-                {col.visible ? <FaEye size={11} /> : <FaEyeSlash size={11} />}
-              </button>
-            </div>
-
-            {/* Alignment */}
-            <div className="flex gap-1 justify-center">
-              {(['left', 'center', 'right'] as const).map((a) => (
-                <button
-                  key={a}
-                  type="button"
-                  onClick={() => updateCol(idx, { align: a })}
-                  className="w-7 h-7 rounded-lg flex items-center justify-center transition-colors"
-                  style={
-                    col.align === a
-                      ? { backgroundColor: 'var(--accent)', color: '#fff' }
-                      : {
-                          backgroundColor: 'var(--glass-bg)',
-                          color: 'var(--text-muted)',
-                          border: '1px solid var(--glass-border)',
-                        }
-                  }
-                  title={a}
-                >
-                  {ALIGN_ICONS[a]}
-                </button>
-              ))}
-            </div>
-          </motion.div>
+            col={col}
+            idx={idx}
+            onChange={(patch) => updateCol(idx, patch)}
+          />
         ))}
       </div>
 

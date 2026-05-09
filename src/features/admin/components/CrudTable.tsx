@@ -1,4 +1,4 @@
-import { memo, useEffect, useState, useMemo } from 'react';
+import React, { memo, useEffect, useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import DataTable, {
   createTheme,
@@ -233,6 +233,10 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
     return relMap ? (relMap[raw] ?? raw) : raw;
   };
 
+  /* Resolve a link template by replacing ${fieldName} tokens with row values */
+  const resolveLink = (template: string, row: AdminRecord): string =>
+    template.replace(/\$\{(\w+)\}/g, (_, key) => String(rowVal(row, key) ?? ''));
+
   /* Build DataTable column definitions */
   const columns = useMemo<TableColumn<AdminRecord>[]>(() => {
     if (!mod) return [];
@@ -277,6 +281,27 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
               ),
             });
           } else {
+            let cellRenderer: ((row: AdminRecord) => React.ReactNode) | undefined;
+            if (c.link) {
+              cellRenderer = (row) => {
+                const label = resolveRelation(relMap, rowVal(row, c.field));
+                const href = resolveLink(c.link!, row);
+                if (!label) return null;
+                return (
+                  <button
+                    onClick={(e) => { e.stopPropagation(); navigate(href); }}
+                    className="text-sm font-medium hover:underline"
+                    style={{ color: 'var(--accent)', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
+                  >
+                    {label}
+                  </button>
+                );
+              };
+            } else if (isDesc) {
+              cellRenderer = (row) => (
+                <TextCell value={resolveRelation(relMap, rowVal(row, c.field))} />
+              );
+            }
             cols.push({
               id: c.field,
               name: c.title,
@@ -286,11 +311,7 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
               ...(c.width ? { width: c.width } : { grow: isDesc ? 2 : 1 }),
               ...(c.align === 'center' && { center: true }),
               ...(c.align === 'right' && { right: true }),
-              ...(isDesc && {
-                cell: (row) => (
-                  <TextCell value={resolveRelation(relMap, rowVal(row, c.field))} />
-                ),
-              }),
+              ...(cellRenderer && { cell: cellRenderer }),
             });
           }
         });
@@ -309,14 +330,32 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
       (mod.tableColumns ?? []).forEach((key) => {
         const fieldDef = mod.fields.find((f) => f.key === key);
         const relMap = relationMaps[key];
-        cols.push({
+        const rel = fieldDef?.relation;
+        const col: TableColumn<AdminRecord> = {
           id: key,
           name: fieldDef?.label ?? key,
           selector: (row) => resolveRelation(relMap, rowVal(row, key)),
           sortable: true,
           wrap: true,
           grow: 1,
-        });
+        };
+        if (rel) {
+          col.cell = (row) => {
+            const rawId = String(rowVal(row, key) ?? '');
+            const label = relMap ? (relMap[rawId] ?? rawId) : rawId;
+            if (!rawId) return null;
+            return (
+              <button
+                onClick={(e) => { e.stopPropagation(); navigate(`/admin/${rel.table}/${rawId}`); }}
+                className="text-sm font-medium hover:underline"
+                style={{ color: 'var(--accent)', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
+              >
+                {label}
+              </button>
+            );
+          };
+        }
+        cols.push(col);
       });
 
       if (mod.descriptionField) {
