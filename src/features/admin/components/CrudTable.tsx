@@ -290,8 +290,7 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
                 return (
                   <button
                     onClick={(e) => { e.stopPropagation(); navigate(href); }}
-                    className="text-sm font-medium hover:underline"
-                    style={{ color: 'var(--accent)', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
+                    style={{ color: 'inherit', background: 'none', border: 'none', cursor: 'pointer', padding: 0, font: 'inherit', textAlign: 'left' }}
                   >
                     {label}
                   </button>
@@ -347,8 +346,7 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
             return (
               <button
                 onClick={(e) => { e.stopPropagation(); navigate(`/admin/${rel.table}/${rawId}`); }}
-                className="text-sm font-medium hover:underline"
-                style={{ color: 'var(--accent)', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
+                style={{ color: 'inherit', background: 'none', border: 'none', cursor: 'pointer', padding: 0, font: 'inherit', textAlign: 'left' }}
               >
                 {label}
               </button>
