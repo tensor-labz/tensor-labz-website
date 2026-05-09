@@ -1,4 +1,4 @@
-import { memo, useState } from 'react';
+import { memo, useState, useEffect, useRef } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import { FaPlay, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import { useAboutMedia } from '../hooks/useAboutMedia';
@@ -156,12 +156,43 @@ const Skeleton = () => (
 const MediaGallery = memo(() => {
   const { items, loading } = useAboutMedia();
   const [active, setActive] = useState(0);
+  const [paused, setPaused] = useState(false);
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  const resetTimer = () => {
+    if (timerRef.current) clearInterval(timerRef.current);
+    if (items.length <= 1) return;
+    timerRef.current = setInterval(() => {
+      setActive((cur) => {
+        let next: number;
+        do {
+          next = Math.floor(Math.random() * items.length);
+        } while (next === cur && items.length > 1);
+        return next;
+      });
+    }, 5000);
+  };
+
+  useEffect(() => {
+    if (paused || items.length <= 1) return;
+    resetTimer();
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [items.length, paused]);
 
   if (loading) return <Skeleton />;
   if (items.length === 0) return null;
 
-  const prev = () => setActive((i) => (i - 1 + items.length) % items.length);
-  const next = () => setActive((i) => (i + 1) % items.length);
+  const prev = () => {
+    setActive((i) => (i - 1 + items.length) % items.length);
+    resetTimer();
+  };
+  const next = () => {
+    setActive((i) => (i + 1) % items.length);
+    resetTimer();
+  };
 
   return (
     <div className="w-full">
@@ -173,6 +204,8 @@ const MediaGallery = memo(() => {
           border: '1px solid var(--glass-border)',
           backgroundColor: '#000',
         }}
+        onMouseEnter={() => setPaused(true)}
+        onMouseLeave={() => setPaused(false)}
       >
         <FeaturedPlayer item={items[active]} />
 
@@ -226,7 +259,10 @@ const MediaGallery = memo(() => {
             {items.map((_, i) => (
               <button
                 key={i}
-                onClick={() => setActive(i)}
+                onClick={() => {
+                  setActive(i);
+                  resetTimer();
+                }}
                 className="rounded-full transition-all duration-200"
                 style={{
                   width: i === active ? 16 : 6,
@@ -248,7 +284,10 @@ const MediaGallery = memo(() => {
               key={item.id}
               item={item}
               active={i === active}
-              onClick={() => setActive(i)}
+              onClick={() => {
+                setActive(i);
+                resetTimer();
+              }}
             />
           ))}
         </div>
