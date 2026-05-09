@@ -535,9 +535,9 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
   }, [rows, search]);
 
   return (
-    <div className="p-4 sm:p-6">
-      {/* Search + record count row */}
-      <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-4">
+    <div className="h-full flex flex-col p-4 sm:p-6">
+      {/* Search + record count row — stays pinned above the table */}
+      <div className="shrink-0 flex flex-col sm:flex-row sm:items-center gap-3 mb-4">
       <div
         className="flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl w-full sm:max-w-[380px]"
         style={{
@@ -568,13 +568,12 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
       </p>
       </div>
 
-      {/* Table / Card view */}
+      {/* Table / Card view — flex-1 so it fills remaining height, scrolls internally */}
       <div
-        className="rounded-2xl"
+        className="rounded-2xl flex-1 min-h-0 overflow-auto"
         style={{
           border: '1px solid var(--glass-border)',
           backgroundColor: 'var(--glass-bg)',
-          overflowX: isMobile ? 'hidden' : 'auto',
         }}
       >
         {isMobile ? (
@@ -586,7 +585,7 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
             search={search}
           />
         ) : (
-          /* ── Desktop/tablet: DataTable with horizontal scroll ── */
+          /* ── Desktop/tablet: DataTable with fixed column header ── */
           <div style={{ minWidth: '580px' }}>
             {loading ? (
               <TableSkeleton />
@@ -597,6 +596,7 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
                   data={filtered}
                   theme="adminTheme"
                   customStyles={customStyles}
+                  fixedHeader
                   pagination
                   paginationPerPage={pageSize}
                   paginationRowsPerPageOptions={[10, 20, 50, 100]}

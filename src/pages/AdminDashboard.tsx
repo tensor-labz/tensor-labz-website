@@ -30,7 +30,7 @@ const AdminDashboard = memo(() => {
 
   return (
     <div
-      className="min-h-screen flex flex-col"
+      className="h-screen overflow-hidden flex flex-col"
       style={{ color: 'var(--text-primary)' }}
     >
       <HeaderHelmet title="Admin Dashboard" />
@@ -111,7 +111,7 @@ const AdminDashboard = memo(() => {
       </header>
 
       {/* ── Body: sidebar + content ── */}
-      <div className="flex flex-1">
+      <div className="flex flex-1 min-h-0">
         <AdminSidebar
           open={sidebarOpen}
           onClose={() => setSidebarOpen(false)}
