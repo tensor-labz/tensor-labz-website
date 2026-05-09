@@ -606,12 +606,13 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
           />
         ) : (
           /* ── Desktop/tablet: DataTable manages its own vertical scroll ── */
-          <div className="dt-no-scrollbar" style={{ minWidth: '580px', height: '100%' }}>
+          <div style={{ minWidth: '580px', height: '100%' }}>
             {loading ? (
               <TableSkeleton />
             ) : (
               <StyleSheetManager shouldForwardProp={shouldForwardDtcProp}>
                 <DataTable<AdminRecord>
+                  className="no-scrollbar"
                   columns={columns}
                   data={filtered}
                   theme="adminTheme"

@@ -111,14 +111,6 @@ body {
   display: none;
 }
 
-/* DataTable's internal scroll element (react-data-table-component) */
-.dt-no-scrollbar .rdt_TableBody {
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-.dt-no-scrollbar .rdt_TableBody::-webkit-scrollbar {
-  display: none;
-}
 
 .project-content h4 {
   font-size: 1.5rem;
