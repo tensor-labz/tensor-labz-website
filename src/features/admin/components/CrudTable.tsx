@@ -555,7 +555,7 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
   }, [rows, search]);
 
   return (
-    <div className="h-full flex flex-col p-4 sm:p-6">
+    <div className="h-full flex flex-col pt-4 px-4 sm:pt-5 sm:px-6">
       {/* Search + record count row — stays pinned above the table */}
       <div className="shrink-0 flex flex-col sm:flex-row sm:items-center gap-3 mb-4">
       <div
