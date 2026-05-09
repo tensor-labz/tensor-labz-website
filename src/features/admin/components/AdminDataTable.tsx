@@ -49,8 +49,8 @@ const AdminDataTable = memo(() => {
       .order('id')
       .then(({ data, error }) => {
         if (!error && data) setRows(data as Record<string, unknown>[]);
-      })
-      .finally(() => setLoading(false));
+        setLoading(false);
+      });
   }, [moduleId]);
 
   /* ── fetch column config ── */
