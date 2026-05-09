@@ -170,7 +170,7 @@ Images uploaded in the admin form (`type: 'image'` fields) will be stored in S3:
 
 **AWS S3 image upload (`ImageField`):**
 
-The Lambda is **deployed and live** at `../tensor-labz-image-lambda/` (separate repo — `ThanuMahee12/tensor-labz-image-lambda`, private).
+The Lambda is **deployed and live** at `../tensor-labz-image-lambda/` (separate repo — `tensor-labz/tensor-labz-image-lambda`, private).
 
 | Resource        | Value                                                     |
 | --------------- | --------------------------------------------------------- |
