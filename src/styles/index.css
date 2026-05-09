@@ -111,12 +111,12 @@ body {
   display: none;
 }
 
-/* DataTable fixedHeader scroll container lives one level inside the wrapper */
-.dt-no-scrollbar > div > div:nth-child(2) {
+/* DataTable's internal scroll element (react-data-table-component) */
+.dt-no-scrollbar .rdt_TableBody {
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
-.dt-no-scrollbar > div > div:nth-child(2)::-webkit-scrollbar {
+.dt-no-scrollbar .rdt_TableBody::-webkit-scrollbar {
   display: none;
 }
 
