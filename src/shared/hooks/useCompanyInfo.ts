@@ -70,7 +70,10 @@ async function load(): Promise<void> {
     [
       supabase.from('company_info').select('*').maybeSingle(),
       supabase.from('social').select('social_media, value').order('id'),
-      supabase.from('contact').select('contact, title, value, link').order('id'),
+      supabase
+        .from('contact')
+        .select('contact, title, value, link')
+        .order('id'),
     ]
   );
 
