@@ -7,6 +7,41 @@ All notable changes to the Tensor Labs website are documented here.
 ## [Unreleased]
 
 ---
+## [v1.2.0] — 2026-05-09
+
+### Added
+
+- live module counts in dashboard + S3 cleanup on record delete
+- add search, sort and mobile layout to AdminDataTable
+- wire image upload to S3 via Lambda presigned URLs
+- migrate admin auth from Firebase to Supabase
+- wire admin CRUD and social context to Supabase
+
+### Bug Fixes
+
+- resolve CI TypeScript errors — .finally() on PromiseLike, AbortSignal type
+- resolve CI lint failures — prettier format, unused imports, unescaped entities
+- add min-w-0 to recharts container divs — prevents -1 dimension warning
+- normalize Supabase column names in services and projects fetchers
+
+### Style
+
+- white background on sort dropdown
+
+### Chore
+
+- add S3/CDN vars to .env.example
+
+### Other
+
+- update HISTORY.md — mark completed steps, list tomorrow's tasks
+- add HISTORY.md — session changelog for 2026-05-07
+- fix mkdocs site_url and repo_url to tensor-labz org
+- add MkDocs site with Mermaid diagrams + GitHub Pages workflow
+
+
+
+---
 
 ## [v1.1.0] — 2026-05-07
 
