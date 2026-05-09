@@ -8,6 +8,12 @@ import {
 } from 'react-icons/fa';
 import { IconType } from 'react-icons';
 
+export interface RelationConfig {
+  table: string;       // Supabase table to fetch options from
+  labelField: string;  // field to display in the dropdown
+  valueField?: string; // field to store as value — defaults to 'id'
+}
+
 export interface FieldConfig {
   key: string;
   label: string;
@@ -28,6 +34,7 @@ export interface FieldConfig {
   required?: boolean;
   span?: 'full' | 'half';
   options?: string[];
+  relation?: RelationConfig; // when set on a 'select' field, options are fetched from Supabase
 }
 
 export interface ModuleConfig {
@@ -37,6 +44,7 @@ export interface ModuleConfig {
   imageField?: string;
   titleField: string;
   descriptionField?: string;
+  tableColumns?: string[]; // extra column keys shown in CrudTable beyond title+description
   fields: FieldConfig[];
 }
 
@@ -112,6 +120,7 @@ export const MODULES: ModuleConfig[] = [
     imageField: 'imageURL',
     titleField: 'title',
     descriptionField: 'description',
+    tableColumns: ['service_id'],
     fields: [
       { key: 'imageURL', label: 'Image', type: 'image', span: 'full' },
       {
@@ -129,7 +138,13 @@ export const MODULES: ModuleConfig[] = [
         span: 'half',
         placeholder: 'my-project',
       },
-      { key: 'service', label: 'Service Slug', type: 'text', span: 'half' },
+      {
+        key: 'service_id',
+        label: 'Service',
+        type: 'select',
+        span: 'half',
+        relation: { table: 'services', labelField: 'title', valueField: 'id' },
+      },
       {
         key: 'tags',
         label: 'Tags (comma separated)',

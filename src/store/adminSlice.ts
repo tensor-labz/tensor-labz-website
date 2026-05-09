@@ -1,6 +1,7 @@
 import {
   createAsyncThunk,
   createEntityAdapter,
+  createSelector,
   createSlice,
   type EntityState,
   type PayloadAction,
@@ -297,12 +298,11 @@ export const { resetModuleStatus, clearCurrentRecord, resetCountsStatus } =
 
 const adapterSelectors = recordAdapter.getSelectors();
 
-export const selectModuleRecords =
-  (moduleId: string) =>
-  (state: RootState): AdminRecord[] => {
-    const mod = state.admin.modules[moduleId];
-    return mod ? adapterSelectors.selectAll(mod) : [];
-  };
+export const selectModuleRecords = (moduleId: string) =>
+  createSelector(
+    (state: RootState) => state.admin.modules[moduleId],
+    (mod) => (mod ? adapterSelectors.selectAll(mod) : [])
+  );
 
 export const selectModuleStatus =
   (moduleId: string) =>

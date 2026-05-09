@@ -645,6 +645,89 @@ const MultiInputField = ({
   );
 };
 
+/* ── Static select (options array) ── */
+const selectStyle = {
+  backgroundColor: '#fff',
+  border: '1px solid var(--input-border)',
+  color: '#111',
+  outline: 'none',
+  backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23888'/%3E%3C/svg%3E")`,
+  backgroundRepeat: 'no-repeat',
+  backgroundPosition: 'right 10px center',
+  paddingRight: '2rem',
+};
+
+const StaticSelect = ({
+  opts,
+  value,
+  onChange,
+}: {
+  opts: string[];
+  value: string;
+  onChange: (v: unknown) => void;
+}) => (
+  <select
+    value={value}
+    onChange={(e) => onChange(e.target.value)}
+    className="w-full px-3 py-2.5 rounded-lg text-sm appearance-none cursor-pointer"
+    style={selectStyle}
+  >
+    <option value="">— select —</option>
+    {opts.map((o) => (
+      <option key={o} value={o}>{o}</option>
+    ))}
+  </select>
+);
+
+/* ── Relation select (options fetched from Supabase) ── */
+const RelationSelect = ({
+  field,
+  value,
+  onChange,
+}: {
+  field: FieldConfig;
+  value: unknown;
+  onChange: (v: unknown) => void;
+}) => {
+  const { relation } = field;
+  const [opts, setOpts] = useState<{ value: string; label: string }[]>([]);
+
+  useEffect(() => {
+    if (!relation) return;
+    const vf = relation.valueField ?? 'id';
+    supabase
+      .from(relation.table)
+      .select('*')
+      .order(vf)
+      .then(({ data }) => {
+        if (!data) return;
+        setOpts(
+          data.map((row) => ({
+            value: String(row[vf] ?? ''),
+            label: String(row[relation.labelField] ?? row[vf] ?? ''),
+          }))
+        );
+      });
+  }, [relation]);
+
+  return (
+    <select
+      value={String(value ?? '')}
+      onChange={(e) => {
+        const raw = e.target.value;
+        onChange(raw === '' ? null : isNaN(Number(raw)) ? raw : Number(raw));
+      }}
+      className="w-full px-3 py-2.5 rounded-lg text-sm appearance-none cursor-pointer"
+      style={selectStyle}
+    >
+      <option value="">— select —</option>
+      {opts.map((o) => (
+        <option key={o.value} value={o.value}>{o.label}</option>
+      ))}
+    </select>
+  );
+};
+
 /* ── Individual field renderer ── */
 const Field = ({
   field,
@@ -759,30 +842,10 @@ const Field = ({
   }
 
   if (field.type === 'select') {
-    const opts = field.options ?? [];
-    return (
-      <select
-        value={str}
-        onChange={(e) => onChange(e.target.value)}
-        className="w-full px-3 py-2.5 rounded-lg text-sm appearance-none cursor-pointer"
-        style={{
-          backgroundColor: '#fff',
-          border: '1px solid var(--input-border)',
-          color: '#111',
-          outline: 'none',
-          backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23888'/%3E%3C/svg%3E")`,
-          backgroundRepeat: 'no-repeat',
-          backgroundPosition: 'right 10px center',
-          paddingRight: '2rem',
-        }}
-      >
-        <option value="">— select —</option>
-        {opts.map((o) => (
-          <option key={o} value={o}>
-            {o}
-          </option>
-        ))}
-      </select>
+    return field.relation ? (
+      <RelationSelect field={field} value={value} onChange={onChange} />
+    ) : (
+      <StaticSelect opts={field.options ?? []} value={str} onChange={onChange} />
     );
   }
 

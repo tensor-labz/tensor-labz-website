@@ -15,9 +15,11 @@ import {
   FaPlus,
   FaChevronDown,
   FaChevronUp,
+  FaColumns,
 } from 'react-icons/fa';
 import { FiAlignLeft, FiAlignCenter, FiAlignRight } from 'react-icons/fi';
 import { MODULES, type FieldConfig } from '../config/modules';
+import { DEFAULT_PAGE_COMPONENTS, type PageComponentConfig } from '../../../shared/types/pageConfig';
 import { supabase } from '../../../lib/supabase';
 import type { TableColumnConfig } from '../../../shared/types/tableConfig';
 
@@ -26,6 +28,7 @@ type SectionId =
   | 'appearance'
   | 'integrations'
   | 'security'
+  | 'pages'
   | 'tables'
   | 'forms';
 
@@ -65,6 +68,13 @@ const SECTIONS: Section[] = [
     icon: FaShieldAlt,
     color: '#fb923c',
     bg: 'rgba(251,146,60,0.1)',
+  },
+  {
+    id: 'pages',
+    label: 'Pages',
+    icon: FaColumns,
+    color: '#818cf8',
+    bg: 'rgba(129,140,248,0.1)',
   },
   {
     id: 'tables',
@@ -321,33 +331,360 @@ const SectionCard = ({
   </div>
 );
 
+const ALIGN_ICONS = {
+  left: <FiAlignLeft size={13} />,
+  center: <FiAlignCenter size={13} />,
+  right: <FiAlignRight size={13} />,
+};
+
 /* ── helpers ── */
 function defaultColumns(moduleId: string): TableColumnConfig[] {
   const mod = MODULES.find((m) => m.id === moduleId);
   if (!mod) return [];
-  const cols: TableColumnConfig[] = [];
-  if (mod.imageField)
-    cols.push({
-      key: mod.imageField,
-      label: 'Image',
-      visible: true,
-      align: 'left',
-    });
-  cols.push({
-    key: mod.titleField,
-    label: 'Title',
-    visible: true,
-    align: 'left',
-  });
-  if (mod.descriptionField)
-    cols.push({
-      key: mod.descriptionField,
-      label: 'Description',
-      visible: true,
-      align: 'left',
-    });
-  return cols;
+
+  // Fields that appear visible by default in the table
+  const visibleByDefault = new Set(
+    [mod.imageField, mod.titleField, ...(mod.tableColumns ?? []), mod.descriptionField].filter(
+      Boolean
+    ) as string[]
+  );
+
+  return mod.fields.map((f, i) => ({
+    field: f.key,
+    title: f.label,
+    visible: visibleByDefault.has(f.key),
+    align: 'left' as const,
+    sortable: !['image', 'images', 'richtext', 'toggle', 'checkbox'].includes(f.type),
+    order: i,
+    ...(f.type === 'image' || f.type === 'images' ? { width: '68px' } : {}),
+  }));
 }
+
+/* ── Available page component types ── */
+const AVAILABLE_PAGE_COMPONENTS: { type: string; label: string; description: string }[] = [
+  { type: 'table', label: 'Data Table', description: 'Main CRUD list with search, sort, and pagination' },
+];
+
+/* ── Page Components Section ── */
+const PageConfigSection = memo(() => {
+  const [activeModule, setActiveModule] = useState(MODULES[0].id);
+  const [configs, setConfigs] = useState<Record<string, PageComponentConfig[]>>({});
+  const [saving, setSaving] = useState(false);
+  const [saved, setSaved] = useState(false);
+
+  useEffect(() => {
+    supabase
+      .from('page_config')
+      .select('*')
+      .then(({ data, error }) => {
+        if (error || !data) return;
+        const map: Record<string, PageComponentConfig[]> = {};
+        (data as { module_id: string; components: PageComponentConfig[] }[]).forEach((r) => {
+          map[r.module_id] = r.components;
+        });
+        setConfigs(map);
+      });
+  }, []);
+
+  const components = configs[activeModule] ?? DEFAULT_PAGE_COMPONENTS;
+
+  const toggleVisible = (type: string) => {
+    setConfigs((prev) => {
+      const base = prev[activeModule] ?? DEFAULT_PAGE_COMPONENTS;
+      const exists = base.find((c) => c.type === type);
+      const next = exists
+        ? base.map((c) => (c.type === type ? { ...c, visible: c.visible === false } : c))
+        : [...base, { type, visible: true, order: base.length }];
+      return { ...prev, [activeModule]: next };
+    });
+  };
+
+  const handleSave = async () => {
+    setSaving(true);
+    await supabase
+      .from('page_config')
+      .upsert({ module_id: activeModule, components }, { onConflict: 'module_id' });
+    setSaving(false);
+    setSaved(true);
+    setTimeout(() => setSaved(false), 2000);
+  };
+
+  return (
+    <div
+      className="rounded-2xl overflow-hidden"
+      style={{ backgroundColor: 'var(--glass-bg)', border: '1px solid var(--glass-border)' }}
+    >
+      {/* Header */}
+      <div className="px-6 py-4" style={{ borderBottom: '1px solid var(--glass-border-subtle)' }}>
+        <p className="font-bold text-sm" style={{ color: 'var(--text-primary)', fontFamily: '"Syne", sans-serif' }}>
+          Page Components
+        </p>
+        <p className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>
+          Configure which components appear on each module&apos;s admin page
+        </p>
+      </div>
+
+      {/* Module tabs */}
+      <div
+        className="px-6 pt-4 flex flex-wrap gap-1.5 pb-4"
+        style={{ borderBottom: '1px solid var(--glass-border-subtle)' }}
+      >
+        {MODULES.map((m) => (
+          <button
+            key={m.id}
+            onClick={() => setActiveModule(m.id)}
+            className="px-3 py-1.5 rounded-lg text-xs font-medium transition-colors"
+            style={
+              activeModule === m.id
+                ? { backgroundColor: 'var(--accent)', color: '#fff' }
+                : { backgroundColor: 'var(--glass-bg-raised)', color: 'var(--text-muted)', border: '1px solid var(--glass-border)' }
+            }
+          >
+            {m.label}
+          </button>
+        ))}
+      </div>
+
+      {/* Component list */}
+      <div className="px-6 py-4 space-y-2">
+        {AVAILABLE_PAGE_COMPONENTS.map((avail, idx) => {
+          const conf = components.find((c) => c.type === avail.type);
+          const visible = conf?.visible !== false;
+          return (
+            <motion.div
+              key={avail.type}
+              initial={{ opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: idx * 0.05 }}
+              className="flex items-center gap-3 px-4 py-3 rounded-xl"
+              style={{
+                backgroundColor: 'var(--glass-bg-raised)',
+                border: '1px solid var(--glass-border-subtle)',
+                opacity: visible ? 1 : 0.5,
+              }}
+            >
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium" style={{ color: 'var(--text-primary)' }}>
+                  {avail.label}
+                </p>
+                <p className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>
+                  {avail.description}
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => toggleVisible(avail.type)}
+                className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 transition-colors"
+                style={
+                  visible
+                    ? { backgroundColor: 'var(--accent)', color: '#fff' }
+                    : { backgroundColor: 'var(--glass-bg)', color: 'var(--text-muted)', border: '1px solid var(--glass-border)' }
+                }
+                title={visible ? 'Hide component' : 'Show component'}
+              >
+                {visible ? <FaEye size={11} /> : <FaEyeSlash size={11} />}
+              </button>
+            </motion.div>
+          );
+        })}
+      </div>
+
+      {/* Footer */}
+      <div
+        className="px-6 py-4 flex justify-end"
+        style={{ borderTop: '1px solid var(--glass-border-subtle)' }}
+      >
+        <motion.button
+          whileTap={{ scale: 0.96 }}
+          onClick={handleSave}
+          disabled={saving}
+          className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold disabled:opacity-60"
+          style={{ backgroundColor: saved ? '#34d399' : 'var(--accent)', color: '#fff' }}
+        >
+          {saved ? <><FaCheck size={11} /> Saved</> : <><FaSave size={11} /> {saving ? 'Saving…' : 'Save Changes'}</>}
+        </motion.button>
+      </div>
+    </div>
+  );
+});
+PageConfigSection.displayName = 'PageConfigSection';
+
+/* ── Column row with expandable link input ── */
+const ColRow = memo(
+  ({
+    col,
+    idx,
+    onChange,
+  }: {
+    col: TableColumnConfig;
+    idx: number;
+    onChange: (patch: Partial<TableColumnConfig>) => void;
+  }) => {
+    const [expanded, setExpanded] = useState(false);
+
+    const inputStyle = {
+      backgroundColor: 'var(--input-bg)',
+      border: '1px solid var(--input-border)',
+      color: 'var(--text-primary)',
+      outline: 'none',
+    };
+
+    return (
+      <motion.div
+        initial={{ opacity: 0, y: 6 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: idx * 0.04 }}
+        className="rounded-xl overflow-hidden"
+        style={{
+          backgroundColor: 'var(--glass-bg-raised)',
+          border: '1px solid var(--glass-border-subtle)',
+          opacity: col.visible !== false ? 1 : 0.5,
+        }}
+      >
+        {/* Main row */}
+        <div
+          className="grid gap-3 items-center py-2.5 px-3"
+          style={{ gridTemplateColumns: '1fr 160px 48px 96px 28px' }}
+        >
+          {/* Field badge */}
+          <span
+            className="text-xs font-mono px-2 py-0.5 rounded w-fit truncate"
+            style={{
+              backgroundColor: 'var(--glass-bg)',
+              color: 'var(--text-muted)',
+              border: '1px solid var(--glass-border)',
+            }}
+          >
+            {col.field}
+          </span>
+
+          {/* Title input */}
+          <input
+            type="text"
+            value={col.title}
+            onChange={(e) => onChange({ title: e.target.value })}
+            className="px-2.5 py-1.5 rounded-lg text-xs w-full"
+            style={inputStyle}
+          />
+
+          {/* Visibility */}
+          <div className="flex justify-center">
+            <button
+              type="button"
+              onClick={() => onChange({ visible: col.visible === false ? true : false })}
+              className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors"
+              style={
+                col.visible !== false
+                  ? { backgroundColor: 'var(--accent)', color: '#fff' }
+                  : { backgroundColor: 'var(--glass-bg)', color: 'var(--text-muted)', border: '1px solid var(--glass-border)' }
+              }
+              title={col.visible !== false ? 'Hide column' : 'Show column'}
+            >
+              {col.visible !== false ? <FaEye size={11} /> : <FaEyeSlash size={11} />}
+            </button>
+          </div>
+
+          {/* Alignment */}
+          <div className="flex gap-1 justify-center">
+            {(['left', 'center', 'right'] as const).map((a) => (
+              <button
+                key={a}
+                type="button"
+                onClick={() => onChange({ align: a })}
+                className="w-7 h-7 rounded-lg flex items-center justify-center transition-colors"
+                style={
+                  col.align === a
+                    ? { backgroundColor: 'var(--accent)', color: '#fff' }
+                    : { backgroundColor: 'var(--glass-bg)', color: 'var(--text-muted)', border: '1px solid var(--glass-border)' }
+                }
+                title={a}
+              >
+                {ALIGN_ICONS[a]}
+              </button>
+            ))}
+          </div>
+
+          {/* Expand toggle */}
+          <button
+            type="button"
+            onClick={() => setExpanded((v) => !v)}
+            className="w-7 h-7 flex items-center justify-center rounded-lg"
+            style={
+              expanded
+                ? { backgroundColor: 'var(--accent)', color: '#fff' }
+                : { backgroundColor: 'var(--glass-bg)', color: 'var(--text-muted)', border: '1px solid var(--glass-border)' }
+            }
+            title="Advanced options"
+          >
+            {expanded ? <FaChevronUp size={9} /> : <FaChevronDown size={9} />}
+          </button>
+        </div>
+
+        {/* Expanded: cell type + link URL */}
+        {expanded && (
+          <div
+            className="px-3 pb-3 pt-2 space-y-3"
+            style={{ borderTop: '1px solid var(--glass-border-subtle)' }}
+          >
+            {/* Cell type */}
+            <div>
+              <p
+                className="text-[10px] font-semibold uppercase tracking-widest mb-1.5"
+                style={{ color: 'var(--text-muted)' }}
+              >
+                Cell Type
+              </p>
+              <div className="flex gap-1.5">
+                {(['text', 'url'] as const).map((t) => (
+                  <button
+                    key={t}
+                    type="button"
+                    onClick={() => onChange({ type: t === 'text' ? undefined : t })}
+                    className="flex-1 py-1 rounded-lg text-xs font-medium"
+                    style={
+                      (col.type ?? 'text') === t
+                        ? { backgroundColor: 'var(--accent)', color: '#fff' }
+                        : { backgroundColor: 'var(--glass-bg)', color: 'var(--text-muted)', border: '1px solid var(--glass-border)' }
+                    }
+                  >
+                    {t === 'url' ? 'URL (icon)' : 'Text'}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <p
+              className="text-[10px] font-semibold uppercase tracking-widest"
+              style={{ color: 'var(--text-muted)' }}
+            >
+              Link URL
+            </p>
+            <input
+              type="text"
+              value={col.link ?? ''}
+              onChange={(e) =>
+                onChange({ link: e.target.value || undefined })
+              }
+              placeholder="/admin/services/${service_id}"
+              className="w-full px-2.5 py-1.5 rounded-lg text-xs font-mono"
+              style={inputStyle}
+            />
+            <p className="text-[10px]" style={{ color: 'var(--text-muted)' }}>
+              Use {'${fieldName}'} for dynamic row values — e.g.{' '}
+              <code
+                className="px-1 py-0.5 rounded"
+                style={{ backgroundColor: 'var(--glass-bg)' }}
+              >
+                /admin/services/$&#123;service_id&#125;
+              </code>
+            </p>
+          </div>
+        )}
+      </motion.div>
+    );
+  }
+);
+ColRow.displayName = 'ColRow';
 
 /* ── Table Columns Section ── */
 const TableColumnsSection = memo(() => {
@@ -399,12 +736,6 @@ const TableColumnsSection = memo(() => {
     setSaving(false);
     setSaved(true);
     setTimeout(() => setSaved(false), 2000);
-  };
-
-  const ALIGN_ICONS = {
-    left: <FiAlignLeft size={13} />,
-    center: <FiAlignCenter size={13} />,
-    right: <FiAlignRight size={13} />,
   };
 
   return (
@@ -470,100 +801,23 @@ const TableColumnsSection = memo(() => {
           className="grid gap-3 mb-3 text-xs font-semibold tracking-widest uppercase"
           style={{
             color: 'var(--text-muted)',
-            gridTemplateColumns: '1fr 160px 48px 96px',
+            gridTemplateColumns: '1fr 160px 48px 96px 28px',
           }}
         >
-          <span>Column</span>
-          <span>Label</span>
+          <span>Field</span>
+          <span>Title</span>
           <span className="text-center">Show</span>
           <span className="text-center">Align</span>
+          <span />
         </div>
 
         {cols.map((col, idx) => (
-          <motion.div
-            key={col.key}
-            initial={{ opacity: 0, y: 6 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: idx * 0.04 }}
-            className="grid gap-3 items-center py-2.5 px-3 rounded-xl"
-            style={{
-              gridTemplateColumns: '1fr 160px 48px 96px',
-              backgroundColor: 'var(--glass-bg-raised)',
-              border: '1px solid var(--glass-border-subtle)',
-              opacity: col.visible ? 1 : 0.5,
-            }}
-          >
-            {/* Key badge */}
-            <span
-              className="text-xs font-mono px-2 py-0.5 rounded w-fit truncate"
-              style={{
-                backgroundColor: 'var(--glass-bg)',
-                color: 'var(--text-muted)',
-                border: '1px solid var(--glass-border)',
-              }}
-            >
-              {col.key}
-            </span>
-
-            {/* Label input */}
-            <input
-              type="text"
-              value={col.label}
-              onChange={(e) => updateCol(idx, { label: e.target.value })}
-              className="px-2.5 py-1.5 rounded-lg text-xs w-full"
-              style={{
-                backgroundColor: 'var(--input-bg)',
-                border: '1px solid var(--input-border)',
-                color: 'var(--text-primary)',
-                outline: 'none',
-              }}
-            />
-
-            {/* Visibility toggle */}
-            <div className="flex justify-center">
-              <button
-                type="button"
-                onClick={() => updateCol(idx, { visible: !col.visible })}
-                className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors"
-                style={
-                  col.visible
-                    ? { backgroundColor: 'var(--accent)', color: '#fff' }
-                    : {
-                        backgroundColor: 'var(--glass-bg)',
-                        color: 'var(--text-muted)',
-                        border: '1px solid var(--glass-border)',
-                      }
-                }
-                title={col.visible ? 'Hide column' : 'Show column'}
-              >
-                {col.visible ? <FaEye size={11} /> : <FaEyeSlash size={11} />}
-              </button>
-            </div>
-
-            {/* Alignment */}
-            <div className="flex gap-1 justify-center">
-              {(['left', 'center', 'right'] as const).map((a) => (
-                <button
-                  key={a}
-                  type="button"
-                  onClick={() => updateCol(idx, { align: a })}
-                  className="w-7 h-7 rounded-lg flex items-center justify-center transition-colors"
-                  style={
-                    col.align === a
-                      ? { backgroundColor: 'var(--accent)', color: '#fff' }
-                      : {
-                          backgroundColor: 'var(--glass-bg)',
-                          color: 'var(--text-muted)',
-                          border: '1px solid var(--glass-border)',
-                        }
-                  }
-                  title={a}
-                >
-                  {ALIGN_ICONS[a]}
-                </button>
-              ))}
-            </div>
-          </motion.div>
+          <ColRow
+            key={col.field}
+            col={col}
+            idx={idx}
+            onChange={(patch) => updateCol(idx, patch)}
+          />
         ))}
       </div>
 
@@ -1509,6 +1763,16 @@ const AdminSettings = memo(() => {
                     defaultOn
                   />
                 </SectionCard>
+              </motion.div>
+            )}
+
+            {activeSection === 'pages' && (
+              <motion.div
+                key="pages"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+              >
+                <PageConfigSection />
               </motion.div>
             )}
 
