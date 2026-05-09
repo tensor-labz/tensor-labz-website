@@ -1,12 +1,17 @@
-import React, { memo } from 'react';
+import React, { memo, Suspense, lazy } from 'react';
 import { motion } from 'motion/react';
 import { FaLightbulb, FaRocket, FaQuoteLeft } from 'react-icons/fa';
 import Page from '../components/resuable/Page';
 import { useAboutController } from '../features/about/hooks/useAboutController';
 import { useCompanyInfo } from '../shared/hooks/useCompanyInfo';
+import MediaGallery from '../features/about/components/MediaGallery';
 import data from '../data/data';
 
-/* Scroll-triggered fade-up used throughout */
+const HeroParticles = lazy(
+  () => import('../features/about/components/HeroParticles')
+);
+
+/* ── Scroll-triggered fade-up ── */
 const inView = (delay = 0) => ({
   initial: { opacity: 0, y: 28 },
   whileInView: { opacity: 1, y: 0 },
@@ -14,7 +19,7 @@ const inView = (delay = 0) => ({
   transition: { duration: 0.6, delay, ease: [0.22, 1, 0.36, 1] as const },
 });
 
-/* ── Section label ── */
+/* ── Shared primitives ── */
 const Label = ({ children }: { children: React.ReactNode }) => (
   <span
     className="text-[10px] font-semibold tracking-[0.35em] uppercase block mb-4"
@@ -24,7 +29,6 @@ const Label = ({ children }: { children: React.ReactNode }) => (
   </span>
 );
 
-/* ── Accent rule ── */
 const Rule = ({ center = false }: { center?: boolean }) => (
   <motion.div
     initial={{ width: 0 }}
@@ -36,7 +40,6 @@ const Rule = ({ center = false }: { center?: boolean }) => (
   />
 );
 
-/* ── Glass card ── */
 const Card = ({
   children,
   className = '',
@@ -56,7 +59,6 @@ const Card = ({
   </div>
 );
 
-/* ── Skeleton card ── */
 const SkeletonCard = () => (
   <Card>
     <div
@@ -87,12 +89,31 @@ const AboutUs: React.FC = memo(() => {
 
   return (
     <Page HeadProps={{ title: 'About Us' }}>
-      {/* ── Hero ── */}
+      {/* ══════════════════════════════════════════════════
+          HERO  — Three.js particle constellation background
+      ══════════════════════════════════════════════════ */}
       <section
-        className="min-h-screen flex items-center justify-center px-6 lg:px-16 text-center"
+        className="relative min-h-screen flex items-center justify-center px-6 lg:px-16 text-center overflow-hidden"
         style={{ paddingTop: 'calc(57px + 4rem)', paddingBottom: '4rem' }}
       >
-        <div className="max-w-4xl mx-auto">
+        {/* Particle background */}
+        <div className="absolute inset-0 z-0">
+          <Suspense fallback={null}>
+            <HeroParticles />
+          </Suspense>
+        </div>
+
+        {/* Radial fade so particles don't fight the text */}
+        <div
+          className="absolute inset-0 z-[1]"
+          style={{
+            background:
+              'radial-gradient(ellipse 60% 55% at 50% 50%, transparent 0%, var(--bg) 80%)',
+          }}
+        />
+
+        {/* Content */}
+        <div className="relative z-[2] max-w-4xl mx-auto">
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -134,11 +155,12 @@ const AboutUs: React.FC = memo(() => {
         </div>
       </section>
 
-      {/* ── Who We Are ── */}
+      {/* ══════════════════════════════════════════════════
+          WHO WE ARE
+      ══════════════════════════════════════════════════ */}
       {whoWeAre && (
         <section className="px-6 lg:px-16 py-20 lg:py-28">
           <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-            {/* Text */}
             <motion.div {...inView(0)}>
               <Label>Our Story</Label>
               <h2
@@ -159,7 +181,6 @@ const AboutUs: React.FC = memo(() => {
               </p>
             </motion.div>
 
-            {/* Quote card */}
             <motion.div {...inView(0.15)}>
               <Card>
                 <FaQuoteLeft
@@ -195,7 +216,9 @@ const AboutUs: React.FC = memo(() => {
         </section>
       )}
 
-      {/* ── Vision & Mission ── */}
+      {/* ══════════════════════════════════════════════════
+          VISION & MISSION
+      ══════════════════════════════════════════════════ */}
       {(info.vision || info.mission) && (
         <section className="px-6 lg:px-16 py-20 lg:py-28">
           <div className="max-w-7xl mx-auto">
@@ -277,7 +300,34 @@ const AboutUs: React.FC = memo(() => {
         </section>
       )}
 
-      {/* ── Key Facts (aboutData) ── */}
+      {/* ══════════════════════════════════════════════════
+          MEDIA GALLERY  — video / image player
+      ══════════════════════════════════════════════════ */}
+      <section className="px-6 lg:px-16 py-20 lg:py-28">
+        <div className="max-w-7xl mx-auto">
+          <motion.div {...inView(0)} className="text-center mb-12">
+            <Label>In Focus</Label>
+            <h2
+              className="text-3xl md:text-4xl font-bold"
+              style={{
+                color: 'var(--text-primary)',
+                fontFamily: '"Syne", sans-serif',
+              }}
+            >
+              Our Work &amp; Story
+            </h2>
+            <Rule center />
+          </motion.div>
+
+          <motion.div {...inView(0.1)} className="max-w-4xl mx-auto">
+            <MediaGallery />
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ══════════════════════════════════════════════════
+          KEY FACTS  — aboutData grid
+      ══════════════════════════════════════════════════ */}
       {(isLoading || aboutData.length > 0) && (
         <section className="px-6 lg:px-16 py-20 lg:py-28">
           <div className="max-w-7xl mx-auto">
