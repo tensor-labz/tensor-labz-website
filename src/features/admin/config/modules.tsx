@@ -9,8 +9,8 @@ import {
 import { IconType } from 'react-icons';
 
 export interface RelationConfig {
-  table: string;       // Supabase table to fetch options from
-  labelField: string;  // field to display in the dropdown
+  table: string; // Supabase table to fetch options from
+  labelField: string; // field to display in the dropdown
   valueField?: string; // field to store as value — defaults to 'id'
 }
 

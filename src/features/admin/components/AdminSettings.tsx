@@ -12,14 +12,16 @@ import {
   FaCheck,
   FaTable,
   FaListAlt,
-  FaTrash,
   FaChevronDown,
   FaChevronUp,
   FaColumns,
 } from 'react-icons/fa';
 import { FiAlignLeft, FiAlignCenter, FiAlignRight } from 'react-icons/fi';
 import { MODULES } from '../config/modules';
-import { DEFAULT_PAGE_COMPONENTS, type PageComponentConfig } from '../../../shared/types/pageConfig';
+import {
+  DEFAULT_PAGE_COMPONENTS,
+  type PageComponentConfig,
+} from '../../../shared/types/pageConfig';
 import { supabase } from '../../../lib/supabase';
 import type { TableColumnConfig } from '../../../shared/types/tableConfig';
 
@@ -344,9 +346,12 @@ function defaultColumns(moduleId: string): TableColumnConfig[] {
 
   // Fields that appear visible by default in the table
   const visibleByDefault = new Set(
-    [mod.imageField, mod.titleField, ...(mod.tableColumns ?? []), mod.descriptionField].filter(
-      Boolean
-    ) as string[]
+    [
+      mod.imageField,
+      mod.titleField,
+      ...(mod.tableColumns ?? []),
+      mod.descriptionField,
+    ].filter(Boolean) as string[]
   );
 
   return mod.fields.map((f, i) => ({
@@ -354,21 +359,33 @@ function defaultColumns(moduleId: string): TableColumnConfig[] {
     title: f.label,
     visible: visibleByDefault.has(f.key),
     align: 'left' as const,
-    sortable: !['image', 'images', 'richtext', 'toggle', 'checkbox'].includes(f.type),
+    sortable: !['image', 'images', 'richtext', 'toggle', 'checkbox'].includes(
+      f.type
+    ),
     order: i,
     ...(f.type === 'image' || f.type === 'images' ? { width: '68px' } : {}),
   }));
 }
 
 /* ── Available page component types ── */
-const AVAILABLE_PAGE_COMPONENTS: { type: string; label: string; description: string }[] = [
-  { type: 'table', label: 'Data Table', description: 'Main CRUD list with search, sort, and pagination' },
+const AVAILABLE_PAGE_COMPONENTS: {
+  type: string;
+  label: string;
+  description: string;
+}[] = [
+  {
+    type: 'table',
+    label: 'Data Table',
+    description: 'Main CRUD list with search, sort, and pagination',
+  },
 ];
 
 /* ── Page Components Section ── */
 const PageConfigSection = memo(() => {
   const [activeModule, setActiveModule] = useState(MODULES[0].id);
-  const [configs, setConfigs] = useState<Record<string, PageComponentConfig[]>>({});
+  const [configs, setConfigs] = useState<Record<string, PageComponentConfig[]>>(
+    {}
+  );
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
 
@@ -379,7 +396,9 @@ const PageConfigSection = memo(() => {
       .then(({ data, error }) => {
         if (error || !data) return;
         const map: Record<string, PageComponentConfig[]> = {};
-        (data as { module_id: string; components: PageComponentConfig[] }[]).forEach((r) => {
+        (
+          data as { module_id: string; components: PageComponentConfig[] }[]
+        ).forEach((r) => {
           map[r.module_id] = r.components;
         });
         setConfigs(map);
@@ -393,7 +412,9 @@ const PageConfigSection = memo(() => {
       const base = prev[activeModule] ?? DEFAULT_PAGE_COMPONENTS;
       const exists = base.find((c) => c.type === type);
       const next = exists
-        ? base.map((c) => (c.type === type ? { ...c, visible: c.visible === false } : c))
+        ? base.map((c) =>
+            c.type === type ? { ...c, visible: c.visible === false } : c
+          )
         : [...base, { type, visible: true, order: base.length }];
       return { ...prev, [activeModule]: next };
     });
@@ -403,7 +424,10 @@ const PageConfigSection = memo(() => {
     setSaving(true);
     await supabase
       .from('page_config')
-      .upsert({ module_id: activeModule, components }, { onConflict: 'module_id' });
+      .upsert(
+        { module_id: activeModule, components },
+        { onConflict: 'module_id' }
+      );
     setSaving(false);
     setSaved(true);
     setTimeout(() => setSaved(false), 2000);
@@ -412,11 +436,23 @@ const PageConfigSection = memo(() => {
   return (
     <div
       className="rounded-2xl overflow-hidden"
-      style={{ backgroundColor: 'var(--glass-bg)', border: '1px solid var(--glass-border)' }}
+      style={{
+        backgroundColor: 'var(--glass-bg)',
+        border: '1px solid var(--glass-border)',
+      }}
     >
       {/* Header */}
-      <div className="px-6 py-4" style={{ borderBottom: '1px solid var(--glass-border-subtle)' }}>
-        <p className="font-bold text-sm" style={{ color: 'var(--text-primary)', fontFamily: '"Syne", sans-serif' }}>
+      <div
+        className="px-6 py-4"
+        style={{ borderBottom: '1px solid var(--glass-border-subtle)' }}
+      >
+        <p
+          className="font-bold text-sm"
+          style={{
+            color: 'var(--text-primary)',
+            fontFamily: '"Syne", sans-serif',
+          }}
+        >
           Page Components
         </p>
         <p className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>
@@ -437,7 +473,11 @@ const PageConfigSection = memo(() => {
             style={
               activeModule === m.id
                 ? { backgroundColor: 'var(--accent)', color: '#fff' }
-                : { backgroundColor: 'var(--glass-bg-raised)', color: 'var(--text-muted)', border: '1px solid var(--glass-border)' }
+                : {
+                    backgroundColor: 'var(--glass-bg-raised)',
+                    color: 'var(--text-muted)',
+                    border: '1px solid var(--glass-border)',
+                  }
             }
           >
             {m.label}
@@ -464,10 +504,16 @@ const PageConfigSection = memo(() => {
               }}
             >
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium" style={{ color: 'var(--text-primary)' }}>
+                <p
+                  className="text-sm font-medium"
+                  style={{ color: 'var(--text-primary)' }}
+                >
                   {avail.label}
                 </p>
-                <p className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>
+                <p
+                  className="text-xs mt-0.5"
+                  style={{ color: 'var(--text-muted)' }}
+                >
                   {avail.description}
                 </p>
               </div>
@@ -478,7 +524,11 @@ const PageConfigSection = memo(() => {
                 style={
                   visible
                     ? { backgroundColor: 'var(--accent)', color: '#fff' }
-                    : { backgroundColor: 'var(--glass-bg)', color: 'var(--text-muted)', border: '1px solid var(--glass-border)' }
+                    : {
+                        backgroundColor: 'var(--glass-bg)',
+                        color: 'var(--text-muted)',
+                        border: '1px solid var(--glass-border)',
+                      }
                 }
                 title={visible ? 'Hide component' : 'Show component'}
               >
@@ -499,9 +549,20 @@ const PageConfigSection = memo(() => {
           onClick={handleSave}
           disabled={saving}
           className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold disabled:opacity-60"
-          style={{ backgroundColor: saved ? '#34d399' : 'var(--accent)', color: '#fff' }}
+          style={{
+            backgroundColor: saved ? '#34d399' : 'var(--accent)',
+            color: '#fff',
+          }}
         >
-          {saved ? <><FaCheck size={11} /> Saved</> : <><FaSave size={11} /> {saving ? 'Saving…' : 'Save Changes'}</>}
+          {saved ? (
+            <>
+              <FaCheck size={11} /> Saved
+            </>
+          ) : (
+            <>
+              <FaSave size={11} /> {saving ? 'Saving…' : 'Save Changes'}
+            </>
+          )}
         </motion.button>
       </div>
     </div>
@@ -571,16 +632,26 @@ const ColRow = memo(
           <div className="flex justify-center">
             <button
               type="button"
-              onClick={() => onChange({ visible: col.visible === false ? true : false })}
+              onClick={() =>
+                onChange({ visible: col.visible === false ? true : false })
+              }
               className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors"
               style={
                 col.visible !== false
                   ? { backgroundColor: 'var(--accent)', color: '#fff' }
-                  : { backgroundColor: 'var(--glass-bg)', color: 'var(--text-muted)', border: '1px solid var(--glass-border)' }
+                  : {
+                      backgroundColor: 'var(--glass-bg)',
+                      color: 'var(--text-muted)',
+                      border: '1px solid var(--glass-border)',
+                    }
               }
               title={col.visible !== false ? 'Hide column' : 'Show column'}
             >
-              {col.visible !== false ? <FaEye size={11} /> : <FaEyeSlash size={11} />}
+              {col.visible !== false ? (
+                <FaEye size={11} />
+              ) : (
+                <FaEyeSlash size={11} />
+              )}
             </button>
           </div>
 
@@ -595,7 +666,11 @@ const ColRow = memo(
                 style={
                   col.align === a
                     ? { backgroundColor: 'var(--accent)', color: '#fff' }
-                    : { backgroundColor: 'var(--glass-bg)', color: 'var(--text-muted)', border: '1px solid var(--glass-border)' }
+                    : {
+                        backgroundColor: 'var(--glass-bg)',
+                        color: 'var(--text-muted)',
+                        border: '1px solid var(--glass-border)',
+                      }
                 }
                 title={a}
               >
@@ -612,7 +687,11 @@ const ColRow = memo(
             style={
               expanded
                 ? { backgroundColor: 'var(--accent)', color: '#fff' }
-                : { backgroundColor: 'var(--glass-bg)', color: 'var(--text-muted)', border: '1px solid var(--glass-border)' }
+                : {
+                    backgroundColor: 'var(--glass-bg)',
+                    color: 'var(--text-muted)',
+                    border: '1px solid var(--glass-border)',
+                  }
             }
             title="Advanced options"
           >
@@ -639,12 +718,18 @@ const ColRow = memo(
                   <button
                     key={t}
                     type="button"
-                    onClick={() => onChange({ type: t === 'text' ? undefined : t })}
+                    onClick={() =>
+                      onChange({ type: t === 'text' ? undefined : t })
+                    }
                     className="flex-1 py-1 rounded-lg text-xs font-medium"
                     style={
                       (col.type ?? 'text') === t
                         ? { backgroundColor: 'var(--accent)', color: '#fff' }
-                        : { backgroundColor: 'var(--glass-bg)', color: 'var(--text-muted)', border: '1px solid var(--glass-border)' }
+                        : {
+                            backgroundColor: 'var(--glass-bg)',
+                            color: 'var(--text-muted)',
+                            border: '1px solid var(--glass-border)',
+                          }
                     }
                   >
                     {t === 'url' ? 'URL (icon)' : 'Text'}
@@ -662,9 +747,7 @@ const ColRow = memo(
             <input
               type="text"
               value={col.link ?? ''}
-              onChange={(e) =>
-                onChange({ link: e.target.value || undefined })
-              }
+              onChange={(e) => onChange({ link: e.target.value || undefined })}
               placeholder="/admin/services/${service_id}"
               className="w-full px-2.5 py-1.5 rounded-lg text-xs font-mono"
               style={inputStyle}
@@ -865,23 +948,33 @@ const TableColumnsSection = memo(() => {
 });
 TableColumnsSection.displayName = 'TableColumnsSection';
 
-
-
-
 /* ── Form Builder Links (replaces inline editor — each module has its own builder page) ── */
 const FormBuilderLinks = memo(() => {
   const navigate = useNavigate();
   return (
     <div
       className="rounded-2xl overflow-hidden"
-      style={{ backgroundColor: 'var(--glass-bg)', border: '1px solid var(--glass-border)' }}
+      style={{
+        backgroundColor: 'var(--glass-bg)',
+        border: '1px solid var(--glass-border)',
+      }}
     >
-      <div className="px-6 py-4" style={{ borderBottom: '1px solid var(--glass-border-subtle)' }}>
-        <p className="font-bold text-sm" style={{ color: 'var(--text-primary)', fontFamily: '"Syne", sans-serif' }}>
+      <div
+        className="px-6 py-4"
+        style={{ borderBottom: '1px solid var(--glass-border-subtle)' }}
+      >
+        <p
+          className="font-bold text-sm"
+          style={{
+            color: 'var(--text-primary)',
+            fontFamily: '"Syne", sans-serif',
+          }}
+        >
           Form Builder
         </p>
         <p className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>
-          Open the dedicated builder to add, edit, reorder, or delete fields for any module.
+          Open the dedicated builder to add, edit, reorder, or delete fields for
+          any module.
         </p>
       </div>
       <div className="px-6 py-4 grid grid-cols-2 sm:grid-cols-3 gap-3">
@@ -896,7 +989,10 @@ const FormBuilderLinks = memo(() => {
               color: 'var(--text-primary)',
             }}
           >
-            <m.icon size={15} style={{ color: 'var(--accent)', flexShrink: 0 }} />
+            <m.icon
+              size={15}
+              style={{ color: 'var(--accent)', flexShrink: 0 }}
+            />
             <span className="text-sm font-medium truncate">{m.label}</span>
           </button>
         ))}

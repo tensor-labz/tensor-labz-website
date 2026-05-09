@@ -18,13 +18,20 @@ const Breadcrumbs = ({ items }: BreadcrumbsProps) => (
           {idx > 0 && (
             <FaChevronRight
               size={9}
-              style={{ color: 'var(--text-muted)', opacity: 0.5, flexShrink: 0 }}
+              style={{
+                color: 'var(--text-muted)',
+                opacity: 0.5,
+                flexShrink: 0,
+              }}
             />
           )}
           {isLast ? (
             <span
               className="font-semibold truncate"
-              style={{ color: 'var(--text-primary)', fontFamily: '"Syne", sans-serif' }}
+              style={{
+                color: 'var(--text-primary)',
+                fontFamily: '"Syne", sans-serif',
+              }}
             >
               {item.label}
             </span>

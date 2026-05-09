@@ -33,7 +33,9 @@ const Header: React.FC<{ className?: string }> = memo(({ className = '' }) => {
           <motion.img
             src={resolveLogo(info, theme, logo)}
             alt={info.name}
-            onError={(e) => { (e.currentTarget as HTMLImageElement).src = logo; }}
+            onError={(e) => {
+              (e.currentTarget as HTMLImageElement).src = logo;
+            }}
             loading="lazy"
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}

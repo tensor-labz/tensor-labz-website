@@ -64,7 +64,9 @@ const AboutUs: React.FC = memo(() => {
               className="text-base md:text-lg mb-12 leading-relaxed max-w-3xl mx-auto"
               style={{ color: 'var(--text-muted)' }}
             >
-              {info.who_we_are || data?.aboutus?.content || 'About us description not available.'}
+              {info.who_we_are ||
+                data?.aboutus?.content ||
+                'About us description not available.'}
             </motion.p>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 text-center">

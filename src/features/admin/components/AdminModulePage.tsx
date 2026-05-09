@@ -3,7 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import { FaCog, FaPlus } from 'react-icons/fa';
 import { MODULES } from '../config/modules';
 import { supabase } from '../../../lib/supabase';
-import { DEFAULT_PAGE_COMPONENTS, type PageComponentConfig } from '../../../shared/types/pageConfig';
+import {
+  DEFAULT_PAGE_COMPONENTS,
+  type PageComponentConfig,
+} from '../../../shared/types/pageConfig';
 import CrudTable from './CrudTable';
 
 /* ── Component registry — add new page component types here ── */
@@ -15,7 +18,9 @@ const REGISTRY: Record<string, React.ComponentType<{ moduleId: string }>> = {
 const AdminModulePage = memo(({ moduleId }: { moduleId: string }) => {
   const navigate = useNavigate();
   const mod = MODULES.find((m) => m.id === moduleId);
-  const [components, setComponents] = useState<PageComponentConfig[]>(DEFAULT_PAGE_COMPONENTS);
+  const [components, setComponents] = useState<PageComponentConfig[]>(
+    DEFAULT_PAGE_COMPONENTS
+  );
 
   useEffect(() => {
     setComponents(DEFAULT_PAGE_COMPONENTS);
@@ -25,7 +30,8 @@ const AdminModulePage = memo(({ moduleId }: { moduleId: string }) => {
       .eq('module_id', moduleId)
       .maybeSingle()
       .then(({ data, error }) => {
-        if (!error && data?.components) setComponents(data.components as PageComponentConfig[]);
+        if (!error && data?.components)
+          setComponents(data.components as PageComponentConfig[]);
       });
   }, [moduleId]);
 
@@ -38,7 +44,10 @@ const AdminModulePage = memo(({ moduleId }: { moduleId: string }) => {
       >
         <h2
           className="text-base sm:text-xl font-bold truncate"
-          style={{ color: 'var(--text-primary)', fontFamily: '"Syne", sans-serif' }}
+          style={{
+            color: 'var(--text-primary)',
+            fontFamily: '"Syne", sans-serif',
+          }}
         >
           {mod?.label ?? moduleId}
         </h2>
