@@ -262,14 +262,20 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
   const [colConfig, setColConfig] = useState<TableColumnConfig[] | null>(null);
   const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
 
-  /* Measure the table card's height so DataTable rows fill the exact
-   * remaining space (col-header ≈44px + pagination ≈56px = 100px overhead) */
+  /* Measure the card height so:
+   * 1. fixedHeaderScrollHeight = full card height (no gap below wrapper)
+   * 2. rows-per-page = however many 56px rows fit between the 44px col-header
+   *    and the 40px pagination bar — no empty space, no need to scroll */
   const tableWrapRef = useRef<HTMLDivElement>(null);
   const [dtScrollHeight, setDtScrollHeight] = useState('400px');
   useEffect(() => {
     const el = tableWrapRef.current;
     if (!el) return;
-    const update = () => setDtScrollHeight(`${Math.max(120, el.clientHeight - 84)}px`);
+    const update = () => {
+      const h = el.clientHeight;
+      setDtScrollHeight(`${h}px`);
+      setPageSize(Math.max(5, Math.floor((h - 84) / 56)));
+    };
     update();
     const obs = new ResizeObserver(update);
     obs.observe(el);
@@ -312,7 +318,6 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
       .maybeSingle()
       .then(({ data }) => {
         if (data?.columns) setColConfig(data.columns as TableColumnConfig[]);
-        if (data?.page_size) setPageSize(data.page_size as number);
       });
   }, [moduleId]);
 
@@ -627,7 +632,7 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
                   fixedHeaderScrollHeight={dtScrollHeight}
                   pagination
                   paginationPerPage={pageSize}
-                  paginationRowsPerPageOptions={[10, 20, 50, 100]}
+                  paginationRowsPerPageOptions={[pageSize, pageSize * 2, pageSize * 5].filter((v, i, a) => a.indexOf(v) === i)}
                   defaultSortFieldId={defaultSortField}
                   defaultSortAsc
                   highlightOnHover
