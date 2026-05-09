@@ -7,6 +7,30 @@ All notable changes to the Tensor Labs website are documented here.
 ## [Unreleased]
 
 ---
+## [v1.6.0] — 2026-05-09
+
+### Added
+
+- dynamic company info, Site Control admin, globe Contact Us page
+- image upload progress bar, prominent preview, per-file multi-image progress
+
+### Style
+
+- compact module page header for mobile — tighter padding, smaller button
+
+### CI / Build
+
+- add VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY to staging and production build env
+
+### Other
+
+- Merge pull request #12 from tensor-labz/staging
+- Merge pull request #11 from tensor-labz/dev
+- Merge pull request #10 from tensor-labz/feat/form-refactor
+
+
+
+---
 ## [v1.5.0] — 2026-05-09
 
 ### Added
