@@ -328,21 +328,21 @@ function defaultColumns(moduleId: string): TableColumnConfig[] {
   const cols: TableColumnConfig[] = [];
   if (mod.imageField)
     cols.push({
-      key: mod.imageField,
-      label: 'Image',
+      field: mod.imageField,
+      title: 'Image',
       visible: true,
       align: 'left',
     });
   cols.push({
-    key: mod.titleField,
-    label: 'Title',
+    field: mod.titleField,
+    title: 'Title',
     visible: true,
     align: 'left',
   });
   if (mod.descriptionField)
     cols.push({
-      key: mod.descriptionField,
-      label: 'Description',
+      field: mod.descriptionField,
+      title: 'Description',
       visible: true,
       align: 'left',
     });
@@ -473,15 +473,15 @@ const TableColumnsSection = memo(() => {
             gridTemplateColumns: '1fr 160px 48px 96px',
           }}
         >
-          <span>Column</span>
-          <span>Label</span>
+          <span>Field</span>
+          <span>Title</span>
           <span className="text-center">Show</span>
           <span className="text-center">Align</span>
         </div>
 
         {cols.map((col, idx) => (
           <motion.div
-            key={col.key}
+            key={col.field}
             initial={{ opacity: 0, y: 6 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: idx * 0.04 }}
@@ -502,14 +502,14 @@ const TableColumnsSection = memo(() => {
                 border: '1px solid var(--glass-border)',
               }}
             >
-              {col.key}
+              {col.field}
             </span>
 
             {/* Label input */}
             <input
               type="text"
-              value={col.label}
-              onChange={(e) => updateCol(idx, { label: e.target.value })}
+              value={col.title}
+              onChange={(e) => updateCol(idx, { title: e.target.value })}
               className="px-2.5 py-1.5 rounded-lg text-xs w-full"
               style={{
                 backgroundColor: 'var(--input-bg)',

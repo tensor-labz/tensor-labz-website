@@ -232,28 +232,28 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
       /* Supabase-driven columns */
       [...colConfig]
         .filter((c) => c.visible !== false)
-        .filter((c) => c.key.toLowerCase() !== primaryImgKey) // skip primary image
+        .filter((c) => c.field.toLowerCase() !== primaryImgKey) // skip primary image
         .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
         .forEach((c) => {
-          const isImg = imageTypeKeys.has(c.key.toLowerCase());
-          const isDesc = c.key.toLowerCase() === mod.descriptionField?.toLowerCase();
+          const isImg = imageTypeKeys.has(c.field.toLowerCase());
+          const isDesc = c.field.toLowerCase() === mod.descriptionField?.toLowerCase();
 
           if (isImg) {
             /* Extra image field — render thumbnail */
             cols.push({
-              id: c.key,
-              name: c.label,
+              id: c.field,
+              name: c.title,
               width: c.width ?? '68px',
               sortable: false,
               cell: (row) => (
-                <ImageCell src={resolveImg(rowVal(row, c.key))} />
+                <ImageCell src={resolveImg(rowVal(row, c.field))} />
               ),
             });
           } else {
             cols.push({
-              id: c.key,
-              name: c.label,
-              selector: (row) => String(rowVal(row, c.key) ?? ''),
+              id: c.field,
+              name: c.title,
+              selector: (row) => String(rowVal(row, c.field) ?? ''),
               sortable: c.sortable ?? true,
               wrap: true,
               ...(c.width ? { width: c.width } : { grow: isDesc ? 2 : 1 }),
@@ -261,7 +261,7 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
               ...(c.align === 'right' && { right: true }),
               ...(isDesc && {
                 cell: (row) => (
-                  <TextCell value={String(rowVal(row, c.key) ?? '')} />
+                  <TextCell value={String(rowVal(row, c.field) ?? '')} />
                 ),
               }),
             });
