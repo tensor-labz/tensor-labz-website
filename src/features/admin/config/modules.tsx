@@ -37,6 +37,7 @@ export interface ModuleConfig {
   imageField?: string;
   titleField: string;
   descriptionField?: string;
+  tableColumns?: string[]; // extra column keys shown in CrudTable beyond title+description
   fields: FieldConfig[];
 }
 
@@ -112,6 +113,7 @@ export const MODULES: ModuleConfig[] = [
     imageField: 'imageURL',
     titleField: 'title',
     descriptionField: 'description',
+    tableColumns: ['service'],
     fields: [
       { key: 'imageURL', label: 'Image', type: 'image', span: 'full' },
       {

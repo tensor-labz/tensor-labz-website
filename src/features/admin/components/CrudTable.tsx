@@ -268,7 +268,7 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
           }
         });
     } else {
-      /* Static fallback — title + description, image already in __image column */
+      /* Static fallback — title + tableColumns + description */
       cols.push({
         id: mod.titleField,
         name: 'Title',
@@ -277,6 +277,20 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
         grow: 1,
         wrap: true,
       });
+
+      /* Extra columns declared in ModuleConfig.tableColumns */
+      (mod.tableColumns ?? []).forEach((key) => {
+        const fieldDef = mod.fields.find((f) => f.key === key);
+        cols.push({
+          id: key,
+          name: fieldDef?.label ?? key,
+          selector: (row) => String(rowVal(row, key) ?? ''),
+          sortable: true,
+          wrap: true,
+          grow: 1,
+        });
+      });
+
       if (mod.descriptionField) {
         cols.push({
           id: mod.descriptionField,
