@@ -7,6 +7,19 @@ All notable changes to the Tensor Labs website are documented here.
 ## [Unreleased]
 
 ---
+## [v1.6.2] — 2026-05-09
+
+### Bug Fixes
+
+- select link column in contact query — resolves TS2339 build error
+
+### Other
+
+- Merge pull request #14 from tensor-labz/staging
+
+
+
+---
 ## [v1.6.1] — 2026-05-09
 
 ### Bug Fixes
