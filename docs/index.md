@@ -44,28 +44,28 @@ flowchart TB
 
 ## Tech stack
 
-| Layer | Technology |
-|---|---|
-| Frontend | React 18 + TypeScript + Vite + Tailwind CSS |
-| State | Redux Toolkit |
-| CMS / Database | Supabase (PostgreSQL) |
-| Auth | Supabase Auth (JWT HS256) |
-| Image Storage | AWS S3 (`tensor-labz-store`, eu-north-1) |
-| Image Service | AWS Lambda + API Gateway |
-| Staging | Firebase Hosting |
-| Production | AWS Amplify (auto-deploy from `main`) |
+| Layer          | Technology                                  |
+| -------------- | ------------------------------------------- |
+| Frontend       | React 18 + TypeScript + Vite + Tailwind CSS |
+| State          | Redux Toolkit                               |
+| CMS / Database | Supabase (PostgreSQL)                       |
+| Auth           | Supabase Auth (JWT HS256)                   |
+| Image Storage  | AWS S3 (`tensor-labz-store`, eu-north-1)    |
+| Image Service  | AWS Lambda + API Gateway                    |
+| Staging        | Firebase Hosting                            |
+| Production     | AWS Amplify (auto-deploy from `main`)       |
 
 ---
 
 ## Quick links
 
-| Resource | Link |
-|---|---|
-| Frontend repo | [ThanuMahee12/tensor-labz-website](https://github.com/ThanuMahee12/tensor-labz-website) |
-| Lambda repo | [ThanuMahee12/tensor-labz-image-lambda](https://github.com/ThanuMahee12/tensor-labz-image-lambda) |
-| Supabase dashboard | [rsxbmgusdiilcajuoxmk.supabase.co](https://supabase.com/dashboard/project/rsxbmgusdiilcajuoxmk) |
-| AWS Console | [eu-north-1 Lambda](https://eu-north-1.console.aws.amazon.com/lambda/home?region=eu-north-1) |
-| Staging URL | [tensor-labz-website.web.app](https://tensor-labz-website.web.app) |
+| Resource           | Link                                                                                              |
+| ------------------ | ------------------------------------------------------------------------------------------------- |
+| Frontend repo      | [ThanuMahee12/tensor-labz-website](https://github.com/ThanuMahee12/tensor-labz-website)           |
+| Lambda repo        | [ThanuMahee12/tensor-labz-image-lambda](https://github.com/ThanuMahee12/tensor-labz-image-lambda) |
+| Supabase dashboard | [rsxbmgusdiilcajuoxmk.supabase.co](https://supabase.com/dashboard/project/rsxbmgusdiilcajuoxmk)   |
+| AWS Console        | [eu-north-1 Lambda](https://eu-north-1.console.aws.amazon.com/lambda/home?region=eu-north-1)      |
+| Staging URL        | [tensor-labz-website.web.app](https://tensor-labz-website.web.app)                                |
 
 ---
 

@@ -10,7 +10,9 @@ import { setUser } from '../store/authSlice';
 
 function AuthListener({ children }: { children: React.ReactNode }) {
   useEffect(() => {
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
       const user = session?.user ?? null;
       store.dispatch(
         setUser(

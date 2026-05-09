@@ -110,16 +110,16 @@ src/features/admin/
 
 ### Field types
 
-| Type       | Renders                                                                 |
-|------------|-------------------------------------------------------------------------|
-| `text`     | Plain text input                                                        |
-| `textarea` | Multi-line textarea                                                     |
-| `richtext` | Textarea with HTML preview toggle                                       |
-| `url`      | URL input (for non-image links e.g. video embed URLs)                  |
-| `image`    | Tab toggle: **Upload File** (drag & drop) or **S3 / URL** with preview |
+| Type       | Renders                                                                                                 |
+| ---------- | ------------------------------------------------------------------------------------------------------- |
+| `text`     | Plain text input                                                                                        |
+| `textarea` | Multi-line textarea                                                                                     |
+| `richtext` | Textarea with HTML preview toggle                                                                       |
+| `url`      | URL input (for non-image links e.g. video embed URLs)                                                   |
+| `image`    | Tab toggle: **Upload File** (drag & drop) or **S3 / URL** with preview                                  |
 | `images`   | Multi-image gallery: grid of previews, add via drag & drop or URL, remove individual, stores `string[]` |
-| `toggle`   | Animated switch (stores `true`/`false`)                                 |
-| `tags`     | Comma-separated text input                                              |
+| `toggle`   | Animated switch (stores `true`/`false`)                                                                 |
+| `tags`     | Comma-separated text input                                                                              |
 
 > Use `type: 'image'` for all image fields. Use `type: 'url'` only for non-image URLs (e.g. `vedio_demo`).
 
@@ -133,16 +133,17 @@ All CRUD operations are currently **UI-only with mock data**. Backend is **not y
 
 #### Decided architecture
 
-| Layer | Technology | Status |
-|---|---|---|
-| Auth | Supabase Auth | ✅ Live |
-| Database / CRUD | **Supabase** (PostgreSQL) | ✅ Live |
-| Image / file storage | **AWS S3 via Lambda** | ✅ Live |
+| Layer                  | Technology                         | Status  |
+| ---------------------- | ---------------------------------- | ------- |
+| Auth                   | Supabase Auth                      | ✅ Live |
+| Database / CRUD        | **Supabase** (PostgreSQL)          | ✅ Live |
+| Image / file storage   | **AWS S3 via Lambda**              | ✅ Live |
 | Public CMS (read-only) | Google Sheets via `VITE_SHEET_URL` | ✅ Live |
 
 #### Why Supabase (not Firestore)
 
 The project deliberately chose **Supabase** for the admin backend instead of Firestore:
+
 - Relational PostgreSQL — better for structured content with foreign keys (e.g. projects → services)
 - Built-in Row Level Security (RLS) for per-role access control
 - REST and realtime APIs without a separate SDK install (uses `@supabase/supabase-js`)
@@ -150,6 +151,7 @@ The project deliberately chose **Supabase** for the admin backend instead of Fir
 #### Why AWS S3 for images
 
 Images uploaded in the admin form (`type: 'image'` fields) will be stored in S3:
+
 - Separate from the database — keeps Supabase rows small (store URL string only)
 - CloudFront CDN can sit in front of the bucket for fast global delivery
 - Bucket name and region are already in the Settings page UI (`AdminSettings.tsx`)
@@ -157,6 +159,7 @@ Images uploaded in the admin form (`type: 'image'` fields) will be stored in S3:
 #### What to do when implementing
 
 **Supabase CRUD:**
+
 1. Install: `npm install @supabase/supabase-js`
 2. Create `src/lib/supabase.ts` — initialise client with `VITE_SUPABASE_URL` + `VITE_SUPABASE_ANON_KEY`
 3. Create a Redux async thunk per module (or a generic one that takes `moduleId` as a param)
@@ -169,16 +172,17 @@ Images uploaded in the admin form (`type: 'image'` fields) will be stored in S3:
 
 The Lambda is **deployed and live** at `../tensor-labz-image-lambda/` (separate repo — `ThanuMahee12/tensor-labz-image-lambda`, private).
 
-| Resource | Value |
-|---|---|
-| Lambda function | `tensor-labz-image-handler` (eu-north-1) |
-| API Gateway | HTTP API `ewf03ybvmc` |
-| **Base URL** | `https://ewf03ybvmc.execute-api.eu-north-1.amazonaws.com` |
-| IAM role | `tensor-labz-lambda-exec` |
+| Resource        | Value                                                     |
+| --------------- | --------------------------------------------------------- |
+| Lambda function | `tensor-labz-image-handler` (eu-north-1)                  |
+| API Gateway     | HTTP API `ewf03ybvmc`                                     |
+| **Base URL**    | `https://ewf03ybvmc.execute-api.eu-north-1.amazonaws.com` |
+| IAM role        | `tensor-labz-lambda-exec`                                 |
 
 > ⚠️ **Firebase credentials not yet set.** Lambda is deployed but env vars `FIREBASE_CLIENT_EMAIL` and `FIREBASE_PRIVATE_KEY` are placeholders — all requests will return 401 until you fill these in the Lambda console under Configuration → Environment variables.
 
 Bucket: `tensor-labz-store` (eu-north-1). Folder structure:
+
 - `Home/Hero/` — hero slide images
 - `Insights/` — service / insight images
 - `projects/{slug}/` — project images (cover + extraImages)
@@ -186,11 +190,13 @@ Bucket: `tensor-labz-store` (eu-north-1). Folder structure:
 Pass the correct `folder` when calling upload endpoints (e.g. `"Home/Hero"`, `"Insights"`, `"projects/my-project-slug"`).
 
 Endpoints:
+
 - `POST /image/upload-url` — new image → `{ filename, contentType, folder }` → `{ uploadUrl, publicUrl, key }`
 - `POST /image/replace` — swap image → `{ oldKey, filename, contentType, folder }` → `{ uploadUrl, publicUrl, key }`
 - `DELETE /image` — remove image(s) → `{ keys: string[] }` → `{ deleted: number }`
 
 Frontend wiring steps:
+
 1. On file select in `ImageField`, call `POST /image/upload-url` with Firebase ID token in `Authorization` header
 2. PUT the file directly to `uploadUrl` (browser → S3, Lambda not involved in transfer)
 3. Store `publicUrl` as the field value (replaces the temporary `createObjectURL`)
@@ -198,6 +204,7 @@ Frontend wiring steps:
 5. On image replace, call `POST /image/replace` with `oldKey` to clean up stale S3 objects
 
 Redeploy Lambda after code changes:
+
 ```bash
 cd ../tensor-labz-image-lambda
 npm run build:zip
@@ -210,6 +217,7 @@ aws --profile tensor lambda update-function-code \
 Lambda IAM role `tensor-labz-lambda-exec` already has `s3:PutObject` and `s3:DeleteObject` on `arn:aws:s3:::tensor-labz-store/*`.
 
 **Environment variables to add to `.env`:**
+
 ```
 VITE_IMAGE_LAMBDA_URL=https://ewf03ybvmc.execute-api.eu-north-1.amazonaws.com
 VITE_SUPABASE_URL=https://your-project.supabase.co
@@ -227,15 +235,15 @@ VITE_CDN_URL=https://cdn.tensorlabz.com
 
 The public site uses Google Sheets as a headless CMS via `VITE_SHEET_URL`. Exact sheet tab names (case-sensitive):
 
-| Data          | Sheet name    | Notes                        |
-|---------------|---------------|------------------------------|
-| Hero slides   | `HeroData`    |                              |
-| Services      | `ServiceData` |                              |
-| Projects      | `ProjectData` |                              |
-| About Us      | `AboutusData` | ⚠️ NOT `AboutData`           |
-| Contact       | `ContactData` |                              |
-| Social links  | `LinkData`    | ⚠️ nested format — see below |
-| Latest news   | `LatestData`  |                              |
+| Data         | Sheet name    | Notes                        |
+| ------------ | ------------- | ---------------------------- |
+| Hero slides  | `HeroData`    |                              |
+| Services     | `ServiceData` |                              |
+| Projects     | `ProjectData` |                              |
+| About Us     | `AboutusData` | ⚠️ NOT `AboutData`           |
+| Contact      | `ContactData` |                              |
+| Social links | `LinkData`    | ⚠️ nested format — see below |
+| Latest news  | `LatestData`  |                              |
 
 > **`LinkData` is special:** returns `{ data: { social_media: [...] } }` — `result.data` is an object, not an array. Do NOT use `sheetsClient` for this sheet — fetch directly and access `result.data.social_media`.
 
@@ -270,13 +278,13 @@ dev  →  staging  →  main
 
 ### Firebase Hosting (staging)
 
-| Item              | Value                                                                  |
-|-------------------|------------------------------------------------------------------------|
-| **Staging URL**   | https://tensor-labz-website.web.app                                    |
-| **Project ID**    | `tensor-labz-website`                                                  |
-| **Console**       | https://console.firebase.google.com/project/tensor-labz-website        |
-| **CLI location**  | `~/.npm-global/bin/firebase`                                           |
-| **Config files**  | `firebase.json`, `.firebaserc`                                         |
+| Item             | Value                                                           |
+| ---------------- | --------------------------------------------------------------- |
+| **Staging URL**  | https://tensor-labz-website.web.app                             |
+| **Project ID**   | `tensor-labz-website`                                           |
+| **Console**      | https://console.firebase.google.com/project/tensor-labz-website |
+| **CLI location** | `~/.npm-global/bin/firebase`                                    |
+| **Config files** | `firebase.json`, `.firebaserc`                                  |
 
 #### Setup (first time on a new machine)
 
@@ -323,7 +331,7 @@ firebase deploy --only hosting:tensor-labz-website
 {
   "projects": {
     "default": "tensor-labz-website",
-    "staging":  "tensor-labz-website",
+    "staging": "tensor-labz-website",
     "production": "tensor-labz-website"
   }
 }
@@ -335,20 +343,20 @@ firebase deploy --only hosting:tensor-labz-website
 
 ### AWS Amplify (production)
 
-| Item              | Value                                 |
-|-------------------|---------------------------------------|
-| **Trigger branch**| `main`                                |
-| **Deploy method** | Automatic on push — do NOT deploy manually |
+| Item               | Value                                      |
+| ------------------ | ------------------------------------------ |
+| **Trigger branch** | `main`                                     |
+| **Deploy method**  | Automatic on push — do NOT deploy manually |
 
 ---
 
 ### npm scripts
 
-| Script                | Command                                     |
-|-----------------------|---------------------------------------------|
-| `npm run dev`         | Start Vite dev server                       |
-| `npm run build`       | `tsc -b && vite build` → outputs to `dist/` |
-| `npm run preview`     | Serve `dist/` locally for testing           |
+| Script                   | Command                                           |
+| ------------------------ | ------------------------------------------------- |
+| `npm run dev`            | Start Vite dev server                             |
+| `npm run build`          | `tsc -b && vite build` → outputs to `dist/`       |
+| `npm run preview`        | Serve `dist/` locally for testing                 |
 | `npm run deploy:staging` | `npm run build && firebase deploy --only hosting` |
 
 ---
@@ -379,13 +387,13 @@ cp .env.example .env
 
 Key variables:
 
-| Variable                | Purpose                                         |
-|-------------------------|-------------------------------------------------|
-| `VITE_SHEET_URL`        | Google Sheets API base URL (headless CMS)       |
-| `VITE_SUPABASE_URL`     | Supabase project URL                            |
-| `VITE_SUPABASE_ANON_KEY`| Supabase public anon key                        |
-| `VITE_IMAGE_LAMBDA_URL` | Lambda API Gateway base URL (image upload)      |
-| `VITE_S3_BUCKET`        | S3 bucket name (`tensor-labz-store`)            |
-| `VITE_S3_REGION`        | S3 region (`eu-north-1`)                        |
-| `VITE_CDN_URL`          | CDN base URL for stored images                  |
-| `VITE_FIREBASE_*`       | Firebase project config (kept for other uses)   |
+| Variable                 | Purpose                                       |
+| ------------------------ | --------------------------------------------- |
+| `VITE_SHEET_URL`         | Google Sheets API base URL (headless CMS)     |
+| `VITE_SUPABASE_URL`      | Supabase project URL                          |
+| `VITE_SUPABASE_ANON_KEY` | Supabase public anon key                      |
+| `VITE_IMAGE_LAMBDA_URL`  | Lambda API Gateway base URL (image upload)    |
+| `VITE_S3_BUCKET`         | S3 bucket name (`tensor-labz-store`)          |
+| `VITE_S3_REGION`         | S3 region (`eu-north-1`)                      |
+| `VITE_CDN_URL`           | CDN base URL for stored images                |
+| `VITE_FIREBASE_*`        | Firebase project config (kept for other uses) |

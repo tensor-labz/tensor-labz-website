@@ -11,32 +11,33 @@ import type { TableColumnConfig } from '../../../shared/types/tableConfig';
 type SortKey = 'id-asc' | 'id-desc' | 'title-asc' | 'title-desc';
 
 const SORT_LABELS: Record<SortKey, string> = {
-  'id-asc':    'Oldest first',
-  'id-desc':   'Newest first',
+  'id-asc': 'Oldest first',
+  'id-desc': 'Newest first',
   'title-asc': 'Title A → Z',
-  'title-desc':'Title Z → A',
+  'title-desc': 'Title Z → A',
 };
 
 const rowVariants = {
-  hidden:  { opacity: 0, y: 8 },
+  hidden: { opacity: 0, y: 8 },
   visible: (i: number) => ({
-    opacity: 1, y: 0,
+    opacity: 1,
+    y: 0,
     transition: { duration: 0.25, delay: i * 0.04, ease: 'easeOut' },
   }),
   exit: { opacity: 0, y: -4, transition: { duration: 0.15 } },
 };
 
 const AdminDataTable = memo(() => {
-  const navigate   = useNavigate();
+  const navigate = useNavigate();
   const { module: moduleId = 'hero' } = useParams();
 
   const mod = MODULES.find((m) => m.id === moduleId);
 
-  const [rows,       setRows]       = useState<Record<string, unknown>[]>([]);
-  const [loading,    setLoading]    = useState(true);
-  const [search,     setSearch]     = useState('');
-  const [sort,       setSort]       = useState<SortKey>('id-asc');
-  const [colConfig,  setColConfig]  = useState<TableColumnConfig[] | null>(null);
+  const [rows, setRows] = useState<Record<string, unknown>[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState('');
+  const [sort, setSort] = useState<SortKey>('id-asc');
+  const [colConfig, setColConfig] = useState<TableColumnConfig[] | null>(null);
 
   /* ── fetch rows ── */
   useEffect(() => {
@@ -74,7 +75,7 @@ const AdminDataTable = memo(() => {
       const q = search.toLowerCase();
       result = result.filter((row) => {
         const title = String(row[mod.titleField] ?? '').toLowerCase();
-        const desc  = mod.descriptionField
+        const desc = mod.descriptionField
           ? String(row[mod.descriptionField] ?? '').toLowerCase()
           : '';
         return title.includes(q) || desc.includes(q);
@@ -82,8 +83,8 @@ const AdminDataTable = memo(() => {
     }
 
     result.sort((a, b) => {
-      if (sort === 'id-asc')    return Number(a.id) - Number(b.id);
-      if (sort === 'id-desc')   return Number(b.id) - Number(a.id);
+      if (sort === 'id-asc') return Number(a.id) - Number(b.id);
+      if (sort === 'id-desc') return Number(b.id) - Number(a.id);
       const ta = String(a[mod.titleField] ?? '');
       const tb = String(b[mod.titleField] ?? '');
       return sort === 'title-asc' ? ta.localeCompare(tb) : tb.localeCompare(ta);
@@ -92,11 +93,12 @@ const AdminDataTable = memo(() => {
     return result;
   }, [rows, search, sort, mod]);
 
-  if (!mod) return (
-    <div className="flex items-center justify-center h-64">
-      <p style={{ color: 'var(--text-muted)' }}>Module not found.</p>
-    </div>
-  );
+  if (!mod)
+    return (
+      <div className="flex items-center justify-center h-64">
+        <p style={{ color: 'var(--text-muted)' }}>Module not found.</p>
+      </div>
+    );
 
   const countLabel = loading
     ? 'Loading…'
@@ -106,17 +108,22 @@ const AdminDataTable = memo(() => {
 
   return (
     <div className="p-4 sm:p-6 max-w-5xl mx-auto">
-
       {/* ── Header ── */}
       <div className="flex items-center justify-between mb-5">
         <div>
           <h2
             className="text-xl sm:text-2xl font-bold"
-            style={{ color: 'var(--text-primary)', fontFamily: '"Syne", sans-serif' }}
+            style={{
+              color: 'var(--text-primary)',
+              fontFamily: '"Syne", sans-serif',
+            }}
           >
             {mod.label}
           </h2>
-          <p className="text-xs sm:text-sm mt-0.5" style={{ color: 'var(--text-muted)' }}>
+          <p
+            className="text-xs sm:text-sm mt-0.5"
+            style={{ color: 'var(--text-muted)' }}
+          >
             {countLabel}
           </p>
         </div>
@@ -134,7 +141,6 @@ const AdminDataTable = memo(() => {
 
       {/* ── Toolbar: search + sort ── */}
       <div className="flex flex-col sm:flex-row gap-2 mb-4">
-
         {/* Search */}
         <div className="relative flex-1">
           <FiSearch
@@ -167,7 +173,11 @@ const AdminDataTable = memo(() => {
 
         {/* Sort */}
         <div className="relative flex items-center gap-2 shrink-0">
-          <HiArrowsUpDown size={14} style={{ color: 'var(--text-muted)' }} className="shrink-0" />
+          <HiArrowsUpDown
+            size={14}
+            style={{ color: 'var(--text-muted)' }}
+            className="shrink-0"
+          />
           <select
             value={sort}
             onChange={(e) => setSort(e.target.value as SortKey)}
@@ -182,7 +192,9 @@ const AdminDataTable = memo(() => {
             }}
           >
             {(Object.keys(SORT_LABELS) as SortKey[]).map((k) => (
-              <option key={k} value={k}>{SORT_LABELS[k]}</option>
+              <option key={k} value={k}>
+                {SORT_LABELS[k]}
+              </option>
             ))}
           </select>
         </div>
@@ -191,18 +203,39 @@ const AdminDataTable = memo(() => {
       {/* ── Table card ── */}
       <div
         className="rounded-2xl overflow-hidden"
-        style={{ backgroundColor: 'var(--glass-bg)', border: '1px solid var(--glass-border)' }}
+        style={{
+          backgroundColor: 'var(--glass-bg)',
+          border: '1px solid var(--glass-border)',
+        }}
       >
         {/* Column headers */}
         {(() => {
-          const imgLabel   = colConfig?.find((c) => c.key === mod.imageField)?.label       ?? 'Image';
-          const titleLabel = colConfig?.find((c) => c.key === mod.titleField)?.label       ?? (mod.titleField === 'social_media' ? 'Platform' : 'Title');
-          const descLabel  = colConfig?.find((c) => c.key === mod.descriptionField)?.label ?? 'Description';
-          const imgVisible  = mod.imageField       ? (colConfig?.find((c) => c.key === mod.imageField)?.visible       ?? true) : false;
-          const descVisible = mod.descriptionField ? (colConfig?.find((c) => c.key === mod.descriptionField)?.visible ?? true) : false;
-          const titleAlign  = colConfig?.find((c) => c.key === mod.titleField)?.align       ?? 'left';
-          const descAlign   = colConfig?.find((c) => c.key === mod.descriptionField)?.align ?? 'left';
-          const alignClass  = { left: 'text-left', center: 'text-center', right: 'text-right' };
+          const imgLabel =
+            colConfig?.find((c) => c.key === mod.imageField)?.label ?? 'Image';
+          const titleLabel =
+            colConfig?.find((c) => c.key === mod.titleField)?.label ??
+            (mod.titleField === 'social_media' ? 'Platform' : 'Title');
+          const descLabel =
+            colConfig?.find((c) => c.key === mod.descriptionField)?.label ??
+            'Description';
+          const imgVisible = mod.imageField
+            ? (colConfig?.find((c) => c.key === mod.imageField)?.visible ??
+              true)
+            : false;
+          const descVisible = mod.descriptionField
+            ? (colConfig?.find((c) => c.key === mod.descriptionField)
+                ?.visible ?? true)
+            : false;
+          const titleAlign =
+            colConfig?.find((c) => c.key === mod.titleField)?.align ?? 'left';
+          const descAlign =
+            colConfig?.find((c) => c.key === mod.descriptionField)?.align ??
+            'left';
+          const alignClass = {
+            left: 'text-left',
+            center: 'text-center',
+            right: 'text-right',
+          };
 
           return (
             <div
@@ -215,10 +248,14 @@ const AdminDataTable = memo(() => {
               }}
             >
               {imgVisible && <span>{imgLabel}</span>}
-              <div className={`grid gap-3 ${descVisible ? 'grid-cols-[1fr_1fr]' : ''}`}>
+              <div
+                className={`grid gap-3 ${descVisible ? 'grid-cols-[1fr_1fr]' : ''}`}
+              >
                 <span className={alignClass[titleAlign]}>{titleLabel}</span>
                 {descVisible && (
-                  <span className={`hidden sm:block ${alignClass[descAlign]}`}>{descLabel}</span>
+                  <span className={`hidden sm:block ${alignClass[descAlign]}`}>
+                    {descLabel}
+                  </span>
                 )}
               </div>
             </div>
@@ -228,17 +265,27 @@ const AdminDataTable = memo(() => {
         {/* Body */}
         {loading ? (
           <div className="flex items-center justify-center py-16 gap-3">
-            <div className="w-4 h-4 rounded-full border-2 border-t-transparent animate-spin"
-              style={{ borderColor: 'var(--accent)', borderTopColor: 'transparent' }} />
-            <p className="text-sm" style={{ color: 'var(--text-muted)' }}>Loading…</p>
+            <div
+              className="w-4 h-4 rounded-full border-2 border-t-transparent animate-spin"
+              style={{
+                borderColor: 'var(--accent)',
+                borderTopColor: 'transparent',
+              }}
+            />
+            <p className="text-sm" style={{ color: 'var(--text-muted)' }}>
+              Loading…
+            </p>
           </div>
         ) : filtered.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-16 gap-3">
             {search.trim() ? (
               <>
-                <FiSearch size={28} style={{ color: 'var(--text-muted)', opacity: 0.3 }} />
+                <FiSearch
+                  size={28}
+                  style={{ color: 'var(--text-muted)', opacity: 0.3 }}
+                />
                 <p className="text-sm" style={{ color: 'var(--text-muted)' }}>
-                  No results for <strong>"{search}"</strong>
+                  No results for <strong>&quot;{search}&quot;</strong>
                 </p>
                 <button
                   className="text-xs underline"
@@ -250,7 +297,10 @@ const AdminDataTable = memo(() => {
               </>
             ) : (
               <>
-                <FaImage size={28} style={{ color: 'var(--text-muted)', opacity: 0.3 }} />
+                <FaImage
+                  size={28}
+                  style={{ color: 'var(--text-muted)', opacity: 0.3 }}
+                />
                 <p className="text-sm" style={{ color: 'var(--text-muted)' }}>
                   No records yet.{' '}
                   <button
@@ -267,16 +317,34 @@ const AdminDataTable = memo(() => {
         ) : (
           <AnimatePresence initial={false}>
             {filtered.map((row, i) => {
-              const imgSrc = mod.imageField ? String(row[mod.imageField] ?? '') : '';
-              const title  = String(row[mod.titleField] ?? '—');
-              const desc   = mod.descriptionField ? String(row[mod.descriptionField] ?? '') : '';
-              const id     = String(row.id ?? i);
+              const imgSrc = mod.imageField
+                ? String(row[mod.imageField] ?? '')
+                : '';
+              const title = String(row[mod.titleField] ?? '—');
+              const desc = mod.descriptionField
+                ? String(row[mod.descriptionField] ?? '')
+                : '';
+              const id = String(row.id ?? i);
 
-              const imgVisible  = mod.imageField       ? (colConfig?.find((c) => c.key === mod.imageField)?.visible       ?? true) : false;
-              const descVisible = mod.descriptionField ? (colConfig?.find((c) => c.key === mod.descriptionField)?.visible ?? true) : false;
-              const titleAlign  = colConfig?.find((c) => c.key === mod.titleField)?.align       ?? 'left';
-              const descAlign   = colConfig?.find((c) => c.key === mod.descriptionField)?.align ?? 'left';
-              const alignClass  = { left: 'text-left', center: 'text-center', right: 'text-right' };
+              const imgVisible = mod.imageField
+                ? (colConfig?.find((c) => c.key === mod.imageField)?.visible ??
+                  true)
+                : false;
+              const descVisible = mod.descriptionField
+                ? (colConfig?.find((c) => c.key === mod.descriptionField)
+                    ?.visible ?? true)
+                : false;
+              const titleAlign =
+                colConfig?.find((c) => c.key === mod.titleField)?.align ??
+                'left';
+              const descAlign =
+                colConfig?.find((c) => c.key === mod.descriptionField)?.align ??
+                'left';
+              const alignClass = {
+                left: 'text-left',
+                center: 'text-center',
+                right: 'text-right',
+              };
 
               return (
                 <motion.div
@@ -289,9 +357,10 @@ const AdminDataTable = memo(() => {
                   className="grid gap-3 px-4 sm:px-5 py-3 sm:py-4 items-center cursor-pointer group"
                   style={{
                     gridTemplateColumns: imgVisible ? '48px 1fr' : '1fr',
-                    borderBottom: i < filtered.length - 1
-                      ? '1px solid var(--glass-border-subtle)'
-                      : 'none',
+                    borderBottom:
+                      i < filtered.length - 1
+                        ? '1px solid var(--glass-border-subtle)'
+                        : 'none',
                   }}
                   onClick={() => navigate(`/admin/${moduleId}/${id}`)}
                   whileHover={{ backgroundColor: 'var(--glass-bg-hover)' }}
@@ -308,17 +377,24 @@ const AdminDataTable = memo(() => {
                           alt={title}
                           className="w-full h-full object-cover"
                           onError={(e) => {
-                            (e.currentTarget as HTMLImageElement).style.display = 'none';
+                            (
+                              e.currentTarget as HTMLImageElement
+                            ).style.display = 'none';
                           }}
                         />
                       ) : (
-                        <FaImage size={15} style={{ color: 'var(--text-muted)', opacity: 0.4 }} />
+                        <FaImage
+                          size={15}
+                          style={{ color: 'var(--text-muted)', opacity: 0.4 }}
+                        />
                       )}
                     </div>
                   )}
 
                   {/* Title + description */}
-                  <div className={`min-w-0 grid gap-3 ${descVisible ? 'grid-cols-1 sm:grid-cols-[1fr_1fr]' : ''}`}>
+                  <div
+                    className={`min-w-0 grid gap-3 ${descVisible ? 'grid-cols-1 sm:grid-cols-[1fr_1fr]' : ''}`}
+                  >
                     <div className="min-w-0">
                       <p
                         className={`font-semibold text-sm truncate group-hover:underline ${alignClass[titleAlign]}`}
@@ -328,14 +404,20 @@ const AdminDataTable = memo(() => {
                       </p>
                       {/* Mobile: show desc below title */}
                       {desc && descVisible && (
-                        <p className={`text-xs truncate mt-0.5 sm:hidden ${alignClass[descAlign]}`} style={{ color: 'var(--text-muted)' }}>
+                        <p
+                          className={`text-xs truncate mt-0.5 sm:hidden ${alignClass[descAlign]}`}
+                          style={{ color: 'var(--text-muted)' }}
+                        >
                           {desc}
                         </p>
                       )}
                     </div>
                     {descVisible && (
                       <div className="min-w-0 hidden sm:block">
-                        <p className={`text-sm truncate ${alignClass[descAlign]}`} style={{ color: 'var(--text-muted)' }}>
+                        <p
+                          className={`text-sm truncate ${alignClass[descAlign]}`}
+                          style={{ color: 'var(--text-muted)' }}
+                        >
                           {desc || '—'}
                         </p>
                       </div>

@@ -6,34 +6,34 @@ The **Forms** section in Admin Settings lets you fully customise each module's c
 
 ## What you can configure per field
 
-| Setting | Description |
-|---|---|
-| Key | The database column name (must match the Supabase table column) |
-| Label | Display name shown above the input |
-| Type | Input type — see all types below |
-| Span | `half` (two-column) or `full` (full width) |
-| Required | Marks field with `*` — enforced by form |
-| Placeholder | Helper text inside the input |
-| Options | Newline-separated choices (for `radio` and `select` types only) |
+| Setting     | Description                                                     |
+| ----------- | --------------------------------------------------------------- |
+| Key         | The database column name (must match the Supabase table column) |
+| Label       | Display name shown above the input                              |
+| Type        | Input type — see all types below                                |
+| Span        | `half` (two-column) or `full` (full width)                      |
+| Required    | Marks field with `*` — enforced by form                         |
+| Placeholder | Helper text inside the input                                    |
+| Options     | Newline-separated choices (for `radio` and `select` types only) |
 
 ---
 
 ## Field types
 
-| Type | Input rendered |
-|---|---|
-| `text` | Single-line text input |
-| `textarea` | Multi-line textarea |
-| `url` | URL input |
-| `image` | Image uploader (drag & drop + URL tab, S3 via Lambda) |
-| `images` | Multi-image gallery (add/remove, S3 + URL) |
-| `toggle` | Animated on/off switch (boolean) |
-| `checkbox` | HTML checkbox (boolean) |
-| `tags` | Comma-separated tag string |
-| `multiinput` | Array of text inputs (add/remove rows) |
-| `richtext` | React Quill WYSIWYG editor (HTML output) |
-| `radio` | Radio button group — requires **Options** |
-| `select` | Dropdown `<select>` — requires **Options** |
+| Type         | Input rendered                                        |
+| ------------ | ----------------------------------------------------- |
+| `text`       | Single-line text input                                |
+| `textarea`   | Multi-line textarea                                   |
+| `url`        | URL input                                             |
+| `image`      | Image uploader (drag & drop + URL tab, S3 via Lambda) |
+| `images`     | Multi-image gallery (add/remove, S3 + URL)            |
+| `toggle`     | Animated on/off switch (boolean)                      |
+| `checkbox`   | HTML checkbox (boolean)                               |
+| `tags`       | Comma-separated tag string                            |
+| `multiinput` | Array of text inputs (add/remove rows)                |
+| `richtext`   | React Quill WYSIWYG editor (HTML output)              |
+| `radio`      | Radio button group — requires **Options**             |
+| `select`     | Dropdown `<select>` — requires **Options**            |
 
 ---
 
@@ -73,10 +73,10 @@ The **Forms** section in Admin Settings lets you fully customise each module's c
 Now every project form will show a Status dropdown with those three options.
 
 !!! tip "Database column"
-    You must also add a `status` column to the `projects` table in Supabase for the value to be saved:
-    ```sql
+You must also add a `status` column to the `projects` table in Supabase for the value to be saved:
+`sql
     alter table projects add column status text default 'Draft';
-    ```
+    `
 
 ---
 
@@ -86,14 +86,57 @@ Now every project form will show a Status dropdown with those three options.
 {
   "module_id": "projects",
   "fields": [
-    { "key": "imageurl",    "label": "Cover Image",     "type": "image",    "span": "full",  "required": false },
-    { "key": "title",       "label": "Title",            "type": "text",     "span": "half",  "required": true  },
-    { "key": "slug",        "label": "Slug",             "type": "text",     "span": "half",  "required": true,  "placeholder": "my-project" },
-    { "key": "status",      "label": "Status",           "type": "select",   "span": "half",  "required": false,
-      "options": ["Draft", "Published", "Archived"] },
-    { "key": "is_top",      "label": "Featured Project", "type": "toggle",   "span": "half",  "required": false },
-    { "key": "description", "label": "Short Description","type": "textarea", "span": "full",  "required": false },
-    { "key": "content",     "label": "Full Content",     "type": "richtext", "span": "full",  "required": false }
+    {
+      "key": "imageurl",
+      "label": "Cover Image",
+      "type": "image",
+      "span": "full",
+      "required": false
+    },
+    {
+      "key": "title",
+      "label": "Title",
+      "type": "text",
+      "span": "half",
+      "required": true
+    },
+    {
+      "key": "slug",
+      "label": "Slug",
+      "type": "text",
+      "span": "half",
+      "required": true,
+      "placeholder": "my-project"
+    },
+    {
+      "key": "status",
+      "label": "Status",
+      "type": "select",
+      "span": "half",
+      "required": false,
+      "options": ["Draft", "Published", "Archived"]
+    },
+    {
+      "key": "is_top",
+      "label": "Featured Project",
+      "type": "toggle",
+      "span": "half",
+      "required": false
+    },
+    {
+      "key": "description",
+      "label": "Short Description",
+      "type": "textarea",
+      "span": "full",
+      "required": false
+    },
+    {
+      "key": "content",
+      "label": "Full Content",
+      "type": "richtext",
+      "span": "full",
+      "required": false
+    }
   ]
 }
 ```
@@ -132,11 +175,19 @@ sequenceDiagram
 
 ```typescript
 // Step 1: load form fields from Supabase (fallback to static MODULES.fields)
-supabase.from('form_config').select('fields').eq('module_id', moduleId).maybeSingle()
+supabase
+  .from('form_config')
+  .select('fields')
+  .eq('module_id', moduleId)
+  .maybeSingle()
   .then(({ data }) => setFormFields(data?.fields ?? mod?.fields ?? []));
 
 // Step 2: load existing record (edit mode)
-supabase.from(moduleId).select('*').eq('id', id).single()
+supabase
+  .from(moduleId)
+  .select('*')
+  .eq('id', id)
+  .single()
   .then(({ data }) => setRecordData(data));
 
 // Step 3: init form values once both are ready

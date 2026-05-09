@@ -25,10 +25,17 @@ const initialState: AuthState = {
 export const signIn = createAsyncThunk(
   'auth/signIn',
   async ({ email, password }: { email: string; password: string }) => {
-    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
     if (error) throw new Error(error.message);
     const { id, email: userEmail, user_metadata } = data.user;
-    return { uid: id, email: userEmail ?? null, displayName: (user_metadata?.full_name as string) ?? null };
+    return {
+      uid: id,
+      email: userEmail ?? null,
+      displayName: (user_metadata?.full_name as string) ?? null,
+    };
   }
 );
 
@@ -77,5 +84,7 @@ export default authSlice.reducer;
 export const selectAuthUser = (state: RootState) => state.auth.user;
 export const selectAuthStatus = (state: RootState) => state.auth.status;
 export const selectAuthError = (state: RootState) => state.auth.error;
-export const selectAuthInitialized = (state: RootState) => state.auth.initialized;
-export const selectIsAuthenticated = (state: RootState) => state.auth.user !== null;
+export const selectAuthInitialized = (state: RootState) =>
+  state.auth.initialized;
+export const selectIsAuthenticated = (state: RootState) =>
+  state.auth.user !== null;

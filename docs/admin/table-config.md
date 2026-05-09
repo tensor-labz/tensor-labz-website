@@ -6,11 +6,11 @@ The **Tables** section in Admin Settings lets you customise each module's list t
 
 ## What you can configure per column
 
-| Setting | Options | Description |
-|---|---|---|
-| Label | free text | Column header shown in the table |
-| Visible | on / off | Hide a column without deleting it |
-| Align | Left / Centre / Right | Text alignment for header and cells |
+| Setting | Options               | Description                         |
+| ------- | --------------------- | ----------------------------------- |
+| Label   | free text             | Column header shown in the table    |
+| Visible | on / off              | Hide a column without deleting it   |
+| Align   | Left / Centre / Right | Text alignment for header and cells |
 
 ---
 
@@ -38,9 +38,19 @@ select * from table_config where module_id = 'projects';
 {
   "module_id": "projects",
   "columns": [
-    { "key": "imageurl",     "label": "Cover",       "visible": true,  "align": "left"  },
-    { "key": "title",        "label": "Project Name", "visible": true,  "align": "left"  },
-    { "key": "description",  "label": "Summary",      "visible": false, "align": "left"  }
+    { "key": "imageurl", "label": "Cover", "visible": true, "align": "left" },
+    {
+      "key": "title",
+      "label": "Project Name",
+      "visible": true,
+      "align": "left"
+    },
+    {
+      "key": "description",
+      "label": "Summary",
+      "visible": false,
+      "align": "left"
+    }
   ]
 }
 ```
@@ -79,9 +89,12 @@ supabase
 Then for each column it derives:
 
 ```typescript
-const imgVisible  = colConfig?.find(c => c.key === mod.imageField)?.visible ?? true;
-const titleLabel  = colConfig?.find(c => c.key === mod.titleField)?.label   ?? 'Title';
-const titleAlign  = colConfig?.find(c => c.key === mod.titleField)?.align   ?? 'left';
+const imgVisible =
+  colConfig?.find((c) => c.key === mod.imageField)?.visible ?? true;
+const titleLabel =
+  colConfig?.find((c) => c.key === mod.titleField)?.label ?? 'Title';
+const titleAlign =
+  colConfig?.find((c) => c.key === mod.titleField)?.align ?? 'left';
 ```
 
 If no config exists for the module, all defaults apply (visible, "Title" / "Description" labels, left-aligned).

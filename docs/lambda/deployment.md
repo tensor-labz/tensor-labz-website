@@ -51,10 +51,10 @@ The repo has a CI/CD workflow at `.github/workflows/deploy.yml`. It triggers on 
 
 Secrets required in the GitHub repo settings:
 
-| Secret | Value |
-|---|---|
-| `AWS_ACCESS_KEY_ID` | IAM user access key |
-| `AWS_SECRET_ACCESS_KEY` | IAM user secret |
+| Secret                  | Value               |
+| ----------------------- | ------------------- |
+| `AWS_ACCESS_KEY_ID`     | IAM user access key |
+| `AWS_SECRET_ACCESS_KEY` | IAM user secret     |
 
 The IAM user needs `lambda:UpdateFunctionCode` permission on the `tensor-labz-image-handler` ARN.
 
@@ -76,7 +76,7 @@ aws --profile tensor lambda update-function-configuration \
 ```
 
 !!! warning "Updating env vars restarts the Lambda"
-    There is a brief cold-start delay after updating environment variables.
+There is a brief cold-start delay after updating environment variables.
 
 ---
 

@@ -109,7 +109,7 @@ flowchart LR
 4. That email + password is used on the `/login` page
 
 !!! warning "No self-registration"
-    There is no signup page. Admin users can only be created from the Supabase dashboard.
+There is no signup page. Admin users can only be created from the Supabase dashboard.
 
 ---
 

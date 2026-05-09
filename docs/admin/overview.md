@@ -26,7 +26,7 @@ flowchart LR
 ```
 
 !!! important "Route ordering"
-    `users`, `billing`, and `settings` must be declared **before** the `:module` catch-all in `AdminDashboard.tsx`. Without this, React Router matches them as module names.
+`users`, `billing`, and `settings` must be declared **before** the `:module` catch-all in `AdminDashboard.tsx`. Without this, React Router matches them as module names.
 
 ---
 

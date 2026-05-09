@@ -7,7 +7,9 @@ export interface ContactItem {
   value: string;
 }
 
-export const fetchContactData = async (signal?: AbortSignal): Promise<ContactItem[]> => {
+export const fetchContactData = async (
+  signal?: AbortSignal
+): Promise<ContactItem[]> => {
   const { data, error } = await supabase
     .from('contact')
     .select('*')

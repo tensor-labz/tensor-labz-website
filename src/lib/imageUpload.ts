@@ -1,9 +1,9 @@
 import { supabase } from './supabase';
 
 const LAMBDA_URL = import.meta.env.VITE_IMAGE_LAMBDA_URL as string;
-const CDN_URL    = (import.meta.env.VITE_CDN_URL ?? '') as string;
-const S3_BUCKET  = (import.meta.env.VITE_S3_BUCKET ?? '') as string;
-const S3_REGION  = (import.meta.env.VITE_S3_REGION ?? '') as string;
+const CDN_URL = (import.meta.env.VITE_CDN_URL ?? '') as string;
+const S3_BUCKET = (import.meta.env.VITE_S3_BUCKET ?? '') as string;
+const S3_REGION = (import.meta.env.VITE_S3_REGION ?? '') as string;
 
 /** Derives S3 key from a stored CDN or S3 URL, returns null for external URLs. */
 export function keyFromUrl(url: string): string | null {
@@ -16,7 +16,9 @@ export function keyFromUrl(url: string): string | null {
 }
 
 async function getToken(): Promise<string> {
-  const { data: { session } } = await supabase.auth.getSession();
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
   if (!session) throw new Error('Not authenticated');
   return session.access_token;
 }
@@ -29,19 +31,27 @@ async function getToken(): Promise<string> {
 export async function uploadImage(
   file: File,
   folder: string,
-  existingUrl?: string,
+  existingUrl?: string
 ): Promise<{ publicUrl: string; key: string }> {
   const token = await getToken();
   const existingKey = existingUrl ? keyFromUrl(existingUrl) : null;
 
   const endpoint = existingKey ? '/image/replace' : '/image/upload-url';
   const payload = existingKey
-    ? { oldKey: existingKey, filename: file.name, contentType: file.type, folder }
+    ? {
+        oldKey: existingKey,
+        filename: file.name,
+        contentType: file.type,
+        folder,
+      }
     : { filename: file.name, contentType: file.type, folder };
 
   const res = await fetch(`${LAMBDA_URL}${endpoint}`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
     body: JSON.stringify(payload),
   });
 
@@ -71,7 +81,10 @@ export async function deleteImages(keysOrUrls: string[]): Promise<void> {
   const token = await getToken();
   await fetch(`${LAMBDA_URL}/image`, {
     method: 'DELETE',
-    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
     body: JSON.stringify({ keys: keysOrUrls }),
   });
 }

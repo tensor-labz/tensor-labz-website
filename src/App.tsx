@@ -11,7 +11,10 @@ const App: React.FC = memo(() => {
       <AppProviders>
         <div
           className="min-h-screen flex flex-col relative"
-          style={{ backgroundColor: 'var(--bg-base)', color: 'var(--text-primary)' }}
+          style={{
+            backgroundColor: 'var(--bg-base)',
+            color: 'var(--text-primary)',
+          }}
         >
           {/* Three.js background — fixed, always behind everything */}
           <Suspense fallback={null}>

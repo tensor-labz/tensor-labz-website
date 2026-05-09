@@ -2,11 +2,11 @@
 
 Staging is deployed to Firebase Hosting on every merge to the `staging` branch.
 
-| Item | Value |
-|---|---|
-| URL | [https://tensor-labz-website.web.app](https://tensor-labz-website.web.app) |
-| Firebase project | `tensor-labz-website` |
-| Trigger branch | `staging` |
+| Item             | Value                                                                      |
+| ---------------- | -------------------------------------------------------------------------- |
+| URL              | [https://tensor-labz-website.web.app](https://tensor-labz-website.web.app) |
+| Firebase project | `tensor-labz-website`                                                      |
+| Trigger branch   | `staging`                                                                  |
 
 ---
 
