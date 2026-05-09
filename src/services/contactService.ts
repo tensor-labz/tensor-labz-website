@@ -14,7 +14,7 @@ export const fetchContactData = async (
     .from('contact')
     .select('*')
     .order('id')
-    .abortSignal(signal);
+    .abortSignal(signal!);
   if (error) throw new Error(error.message);
   return (data ?? []) as ContactItem[];
 };

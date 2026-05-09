@@ -14,7 +14,7 @@ export const fetchHeroSlides = async (
     .from('hero')
     .select('*')
     .order('id')
-    .abortSignal(signal);
+    .abortSignal(signal!);
   if (error) throw new Error(error.message);
   return (data ?? []) as HeroSlide[];
 };

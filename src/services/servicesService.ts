@@ -8,7 +8,7 @@ export const fetchServices = async (
     .from('services')
     .select('*')
     .order('id')
-    .abortSignal(signal);
+    .abortSignal(signal!);
   if (error) throw new Error(error.message);
   return (data ?? []).map((row) => ({
     id: row.id,
