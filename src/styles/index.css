@@ -102,6 +102,13 @@ body {
   font-weight: 500;
   margin-bottom: 0.6rem;
 }
+/* ─── Admin table: sticky column header inside overflow card ── */
+.rdt_TableHead {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
 /* ─── Hide scrollbars while keeping scroll functional ───── */
 .no-scrollbar {
   scrollbar-width: none;
