@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useState, useMemo } from 'react';
+import React, { memo, useEffect, useRef, useState, useMemo } from 'react';
 import { StyleSheetManager } from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import DataTable, {
@@ -255,6 +255,20 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
   const [search, setSearch] = useState('');
   const [colConfig, setColConfig] = useState<TableColumnConfig[] | null>(null);
   const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
+
+  /* Measure the table card's height so DataTable rows fill the exact
+   * remaining space (col-header ≈44px + pagination ≈56px = 100px overhead) */
+  const tableWrapRef = useRef<HTMLDivElement>(null);
+  const [dtScrollHeight, setDtScrollHeight] = useState('400px');
+  useEffect(() => {
+    const el = tableWrapRef.current;
+    if (!el) return;
+    const update = () => setDtScrollHeight(`${Math.max(120, el.clientHeight - 100)}px`);
+    update();
+    const obs = new ResizeObserver(update);
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
   // Maps fieldKey → { idString → displayLabel } for select+relation fields
   const [relationMaps, setRelationMaps] = useState<Record<string, Record<string, string>>>({});
 
@@ -568,16 +582,22 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
       </p>
       </div>
 
-      {/* Table / Card view — flex-1 so it fills remaining height, scrolls internally */}
+      {/* Table / Card view — flex-1 fills remaining height.
+          Desktop: overflow-x for narrow-tablet scroll; overflow-y hidden because
+          DataTable owns its own vertical scroll via fixedHeader.
+          Mobile: overflow-y auto so the card list scrolls. */}
       <div
-        className="rounded-2xl flex-1 min-h-0 overflow-auto"
+        ref={tableWrapRef}
+        className="rounded-2xl flex-1 min-h-0"
         style={{
           border: '1px solid var(--glass-border)',
           backgroundColor: 'var(--glass-bg)',
+          overflowX: isMobile ? 'hidden' : 'auto',
+          overflowY: isMobile ? 'auto' : 'hidden',
         }}
       >
         {isMobile ? (
-          /* ── Mobile: card list ── */
+          /* ── Mobile: card list scrolls inside this container ── */
           <MobileCardList
             rows={filtered}
             moduleId={moduleId}
@@ -585,8 +605,8 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
             search={search}
           />
         ) : (
-          /* ── Desktop/tablet: DataTable with fixed column header ── */
-          <div style={{ minWidth: '580px' }}>
+          /* ── Desktop/tablet: DataTable manages its own vertical scroll ── */
+          <div style={{ minWidth: '580px', height: '100%' }}>
             {loading ? (
               <TableSkeleton />
             ) : (
@@ -597,6 +617,7 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
                   theme="adminTheme"
                   customStyles={customStyles}
                   fixedHeader
+                  fixedHeaderScrollHeight={dtScrollHeight}
                   pagination
                   paginationPerPage={pageSize}
                   paginationRowsPerPageOptions={[10, 20, 50, 100]}
