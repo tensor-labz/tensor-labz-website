@@ -175,12 +175,32 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
   const [search, setSearch] = useState('');
   const [colConfig, setColConfig] = useState<TableColumnConfig[] | null>(null);
   const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
+  // Maps fieldKey → { idString → displayLabel } for select+relation fields
+  const [relationMaps, setRelationMaps] = useState<Record<string, Record<string, string>>>({});
 
   /* Fetch rows via Redux */
   useEffect(() => {
     setSearch('');
     if (status === 'idle') dispatch(fetchRecords(moduleId));
   }, [moduleId, status, dispatch]);
+
+  /* Fetch relation option maps for any select+relation fields */
+  useEffect(() => {
+    if (!mod) return;
+    setRelationMaps({});
+    const relFields = mod.fields.filter((f) => f.type === 'select' && f.relation);
+    relFields.forEach(async (f) => {
+      const rel = f.relation!;
+      const vf = rel.valueField ?? 'id';
+      const { data } = await supabase.from(rel.table).select('*');
+      if (!data) return;
+      const map: Record<string, string> = {};
+      data.forEach((row) => {
+        map[String(row[vf] ?? '')] = String(row[rel.labelField] ?? row[vf] ?? '');
+      });
+      setRelationMaps((prev) => ({ ...prev, [f.key]: map }));
+    });
+  }, [moduleId]); // eslint-disable-line react-hooks/exhaustive-deps
 
   /* Fetch column + pagination config from Supabase */
   useEffect(() => {
@@ -206,6 +226,12 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
         .map((f) => f.key.toLowerCase())
     );
   }, [mod]);
+
+  /* Resolve a stored value via a relation map (if available) */
+  const resolveRelation = (relMap: Record<string, string> | undefined, val: unknown): string => {
+    const raw = String(val ?? '');
+    return relMap ? (relMap[raw] ?? raw) : raw;
+  };
 
   /* Build DataTable column definitions */
   const columns = useMemo<TableColumn<AdminRecord>[]>(() => {
@@ -237,6 +263,7 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
         .forEach((c) => {
           const isImg = imageTypeKeys.has(c.field.toLowerCase());
           const isDesc = c.field.toLowerCase() === mod.descriptionField?.toLowerCase();
+          const relMap = relationMaps[c.field];
 
           if (isImg) {
             /* Extra image field — render thumbnail */
@@ -253,7 +280,7 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
             cols.push({
               id: c.field,
               name: c.title,
-              selector: (row) => String(rowVal(row, c.field) ?? ''),
+              selector: (row) => resolveRelation(relMap, rowVal(row, c.field)),
               sortable: c.sortable ?? true,
               wrap: true,
               ...(c.width ? { width: c.width } : { grow: isDesc ? 2 : 1 }),
@@ -261,7 +288,7 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
               ...(c.align === 'right' && { right: true }),
               ...(isDesc && {
                 cell: (row) => (
-                  <TextCell value={String(rowVal(row, c.field) ?? '')} />
+                  <TextCell value={resolveRelation(relMap, rowVal(row, c.field))} />
                 ),
               }),
             });
@@ -281,10 +308,11 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
       /* Extra columns declared in ModuleConfig.tableColumns */
       (mod.tableColumns ?? []).forEach((key) => {
         const fieldDef = mod.fields.find((f) => f.key === key);
+        const relMap = relationMaps[key];
         cols.push({
           id: key,
           name: fieldDef?.label ?? key,
-          selector: (row) => String(rowVal(row, key) ?? ''),
+          selector: (row) => resolveRelation(relMap, rowVal(row, key)),
           sortable: true,
           wrap: true,
           grow: 1,
@@ -306,7 +334,7 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
     }
 
     return cols;
-  }, [mod, colConfig, moduleId, imageTypeKeys]);
+  }, [mod, colConfig, moduleId, imageTypeKeys, relationMaps]);
 
   /* Default sort: first sortable non-image column */
   const defaultSortField = useMemo(() => {
