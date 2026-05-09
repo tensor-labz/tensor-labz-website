@@ -273,7 +273,7 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
             cols.push({
               id: c.field,
               name: c.title,
-              width: c.width ?? '48px',
+              width: c.width ?? '56px',
               sortable: false,
               center: true,
               cell: (row) => {
@@ -285,9 +285,15 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={(e) => e.stopPropagation()}
-                    style={{ color: 'var(--text-muted)', display: 'flex', alignItems: 'center' }}
+                    className="flex items-center justify-center w-8 h-8 rounded-lg transition-colors"
+                    style={{
+                      color: 'var(--text-primary)',
+                      backgroundColor: 'var(--glass-bg-raised)',
+                      border: '1px solid var(--glass-border)',
+                      flexShrink: 0,
+                    }}
                   >
-                    <FiExternalLink size={15} />
+                    <FiExternalLink size={14} />
                   </a>
                 );
               },
@@ -414,9 +420,9 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
   }, [rows, search]);
 
   return (
-    <div className="p-6">
+    <div className="p-4 sm:p-6">
       {/* Header */}
-      <div className="flex items-center justify-between mb-5">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5">
         <div>
           <h2
             className="text-xl font-bold"
@@ -433,7 +439,7 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
         </div>
         <button
           onClick={() => navigate(`/admin/${moduleId}/new`)}
-          className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold"
+          className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold self-start sm:self-auto"
           style={{ backgroundColor: 'var(--accent)', color: '#fff' }}
         >
           <FaPlus size={11} /> Add New
@@ -442,11 +448,10 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
 
       {/* Search bar */}
       <div
-        className="flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl mb-4"
+        className="flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl mb-4 w-full sm:max-w-[380px]"
         style={{
           backgroundColor: 'var(--glass-bg)',
           border: '1px solid var(--glass-border)',
-          maxWidth: 380,
         }}
       >
         <FiSearch
@@ -468,14 +473,16 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
         )}
       </div>
 
-      {/* Table */}
+      {/* Table — outer div clips border-radius, inner allows horizontal scroll on mobile */}
       <div
-        className="rounded-2xl overflow-hidden"
+        className="rounded-2xl"
         style={{
           border: '1px solid var(--glass-border)',
           backgroundColor: 'var(--glass-bg)',
+          overflow: 'hidden',
         }}
       >
+      <div style={{ overflowX: 'auto' }}>
         {loading ? (
           <TableSkeleton />
         ) : (
@@ -502,6 +509,7 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
             }
           />
         )}
+      </div>
       </div>
     </div>
   );
