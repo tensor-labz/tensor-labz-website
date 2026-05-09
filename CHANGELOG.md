@@ -7,6 +7,20 @@ All notable changes to the Tensor Labs website are documented here.
 ## [Unreleased]
 
 ---
+## [v1.3.1] — 2026-05-09
+
+### Chore
+
+- remove docs — moved to tensor-labz/tensor-labz-docs
+
+### Other
+
+- Merge branch 'main' of github.com:tensor-labz/tensor-labz-website
+- update CLAUDE.md — all backend live, tensor-labz-docs repo, all 12 field types, Supabase auth references
+
+
+
+---
 ## [v1.3.0] — 2026-05-09
 
 ### Added
