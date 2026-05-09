@@ -16,6 +16,17 @@ import 'react-quill-new/dist/quill.snow.css';
 import { MODULES, type FieldConfig } from '../config/modules';
 import { supabase } from '../../../lib/supabase';
 import { uploadImage, moduleFolder } from '../../../lib/imageUpload';
+import { useAppDispatch, useAppSelector } from '../../../app/hooks';
+import {
+  fetchRecord,
+  createRecord,
+  updateRecord,
+  deleteRecord,
+  clearCurrentRecord,
+  selectCurrentRecord,
+  selectCurrentRecordStatus,
+  selectCurrentRecordError,
+} from '../../../store/adminSlice';
 
 /* ── helpers ── */
 function defaultForType(type: FieldConfig['type']): unknown {
@@ -868,22 +879,25 @@ const FormSkeleton = () => (
 /* ── Main CRUD form ── */
 const AdminCrudForm = memo(() => {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const { module: moduleId = 'hero', id } = useParams();
   const isNew = id === 'new';
 
   const mod = MODULES.find((m) => m.id === moduleId);
 
-  /* ── async state ── */
+  /* ── Redux state ── */
+  const currentRecord = useAppSelector(selectCurrentRecord(moduleId));
+  const recordStatus = useAppSelector(selectCurrentRecordStatus(moduleId));
+  const loadError = useAppSelector(selectCurrentRecordError(moduleId));
+
+  /* ── Local UI state ── */
   const [formFields, setFormFields] = useState<FieldConfig[] | null>(null);
-  const [recordData, setRecordData] = useState<Record<string, unknown> | null>(
-    null
-  );
   const [values, setValues] = useState<Record<string, unknown>>({});
   const [showDelete, setShowDelete] = useState(false);
   const [saving, setSaving] = useState(false);
-  const [loadError, setLoadError] = useState<string | null>(null);
+  const [saveError, setSaveError] = useState<string | null>(null);
 
-  /* Step 1 — load form field config from Supabase (falls back to module static config) */
+  /* Step 1 — load form field config (Supabase dynamic, falls back to static) */
   useEffect(() => {
     setFormFields(null);
     supabase
@@ -896,36 +910,31 @@ const AdminCrudForm = memo(() => {
       });
   }, [moduleId, mod]);
 
-  /* Step 2 — load existing record (edit mode only) */
+  /* Step 2 — fetch existing record via Redux (edit mode only) */
   useEffect(() => {
-    if (isNew) {
-      setRecordData({});
-      return;
+    if (!isNew) {
+      const numId = Number(id);
+      if (!isNaN(numId)) dispatch(fetchRecord({ moduleId, id: numId }));
     }
-    setRecordData(null);
-    supabase
-      .from(moduleId)
-      .select('*')
-      .eq('id', id!)
-      .single()
-      .then(({ data, error }) => {
-        if (error) setLoadError(error.message);
-        else setRecordData((data as Record<string, unknown>) ?? {});
-      });
-  }, [moduleId, id, isNew]);
+    return () => {
+      dispatch(clearCurrentRecord(moduleId));
+    };
+  }, [moduleId, id, isNew, dispatch]);
 
-  /* Step 3 — init values once both are ready */
+  /* Step 3 — init form values once config + record are both ready */
   useEffect(() => {
-    if (!formFields || recordData === null) return;
+    if (!formFields) return;
+    if (!isNew && recordStatus !== 'succeeded') return;
+    const data = isNew ? {} : (currentRecord ?? {});
     setValues(
       formFields.reduce<Record<string, unknown>>((acc, f) => {
-        const raw = recordData[f.key];
+        const raw = (data as Record<string, unknown>)[f.key];
         acc[f.key] =
           raw !== undefined && raw !== null ? raw : defaultForType(f.type);
         return acc;
       }, {})
     );
-  }, [formFields, recordData]);
+  }, [formFields, currentRecord, isNew, recordStatus]);
 
   const handleChange = (key: string, val: unknown) =>
     setValues((prev) => ({ ...prev, [key]: val }));
@@ -933,30 +942,34 @@ const AdminCrudForm = memo(() => {
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     setSaving(true);
-    const payload = isNew ? values : { ...values, id };
-    const { error } = await supabase
-      .from(moduleId)
-      .upsert(payload as Record<string, unknown>);
-    setSaving(false);
-    if (!error) navigate(`/admin/${moduleId}`);
+    setSaveError(null);
+    try {
+      if (isNew) {
+        await dispatch(createRecord({ moduleId, data: values })).unwrap();
+      } else {
+        await dispatch(
+          updateRecord({ moduleId, id: Number(id), data: values })
+        ).unwrap();
+      }
+      navigate(`/admin/${moduleId}`);
+    } catch (err) {
+      setSaveError(err instanceof Error ? err.message : 'Save failed');
+      setSaving(false);
+    }
   };
 
   const handleDelete = async () => {
-    if (formFields) {
-      const imageKeys = formFields
-        .filter((f) => f.type === 'image' || f.type === 'images')
-        .flatMap((f) => {
-          const v = values[f.key];
-          if (!v) return [];
-          return Array.isArray(v) ? (v as string[]) : [String(v)];
-        })
-        .filter(Boolean);
-      if (imageKeys.length) {
-        const { deleteImages } = await import('../../../lib/imageUpload');
-        await deleteImages(imageKeys).catch(() => {});
-      }
-    }
-    await supabase.from(moduleId).delete().eq('id', id!);
+    const imageKeys = (formFields ?? [])
+      .filter((f) => f.type === 'image' || f.type === 'images')
+      .flatMap((f) => {
+        const v = values[f.key];
+        if (!v) return [];
+        return Array.isArray(v) ? (v as string[]) : [String(v)];
+      })
+      .filter(Boolean);
+    await dispatch(
+      deleteRecord({ moduleId, id: Number(id), imageKeys })
+    ).unwrap();
     navigate(`/admin/${moduleId}`);
   };
 
@@ -968,7 +981,8 @@ const AdminCrudForm = memo(() => {
       </div>
     );
 
-  const isLoading = formFields === null || recordData === null;
+  const isLoading =
+    formFields === null || (!isNew && recordStatus === 'loading');
 
   return (
     <>
@@ -1060,6 +1074,13 @@ const AdminCrudForm = memo(() => {
                   </div>
                 ))}
               </div>
+
+              {/* Save error */}
+              {saveError && (
+                <p className="mt-4 text-sm" style={{ color: '#ef4444' }}>
+                  {saveError}
+                </p>
+              )}
 
               {/* Actions */}
               <div

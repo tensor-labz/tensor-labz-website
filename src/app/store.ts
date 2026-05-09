@@ -5,6 +5,7 @@ import projectsReducer from '../store/projectsSlice';
 import aboutReducer from '../store/aboutSlice';
 import contactReducer from '../store/contactSlice';
 import authReducer from '../store/authSlice';
+import adminReducer from '../store/adminSlice';
 
 export const store = configureStore({
   reducer: {
@@ -14,6 +15,7 @@ export const store = configureStore({
     about: aboutReducer,
     contact: contactReducer,
     auth: authReducer,
+    admin: adminReducer,
   },
 });
 
