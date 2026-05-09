@@ -69,7 +69,7 @@ The admin panel lives at `/admin/*` (wildcard route in `src/routes/Approutes.tsx
 
 1. App loads → `authSlice` initialState: `{ initialized: false, user: null }`.
 2. `ProtectedRoute` renders `null` (blank) until `initialized` becomes `true`.
-3. Firebase `onAuthStateChanged` fires (always, on every page load):
+3. Supabase `onAuthStateChange` fires (always, on every page load):
    - If a session exists → dispatches `setUser(user)` → `initialized = true`, `user` set.
    - If no session → dispatches `setUser(null)` → `initialized = true`, `user` stays `null`.
 4. Once `initialized`, `ProtectedRoute` checks `isAuthenticated`:
@@ -83,7 +83,7 @@ The admin panel lives at `/admin/*` (wildcard route in `src/routes/Approutes.tsx
 
 ```
 src/pages/AdminDashboard.tsx                        ← layout shell (header + sidebar + Routes)
-src/pages/Login.tsx                                 ← Firebase Auth login page
+src/pages/Login.tsx                                 ← Supabase Auth login page
 src/components/ProtectedRoute.tsx                   ← redirects to /login when unauthenticated
 src/features/admin/
   config/modules.tsx                                ← MODULES array (content module definitions)
@@ -110,16 +110,20 @@ src/features/admin/
 
 ### Field types
 
-| Type       | Renders                                                                                                 |
-| ---------- | ------------------------------------------------------------------------------------------------------- |
-| `text`     | Plain text input                                                                                        |
-| `textarea` | Multi-line textarea                                                                                     |
-| `richtext` | Textarea with HTML preview toggle                                                                       |
-| `url`      | URL input (for non-image links e.g. video embed URLs)                                                   |
-| `image`    | Tab toggle: **Upload File** (drag & drop) or **S3 / URL** with preview                                  |
-| `images`   | Multi-image gallery: grid of previews, add via drag & drop or URL, remove individual, stores `string[]` |
-| `toggle`   | Animated switch (stores `true`/`false`)                                                                 |
-| `tags`     | Comma-separated text input                                                                              |
+| Type         | Renders                                                                                                 |
+| ------------ | ------------------------------------------------------------------------------------------------------- |
+| `text`       | Plain text input                                                                                        |
+| `textarea`   | Multi-line textarea                                                                                     |
+| `richtext`   | Rich-text editor (`react-quill-new`) with HTML output                                                   |
+| `url`        | URL input (for non-image links e.g. video embed URLs)                                                   |
+| `image`      | Tab toggle: **Upload File** (drag & drop) or **S3 / URL** with preview                                  |
+| `images`     | Multi-image gallery: grid of previews, add via drag & drop or URL, remove individual, stores `string[]` |
+| `toggle`     | Animated switch (stores `true`/`false`)                                                                 |
+| `checkbox`   | Boolean checkbox (stores `true`/`false`)                                                                |
+| `tags`       | Comma-separated tag input (stores `string[]`)                                                           |
+| `multiinput` | Repeating group of sub-fields (stores array of objects)                                                 |
+| `radio`      | Radio button group (mutually exclusive options)                                                         |
+| `select`     | Dropdown select (single value from a defined option list)                                               |
 
 > Use `type: 'image'` for all image fields. Use `type: 'url'` only for non-image URLs (e.g. `vedio_demo`).
 
@@ -129,9 +133,9 @@ src/features/admin/
 
 ### CRUD backend
 
-All CRUD operations are currently **UI-only with mock data**. Backend is **not yet implemented** — deferred by design.
+All backend layers are **live**. Supabase handles auth + database, Lambda/S3 handles image storage.
 
-#### Decided architecture
+#### Architecture
 
 | Layer                  | Technology                         | Status  |
 | ---------------------- | ---------------------------------- | ------- |
@@ -139,6 +143,10 @@ All CRUD operations are currently **UI-only with mock data**. Backend is **not y
 | Database / CRUD        | **Supabase** (PostgreSQL)          | ✅ Live |
 | Image / file storage   | **AWS S3 via Lambda**              | ✅ Live |
 | Public CMS (read-only) | Google Sheets via `VITE_SHEET_URL` | ✅ Live |
+
+Table names in Supabase match `ModuleConfig.id`: `hero`, `services`, `projects`, `about`, `contact`, `social`.
+
+Dynamic form/table layout is stored per-module in Supabase JSONB tables (`form_config`, `table_config`) and falls back to the static `fields[]` in `MODULES` config when the row is absent.
 
 #### Why Supabase (not Firestore)
 
@@ -156,21 +164,9 @@ Images uploaded in the admin form (`type: 'image'` fields) will be stored in S3:
 - CloudFront CDN can sit in front of the bucket for fast global delivery
 - Bucket name and region are already in the Settings page UI (`AdminSettings.tsx`)
 
-#### What to do when implementing
+#### AWS S3 image upload (`ImageField`)
 
-**Supabase CRUD:**
-
-1. Install: `npm install @supabase/supabase-js`
-2. Create `src/lib/supabase.ts` — initialise client with `VITE_SUPABASE_URL` + `VITE_SUPABASE_ANON_KEY`
-3. Create a Redux async thunk per module (or a generic one that takes `moduleId` as a param)
-4. Replace `MOCK_DATA` in `AdminDataTable.tsx` with a `useEffect` that calls `supabase.from(moduleId).select()`
-5. Replace `handleSave` in `AdminCrudForm.tsx` with `supabase.from(moduleId).upsert(values)`
-6. Replace `handleDelete` with `supabase.from(moduleId).delete().eq('id', id)`
-7. Table names in Supabase should match `ModuleConfig.id`: `hero`, `services`, `projects`, `about`, `contact`, `social`
-
-**AWS S3 image upload (`ImageField`):**
-
-The Lambda is **deployed and live** at `../tensor-labz-image-lambda/` (separate repo — `tensor-labz/tensor-labz-image-lambda`, private).
+Lambda is **deployed and live** at `../tensor-labz-image-lambda/` (separate repo — `tensor-labz/tensor-labz-image-lambda`, private).
 
 | Resource        | Value                                                     |
 | --------------- | --------------------------------------------------------- |
@@ -179,7 +175,7 @@ The Lambda is **deployed and live** at `../tensor-labz-image-lambda/` (separate 
 | **Base URL**    | `https://ewf03ybvmc.execute-api.eu-north-1.amazonaws.com` |
 | IAM role        | `tensor-labz-lambda-exec`                                 |
 
-> ⚠️ **Firebase credentials not yet set.** Lambda is deployed but env vars `FIREBASE_CLIENT_EMAIL` and `FIREBASE_PRIVATE_KEY` are placeholders — all requests will return 401 until you fill these in the Lambda console under Configuration → Environment variables.
+> Lambda validates requests using **Supabase JWT** (`SUPABASE_JWT_SECRET` env var in Lambda). Auth token from `supabase.auth.getSession()` is passed as the `Authorization: Bearer <token>` header. No Firebase credentials involved.
 
 Bucket: `tensor-labz-store` (eu-north-1). Folder structure:
 
@@ -197,7 +193,7 @@ Endpoints:
 
 Frontend wiring steps:
 
-1. On file select in `ImageField`, call `POST /image/upload-url` with Firebase ID token in `Authorization` header
+1. On file select in `ImageField`, call `POST /image/upload-url` with the Supabase session JWT in `Authorization: Bearer <token>` header
 2. PUT the file directly to `uploadUrl` (browser → S3, Lambda not involved in transfer)
 3. Store `publicUrl` as the field value (replaces the temporary `createObjectURL`)
 4. On record delete, call `DELETE /image` with all image keys for that record (including `extraImages` array)
@@ -228,6 +224,21 @@ VITE_CDN_URL=https://cdn.tensorlabz.com
 ```
 
 > Do NOT use `VITE_AWS_ACCESS_KEY` or `VITE_AWS_SECRET` — AWS credentials must never be in the frontend bundle. Use pre-signed URLs via a Supabase Edge Function instead.
+
+---
+
+## Documentation Repo
+
+Developer docs live in a **separate dedicated repo** — `tensor-labz/tensor-labz-docs` (not in this repo).
+
+| Item          | Value                                              |
+| ------------- | -------------------------------------------------- |
+| **Repo**      | https://github.com/tensor-labz/tensor-labz-docs   |
+| **Docs site** | https://tensor-labz.github.io/tensor-labz-docs/   |
+| **Tool**      | MkDocs Material + GitHub Actions (auto-deploy on push to `main`) |
+| **Local**     | `cd ../tensor-labz-docs && mkdocs serve`           |
+
+> Do **not** add `docs/`, `mkdocs.yml`, or a docs workflow to this repo — they were removed and live in `tensor-labz-docs` only.
 
 ---
 
@@ -363,11 +374,10 @@ firebase deploy --only hosting:tensor-labz-website
 
 ### Last deployed
 
-- **Date:** 2026-05-07
+- **Date:** 2026-05-09
 - **Firebase CLI version:** 15.17.0
-- **Files deployed:** 12 files to `dist/`
 - **Hosting URL:** https://tensor-labz-website.web.app
-- **Changes in last deploy:** Fixed auth guard redirect — unauthenticated admin URLs now correctly redirect to `/login` with return URL preserved.
+- **Changes in last deploy:** Live Supabase CRUD across all admin modules; AdminOverview live stats; S3 cleanup on record delete; Lambda CORS updated for all allowed origins; docs moved to dedicated `tensor-labz-docs` repo.
 
 ---
 
@@ -396,4 +406,4 @@ Key variables:
 | `VITE_S3_BUCKET`         | S3 bucket name (`tensor-labz-store`)          |
 | `VITE_S3_REGION`         | S3 region (`eu-north-1`)                      |
 | `VITE_CDN_URL`           | CDN base URL for stored images                |
-| `VITE_FIREBASE_*`        | Firebase project config (kept for other uses) |
+| `VITE_FIREBASE_*`        | Firebase project config (staging hosting only — not used for auth) |
