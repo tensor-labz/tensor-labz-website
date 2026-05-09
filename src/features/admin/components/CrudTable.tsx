@@ -5,7 +5,6 @@ import DataTable, {
   createTheme,
   type TableColumn,
 } from 'react-data-table-component';
-import { FaPlus } from 'react-icons/fa';
 import { FiSearch, FiX, FiExternalLink } from 'react-icons/fi';
 import { MODULES } from '../config/modules';
 import { supabase } from '../../../lib/supabase';
@@ -467,34 +466,10 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
 
   return (
     <div className="p-4 sm:p-6">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5">
-        <div>
-          <h2
-            className="text-xl font-bold"
-            style={{
-              color: 'var(--text-primary)',
-              fontFamily: '"Syne", sans-serif',
-            }}
-          >
-            {mod?.label ?? moduleId}
-          </h2>
-          <p className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>
-            {loading ? '—' : `${filtered.length} record${filtered.length !== 1 ? 's' : ''}`}
-          </p>
-        </div>
-        <button
-          onClick={() => navigate(`/admin/${moduleId}/new`)}
-          className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold self-start sm:self-auto"
-          style={{ backgroundColor: 'var(--accent)', color: '#fff' }}
-        >
-          <FaPlus size={11} /> Add New
-        </button>
-      </div>
-
-      {/* Search bar */}
+      {/* Search + record count row */}
+      <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-4">
       <div
-        className="flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl mb-4 w-full sm:max-w-[380px]"
+        className="flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl w-full sm:max-w-[380px]"
         style={{
           backgroundColor: 'var(--glass-bg)',
           border: '1px solid var(--glass-border)',
@@ -518,17 +493,21 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
           </button>
         )}
       </div>
+      <p className="text-xs shrink-0" style={{ color: 'var(--text-muted)' }}>
+        {loading ? '—' : `${filtered.length} record${filtered.length !== 1 ? 's' : ''}`}
+      </p>
+      </div>
 
-      {/* Table — outer div clips border-radius, inner allows horizontal scroll on mobile */}
+      {/* Table — overflow-x: auto directly on container preserves border-radius + enables mobile scroll */}
       <div
         className="rounded-2xl"
         style={{
           border: '1px solid var(--glass-border)',
           backgroundColor: 'var(--glass-bg)',
-          overflow: 'hidden',
+          overflowX: 'auto',
         }}
       >
-      <div style={{ overflowX: 'auto' }}>
+      <div style={{ minWidth: '580px' }}>
         {loading ? (
           <TableSkeleton />
         ) : (

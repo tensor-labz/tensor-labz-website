@@ -1,10 +1,10 @@
 import { memo } from 'react';
 import { useParams } from 'react-router-dom';
-import CrudTable from './CrudTable';
+import AdminModulePage from './AdminModulePage';
 
 const AdminDataTable = memo(() => {
   const { module: moduleId = 'hero' } = useParams();
-  return <CrudTable moduleId={moduleId} />;
+  return <AdminModulePage moduleId={moduleId} />;
 });
 
 AdminDataTable.displayName = 'AdminDataTable';
