@@ -268,8 +268,10 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
           const isImg = imageTypeKeys.has(c.field.toLowerCase());
           const isDesc = c.field.toLowerCase() === mod.descriptionField?.toLowerCase();
           const relMap = relationMaps[c.field];
+          const fieldDef = mod.fields.find((f) => f.key === c.field);
+          const isUrlField = c.type === 'url' || fieldDef?.type === 'url';
 
-          if (c.type === 'url') {
+          if (isUrlField) {
             cols.push({
               id: c.field,
               name: c.title,
@@ -359,30 +361,63 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
         const fieldDef = mod.fields.find((f) => f.key === key);
         const relMap = relationMaps[key];
         const rel = fieldDef?.relation;
-        const col: TableColumn<AdminRecord> = {
-          id: key,
-          name: fieldDef?.label ?? key,
-          selector: (row) => resolveRelation(relMap, rowVal(row, key)),
-          sortable: true,
-          wrap: true,
-          grow: 1,
-        };
-        if (rel) {
-          col.cell = (row) => {
-            const rawId = String(rowVal(row, key) ?? '');
-            const label = relMap ? (relMap[rawId] ?? rawId) : rawId;
-            if (!rawId) return null;
-            return (
-              <button
-                onClick={(e) => { e.stopPropagation(); navigate(`/admin/${rel.table}/${rawId}`); }}
-                style={{ color: 'inherit', background: 'none', border: 'none', cursor: 'pointer', padding: 0, font: 'inherit', textAlign: 'left' }}
-              >
-                {label}
-              </button>
-            );
+        const isUrl = fieldDef?.type === 'url';
+
+        if (isUrl) {
+          cols.push({
+            id: key,
+            name: fieldDef?.label ?? key,
+            width: '56px',
+            sortable: false,
+            center: true,
+            cell: (row) => {
+              const url = String(rowVal(row, key) ?? '');
+              if (!url) return null;
+              return (
+                <a
+                  href={url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={(e) => e.stopPropagation()}
+                  className="flex items-center justify-center w-8 h-8 rounded-lg transition-colors"
+                  style={{
+                    color: 'var(--text-primary)',
+                    backgroundColor: 'var(--glass-bg-raised)',
+                    border: '1px solid var(--glass-border)',
+                    flexShrink: 0,
+                  }}
+                >
+                  <FiExternalLink size={14} />
+                </a>
+              );
+            },
+          });
+        } else {
+          const col: TableColumn<AdminRecord> = {
+            id: key,
+            name: fieldDef?.label ?? key,
+            selector: (row) => resolveRelation(relMap, rowVal(row, key)),
+            sortable: true,
+            wrap: true,
+            grow: 1,
           };
+          if (rel) {
+            col.cell = (row) => {
+              const rawId = String(rowVal(row, key) ?? '');
+              const label = relMap ? (relMap[rawId] ?? rawId) : rawId;
+              if (!rawId) return null;
+              return (
+                <button
+                  onClick={(e) => { e.stopPropagation(); navigate(`/admin/${rel.table}/${rawId}`); }}
+                  style={{ color: 'inherit', background: 'none', border: 'none', cursor: 'pointer', padding: 0, font: 'inherit', textAlign: 'left' }}
+                >
+                  {label}
+                </button>
+              );
+            };
+          }
+          cols.push(col);
         }
-        cols.push(col);
       });
 
       if (mod.descriptionField) {
