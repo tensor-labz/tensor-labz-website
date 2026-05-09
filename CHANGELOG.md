@@ -7,6 +7,19 @@ All notable changes to the Tensor Labs website are documented here.
 ## [Unreleased]
 
 ---
+## [v1.6.3] — 2026-05-09
+
+### Bug Fixes
+
+- format contact query chain to satisfy prettier line-length rule
+
+### Other
+
+- Merge pull request #15 from tensor-labz/staging
+
+
+
+---
 ## [v1.6.2] — 2026-05-09
 
 ### Bug Fixes
