@@ -5,12 +5,14 @@ import { RiSunLine, RiMoonLine } from 'react-icons/ri';
 import logo from '../../../assets/images/logo.png';
 import useScroll from '../../hooks/useScroll';
 import { useTheme } from '../../hooks/useTheme';
+import { useCompanyInfo, resolveLogo } from '../../hooks/useCompanyInfo';
 import NavBar from './NavBar';
 import MobileNavigation from './MobileNavigation';
 
 const Header: React.FC<{ className?: string }> = memo(({ className = '' }) => {
   const isScrolled = useScroll();
   const { theme, toggleTheme } = useTheme();
+  const info = useCompanyInfo();
 
   return (
     <motion.header
@@ -29,8 +31,9 @@ const Header: React.FC<{ className?: string }> = memo(({ className = '' }) => {
       <div className="max-w-7xl mx-auto px-6 lg:px-10 py-3.5 flex items-center justify-between">
         <Link to="/" className="shrink-0">
           <motion.img
-            src={logo}
-            alt="Tensor Labs"
+            src={resolveLogo(info, theme, logo)}
+            alt={info.name}
+            onError={(e) => { (e.currentTarget as HTMLImageElement).src = logo; }}
             loading="lazy"
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}

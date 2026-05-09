@@ -7,8 +7,12 @@ import {
   FaUsers,
   FaCreditCard,
   FaCog,
+  FaGlobe,
 } from 'react-icons/fa';
 import { MODULES } from '../config/modules';
+
+/* Modules consolidated into Site Control — hidden from the main sidebar */
+const SITE_CONTROL_IDS = new Set(['contact', 'social', 'about']);
 
 interface AdminSidebarProps {
   open: boolean;
@@ -27,6 +31,9 @@ const AdminSidebar = memo(({ open, onClose }: AdminSidebarProps) => {
   const isUsers = location.pathname.startsWith('/admin/users');
   const isBilling = location.pathname.startsWith('/admin/billing');
   const isSettings = location.pathname.startsWith('/admin/settings');
+  const isSiteControl =
+    location.pathname.startsWith('/admin/site-control') ||
+    (activeModule !== undefined && SITE_CONTROL_IDS.has(activeModule));
 
   const handleNav = (path: string) => {
     navigate(path);
@@ -94,12 +101,19 @@ const AdminSidebar = memo(({ open, onClose }: AdminSidebarProps) => {
       >
         Modules
       </p>
-      {MODULES.map((mod) => {
+      <NavBtn
+        isActive={isSiteControl}
+        onClick={() => handleNav('/admin/site-control')}
+        icon={FaGlobe}
+        label="Site Control"
+      />
+      {MODULES.filter((mod) => !SITE_CONTROL_IDS.has(mod.id)).map((mod) => {
         const isActive =
           !isOverview &&
           !isUsers &&
           !isBilling &&
           !isSettings &&
+          !isSiteControl &&
           activeModule === mod.id;
         return (
           <NavBtn
