@@ -10,6 +10,7 @@ import {
 import navData from '../../../data/nav_data';
 import logo from '../../../assets/images/logo.png';
 import { useTheme } from '../../hooks/useTheme';
+import { useCompanyInfo, resolveLogo } from '../../hooks/useCompanyInfo';
 
 interface MobileNavItemProps {
   nav: string;
@@ -60,6 +61,7 @@ const MobileNavigation: React.FC = memo(() => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const { theme, toggleTheme } = useTheme();
+  const info = useCompanyInfo();
 
   const close = () => setIsOpen(false);
   const toggle = () => setIsOpen((v) => !v);
@@ -115,9 +117,10 @@ const MobileNavigation: React.FC = memo(() => {
                   }}
                 >
                   <img
-                    src={logo}
-                    alt="Tensor Labs"
+                    src={resolveLogo(info, theme, logo)}
+                    alt={info.name}
                     className="h-9 w-auto object-contain"
+                    onError={(e) => { (e.currentTarget as HTMLImageElement).src = logo; }}
                   />
                 </button>
                 <div className="flex items-center gap-2">
@@ -166,10 +169,10 @@ const MobileNavigation: React.FC = memo(() => {
                 className="mt-auto px-6 py-6 border-t"
               >
                 <p className="text-[var(--text-muted)] text-[10px] tracking-widest uppercase">
-                  Tensor Labs
+                  {info.name}
                 </p>
                 <p className="text-[var(--text-muted)] opacity-60 text-[10px] mt-1">
-                  Engineering & Technology
+                  {info.tagline}
                 </p>
               </div>
             </motion.div>

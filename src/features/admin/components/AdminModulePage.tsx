@@ -1,6 +1,6 @@
 import { memo, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FaPlus } from 'react-icons/fa';
+import { FaCog, FaPlus } from 'react-icons/fa';
 import { MODULES } from '../config/modules';
 import { supabase } from '../../../lib/supabase';
 import { DEFAULT_PAGE_COMPONENTS, type PageComponentConfig } from '../../../shared/types/pageConfig';
@@ -42,13 +42,28 @@ const AdminModulePage = memo(({ moduleId }: { moduleId: string }) => {
         >
           {mod?.label ?? moduleId}
         </h2>
-        <button
-          onClick={() => navigate(`/admin/${moduleId}/new`)}
-          className="flex items-center gap-1.5 px-3 py-2 sm:px-4 sm:py-2.5 rounded-xl text-xs sm:text-sm font-semibold shrink-0"
-          style={{ backgroundColor: 'var(--accent)', color: '#fff' }}
-        >
-          <FaPlus size={10} /> <span>Add New</span>
-        </button>
+        <div className="flex items-center gap-2 shrink-0">
+          <button
+            onClick={() => navigate(`/admin/${moduleId}/form-config`)}
+            className="flex items-center gap-1.5 px-3 py-2 sm:px-3.5 sm:py-2.5 rounded-xl text-xs sm:text-sm font-medium"
+            style={{
+              backgroundColor: 'var(--glass-bg-raised)',
+              border: '1px solid var(--glass-border)',
+              color: 'var(--text-muted)',
+            }}
+            title="Configure form fields"
+          >
+            <FaCog size={12} />
+            <span className="hidden sm:inline">Form Builder</span>
+          </button>
+          <button
+            onClick={() => navigate(`/admin/${moduleId}/new`)}
+            className="flex items-center gap-1.5 px-3 py-2 sm:px-4 sm:py-2.5 rounded-xl text-xs sm:text-sm font-semibold"
+            style={{ backgroundColor: 'var(--accent)', color: '#fff' }}
+          >
+            <FaPlus size={10} /> <span>Add New</span>
+          </button>
+        </div>
       </div>
 
       <div className="flex-1 min-h-0 overflow-hidden">

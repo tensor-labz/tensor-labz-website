@@ -1,4 +1,5 @@
 import { memo, useState, useEffect, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion } from 'motion/react';
 import {
   FaGlobe,
@@ -12,13 +13,12 @@ import {
   FaTable,
   FaListAlt,
   FaTrash,
-  FaPlus,
   FaChevronDown,
   FaChevronUp,
   FaColumns,
 } from 'react-icons/fa';
 import { FiAlignLeft, FiAlignCenter, FiAlignRight } from 'react-icons/fi';
-import { MODULES, type FieldConfig } from '../config/modules';
+import { MODULES } from '../config/modules';
 import { DEFAULT_PAGE_COMPONENTS, type PageComponentConfig } from '../../../shared/types/pageConfig';
 import { supabase } from '../../../lib/supabase';
 import type { TableColumnConfig } from '../../../shared/types/tableConfig';
@@ -865,523 +865,46 @@ const TableColumnsSection = memo(() => {
 });
 TableColumnsSection.displayName = 'TableColumnsSection';
 
-/* ── Field type options ── */
-const FIELD_TYPES: { value: FieldConfig['type']; label: string }[] = [
-  { value: 'text', label: 'Text' },
-  { value: 'textarea', label: 'Long Text' },
-  { value: 'url', label: 'URL' },
-  { value: 'image', label: 'Image' },
-  { value: 'images', label: 'Image Gallery' },
-  { value: 'toggle', label: 'Toggle Switch' },
-  { value: 'checkbox', label: 'Checkbox' },
-  { value: 'tags', label: 'Tags' },
-  { value: 'multiinput', label: 'Multi-input (Array)' },
-  { value: 'richtext', label: 'Rich Text (Quill)' },
-  { value: 'radio', label: 'Radio Buttons' },
-  { value: 'select', label: 'Dropdown Select' },
-];
 
-function needsOptions(type: FieldConfig['type']) {
-  return type === 'radio' || type === 'select';
-}
 
-function defaultFieldConfig(): FieldConfig {
-  return {
-    key: '',
-    label: '',
-    type: 'text',
-    span: 'full',
-    required: false,
-    placeholder: '',
-  };
-}
 
-function defaultFormFields(moduleId: string): FieldConfig[] {
-  return MODULES.find((m) => m.id === moduleId)?.fields ?? [];
-}
-
-/* ── Single field row in Form Fields editor ── */
-const FieldRow = memo(
-  ({
-    field,
-    idx,
-    total,
-    onChange,
-    onDelete,
-    onMove,
-  }: {
-    field: FieldConfig;
-    idx: number;
-    total: number;
-    onChange: (patch: Partial<FieldConfig>) => void;
-    onDelete: () => void;
-    onMove: (dir: -1 | 1) => void;
-  }) => {
-    const [expanded, setExpanded] = useState(false);
-
-    const inputStyle = {
-      backgroundColor: 'var(--input-bg)',
-      border: '1px solid var(--input-border)',
-      color: 'var(--text-primary)',
-      outline: 'none',
-    };
-
-    const optionsText = (field.options ?? []).join('\n');
-    const updateOptions = (raw: string) =>
-      onChange({
-        options: raw
-          .split('\n')
-          .map((s) => s.trim())
-          .filter(Boolean),
-      });
-
-    return (
-      <motion.div
-        initial={{ opacity: 0, y: 6 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: idx * 0.03 }}
-        className="rounded-xl overflow-hidden"
-        style={{
-          backgroundColor: 'var(--glass-bg-raised)',
-          border: '1px solid var(--glass-border-subtle)',
-        }}
-      >
-        {/* Primary row */}
-        <div className="flex items-center gap-2 px-3 py-2.5">
-          {/* Reorder */}
-          <div className="flex flex-col gap-0.5 shrink-0">
-            <button
-              type="button"
-              disabled={idx === 0}
-              onClick={() => onMove(-1)}
-              className="w-5 h-4 flex items-center justify-center rounded disabled:opacity-30"
-              style={{ color: 'var(--text-muted)' }}
-            >
-              <FaChevronUp size={8} />
-            </button>
-            <button
-              type="button"
-              disabled={idx === total - 1}
-              onClick={() => onMove(1)}
-              className="w-5 h-4 flex items-center justify-center rounded disabled:opacity-30"
-              style={{ color: 'var(--text-muted)' }}
-            >
-              <FaChevronDown size={8} />
-            </button>
-          </div>
-
-          {/* Key */}
-          <input
-            type="text"
-            value={field.key}
-            onChange={(e) => onChange({ key: e.target.value })}
-            placeholder="key"
-            className="px-2 py-1.5 rounded-lg text-xs font-mono w-24 shrink-0"
-            style={inputStyle}
-          />
-
-          {/* Label */}
-          <input
-            type="text"
-            value={field.label}
-            onChange={(e) => onChange({ label: e.target.value })}
-            placeholder="Label"
-            className="flex-1 min-w-0 px-2 py-1.5 rounded-lg text-xs"
-            style={inputStyle}
-          />
-
-          {/* Type */}
-          <select
-            value={field.type}
-            onChange={(e) =>
-              onChange({ type: e.target.value as FieldConfig['type'] })
-            }
-            className="text-xs py-1.5 px-2 rounded-lg appearance-none shrink-0 cursor-pointer"
-            style={{
-              width: 148,
-              backgroundColor: '#fff',
-              border: '1px solid var(--input-border)',
-              color: '#111',
-              outline: 'none',
-              backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23888'/%3E%3C/svg%3E")`,
-              backgroundRepeat: 'no-repeat',
-              backgroundPosition: 'right 6px center',
-              paddingRight: '1.5rem',
-            }}
-          >
-            {FIELD_TYPES.map((t) => (
-              <option key={t.value} value={t.value}>
-                {t.label}
-              </option>
-            ))}
-          </select>
-
-          {/* Expand / delete */}
-          <button
-            type="button"
-            onClick={() => setExpanded((v) => !v)}
-            className="w-7 h-7 flex items-center justify-center rounded-lg shrink-0"
-            style={{
-              backgroundColor: expanded ? 'var(--accent)' : 'var(--glass-bg)',
-              color: expanded ? '#fff' : 'var(--text-muted)',
-              border: '1px solid var(--glass-border)',
-            }}
-          >
-            {expanded ? <FaChevronUp size={9} /> : <FaChevronDown size={9} />}
-          </button>
-          <button
-            type="button"
-            onClick={onDelete}
-            className="w-7 h-7 flex items-center justify-center rounded-lg shrink-0"
-            style={{
-              backgroundColor: 'rgba(239,68,68,0.1)',
-              color: '#ef4444',
-              border: '1px solid rgba(239,68,68,0.2)',
-            }}
-          >
-            <FaTrash size={10} />
-          </button>
-        </div>
-
-        {/* Expanded details */}
-        {expanded && (
-          <div
-            className="px-3 pb-3 space-y-3 pt-1"
-            style={{ borderTop: '1px solid var(--glass-border-subtle)' }}
-          >
-            <div className="grid grid-cols-2 gap-3">
-              {/* Span */}
-              <div>
-                <p
-                  className="text-[10px] font-semibold uppercase tracking-widest mb-1"
-                  style={{ color: 'var(--text-muted)' }}
-                >
-                  Span
-                </p>
-                <div className="flex gap-1">
-                  {(['half', 'full'] as const).map((s) => (
-                    <button
-                      key={s}
-                      type="button"
-                      onClick={() => onChange({ span: s })}
-                      className="flex-1 py-1 rounded-lg text-xs font-medium capitalize"
-                      style={
-                        field.span === s
-                          ? { backgroundColor: 'var(--accent)', color: '#fff' }
-                          : {
-                              backgroundColor: 'var(--glass-bg)',
-                              color: 'var(--text-muted)',
-                              border: '1px solid var(--glass-border)',
-                            }
-                      }
-                    >
-                      {s}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Required */}
-              <div>
-                <p
-                  className="text-[10px] font-semibold uppercase tracking-widest mb-1"
-                  style={{ color: 'var(--text-muted)' }}
-                >
-                  Required
-                </p>
-                <button
-                  type="button"
-                  onClick={() => onChange({ required: !field.required })}
-                  className="relative w-11 h-6 rounded-full transition-colors duration-200"
-                  style={{
-                    backgroundColor: field.required
-                      ? 'var(--accent)'
-                      : 'var(--glass-bg-raised)',
-                  }}
-                  role="switch"
-                  aria-checked={!!field.required}
-                >
-                  <motion.span
-                    animate={{ x: field.required ? 22 : 2 }}
-                    transition={{ type: 'spring', damping: 20, stiffness: 300 }}
-                    className="absolute top-1 w-4 h-4 rounded-full bg-white shadow"
-                  />
-                </button>
-              </div>
-            </div>
-
-            {/* Placeholder */}
-            <div>
-              <p
-                className="text-[10px] font-semibold uppercase tracking-widest mb-1"
-                style={{ color: 'var(--text-muted)' }}
-              >
-                Placeholder
-              </p>
-              <input
-                type="text"
-                value={field.placeholder ?? ''}
-                onChange={(e) => onChange({ placeholder: e.target.value })}
-                placeholder="e.g. Enter a title…"
-                className="w-full px-2.5 py-1.5 rounded-lg text-xs"
-                style={inputStyle}
-              />
-            </div>
-
-            {/* Options (radio / select) */}
-            {needsOptions(field.type) && (
-              <div>
-                <p
-                  className="text-[10px] font-semibold uppercase tracking-widest mb-1"
-                  style={{ color: 'var(--text-muted)' }}
-                >
-                  Options{' '}
-                  <span className="normal-case font-normal">
-                    (one per line)
-                  </span>
-                </p>
-                <textarea
-                  value={optionsText}
-                  onChange={(e) => updateOptions(e.target.value)}
-                  rows={4}
-                  placeholder={`Option A\nOption B\nOption C`}
-                  className="w-full px-2.5 py-1.5 rounded-lg text-xs resize-y"
-                  style={inputStyle}
-                />
-              </div>
-            )}
-          </div>
-        )}
-      </motion.div>
-    );
-  }
-);
-FieldRow.displayName = 'FieldRow';
-
-/* ── Form Fields Section ── */
-const FormFieldsSection = memo(() => {
-  const [activeModule, setActiveModule] = useState(MODULES[0].id);
-  const [configs, setConfigs] = useState<Record<string, FieldConfig[]>>({});
-  const [saving, setSaving] = useState(false);
-  const [saved, setSaved] = useState(false);
-
-  /* load all form configs once */
-  useEffect(() => {
-    supabase
-      .from('form_config')
-      .select('*')
-      .then(({ data }) => {
-        if (!data) return;
-        const map: Record<string, FieldConfig[]> = {};
-        (data as { module_id: string; fields: FieldConfig[] }[]).forEach(
-          (r) => {
-            map[r.module_id] = r.fields;
-          }
-        );
-        setConfigs(map);
-      });
-  }, []);
-
-  const fields = configs[activeModule] ?? defaultFormFields(activeModule);
-
-  const updateField = useCallback(
-    (idx: number, patch: Partial<FieldConfig>) => {
-      setConfigs((prev) => {
-        const base = prev[activeModule] ?? defaultFormFields(activeModule);
-        const next = base.map((f, i) => (i === idx ? { ...f, ...patch } : f));
-        return { ...prev, [activeModule]: next };
-      });
-    },
-    [activeModule]
-  );
-
-  const deleteField = useCallback(
-    (idx: number) => {
-      setConfigs((prev) => {
-        const base = prev[activeModule] ?? defaultFormFields(activeModule);
-        return { ...prev, [activeModule]: base.filter((_, i) => i !== idx) };
-      });
-    },
-    [activeModule]
-  );
-
-  const moveField = useCallback(
-    (idx: number, dir: -1 | 1) => {
-      setConfigs((prev) => {
-        const base = [
-          ...(prev[activeModule] ?? defaultFormFields(activeModule)),
-        ];
-        const to = idx + dir;
-        if (to < 0 || to >= base.length) return prev;
-        [base[idx], base[to]] = [base[to], base[idx]];
-        return { ...prev, [activeModule]: base };
-      });
-    },
-    [activeModule]
-  );
-
-  const addField = () => {
-    setConfigs((prev) => {
-      const base = prev[activeModule] ?? defaultFormFields(activeModule);
-      return { ...prev, [activeModule]: [...base, defaultFieldConfig()] };
-    });
-  };
-
-  const handleSave = async () => {
-    setSaving(true);
-    await supabase
-      .from('form_config')
-      .upsert({ module_id: activeModule, fields }, { onConflict: 'module_id' });
-    setSaving(false);
-    setSaved(true);
-    setTimeout(() => setSaved(false), 2000);
-  };
-
+/* ── Form Builder Links (replaces inline editor — each module has its own builder page) ── */
+const FormBuilderLinks = memo(() => {
+  const navigate = useNavigate();
   return (
     <div
       className="rounded-2xl overflow-hidden"
-      style={{
-        backgroundColor: 'var(--glass-bg)',
-        border: '1px solid var(--glass-border)',
-      }}
+      style={{ backgroundColor: 'var(--glass-bg)', border: '1px solid var(--glass-border)' }}
     >
-      {/* Header */}
-      <div
-        className="px-6 py-4"
-        style={{ borderBottom: '1px solid var(--glass-border-subtle)' }}
-      >
-        <p
-          className="font-bold text-sm"
-          style={{
-            color: 'var(--text-primary)',
-            fontFamily: '"Syne", sans-serif',
-          }}
-        >
-          Form Fields
+      <div className="px-6 py-4" style={{ borderBottom: '1px solid var(--glass-border-subtle)' }}>
+        <p className="font-bold text-sm" style={{ color: 'var(--text-primary)', fontFamily: '"Syne", sans-serif' }}>
+          Form Builder
         </p>
         <p className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>
-          Configure field layout, types, and options for each module&apos;s
-          create/edit form
+          Open the dedicated builder to add, edit, reorder, or delete fields for any module.
         </p>
       </div>
-
-      {/* Module tabs */}
-      <div
-        className="px-6 pt-4 flex flex-wrap gap-1.5 pb-4"
-        style={{ borderBottom: '1px solid var(--glass-border-subtle)' }}
-      >
+      <div className="px-6 py-4 grid grid-cols-2 sm:grid-cols-3 gap-3">
         {MODULES.map((m) => (
           <button
             key={m.id}
-            onClick={() => setActiveModule(m.id)}
-            className="px-3 py-1.5 rounded-lg text-xs font-medium transition-colors"
-            style={
-              activeModule === m.id
-                ? { backgroundColor: 'var(--accent)', color: '#fff' }
-                : {
-                    backgroundColor: 'var(--glass-bg-raised)',
-                    color: 'var(--text-muted)',
-                    border: '1px solid var(--glass-border)',
-                  }
-            }
+            onClick={() => navigate(`/admin/${m.id}/form-config`)}
+            className="flex items-center gap-3 px-4 py-3 rounded-xl text-left transition-colors"
+            style={{
+              backgroundColor: 'var(--glass-bg-raised)',
+              border: '1px solid var(--glass-border)',
+              color: 'var(--text-primary)',
+            }}
           >
-            {m.label}
+            <m.icon size={15} style={{ color: 'var(--accent)', flexShrink: 0 }} />
+            <span className="text-sm font-medium truncate">{m.label}</span>
           </button>
         ))}
-      </div>
-
-      {/* Column header hint */}
-      <div
-        className="px-6 pt-3 pb-1 flex gap-2 text-[10px] font-semibold tracking-widest uppercase"
-        style={{ color: 'var(--text-muted)' }}
-      >
-        <span className="w-7 shrink-0" />
-        <span className="w-24 shrink-0">Key</span>
-        <span className="flex-1">Label</span>
-        <span style={{ width: 148 }}>Type</span>
-        <span className="w-14" />
-      </div>
-
-      {/* Field rows */}
-      <div className="px-6 py-3 space-y-2">
-        {fields.map((field, idx) => (
-          <FieldRow
-            key={`${idx}-${field.key}`}
-            field={field}
-            idx={idx}
-            total={fields.length}
-            onChange={(patch) => updateField(idx, patch)}
-            onDelete={() => deleteField(idx)}
-            onMove={(dir) => moveField(idx, dir)}
-          />
-        ))}
-
-        {fields.length === 0 && (
-          <p
-            className="text-sm text-center py-6"
-            style={{ color: 'var(--text-muted)' }}
-          >
-            No fields configured. Add one below.
-          </p>
-        )}
-
-        <button
-          type="button"
-          onClick={addField}
-          className="flex items-center gap-2 w-full justify-center py-2.5 rounded-xl text-xs font-medium mt-1"
-          style={{
-            backgroundColor: 'var(--glass-bg-raised)',
-            color: 'var(--text-muted)',
-            border: '1px dashed var(--glass-border)',
-          }}
-        >
-          <FaPlus size={9} /> Add Field
-        </button>
-      </div>
-
-      {/* Footer */}
-      <div
-        className="px-6 py-4 flex items-center justify-between"
-        style={{ borderTop: '1px solid var(--glass-border-subtle)' }}
-      >
-        <button
-          type="button"
-          onClick={() =>
-            setConfigs((prev) => ({
-              ...prev,
-              [activeModule]: defaultFormFields(activeModule),
-            }))
-          }
-          className="text-xs underline"
-          style={{ color: 'var(--text-muted)' }}
-        >
-          Reset to defaults
-        </button>
-        <motion.button
-          whileTap={{ scale: 0.96 }}
-          onClick={handleSave}
-          disabled={saving}
-          className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold disabled:opacity-60"
-          style={{
-            backgroundColor: saved ? '#34d399' : 'var(--accent)',
-            color: '#fff',
-          }}
-        >
-          {saved ? (
-            <>
-              <FaCheck size={11} /> Saved
-            </>
-          ) : (
-            <>
-              <FaSave size={11} /> {saving ? 'Saving…' : 'Save Changes'}
-            </>
-          )}
-        </motion.button>
       </div>
     </div>
   );
 });
-FormFieldsSection.displayName = 'FormFieldsSection';
+FormBuilderLinks.displayName = 'FormBuilderLinks';
 
 /* ── Main ── */
 const AdminSettings = memo(() => {
@@ -1792,7 +1315,7 @@ const AdminSettings = memo(() => {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
               >
-                <FormFieldsSection />
+                <FormBuilderLinks />
               </motion.div>
             )}
           </div>

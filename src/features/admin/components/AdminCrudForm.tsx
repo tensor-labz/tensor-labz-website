@@ -14,6 +14,7 @@ import {
 import ReactQuill from 'react-quill-new';
 import 'react-quill-new/dist/quill.snow.css';
 import { MODULES, type FieldConfig } from '../config/modules';
+import Breadcrumbs from '../../../shared/components/ui/Breadcrumbs';
 import { supabase } from '../../../lib/supabase';
 import { uploadImage, moduleFolder } from '../../../lib/imageUpload';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
@@ -109,7 +110,7 @@ const DeleteModal = ({
 );
 
 /* ── Image field ── */
-const ImageField = ({
+export const ImageField = ({
   value,
   onChange,
   folder,
@@ -126,8 +127,11 @@ const ImageField = ({
   const [progress, setProgress] = useState(0);
   const [uploadError, setUploadError] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-  // Keep track of the value at the time upload started so we can revert on error
   const originalValueRef = useRef<string>(String(value ?? ''));
+
+  useEffect(() => {
+    if (!uploading) setPreview(String(value ?? ''));
+  }, [value]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const inputStyle = {
     backgroundColor: 'var(--input-bg)',
@@ -214,9 +218,8 @@ const ImageField = ({
             src={preview}
             alt="preview"
             className="w-full h-full object-cover"
-            onError={(e) => {
-              (e.currentTarget.parentElement as HTMLDivElement).style.display =
-                'none';
+            onError={() => {
+              if (!uploading) setPreview('');
             }}
           />
 
@@ -1161,9 +1164,14 @@ const AdminCrudForm = memo(() => {
     if (!formFields) return;
     if (!isNew && recordStatus !== 'succeeded') return;
     const data = isNew ? {} : (currentRecord ?? {});
+    // Supabase returns all column names lowercased; build a lowercase lookup map
+    // so camelCase field keys like 'imageURL' still find 'imageurl' in the record.
+    const lowerData = Object.fromEntries(
+      Object.entries(data as Record<string, unknown>).map(([k, v]) => [k.toLowerCase(), v])
+    );
     setValues(
       formFields.reduce<Record<string, unknown>>((acc, f) => {
-        const raw = (data as Record<string, unknown>)[f.key];
+        const raw = lowerData[f.key.toLowerCase()];
         acc[f.key] =
           raw !== undefined && raw !== null ? raw : defaultForType(f.type);
         return acc;
@@ -1221,152 +1229,124 @@ const AdminCrudForm = memo(() => {
 
   return (
     <>
-      <div className="p-6 max-w-3xl mx-auto">
-        {/* Header */}
-        <div className="flex items-center gap-3 mb-6">
-          <motion.button
-            whileTap={{ scale: 0.9 }}
-            onClick={() => navigate(`/admin/${moduleId}`)}
-            className="w-9 h-9 flex items-center justify-center rounded-lg"
-            style={{
-              backgroundColor: 'var(--glass-bg-raised)',
-              border: '1px solid var(--glass-border)',
-              color: 'var(--text-muted)',
-            }}
-          >
-            <FaArrowLeft size={13} />
-          </motion.button>
-          <div>
-            <h2
-              className="text-xl font-bold"
+      {/* form wraps both header and body so type="submit" in header works */}
+      <form onSubmit={handleSave} className="h-full flex flex-col">
+
+        {/* ── Sticky page header ── */}
+        <div
+          className="shrink-0 flex items-center justify-between gap-3 px-4 sm:px-6 py-3 sm:py-4"
+          style={{ borderBottom: '1px solid var(--glass-border)' }}
+        >
+          <Breadcrumbs
+            items={[
+              { label: mod.label, onClick: () => navigate(`/admin/${moduleId}`) },
+              { label: isNew ? 'New' : `#${id}` },
+            ]}
+          />
+
+          {/* Right: actions */}
+          <div className="flex items-center gap-2 shrink-0">
+            {!isNew && (
+              <motion.button
+                type="button"
+                whileTap={{ scale: 0.96 }}
+                onClick={() => setShowDelete(true)}
+                className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs sm:text-sm font-medium"
+                style={{
+                  backgroundColor: 'rgba(239,68,68,0.1)',
+                  border: '1px solid rgba(239,68,68,0.25)',
+                  color: '#ef4444',
+                }}
+              >
+                <FaTrash size={12} />
+                <span className="hidden sm:inline">Delete</span>
+              </motion.button>
+            )}
+            <button
+              type="button"
+              onClick={() => navigate(`/admin/${moduleId}`)}
+              className="px-3 py-2 rounded-lg text-xs sm:text-sm font-medium"
               style={{
-                color: 'var(--text-primary)',
-                fontFamily: '"Syne", sans-serif',
+                color: 'var(--text-muted)',
+                backgroundColor: 'var(--glass-bg-raised)',
+                border: '1px solid var(--glass-border)',
               }}
             >
-              {isNew ? `New ${mod.label}` : `Edit ${mod.label}`}
-            </h2>
-            {!isNew && (
-              <p
-                className="text-xs mt-0.5"
-                style={{ color: 'var(--text-muted)' }}
-              >
-                ID: {id}
-              </p>
-            )}
+              Cancel
+            </button>
+            <motion.button
+              type="submit"
+              whileTap={{ scale: 0.97 }}
+              disabled={saving}
+              className="flex items-center gap-1.5 px-3 py-2 sm:px-4 sm:py-2.5 rounded-lg text-xs sm:text-sm font-semibold disabled:opacity-60"
+              style={{ backgroundColor: 'var(--accent)', color: '#fff' }}
+            >
+              <FaSave size={12} />
+              <span>{saving ? 'Saving…' : 'Save'}</span>
+            </motion.button>
           </div>
         </div>
 
-        {/* Form card */}
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4 }}
-          className="rounded-2xl p-6"
-          style={{
-            backgroundColor: 'var(--glass-bg)',
-            border: '1px solid var(--glass-border)',
-          }}
-        >
-          {isLoading ? (
-            <FormSkeleton />
-          ) : (
-            <form onSubmit={handleSave}>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                {(formFields ?? []).map((field) => (
-                  <div
-                    key={field.key}
-                    className={
-                      field.span === 'full' ||
-                      field.type === 'toggle' ||
-                      field.type === 'checkbox'
-                        ? 'sm:col-span-2'
-                        : ''
-                    }
-                  >
-                    {field.type !== 'toggle' && field.type !== 'checkbox' && (
-                      <label
-                        className="block text-xs font-semibold mb-1.5"
-                        style={{ color: 'var(--text-muted)' }}
-                      >
-                        {field.label}
-                        {field.required && (
-                          <span
-                            className="ml-1"
-                            style={{ color: 'var(--accent)' }}
-                          >
-                            *
-                          </span>
-                        )}
-                      </label>
-                    )}
-                    <Field
-                      field={field}
-                      value={values[field.key]}
-                      folder={moduleFolder(moduleId, String(values.slug ?? ''))}
-                      onChange={(val) => handleChange(field.key, val)}
-                    />
-                  </div>
-                ))}
-              </div>
+        {/* ── Scrollable form body ── */}
+        <div className="flex-1 min-h-0 overflow-y-auto no-scrollbar">
+          <div className="p-6 max-w-3xl mx-auto">
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4 }}
+              className="rounded-2xl p-6"
+              style={{
+                backgroundColor: 'var(--glass-bg)',
+                border: '1px solid var(--glass-border)',
+              }}
+            >
+              {isLoading ? (
+                <FormSkeleton />
+              ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                  {(formFields ?? []).map((field) => (
+                    <div
+                      key={field.key}
+                      className={
+                        field.span === 'full' ||
+                        field.type === 'toggle' ||
+                        field.type === 'checkbox'
+                          ? 'sm:col-span-2'
+                          : ''
+                      }
+                    >
+                      {field.type !== 'toggle' && field.type !== 'checkbox' && (
+                        <label
+                          className="block text-xs font-semibold mb-1.5"
+                          style={{ color: 'var(--text-muted)' }}
+                        >
+                          {field.label}
+                          {field.required && (
+                            <span className="ml-1" style={{ color: 'var(--accent)' }}>*</span>
+                          )}
+                        </label>
+                      )}
+                      <Field
+                        field={field}
+                        value={values[field.key]}
+                        folder={moduleFolder(moduleId, String(values.slug ?? ''))}
+                        onChange={(val) => handleChange(field.key, val)}
+                      />
+                    </div>
+                  ))}
+                </div>
+              )}
 
-              {/* Save error */}
               {saveError && (
                 <p className="mt-4 text-sm" style={{ color: '#ef4444' }}>
                   {saveError}
                 </p>
               )}
+            </motion.div>
+          </div>
+        </div>
 
-              {/* Actions */}
-              <div
-                className="flex items-center justify-between mt-8 pt-6"
-                style={{ borderTop: '1px solid var(--glass-border)' }}
-              >
-                {!isNew ? (
-                  <motion.button
-                    type="button"
-                    whileTap={{ scale: 0.96 }}
-                    onClick={() => setShowDelete(true)}
-                    className="flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium"
-                    style={{
-                      backgroundColor: 'rgba(239,68,68,0.1)',
-                      border: '1px solid rgba(239,68,68,0.25)',
-                      color: '#ef4444',
-                    }}
-                  >
-                    <FaTrash size={12} /> Delete
-                  </motion.button>
-                ) : (
-                  <span />
-                )}
-                <div className="flex items-center gap-3">
-                  <button
-                    type="button"
-                    onClick={() => navigate(`/admin/${moduleId}`)}
-                    className="px-4 py-2.5 rounded-lg text-sm font-medium"
-                    style={{
-                      color: 'var(--text-muted)',
-                      backgroundColor: 'var(--glass-bg-raised)',
-                      border: '1px solid var(--glass-border)',
-                    }}
-                  >
-                    Cancel
-                  </button>
-                  <motion.button
-                    type="submit"
-                    whileTap={{ scale: 0.97 }}
-                    disabled={saving}
-                    className="flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold disabled:opacity-60"
-                    style={{ backgroundColor: 'var(--accent)', color: '#fff' }}
-                  >
-                    <FaSave size={12} /> {saving ? 'Saving…' : 'Save'}
-                  </motion.button>
-                </div>
-              </div>
-            </form>
-          )}
-        </motion.div>
-      </div>
+      </form>
 
       <AnimatePresence>
         {showDelete && (
