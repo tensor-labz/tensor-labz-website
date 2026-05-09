@@ -102,6 +102,24 @@ body {
   font-weight: 500;
   margin-bottom: 0.6rem;
 }
+/* ─── Hide scrollbars while keeping scroll functional ───── */
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* DataTable fixedHeader scroll container lives one level inside the wrapper */
+.dt-no-scrollbar > div > div:nth-child(2) {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.dt-no-scrollbar > div > div:nth-child(2)::-webkit-scrollbar {
+  display: none;
+}
+
 .project-content h4 {
   font-size: 1.5rem;
   font-weight: 500;

@@ -588,7 +588,7 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
           Mobile: overflow-y auto so the card list scrolls. */}
       <div
         ref={tableWrapRef}
-        className="rounded-2xl flex-1 min-h-0"
+        className="rounded-2xl flex-1 min-h-0 no-scrollbar"
         style={{
           border: '1px solid var(--glass-border)',
           backgroundColor: 'var(--glass-bg)',
@@ -606,7 +606,7 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
           />
         ) : (
           /* ── Desktop/tablet: DataTable manages its own vertical scroll ── */
-          <div style={{ minWidth: '580px', height: '100%' }}>
+          <div className="dt-no-scrollbar" style={{ minWidth: '580px', height: '100%' }}>
             {loading ? (
               <TableSkeleton />
             ) : (
