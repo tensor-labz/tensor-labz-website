@@ -88,6 +88,28 @@ const customStyles = {
   },
 };
 
+/* ── Field helpers ──────────────────────────────────────────────────────
+ * Postgres stores column names in lowercase regardless of how they were
+ * defined (e.g. "imageURL" becomes "imageurl").  Always try the exact key
+ * first so we don't hide intentional casing, then fall back to lowercase.
+ * ── */
+const rowVal = (row: AdminRecord, key: string): unknown =>
+  row[key] !== undefined
+    ? row[key]
+    : row[key.toLowerCase()];
+
+/** Resolve any image-field value to a displayable URL string.
+ *  Handles: full URL string · relative S3 key · JSON array (takes first). */
+const resolveImg = (val: unknown): string => {
+  if (!val) return '';
+  const src = Array.isArray(val) ? String(val[0] ?? '') : String(val);
+  if (!src) return '';
+  if (src.startsWith('http')) return src;
+  // relative S3 key — prepend CDN base if configured
+  const cdn = import.meta.env.VITE_CDN_URL as string | undefined;
+  return cdn ? `${cdn}/${src}` : src;
+};
+
 /* ── Image thumbnail cell ── */
 const ImageCell = ({ src }: { src: string }) =>
   src ? (
@@ -95,6 +117,9 @@ const ImageCell = ({ src }: { src: string }) =>
       src={src}
       alt=""
       className="w-10 h-10 object-cover rounded-lg flex-shrink-0"
+      onError={(e) => {
+        (e.currentTarget as HTMLImageElement).style.display = 'none';
+      }}
     />
   ) : (
     <div
@@ -196,12 +221,23 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
       });
   }, [moduleId]);
 
+  /* Keys of fields typed 'image' or 'images' in the static module config.
+   * Used to render image thumbnails even for non-primary image columns. */
+  const imageTypeKeys = useMemo(() => {
+    if (!mod) return new Set<string>();
+    return new Set(
+      mod.fields
+        .filter((f) => f.type === 'image' || f.type === 'images')
+        .map((f) => f.key.toLowerCase())
+    );
+  }, [mod]);
+
   /* Build DataTable column definitions */
   const columns = useMemo<TableColumn<AdminRecord>[]>(() => {
     if (!mod) return [];
     const cols: TableColumn<AdminRecord>[] = [];
 
-    /* Image column — always first if the module has one */
+    /* Primary image — always first, uses rowVal for case-insensitive lookup */
     if (mod.imageField) {
       cols.push({
         id: '__image',
@@ -209,40 +245,59 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
         width: '68px',
         sortable: false,
         cell: (row) => (
-          <ImageCell src={String(row[mod.imageField!] ?? '')} />
+          <ImageCell src={resolveImg(rowVal(row, mod.imageField!))} />
         ),
       });
     }
+
+    /* imageField key (lowercase) — skip it in content columns to avoid duplicate */
+    const primaryImgKey = mod.imageField?.toLowerCase() ?? '';
 
     if (colConfig) {
       /* Supabase-driven columns */
       [...colConfig]
         .filter((c) => c.visible !== false)
+        .filter((c) => c.key.toLowerCase() !== primaryImgKey) // skip primary image
         .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
         .forEach((c) => {
-          const isDesc = c.key === mod.descriptionField;
-          cols.push({
-            id: c.key,
-            name: c.label,
-            selector: (row) => String(row[c.key] ?? ''),
-            sortable: c.sortable ?? true,
-            wrap: true,
-            ...(c.width ? { width: c.width } : { grow: isDesc ? 2 : 1 }),
-            ...(c.align === 'center' && { center: true }),
-            ...(c.align === 'right' && { right: true }),
-            ...(isDesc && {
+          const isImg = imageTypeKeys.has(c.key.toLowerCase());
+          const isDesc = c.key.toLowerCase() === mod.descriptionField?.toLowerCase();
+
+          if (isImg) {
+            /* Extra image field — render thumbnail */
+            cols.push({
+              id: c.key,
+              name: c.label,
+              width: c.width ?? '68px',
+              sortable: false,
               cell: (row) => (
-                <TextCell value={String(row[c.key] ?? '')} />
+                <ImageCell src={resolveImg(rowVal(row, c.key))} />
               ),
-            }),
-          });
+            });
+          } else {
+            cols.push({
+              id: c.key,
+              name: c.label,
+              selector: (row) => String(rowVal(row, c.key) ?? ''),
+              sortable: c.sortable ?? true,
+              wrap: true,
+              ...(c.width ? { width: c.width } : { grow: isDesc ? 2 : 1 }),
+              ...(c.align === 'center' && { center: true }),
+              ...(c.align === 'right' && { right: true }),
+              ...(isDesc && {
+                cell: (row) => (
+                  <TextCell value={String(rowVal(row, c.key) ?? '')} />
+                ),
+              }),
+            });
+          }
         });
     } else {
-      /* Static fallback from modules.tsx */
+      /* Static fallback — title + description, image already in __image column */
       cols.push({
         id: mod.titleField,
         name: 'Title',
-        selector: (row) => String(row[mod.titleField] ?? ''),
+        selector: (row) => String(rowVal(row, mod.titleField) ?? ''),
         sortable: true,
         grow: 1,
         wrap: true,
@@ -251,11 +306,11 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
         cols.push({
           id: mod.descriptionField,
           name: 'Description',
-          selector: (row) => String(row[mod.descriptionField!] ?? ''),
+          selector: (row) => String(rowVal(row, mod.descriptionField!) ?? ''),
           sortable: false,
           grow: 2,
           cell: (row) => (
-            <TextCell value={String(row[mod.descriptionField!] ?? '')} />
+            <TextCell value={String(rowVal(row, mod.descriptionField!) ?? '')} />
           ),
         });
       }
@@ -274,7 +329,7 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
     });
 
     return cols;
-  }, [mod, colConfig, moduleId, navigate]);
+  }, [mod, colConfig, moduleId, navigate, imageTypeKeys]);
 
   /* Default sort: first sortable non-image column */
   const defaultSortField = useMemo(() => {
