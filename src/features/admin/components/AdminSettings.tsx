@@ -331,28 +331,23 @@ const ALIGN_ICONS = {
 function defaultColumns(moduleId: string): TableColumnConfig[] {
   const mod = MODULES.find((m) => m.id === moduleId);
   if (!mod) return [];
-  const cols: TableColumnConfig[] = [];
-  if (mod.imageField)
-    cols.push({
-      field: mod.imageField,
-      title: 'Image',
-      visible: true,
-      align: 'left',
-    });
-  cols.push({
-    field: mod.titleField,
-    title: 'Title',
-    visible: true,
-    align: 'left',
-  });
-  if (mod.descriptionField)
-    cols.push({
-      field: mod.descriptionField,
-      title: 'Description',
-      visible: true,
-      align: 'left',
-    });
-  return cols;
+
+  // Fields that appear visible by default in the table
+  const visibleByDefault = new Set(
+    [mod.imageField, mod.titleField, ...(mod.tableColumns ?? []), mod.descriptionField].filter(
+      Boolean
+    ) as string[]
+  );
+
+  return mod.fields.map((f, i) => ({
+    field: f.key,
+    title: f.label,
+    visible: visibleByDefault.has(f.key),
+    align: 'left' as const,
+    sortable: !['image', 'images', 'richtext', 'toggle', 'checkbox'].includes(f.type),
+    order: i,
+    ...(f.type === 'image' || f.type === 'images' ? { width: '68px' } : {}),
+  }));
 }
 
 /* ── Column row with expandable link input ── */
