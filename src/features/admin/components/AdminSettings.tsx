@@ -376,8 +376,8 @@ const PageConfigSection = memo(() => {
     supabase
       .from('page_config')
       .select('*')
-      .then(({ data }) => {
-        if (!data) return;
+      .then(({ data, error }) => {
+        if (error || !data) return;
         const map: Record<string, PageComponentConfig[]> = {};
         (data as { module_id: string; components: PageComponentConfig[] }[]).forEach((r) => {
           map[r.module_id] = r.components;
