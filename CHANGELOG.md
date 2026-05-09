@@ -7,6 +7,19 @@ All notable changes to the Tensor Labs website are documented here.
 ## [Unreleased]
 
 ---
+## [v1.6.1] — 2026-05-09
+
+### Bug Fixes
+
+- prettier formatting, remove unused imports, escape quotes in JSX
+
+### Other
+
+- Merge pull request #13 from tensor-labz/staging
+
+
+
+---
 ## [v1.6.0] — 2026-05-09
 
 ### Added
