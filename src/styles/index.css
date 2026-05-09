@@ -102,42 +102,44 @@ body {
   font-weight: 500;
   margin-bottom: 0.6rem;
 }
-/* ─── Admin DataTable: fill card height, fixed header + fixed pagination ──
- * .dt-fill is passed as className to <DataTable> so it lands on
- * ResponsiveWrapper (the scroll root DTC renders).
- * Layout: flex column → complementary div (rows) gets flex-1 + overflow-y
- *         → last div (pagination) is always pinned at the bottom.
+/* ─── Admin DataTable: fixed header + fixed pagination ────────────────
+ * DTC renders outside ResponsiveWrapper for pagination:
+ *   .dt-layout > [ResponsiveWrapper(.dt-fill), div(pagination)]
+ *
+ * .dt-layout = our wrapper div  → flex column, full height
+ * .dt-fill   = <DataTable className> → lands on ResponsiveWrapper
+ *              flex-1, overrides DTC overflow-y:hidden so rows scroll
+ * pagination div is a sibling of ResponsiveWrapper → flex-shrink:0
  * ── */
-.dt-fill {
-  height: 100%;
-  display: flex !important;
+.dt-layout {
+  display: flex;
   flex-direction: column;
-  overflow: hidden !important;
+  height: 100%;
 }
 
-/* Row area: fills remaining space, scrolls vertically */
-.dt-fill > div[role="complementary"] {
+/* ResponsiveWrapper: fills space, rows scroll, no scrollbar */
+.dt-layout > .dt-fill {
   flex: 1;
   min-height: 0;
-  overflow-y: auto;
+  overflow-y: auto !important;
   overflow-x: hidden;
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
-.dt-fill > div[role="complementary"]::-webkit-scrollbar {
+.dt-layout > .dt-fill::-webkit-scrollbar {
   display: none;
 }
 
-/* Column header: sticky within the row-scroll div */
+/* Pagination sibling: always pinned at the bottom */
+.dt-layout > div:not(.dt-fill) {
+  flex-shrink: 0;
+}
+
+/* Column header sticky within the ResponsiveWrapper scroll context */
 .rdt_TableHead {
   position: sticky;
   top: 0;
   z-index: 1;
-}
-
-/* Pagination: always at bottom, never scrolls away */
-.dt-fill > div:last-child {
-  flex-shrink: 0;
 }
 
 /* ─── Hide scrollbars while keeping scroll functional ───── */

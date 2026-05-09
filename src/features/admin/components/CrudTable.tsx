@@ -594,7 +594,7 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
           />
         ) : (
           /* ── Desktop/tablet: DataTable manages its own vertical scroll ── */
-          <div style={{ minWidth: '580px', height: '100%' }}>
+          <div className="dt-layout" style={{ minWidth: '580px', height: '100%' }}>
             {loading ? (
               <TableSkeleton />
             ) : (
