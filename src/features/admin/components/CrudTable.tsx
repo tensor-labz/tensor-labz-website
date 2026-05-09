@@ -541,7 +541,7 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
   }, [rows, search]);
 
   return (
-    <div className="flex flex-col pt-4 px-4 pb-4 sm:pt-5 sm:px-6 sm:pb-5">
+    <div className="h-full flex flex-col pt-3 px-4 sm:pt-4 sm:px-5">
       {/* Search + record count row — stays pinned above the table */}
       <div className="shrink-0 flex flex-col sm:flex-row sm:items-center gap-3 mb-4">
       <div
@@ -574,15 +574,14 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
       </p>
       </div>
 
-      {/* Table card — naturally sized, capped at max-height so it never
-          pushes below the viewport. Scrolls internally when rows exceed cap. */}
+      {/* Table card — fills remaining height; row area scrolls, header+pagination fixed */}
       <div
-        className="rounded-2xl no-scrollbar"
+        className="rounded-2xl flex-1 min-h-0 no-scrollbar"
         style={{
           border: '1px solid var(--glass-border)',
           backgroundColor: 'var(--glass-bg)',
-          overflow: 'auto',
-          maxHeight: 'calc(100vh - 215px)',
+          overflowY: 'hidden',
+          overflowX: isMobile ? 'hidden' : 'auto',
         }}
       >
         {isMobile ? (
@@ -601,6 +600,7 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
             ) : (
               <StyleSheetManager shouldForwardProp={shouldForwardDtcProp}>
                 <DataTable<AdminRecord>
+                  className="dt-fill"
                   columns={columns}
                   data={filtered}
                   theme="adminTheme"

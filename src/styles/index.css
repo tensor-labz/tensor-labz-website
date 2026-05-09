@@ -102,11 +102,42 @@ body {
   font-weight: 500;
   margin-bottom: 0.6rem;
 }
-/* ─── Admin table: sticky column header inside overflow card ── */
+/* ─── Admin DataTable: fill card height, fixed header + fixed pagination ──
+ * .dt-fill is passed as className to <DataTable> so it lands on
+ * ResponsiveWrapper (the scroll root DTC renders).
+ * Layout: flex column → complementary div (rows) gets flex-1 + overflow-y
+ *         → last div (pagination) is always pinned at the bottom.
+ * ── */
+.dt-fill {
+  height: 100%;
+  display: flex !important;
+  flex-direction: column;
+  overflow: hidden !important;
+}
+
+/* Row area: fills remaining space, scrolls vertically */
+.dt-fill > div[role="complementary"] {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.dt-fill > div[role="complementary"]::-webkit-scrollbar {
+  display: none;
+}
+
+/* Column header: sticky within the row-scroll div */
 .rdt_TableHead {
   position: sticky;
   top: 0;
   z-index: 1;
+}
+
+/* Pagination: always at bottom, never scrolls away */
+.dt-fill > div:last-child {
+  flex-shrink: 0;
 }
 
 /* ─── Hide scrollbars while keeping scroll functional ───── */
