@@ -27,11 +27,14 @@ async function getToken(): Promise<string> {
  * Uploads a file to S3 via Lambda presigned URL.
  * If existingUrl is one of our S3/CDN URLs, calls /image/replace to clean up the old object.
  * Returns the publicUrl to store in Supabase.
+ *
+ * @param onProgress Optional callback receiving upload progress (0–100).
  */
 export async function uploadImage(
   file: File,
   folder: string,
-  existingUrl?: string
+  existingUrl?: string,
+  onProgress?: (pct: number) => void
 ): Promise<{ publicUrl: string; key: string }> {
   const token = await getToken();
   const existingKey = existingUrl ? keyFromUrl(existingUrl) : null;
@@ -66,10 +69,30 @@ export async function uploadImage(
     key: string;
   };
 
-  await fetch(uploadUrl, {
-    method: 'PUT',
-    body: file,
-    headers: { 'Content-Type': file.type },
+  // Use XHR instead of fetch so we can report upload progress via onprogress.
+  await new Promise<void>((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    xhr.open('PUT', uploadUrl);
+    xhr.setRequestHeader('Content-Type', file.type);
+
+    if (onProgress) {
+      xhr.upload.onprogress = (e) => {
+        if (e.lengthComputable) {
+          onProgress(Math.round((e.loaded / e.total) * 100));
+        }
+      };
+    }
+
+    xhr.onload = () => {
+      if (xhr.status >= 200 && xhr.status < 300) {
+        if (onProgress) onProgress(100);
+        resolve();
+      } else {
+        reject(new Error(`S3 PUT failed (${xhr.status})`));
+      }
+    };
+    xhr.onerror = () => reject(new Error('S3 PUT network error'));
+    xhr.send(file);
   });
 
   return { publicUrl, key };

@@ -10,6 +10,8 @@ import AdminSidebar from '../features/admin/components/AdminSidebar';
 import AdminOverview from '../features/admin/components/AdminOverview';
 import AdminDataTable from '../features/admin/components/AdminDataTable';
 import AdminCrudForm from '../features/admin/components/AdminCrudForm';
+import AdminFormBuilder from '../features/admin/components/AdminFormBuilder';
+import AdminSiteControl from '../features/admin/components/AdminSiteControl';
 import AdminUsers from '../features/admin/components/AdminUsers';
 import AdminBilling from '../features/admin/components/AdminBilling';
 import AdminSettings from '../features/admin/components/AdminSettings';
@@ -30,7 +32,7 @@ const AdminDashboard = memo(() => {
 
   return (
     <div
-      className="min-h-screen flex flex-col"
+      className="h-screen overflow-hidden flex flex-col"
       style={{ color: 'var(--text-primary)' }}
     >
       <HeaderHelmet title="Admin Dashboard" />
@@ -111,7 +113,7 @@ const AdminDashboard = memo(() => {
       </header>
 
       {/* ── Body: sidebar + content ── */}
-      <div className="flex flex-1">
+      <div className="flex flex-1 min-h-0">
         <AdminSidebar
           open={sidebarOpen}
           onClose={() => setSidebarOpen(false)}
@@ -124,7 +126,9 @@ const AdminDashboard = memo(() => {
             <Route path="users" element={<AdminUsers />} />
             <Route path="billing" element={<AdminBilling />} />
             <Route path="settings" element={<AdminSettings />} />
+            <Route path="site-control" element={<AdminSiteControl />} />
             <Route path=":module" element={<AdminDataTable />} />
+            <Route path=":module/form-config" element={<AdminFormBuilder />} />
             <Route path=":module/:id" element={<AdminCrudForm />} />
           </Routes>
         </main>

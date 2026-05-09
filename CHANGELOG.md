@@ -7,6 +7,63 @@ All notable changes to the Tensor Labs website are documented here.
 ## [Unreleased]
 
 ---
+## [v1.5.0] — 2026-05-09
+
+### Added
+
+- fixed header + fixed pagination, rows scroll between them
+- table-only scroll — page header and search bar always visible
+- mobile card list view for xs screens; DataTable for sm+
+- dynamic page components + fix table responsiveness + Add button at page level
+- auto-render url-type fields as icon in table, no manual config needed
+- url action column type renders external link icon
+- add link template support to TableColumnConfig and CrudTable
+- resolve service_id FK to label in CrudTable; add relation select in AdminCrudForm
+- add service column to projects table via tableColumns config
+- replace AdminDataTable with reusable CrudTable using react-data-table-component
+
+### Bug Fixes
+
+- pagination visible — flex layout on wrapper div not ResponsiveWrapper
+- eliminate bottom gap — fill full card height, auto rows-per-page
+- hide DTC scrollbar by passing className directly to DataTable
+- hide DataTable scrollbar via .rdt_TableBody selector
+- single scroll — DataTable owns vertical, container owns horizontal
+- guard page_config fetch against 404 when table not yet created
+- memoize selectors with createSelector+useMemo; wrap DataTable in StyleSheetManager to suppress styled-components DOM prop warnings
+- visible url icon cell; responsive table layout with horizontal scroll
+- defaultColumns includes all module fields, hidden by default
+- CrudTable — case-insensitive field lookup, image thumbnails for all image-type fields, skip duplicate imageField in colConfig
+
+### Refactor
+
+- natural-height table with max-height cap
+- rename TableColumnConfig key→field, label→title, add height field
+
+### Style
+
+- remove bottom padding from CrudTable — table card reaches the edge
+- compact pagination bar — 40px height, smaller page buttons
+- hide scrollbars on table and card list
+- link cells inherit text style — no accent color or underline
+- remove Edit button column from CrudTable — row click handles navigation
+
+### Other
+
+- Merge pull request #9 from tensor-labz/feat/crud-table
+
+
+
+---
+## [v1.4.0] — 2026-05-09
+
+### Added
+
+- wire admin CRUD through Redux entity adapter and async thunks (#8)
+
+
+
+---
 ## [v1.3.1] — 2026-05-09
 
 ### Chore
