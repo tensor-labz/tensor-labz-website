@@ -27,14 +27,14 @@ import type { ContactRow } from '../../hooks/useCompanyInfo';
 
 /* Map social platform name → icon */
 const PLATFORM_ICONS: [string, IconType][] = [
-  ['whatsapp',  FaWhatsapp],
-  ['facebook',  FaFacebookF],
-  ['linkedin',  FaLinkedinIn],
+  ['whatsapp', FaWhatsapp],
+  ['facebook', FaFacebookF],
+  ['linkedin', FaLinkedinIn],
   ['instagram', FaInstagram],
-  ['tiktok',    FaTiktok],
-  ['youtube',   FaYoutube],
-  ['twitter',   FaTwitter],
-  ['x',         FaTwitter],
+  ['tiktok', FaTiktok],
+  ['youtube', FaYoutube],
+  ['twitter', FaTwitter],
+  ['x', FaTwitter],
 ];
 
 function socialIcon(platform: string): IconType {
@@ -46,8 +46,10 @@ function socialIcon(platform: string): IconType {
 function contactIcon(type: string): IconType {
   const t = type.toLowerCase();
   if (t.includes('email') || t.includes('mail')) return FaEnvelope;
-  if (t.includes('phone') || t.includes('tel') || t.includes('mobile')) return FaPhone;
-  if (t.includes('address') || t.includes('location') || t.includes('map')) return FaMapMarkerAlt;
+  if (t.includes('phone') || t.includes('tel') || t.includes('mobile'))
+    return FaPhone;
+  if (t.includes('address') || t.includes('location') || t.includes('map'))
+    return FaMapMarkerAlt;
   return FaClock;
 }
 
@@ -59,7 +61,8 @@ function contactHref(row: ContactRow): string | undefined {
     return `tel:${row.value.replace(/[\s\-()]/g, '')}`;
   if (t.includes('address') || t.includes('location') || t.includes('map'))
     return row.value.startsWith('http') ? row.value : undefined;
-  if (t.includes('whatsapp')) return `https://wa.me/${row.value.replace(/\D/g, '')}`;
+  if (t.includes('whatsapp'))
+    return `https://wa.me/${row.value.replace(/\D/g, '')}`;
   return undefined;
 }
 
@@ -81,7 +84,6 @@ const Footer = () => {
     link: `/services/${s.slug}`,
   }));
 
-
   return (
     <footer
       style={{
@@ -98,7 +100,6 @@ const Footer = () => {
         className="max-w-7xl mx-auto px-6 lg:px-10 py-16"
       >
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12">
-
           {/* Brand */}
           <div className="flex flex-col items-center sm:items-start gap-5">
             <Link to="/">
@@ -107,7 +108,9 @@ const Footer = () => {
                 alt={info.name}
                 className="h-10 w-auto object-contain"
                 loading="lazy"
-                onError={(e) => { (e.currentTarget as HTMLImageElement).src = logo; }}
+                onError={(e) => {
+                  (e.currentTarget as HTMLImageElement).src = logo;
+                }}
               />
             </Link>
             <p className="text-sm leading-relaxed text-slate-500 max-w-xs text-center sm:text-left">
@@ -142,7 +145,10 @@ const Footer = () => {
             <ul className="flex flex-col items-center sm:items-start gap-2.5">
               {isLoading
                 ? Array.from({ length: 4 }).map((_, i) => (
-                    <li key={i} className="h-4 w-24 bg-white/10 rounded animate-pulse" />
+                    <li
+                      key={i}
+                      className="h-4 w-24 bg-white/10 rounded animate-pulse"
+                    />
                   ))
                 : serviceLinks.map((s) => (
                     <li key={s.link}>
@@ -186,7 +192,10 @@ const Footer = () => {
                 const Icon = contactIcon(row.type);
                 const href = contactHref(row);
                 return (
-                  <li key={row.type + row.value} className="flex items-start gap-3">
+                  <li
+                    key={row.type + row.value}
+                    className="flex items-start gap-3"
+                  >
                     <Icon className="text-slate-600 mt-0.5 shrink-0 text-sm" />
                     {href ? (
                       <a
@@ -196,7 +205,9 @@ const Footer = () => {
                         {row.value}
                       </a>
                     ) : (
-                      <span className="text-sm text-slate-500 leading-snug">{row.value}</span>
+                      <span className="text-sm text-slate-500 leading-snug">
+                        {row.value}
+                      </span>
                     )}
                   </li>
                 );
@@ -204,7 +215,9 @@ const Footer = () => {
               {info.available_hours && (
                 <li className="flex items-start gap-3">
                   <FaClock className="text-slate-600 mt-0.5 shrink-0 text-sm" />
-                  <span className="text-sm text-slate-500 leading-snug">{info.available_hours}</span>
+                  <span className="text-sm text-slate-500 leading-snug">
+                    {info.available_hours}
+                  </span>
                 </li>
               )}
             </ul>

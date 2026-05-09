@@ -38,7 +38,14 @@ const DEFAULT_PAGE_SIZE = 20;
 
 /* Prevent react-data-table-component's styled-components from forwarding
  * non-HTML props (grow, center, right, wrap) to the DOM */
-const DTC_INTERNAL_PROPS = new Set(['grow', 'center', 'right', 'wrap', 'dense', 'pointer']);
+const DTC_INTERNAL_PROPS = new Set([
+  'grow',
+  'center',
+  'right',
+  'wrap',
+  'dense',
+  'pointer',
+]);
 const shouldForwardDtcProp = (prop: string) => !DTC_INTERNAL_PROPS.has(prop);
 
 /* ── Custom styles applied on top of the theme ── */
@@ -106,9 +113,7 @@ const customStyles = {
  * first so we don't hide intentional casing, then fall back to lowercase.
  * ── */
 const rowVal = (row: AdminRecord, key: string): unknown =>
-  row[key] !== undefined
-    ? row[key]
-    : row[key.toLowerCase()];
+  row[key] !== undefined ? row[key] : row[key.toLowerCase()];
 
 /** Resolve any image-field value to a displayable URL string.
  *  Handles: full URL string · relative S3 key · JSON array (takes first). */
@@ -140,7 +145,6 @@ const ImageCell = ({ src }: { src: string }) =>
     />
   );
 
-
 /* ── Truncated text cell for long descriptions ── */
 const TextCell = ({ value }: { value: string }) => (
   <span
@@ -164,7 +168,10 @@ const TableSkeleton = () => (
       <div
         key={i}
         className="h-14 w-full"
-        style={{ backgroundColor: 'var(--glass-bg-raised)', opacity: 1 - i * 0.12 }}
+        style={{
+          backgroundColor: 'var(--glass-bg-raised)',
+          opacity: 1 - i * 0.12,
+        }}
       />
     ))}
   </div>
@@ -189,7 +196,10 @@ const MobileCardList = ({
 
   if (!rows.length) {
     return (
-      <div className="py-14 text-sm text-center" style={{ color: 'var(--text-muted)' }}>
+      <div
+        className="py-14 text-sm text-center"
+        style={{ color: 'var(--text-muted)' }}
+      >
         {search ? `No results for "${search}"` : 'No records yet.'}
       </div>
     );
@@ -199,8 +209,12 @@ const MobileCardList = ({
     <div>
       {rows.map((row, i) => {
         const title = String(rowVal(row, mod?.titleField ?? 'id') ?? '');
-        const desc = mod?.descriptionField ? String(rowVal(row, mod.descriptionField) ?? '') : '';
-        const imgSrc = mod?.imageField ? resolveImg(rowVal(row, mod.imageField)) : '';
+        const desc = mod?.descriptionField
+          ? String(rowVal(row, mod.descriptionField) ?? '')
+          : '';
+        const imgSrc = mod?.imageField
+          ? resolveImg(rowVal(row, mod.imageField))
+          : '';
 
         return (
           <div
@@ -216,20 +230,31 @@ const MobileCardList = ({
                 src={imgSrc}
                 alt=""
                 className="w-10 h-10 object-cover rounded-lg shrink-0"
-                onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
+                onError={(e) => {
+                  (e.currentTarget as HTMLImageElement).style.display = 'none';
+                }}
               />
             )}
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium truncate" style={{ color: 'var(--text-primary)' }}>
+              <p
+                className="text-sm font-medium truncate"
+                style={{ color: 'var(--text-primary)' }}
+              >
                 {title || `#${row.id}`}
               </p>
               {desc && (
-                <p className="text-xs mt-0.5 truncate" style={{ color: 'var(--text-muted)' }}>
+                <p
+                  className="text-xs mt-0.5 truncate"
+                  style={{ color: 'var(--text-muted)' }}
+                >
                   {desc}
                 </p>
               )}
             </div>
-            <FiChevronRight size={15} style={{ color: 'var(--text-muted)', flexShrink: 0 }} />
+            <FiChevronRight
+              size={15}
+              style={{ color: 'var(--text-muted)', flexShrink: 0 }}
+            />
           </div>
         );
       })}
@@ -262,7 +287,9 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
   const [colConfig, setColConfig] = useState<TableColumnConfig[] | null>(null);
   const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
   // Maps fieldKey → { idString → displayLabel } for select+relation fields
-  const [relationMaps, setRelationMaps] = useState<Record<string, Record<string, string>>>({});
+  const [relationMaps, setRelationMaps] = useState<
+    Record<string, Record<string, string>>
+  >({});
 
   /* Fetch rows via Redux */
   useEffect(() => {
@@ -274,7 +301,9 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
   useEffect(() => {
     if (!mod) return;
     setRelationMaps({});
-    const relFields = mod.fields.filter((f) => f.type === 'select' && f.relation);
+    const relFields = mod.fields.filter(
+      (f) => f.type === 'select' && f.relation
+    );
     relFields.forEach(async (f) => {
       const rel = f.relation!;
       const vf = rel.valueField ?? 'id';
@@ -282,7 +311,9 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
       if (!data) return;
       const map: Record<string, string> = {};
       data.forEach((row) => {
-        map[String(row[vf] ?? '')] = String(row[rel.labelField] ?? row[vf] ?? '');
+        map[String(row[vf] ?? '')] = String(
+          row[rel.labelField] ?? row[vf] ?? ''
+        );
       });
       setRelationMaps((prev) => ({ ...prev, [f.key]: map }));
     });
@@ -314,14 +345,19 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
   }, [mod]);
 
   /* Resolve a stored value via a relation map (if available) */
-  const resolveRelation = (relMap: Record<string, string> | undefined, val: unknown): string => {
+  const resolveRelation = (
+    relMap: Record<string, string> | undefined,
+    val: unknown
+  ): string => {
     const raw = String(val ?? '');
     return relMap ? (relMap[raw] ?? raw) : raw;
   };
 
   /* Resolve a link template by replacing ${fieldName} tokens with row values */
   const resolveLink = (template: string, row: AdminRecord): string =>
-    template.replace(/\$\{(\w+)\}/g, (_, key) => String(rowVal(row, key) ?? ''));
+    template.replace(/\$\{(\w+)\}/g, (_, key) =>
+      String(rowVal(row, key) ?? '')
+    );
 
   /* Build DataTable column definitions */
   const columns = useMemo<TableColumn<AdminRecord>[]>(() => {
@@ -352,7 +388,8 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
         .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
         .forEach((c) => {
           const isImg = imageTypeKeys.has(c.field.toLowerCase());
-          const isDesc = c.field.toLowerCase() === mod.descriptionField?.toLowerCase();
+          const isDesc =
+            c.field.toLowerCase() === mod.descriptionField?.toLowerCase();
           const relMap = relationMaps[c.field];
           const fieldDef = mod.fields.find((f) => f.key === c.field);
           const isUrlField = c.type === 'url' || fieldDef?.type === 'url';
@@ -398,7 +435,9 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
               ),
             });
           } else {
-            let cellRenderer: ((row: AdminRecord) => React.ReactNode) | undefined;
+            let cellRenderer:
+              | ((row: AdminRecord) => React.ReactNode)
+              | undefined;
             if (c.link) {
               cellRenderer = (row) => {
                 const label = resolveRelation(relMap, rowVal(row, c.field));
@@ -406,8 +445,19 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
                 if (!label) return null;
                 return (
                   <button
-                    onClick={(e) => { e.stopPropagation(); navigate(href); }}
-                    style={{ color: 'inherit', background: 'none', border: 'none', cursor: 'pointer', padding: 0, font: 'inherit', textAlign: 'left' }}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      navigate(href);
+                    }}
+                    style={{
+                      color: 'inherit',
+                      background: 'none',
+                      border: 'none',
+                      cursor: 'pointer',
+                      padding: 0,
+                      font: 'inherit',
+                      textAlign: 'left',
+                    }}
                   >
                     {label}
                   </button>
@@ -415,7 +465,9 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
               };
             } else if (isDesc) {
               cellRenderer = (row) => (
-                <TextCell value={resolveRelation(relMap, rowVal(row, c.field))} />
+                <TextCell
+                  value={resolveRelation(relMap, rowVal(row, c.field))}
+                />
               );
             }
             cols.push({
@@ -494,8 +546,19 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
               if (!rawId) return null;
               return (
                 <button
-                  onClick={(e) => { e.stopPropagation(); navigate(`/admin/${rel.table}/${rawId}`); }}
-                  style={{ color: 'inherit', background: 'none', border: 'none', cursor: 'pointer', padding: 0, font: 'inherit', textAlign: 'left' }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    navigate(`/admin/${rel.table}/${rawId}`);
+                  }}
+                  style={{
+                    color: 'inherit',
+                    background: 'none',
+                    border: 'none',
+                    cursor: 'pointer',
+                    padding: 0,
+                    font: 'inherit',
+                    textAlign: 'left',
+                  }}
                 >
                   {label}
                 </button>
@@ -514,7 +577,9 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
           sortable: false,
           grow: 2,
           cell: (row) => (
-            <TextCell value={String(rowVal(row, mod.descriptionField!) ?? '')} />
+            <TextCell
+              value={String(rowVal(row, mod.descriptionField!) ?? '')}
+            />
           ),
         });
       }
@@ -536,7 +601,11 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
     if (!search.trim()) return rows;
     const q = search.toLowerCase();
     return rows.filter((row) =>
-      Object.values(row).some((v) => String(v ?? '').toLowerCase().includes(q))
+      Object.values(row).some((v) =>
+        String(v ?? '')
+          .toLowerCase()
+          .includes(q)
+      )
     );
   }, [rows, search]);
 
@@ -544,34 +613,36 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
     <div className="h-full flex flex-col pt-3 px-4 sm:pt-4 sm:px-5">
       {/* Search + record count row — stays pinned above the table */}
       <div className="shrink-0 flex flex-col sm:flex-row sm:items-center gap-3 mb-4">
-      <div
-        className="flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl w-full sm:max-w-[380px]"
-        style={{
-          backgroundColor: 'var(--glass-bg)',
-          border: '1px solid var(--glass-border)',
-        }}
-      >
-        <FiSearch
-          size={14}
-          style={{ color: 'var(--text-muted)', flexShrink: 0 }}
-        />
-        <input
-          type="text"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          placeholder={`Search ${mod?.label ?? moduleId}…`}
-          className="flex-1 text-sm bg-transparent outline-none"
-          style={{ color: 'var(--text-primary)' }}
-        />
-        {search && (
-          <button onClick={() => setSearch('')} className="flex-shrink-0">
-            <FiX size={13} style={{ color: 'var(--text-muted)' }} />
-          </button>
-        )}
-      </div>
-      <p className="text-xs shrink-0" style={{ color: 'var(--text-muted)' }}>
-        {loading ? '—' : `${filtered.length} record${filtered.length !== 1 ? 's' : ''}`}
-      </p>
+        <div
+          className="flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl w-full sm:max-w-[380px]"
+          style={{
+            backgroundColor: 'var(--glass-bg)',
+            border: '1px solid var(--glass-border)',
+          }}
+        >
+          <FiSearch
+            size={14}
+            style={{ color: 'var(--text-muted)', flexShrink: 0 }}
+          />
+          <input
+            type="text"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder={`Search ${mod?.label ?? moduleId}…`}
+            className="flex-1 text-sm bg-transparent outline-none"
+            style={{ color: 'var(--text-primary)' }}
+          />
+          {search && (
+            <button onClick={() => setSearch('')} className="flex-shrink-0">
+              <FiX size={13} style={{ color: 'var(--text-muted)' }} />
+            </button>
+          )}
+        </div>
+        <p className="text-xs shrink-0" style={{ color: 'var(--text-muted)' }}>
+          {loading
+            ? '—'
+            : `${filtered.length} record${filtered.length !== 1 ? 's' : ''}`}
+        </p>
       </div>
 
       {/* Table card — fills remaining height; row area scrolls, header+pagination fixed */}
@@ -594,7 +665,10 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
           />
         ) : (
           /* ── Desktop/tablet: DataTable manages its own vertical scroll ── */
-          <div className="dt-layout" style={{ minWidth: '580px', height: '100%' }}>
+          <div
+            className="dt-layout"
+            style={{ minWidth: '580px', height: '100%' }}
+          >
             {loading ? (
               <TableSkeleton />
             ) : (
@@ -612,10 +686,17 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
                   defaultSortAsc
                   highlightOnHover
                   pointerOnHover
-                  onRowClicked={(row) => navigate(`/admin/${moduleId}/${row.id}`)}
+                  onRowClicked={(row) =>
+                    navigate(`/admin/${moduleId}/${row.id}`)
+                  }
                   noDataComponent={
-                    <div className="py-16 text-sm text-center w-full" style={{ color: 'var(--text-muted)' }}>
-                      {search ? `No results for "${search}"` : 'No records yet.'}
+                    <div
+                      className="py-16 text-sm text-center w-full"
+                      style={{ color: 'var(--text-muted)' }}
+                    >
+                      {search
+                        ? `No results for "${search}"`
+                        : 'No records yet.'}
                     </div>
                   }
                 />

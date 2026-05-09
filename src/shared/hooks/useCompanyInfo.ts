@@ -7,10 +7,10 @@ export interface SocialLink {
 }
 
 export interface ContactRow {
-  type: string;   // raw value of the `contact` column (email / phone / address / hours …)
+  type: string; // raw value of the `contact` column (email / phone / address / hours …)
   title: string;
   value: string;
-  link?: string;  // optional explicit URL; overrides auto-derived href
+  link?: string; // optional explicit URL; overrides auto-derived href
 }
 
 export interface CompanyInfo {
@@ -39,18 +39,25 @@ const DEFAULTS: CompanyInfo = {
   vision: '',
   mission: '',
   contact_rows: [
-    { type: 'address', title: 'Address',         value: 'Jaffna, Sri Lanka' },
-    { type: 'email',   title: 'Email',           value: 'tensoragri@gmail.com' },
-    { type: 'phone',   title: 'Phone',           value: '+94 070-595-1199' },
-    { type: 'hours',   title: 'Available Hours', value: 'Mon – Fri: 8:00 AM – 6:00 PM' },
+    { type: 'address', title: 'Address', value: 'Jaffna, Sri Lanka' },
+    { type: 'email', title: 'Email', value: 'tensoragri@gmail.com' },
+    { type: 'phone', title: 'Phone', value: '+94 070-595-1199' },
+    {
+      type: 'hours',
+      title: 'Available Hours',
+      value: 'Mon – Fri: 8:00 AM – 6:00 PM',
+    },
   ],
   social_links: [
-    { platform: 'WhatsApp',  url: 'https://wa.me/+94705359369' },
-    { platform: 'Facebook',  url: 'https://www.facebook.com/tensorlabs.tech' },
-    { platform: 'LinkedIn',  url: 'https://www.linkedin.com/company/tensoragri' },
+    { platform: 'WhatsApp', url: 'https://wa.me/+94705359369' },
+    { platform: 'Facebook', url: 'https://www.facebook.com/tensorlabs.tech' },
+    {
+      platform: 'LinkedIn',
+      url: 'https://www.linkedin.com/company/tensoragri',
+    },
     { platform: 'Instagram', url: 'https://www.instagram.com/tensorlabs.tech' },
-    { platform: 'TikTok',    url: 'https://www.tiktok.com/@tensoragri' },
-    { platform: 'YouTube',   url: 'https://www.youtube.com/@TENSORAGRI' },
+    { platform: 'TikTok', url: 'https://www.tiktok.com/@tensoragri' },
+    { platform: 'YouTube', url: 'https://www.youtube.com/@TENSORAGRI' },
   ],
 };
 
@@ -59,32 +66,43 @@ let _cache: CompanyInfo | null = null;
 let _promise: Promise<void> | null = null;
 
 async function load(): Promise<void> {
-  const [{ data: ci }, { data: social }, { data: contact }] = await Promise.all([
-    supabase.from('company_info').select('*').maybeSingle(),
-    supabase.from('social').select('social_media, value').order('id'),
-    supabase.from('contact').select('contact, title, value').order('id'),
-  ]);
+  const [{ data: ci }, { data: social }, { data: contact }] = await Promise.all(
+    [
+      supabase.from('company_info').select('*').maybeSingle(),
+      supabase.from('social').select('social_media, value').order('id'),
+      supabase.from('contact').select('contact, title, value').order('id'),
+    ]
+  );
 
   const socialLinks: SocialLink[] =
     social && social.length > 0
-      ? social.map((r) => ({ platform: r.social_media ?? '', url: r.value ?? '' }))
+      ? social.map((r) => ({
+          platform: r.social_media ?? '',
+          url: r.value ?? '',
+        }))
       : DEFAULTS.social_links;
 
   const contactRows: ContactRow[] =
     contact && contact.length > 0
-      ? contact.map((r) => ({ type: r.contact ?? '', title: r.title ?? '', value: r.value ?? '', link: r.link ?? '' }))
+      ? contact.map((r) => ({
+          type: r.contact ?? '',
+          title: r.title ?? '',
+          value: r.value ?? '',
+          link: r.link ?? '',
+        }))
       : DEFAULTS.contact_rows;
 
   _cache = {
-    name:          (ci?.name          as string) || DEFAULTS.name,
-    tagline:       (ci?.tagline       as string) || DEFAULTS.tagline,
-    description:   (ci?.description   as string) || DEFAULTS.description,
-    logo_url:        (ci?.logo_url        as string) || DEFAULTS.logo_url,
-    logo_url_dark:   (ci?.logo_url_dark   as string) || DEFAULTS.logo_url_dark,
-    available_hours: (ci?.available_hours as string) || DEFAULTS.available_hours,
-    who_we_are:      (ci?.who_we_are      as string) || DEFAULTS.who_we_are,
-    vision:       (ci?.vision      as string) || DEFAULTS.vision,
-    mission:      (ci?.mission     as string) || DEFAULTS.mission,
+    name: (ci?.name as string) || DEFAULTS.name,
+    tagline: (ci?.tagline as string) || DEFAULTS.tagline,
+    description: (ci?.description as string) || DEFAULTS.description,
+    logo_url: (ci?.logo_url as string) || DEFAULTS.logo_url,
+    logo_url_dark: (ci?.logo_url_dark as string) || DEFAULTS.logo_url_dark,
+    available_hours:
+      (ci?.available_hours as string) || DEFAULTS.available_hours,
+    who_we_are: (ci?.who_we_are as string) || DEFAULTS.who_we_are,
+    vision: (ci?.vision as string) || DEFAULTS.vision,
+    mission: (ci?.mission as string) || DEFAULTS.mission,
     contact_rows: contactRows,
     social_links: socialLinks,
   };
@@ -97,7 +115,7 @@ export function resolveLogo(
   fallback: string
 ): string {
   const light = info.logo_url;
-  const dark  = info.logo_url_dark;
+  const dark = info.logo_url_dark;
   if (light && dark) return theme === 'dark' ? dark : light;
   return light || dark || fallback;
 }
@@ -106,11 +124,18 @@ export function useCompanyInfo(): CompanyInfo {
   const [info, setInfo] = useState<CompanyInfo>(_cache ?? DEFAULTS);
 
   useEffect(() => {
-    if (_cache) { setInfo(_cache); return; }
+    if (_cache) {
+      setInfo(_cache);
+      return;
+    }
     if (!_promise) {
-      _promise = load().then(() => { if (_cache) setInfo(_cache); });
+      _promise = load().then(() => {
+        if (_cache) setInfo(_cache);
+      });
     } else {
-      _promise.then(() => { if (_cache) setInfo(_cache); });
+      _promise.then(() => {
+        if (_cache) setInfo(_cache);
+      });
     }
   }, []);
 

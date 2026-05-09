@@ -2,7 +2,6 @@ import { memo, useState, useRef, useCallback, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import {
-  FaArrowLeft,
   FaTrash,
   FaSave,
   FaCloudUploadAlt,
@@ -229,10 +228,7 @@ export const ImageField = ({
               className="absolute inset-0 flex flex-col items-center justify-center gap-2"
               style={{ backgroundColor: 'rgba(0,0,0,0.6)' }}
             >
-              <p
-                className="text-sm font-semibold"
-                style={{ color: '#fff' }}
-              >
+              <p className="text-sm font-semibold" style={{ color: '#fff' }}>
                 {progress}%
               </p>
               {/* Progress bar */}
@@ -330,7 +326,9 @@ export const ImageField = ({
                   color: dragging ? 'var(--accent)' : 'var(--text-muted)',
                 }}
               >
-                {dragging ? 'Drop to replace' : 'Drop or click to replace image'}
+                {dragging
+                  ? 'Drop to replace'
+                  : 'Drop or click to replace image'}
               </p>
             ) : (
               /* Full drop zone */
@@ -345,9 +343,7 @@ export const ImageField = ({
                   <p
                     className="text-sm font-medium"
                     style={{
-                      color: dragging
-                        ? 'var(--accent)'
-                        : 'var(--text-primary)',
+                      color: dragging ? 'var(--accent)' : 'var(--text-primary)',
                     }}
                   >
                     {dragging
@@ -493,12 +489,9 @@ const MultiImageField = ({
           onChange([...images, publicUrl]);
         })
         .catch((err: unknown) => {
-          const msg =
-            err instanceof Error ? err.message : 'Upload failed';
+          const msg = err instanceof Error ? err.message : 'Upload failed';
           setPending((prev) =>
-            prev.map((p) =>
-              p.id === entry.id ? { ...p, error: msg } : p
-            )
+            prev.map((p) => (p.id === entry.id ? { ...p, error: msg } : p))
           );
         });
     });
@@ -574,7 +567,10 @@ const MultiImageField = ({
                   {/* Progress bar at bottom */}
                   <div
                     className="absolute bottom-0 left-0 right-0"
-                    style={{ height: 4, backgroundColor: 'rgba(255,255,255,0.2)' }}
+                    style={{
+                      height: 4,
+                      backgroundColor: 'rgba(255,255,255,0.2)',
+                    }}
                   >
                     <div
                       style={{
@@ -604,7 +600,10 @@ const MultiImageField = ({
                     type="button"
                     onClick={() => dismissPending(p.id)}
                     className="w-5 h-5 rounded-full flex items-center justify-center"
-                    style={{ backgroundColor: 'rgba(239,68,68,0.7)', color: '#fff' }}
+                    style={{
+                      backgroundColor: 'rgba(239,68,68,0.7)',
+                      color: '#fff',
+                    }}
                   >
                     <FaTimes size={8} />
                   </button>
@@ -849,7 +848,9 @@ const StaticSelect = ({
   >
     <option value="">— select —</option>
     {opts.map((o) => (
-      <option key={o} value={o}>{o}</option>
+      <option key={o} value={o}>
+        {o}
+      </option>
     ))}
   </select>
 );
@@ -897,7 +898,9 @@ const RelationSelect = ({
     >
       <option value="">— select —</option>
       {opts.map((o) => (
-        <option key={o.value} value={o.value}>{o.label}</option>
+        <option key={o.value} value={o.value}>
+          {o.label}
+        </option>
       ))}
     </select>
   );
@@ -1020,7 +1023,11 @@ const Field = ({
     return field.relation ? (
       <RelationSelect field={field} value={value} onChange={onChange} />
     ) : (
-      <StaticSelect opts={field.options ?? []} value={str} onChange={onChange} />
+      <StaticSelect
+        opts={field.options ?? []}
+        value={str}
+        onChange={onChange}
+      />
     );
   }
 
@@ -1167,7 +1174,10 @@ const AdminCrudForm = memo(() => {
     // Supabase returns all column names lowercased; build a lowercase lookup map
     // so camelCase field keys like 'imageURL' still find 'imageurl' in the record.
     const lowerData = Object.fromEntries(
-      Object.entries(data as Record<string, unknown>).map(([k, v]) => [k.toLowerCase(), v])
+      Object.entries(data as Record<string, unknown>).map(([k, v]) => [
+        k.toLowerCase(),
+        v,
+      ])
     );
     setValues(
       formFields.reduce<Record<string, unknown>>((acc, f) => {
@@ -1231,7 +1241,6 @@ const AdminCrudForm = memo(() => {
     <>
       {/* form wraps both header and body so type="submit" in header works */}
       <form onSubmit={handleSave} className="h-full flex flex-col">
-
         {/* ── Sticky page header ── */}
         <div
           className="shrink-0 flex items-center justify-between gap-3 px-4 sm:px-6 py-3 sm:py-4"
@@ -1239,7 +1248,10 @@ const AdminCrudForm = memo(() => {
         >
           <Breadcrumbs
             items={[
-              { label: mod.label, onClick: () => navigate(`/admin/${moduleId}`) },
+              {
+                label: mod.label,
+                onClick: () => navigate(`/admin/${moduleId}`),
+              },
               { label: isNew ? 'New' : `#${id}` },
             ]}
           />
@@ -1322,14 +1334,22 @@ const AdminCrudForm = memo(() => {
                         >
                           {field.label}
                           {field.required && (
-                            <span className="ml-1" style={{ color: 'var(--accent)' }}>*</span>
+                            <span
+                              className="ml-1"
+                              style={{ color: 'var(--accent)' }}
+                            >
+                              *
+                            </span>
                           )}
                         </label>
                       )}
                       <Field
                         field={field}
                         value={values[field.key]}
-                        folder={moduleFolder(moduleId, String(values.slug ?? ''))}
+                        folder={moduleFolder(
+                          moduleId,
+                          String(values.slug ?? '')
+                        )}
                         onChange={(val) => handleChange(field.key, val)}
                       />
                     </div>
@@ -1345,7 +1365,6 @@ const AdminCrudForm = memo(() => {
             </motion.div>
           </div>
         </div>
-
       </form>
 
       <AnimatePresence>

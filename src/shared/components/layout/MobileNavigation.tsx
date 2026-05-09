@@ -120,7 +120,9 @@ const MobileNavigation: React.FC = memo(() => {
                     src={resolveLogo(info, theme, logo)}
                     alt={info.name}
                     className="h-9 w-auto object-contain"
-                    onError={(e) => { (e.currentTarget as HTMLImageElement).src = logo; }}
+                    onError={(e) => {
+                      (e.currentTarget as HTMLImageElement).src = logo;
+                    }}
                   />
                 </button>
                 <div className="flex items-center gap-2">
