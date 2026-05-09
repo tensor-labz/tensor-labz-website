@@ -227,6 +227,87 @@ VITE_CDN_URL=https://cdn.tensorlabz.com
 
 ---
 
+## Google Maps Embed URL
+
+The Contact Us page and footer can display a Google Maps embed. The embed URL is stored in the `contact` table — row with `contact = 'address'`, column `link`.
+
+### How to get the embed URL
+
+1. Open [Google Maps](https://maps.google.com) and search for the location
+2. Click **Share** → **Embed a map** tab
+3. Copy only the URL inside `src="..."` — example:
+   ```
+   https://www.google.com/maps/embed?pb=!1m17!1m12...
+   ```
+4. Paste that URL into the `link` column of the address row:
+   ```sql
+   UPDATE contact
+   SET link = 'https://www.google.com/maps/embed?pb=...'
+   WHERE contact = 'address';
+   ```
+5. Or update it via the admin panel: **Site Control → Contact Details → edit the Address row → Link field**
+
+### How it works in code
+
+- `contactHref(row)` in `Footer.tsx` checks `row.link` first — if set, uses it directly
+- `deriveLink()` in `AdminSiteControl.tsx` auto-generates a Google Maps search URL for address rows when no explicit link is provided
+- To display as an iframe embed (e.g. on Contact Us page), check if the link contains `maps/embed` and render `<iframe src={row.link} />`
+
+---
+
+## Direct S3 Upload (Budget / CLI)
+
+Use this when the Lambda image upload is not available or to save on Lambda invocation costs. Requires the `tensor` AWS CLI profile configured locally.
+
+### Upload a single file
+
+```bash
+aws --profile tensor s3 cp <local-file> s3://tensor-labz-store/<folder>/<filename> \
+  --acl public-read \
+  --content-type image/png
+```
+
+Example — upload the logo:
+```bash
+aws --profile tensor s3 cp src/assets/images/logo.png \
+  s3://tensor-labz-store/assets/upload/logo.png \
+  --acl public-read \
+  --content-type image/png
+```
+
+### Get the public URL
+
+After upload the public URL is always:
+```
+https://tensor-labz-store.s3.eu-north-1.amazonaws.com/<folder>/<filename>
+```
+
+Example:
+```
+https://tensor-labz-store.s3.eu-north-1.amazonaws.com/assets/upload/logo.png
+```
+
+### Upload a folder
+
+```bash
+aws --profile tensor s3 sync ./dist/assets \
+  s3://tensor-labz-store/assets/ \
+  --acl public-read
+```
+
+### When to use CLI vs Lambda
+
+| Situation | Use |
+| --------- | --- |
+| Admin panel image upload (users) | Lambda (pre-signed URL) |
+| One-off assets (logo, static files) | AWS CLI |
+| Batch upload / migration | AWS CLI |
+| Budget-sensitive / Lambda cold-start concerns | AWS CLI |
+
+> The bucket `tensor-labz-store` is in `eu-north-1`. Always use `--profile tensor` to authenticate with the correct IAM credentials.
+
+---
+
 ## Documentation Repo
 
 Developer docs live in a **separate dedicated repo** — `tensor-labz/tensor-labz-docs` (not in this repo).

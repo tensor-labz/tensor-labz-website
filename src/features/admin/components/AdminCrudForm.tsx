@@ -14,6 +14,7 @@ import {
 import ReactQuill from 'react-quill-new';
 import 'react-quill-new/dist/quill.snow.css';
 import { MODULES, type FieldConfig } from '../config/modules';
+import Breadcrumbs from '../../../shared/components/ui/Breadcrumbs';
 import { supabase } from '../../../lib/supabase';
 import { uploadImage, moduleFolder } from '../../../lib/imageUpload';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
@@ -109,7 +110,7 @@ const DeleteModal = ({
 );
 
 /* ── Image field ── */
-const ImageField = ({
+export const ImageField = ({
   value,
   onChange,
   folder,
@@ -123,8 +124,14 @@ const ImageField = ({
   const [preview, setPreview] = useState(String(value ?? ''));
   const [fileName, setFileName] = useState('');
   const [uploading, setUploading] = useState(false);
+  const [progress, setProgress] = useState(0);
   const [uploadError, setUploadError] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const originalValueRef = useRef<string>(String(value ?? ''));
+
+  useEffect(() => {
+    if (!uploading) setPreview(String(value ?? ''));
+  }, [value]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const inputStyle = {
     backgroundColor: 'var(--input-bg)',
@@ -136,22 +143,30 @@ const ImageField = ({
   const handleFile = useCallback(
     async (file: File) => {
       if (!file.type.startsWith('image/')) return;
+      const originalValue = String(value ?? '');
+      originalValueRef.current = originalValue;
+      const localUrl = URL.createObjectURL(file);
       setUploading(true);
+      setProgress(0);
       setUploadError(null);
       setFileName(file.name);
-      setPreview(URL.createObjectURL(file));
+      setPreview(localUrl);
       try {
         const { publicUrl } = await uploadImage(
           file,
           folder,
-          String(value ?? '')
+          originalValue,
+          (pct) => setProgress(pct)
         );
         setPreview(publicUrl);
         onChange(publicUrl);
       } catch (err) {
+        // Revert preview to the original saved value on failure
+        setPreview(originalValueRef.current);
         setUploadError(err instanceof Error ? err.message : 'Upload failed');
       } finally {
         setUploading(false);
+        setProgress(0);
       }
     },
     [onChange, folder, value]
@@ -183,33 +198,97 @@ const ImageField = ({
 
   return (
     <div className="space-y-3">
+      {/* Tab bar — always visible */}
       <div className="flex items-center gap-2">
         {tabBtn('Upload File', 'upload', <FaCloudUploadAlt size={11} />)}
         {tabBtn('S3 / URL', 'url', <FaLink size={10} />)}
       </div>
-      {mode === 'upload' && (
+
+      {/* Prominent full-width preview card — shown whenever a preview exists */}
+      {preview && (
         <div
-          onDragOver={(e) => {
-            e.preventDefault();
-            setDragging(true);
-          }}
-          onDragLeave={() => setDragging(false)}
-          onDrop={(e) => {
-            e.preventDefault();
-            setDragging(false);
-            const f = e.dataTransfer.files[0];
-            if (f) handleFile(f);
-          }}
-          onClick={() => inputRef.current?.click()}
-          className="relative w-full rounded-xl flex flex-col items-center justify-center gap-2 cursor-pointer transition-colors"
+          className="relative w-full rounded-xl overflow-hidden"
           style={{
-            minHeight: 120,
-            border: `2px dashed ${dragging ? 'var(--accent)' : 'var(--glass-border-strong)'}`,
-            backgroundColor: dragging
-              ? 'var(--accent-soft)'
-              : 'var(--glass-bg-raised)',
+            aspectRatio: '16/9',
+            maxHeight: 200,
+            backgroundColor: 'var(--glass-bg-raised)',
           }}
         >
+          <img
+            src={preview}
+            alt="preview"
+            className="w-full h-full object-cover"
+            onError={() => {
+              if (!uploading) setPreview('');
+            }}
+          />
+
+          {/* Upload progress overlay */}
+          {uploading && (
+            <div
+              className="absolute inset-0 flex flex-col items-center justify-center gap-2"
+              style={{ backgroundColor: 'rgba(0,0,0,0.6)' }}
+            >
+              <p
+                className="text-sm font-semibold"
+                style={{ color: '#fff' }}
+              >
+                {progress}%
+              </p>
+              {/* Progress bar */}
+              <div
+                className="rounded-full overflow-hidden"
+                style={{
+                  width: '60%',
+                  height: 6,
+                  backgroundColor: 'rgba(255,255,255,0.25)',
+                }}
+              >
+                <div
+                  style={{
+                    width: `${progress}%`,
+                    height: '100%',
+                    backgroundColor: 'var(--accent)',
+                    transition: 'width 0.15s ease',
+                  }}
+                />
+              </div>
+            </div>
+          )}
+
+          {/* Remove / filename strip — only when not uploading */}
+          {!uploading && (
+            <>
+              <button
+                type="button"
+                onClick={() => {
+                  setPreview('');
+                  setFileName('');
+                  onChange('');
+                  if (inputRef.current) inputRef.current.value = '';
+                }}
+                className="absolute top-2 right-2 w-7 h-7 rounded-full flex items-center justify-center shadow-lg"
+                style={{ backgroundColor: 'rgba(0,0,0,0.55)', color: '#fff' }}
+              >
+                <FaTimes size={11} />
+              </button>
+              <div
+                className="absolute bottom-0 left-0 right-0 px-3 py-1.5 text-xs truncate"
+                style={{
+                  backgroundColor: 'rgba(0,0,0,0.45)',
+                  color: 'rgba(255,255,255,0.85)',
+                }}
+              >
+                {fileName || preview}
+              </div>
+            </>
+          )}
+        </div>
+      )}
+
+      {/* Upload mode controls */}
+      {mode === 'upload' && !uploading && (
+        <>
           <input
             ref={inputRef}
             type="file"
@@ -220,55 +299,87 @@ const ImageField = ({
               if (f) handleFile(f);
             }}
           />
-          {uploading ? (
-            <p
-              className="text-sm font-medium"
-              style={{ color: 'var(--accent)' }}
-            >
-              Uploading…
-            </p>
-          ) : (
-            <>
-              <FaCloudUploadAlt
-                size={22}
+          {/* Full-height drop zone when no image; compact when image exists */}
+          <div
+            onDragOver={(e) => {
+              e.preventDefault();
+              setDragging(true);
+            }}
+            onDragLeave={() => setDragging(false)}
+            onDrop={(e) => {
+              e.preventDefault();
+              setDragging(false);
+              const f = e.dataTransfer.files[0];
+              if (f) handleFile(f);
+            }}
+            onClick={() => inputRef.current?.click()}
+            className="relative w-full rounded-xl flex flex-col items-center justify-center gap-2 cursor-pointer transition-colors"
+            style={{
+              minHeight: preview ? 64 : 120,
+              border: `2px dashed ${dragging ? 'var(--accent)' : 'var(--glass-border-strong)'}`,
+              backgroundColor: dragging
+                ? 'var(--accent-soft)'
+                : 'var(--glass-bg-raised)',
+            }}
+          >
+            {preview ? (
+              /* Compact replace hint */
+              <p
+                className="text-xs font-medium"
                 style={{
                   color: dragging ? 'var(--accent)' : 'var(--text-muted)',
                 }}
-              />
-              <div className="text-center px-4">
-                <p
-                  className="text-sm font-medium"
+              >
+                {dragging ? 'Drop to replace' : 'Drop or click to replace image'}
+              </p>
+            ) : (
+              /* Full drop zone */
+              <>
+                <FaCloudUploadAlt
+                  size={22}
                   style={{
-                    color: dragging ? 'var(--accent)' : 'var(--text-primary)',
+                    color: dragging ? 'var(--accent)' : 'var(--text-muted)',
                   }}
-                >
-                  {dragging
-                    ? 'Drop image here'
-                    : 'Drag & drop or click to browse'}
-                </p>
-                <p
-                  className="text-xs mt-0.5"
-                  style={{ color: 'var(--text-muted)' }}
-                >
-                  PNG, JPG, WebP — max 10 MB
-                </p>
-              </div>
-              {fileName && (
-                <span
-                  className="text-xs px-2 py-0.5 rounded-full"
-                  style={{
-                    backgroundColor: 'var(--glass-bg)',
-                    color: 'var(--text-muted)',
-                    border: '1px solid var(--glass-border)',
-                  }}
-                >
-                  {fileName}
-                </span>
-              )}
-            </>
-          )}
-        </div>
+                />
+                <div className="text-center px-4">
+                  <p
+                    className="text-sm font-medium"
+                    style={{
+                      color: dragging
+                        ? 'var(--accent)'
+                        : 'var(--text-primary)',
+                    }}
+                  >
+                    {dragging
+                      ? 'Drop image here'
+                      : 'Drag & drop or click to browse'}
+                  </p>
+                  <p
+                    className="text-xs mt-0.5"
+                    style={{ color: 'var(--text-muted)' }}
+                  >
+                    PNG, JPG, WebP — max 10 MB
+                  </p>
+                </div>
+                {fileName && (
+                  <span
+                    className="text-xs px-2 py-0.5 rounded-full"
+                    style={{
+                      backgroundColor: 'var(--glass-bg)',
+                      color: 'var(--text-muted)',
+                      border: '1px solid var(--glass-border)',
+                    }}
+                  >
+                    {fileName}
+                  </span>
+                )}
+              </>
+            )}
+          </div>
+        </>
       )}
+
+      {/* URL mode */}
       {mode === 'url' && (
         <div className="space-y-2">
           <div className="flex items-center gap-2">
@@ -293,43 +404,8 @@ const ImageField = ({
           </p>
         </div>
       )}
-      {preview && (
-        <div
-          className="relative rounded-xl overflow-hidden"
-          style={{ height: 140, backgroundColor: 'var(--glass-bg-raised)' }}
-        >
-          <img
-            src={preview}
-            alt="preview"
-            className="w-full h-full object-cover"
-            onError={(e) => {
-              e.currentTarget.parentElement!.style.display = 'none';
-            }}
-          />
-          <button
-            type="button"
-            onClick={() => {
-              setPreview('');
-              setFileName('');
-              onChange('');
-              if (inputRef.current) inputRef.current.value = '';
-            }}
-            className="absolute top-2 right-2 w-7 h-7 rounded-full flex items-center justify-center shadow-lg"
-            style={{ backgroundColor: 'rgba(0,0,0,0.55)', color: '#fff' }}
-          >
-            <FaTimes size={11} />
-          </button>
-          <div
-            className="absolute bottom-0 left-0 right-0 px-3 py-1.5 text-xs truncate"
-            style={{
-              backgroundColor: 'rgba(0,0,0,0.45)',
-              color: 'rgba(255,255,255,0.85)',
-            }}
-          >
-            {fileName || preview}
-          </div>
-        </div>
-      )}
+
+      {/* Empty state placeholder */}
       {!preview && (
         <div
           className="flex items-center justify-center rounded-xl"
@@ -345,6 +421,7 @@ const ImageField = ({
           />
         </div>
       )}
+
       {uploadError && (
         <p className="text-xs" style={{ color: '#ef4444' }}>
           {uploadError}
@@ -355,6 +432,14 @@ const ImageField = ({
 };
 
 /* ── Multi-image field ── */
+interface PendingImage {
+  id: string;
+  localUrl: string;
+  name: string;
+  progress: number;
+  error?: string;
+}
+
 const MultiImageField = ({
   value,
   onChange,
@@ -367,8 +452,7 @@ const MultiImageField = ({
   const [addMode, setAddMode] = useState<'upload' | 'url' | null>(null);
   const [urlInput, setUrlInput] = useState('');
   const [dragging, setDragging] = useState(false);
-  const [uploading, setUploading] = useState(false);
-  const [uploadError, setUploadError] = useState<string | null>(null);
+  const [pending, setPending] = useState<PendingImage[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const images: string[] = Array.isArray(value)
@@ -380,29 +464,57 @@ const MultiImageField = ({
           .filter(Boolean)
       : [];
 
-  const handleFiles = async (files: FileList | null) => {
+  const handleFiles = (files: FileList | null) => {
     if (!files) return;
     const valid = Array.from(files).filter((f) => f.type.startsWith('image/'));
     if (!valid.length) return;
-    setUploading(true);
-    setUploadError(null);
     setAddMode(null);
-    try {
-      const results = await Promise.all(
-        valid.map((f) => uploadImage(f, folder))
-      );
-      onChange([...images, ...results.map((r) => r.publicUrl)]);
-    } catch (err) {
-      setUploadError(err instanceof Error ? err.message : 'Upload failed');
-    } finally {
-      setUploading(false);
-    }
+
+    // Create pending entries with local object URLs immediately
+    const newPending: PendingImage[] = valid.map((f) => ({
+      id: `${Date.now()}-${Math.random()}`,
+      localUrl: URL.createObjectURL(f),
+      name: f.name,
+      progress: 0,
+    }));
+    setPending((prev) => [...prev, ...newPending]);
+
+    // Upload each file concurrently with per-file progress
+    newPending.forEach((entry, i) => {
+      const file = valid[i];
+      uploadImage(file, folder, undefined, (pct) => {
+        setPending((prev) =>
+          prev.map((p) => (p.id === entry.id ? { ...p, progress: pct } : p))
+        );
+      })
+        .then(({ publicUrl }) => {
+          // Remove from pending, add to committed images
+          setPending((prev) => prev.filter((p) => p.id !== entry.id));
+          onChange([...images, publicUrl]);
+        })
+        .catch((err: unknown) => {
+          const msg =
+            err instanceof Error ? err.message : 'Upload failed';
+          setPending((prev) =>
+            prev.map((p) =>
+              p.id === entry.id ? { ...p, error: msg } : p
+            )
+          );
+        });
+    });
   };
+
+  const dismissPending = (id: string) =>
+    setPending((prev) => prev.filter((p) => p.id !== id));
+
+  const hasItems = images.length > 0 || pending.length > 0;
 
   return (
     <div className="space-y-3">
-      {images.length > 0 && (
+      {/* Combined grid: committed images + in-flight pending */}
+      {hasItems && (
         <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
+          {/* Committed images */}
           {images.map((src, idx) => (
             <div
               key={idx}
@@ -430,8 +542,79 @@ const MultiImageField = ({
               </button>
             </div>
           ))}
+
+          {/* Pending (in-flight) images */}
+          {pending.map((p) => (
+            <div
+              key={p.id}
+              className="relative rounded-xl overflow-hidden"
+              style={{
+                aspectRatio: '1',
+                backgroundColor: 'var(--glass-bg-raised)',
+              }}
+            >
+              <img
+                src={p.localUrl}
+                alt={p.name}
+                className="w-full h-full object-cover"
+              />
+
+              {/* Overlay: uploading state */}
+              {!p.error && (
+                <div
+                  className="absolute inset-0 flex flex-col items-center justify-center"
+                  style={{ backgroundColor: 'rgba(0,0,0,0.55)' }}
+                >
+                  <p
+                    className="text-xs font-semibold mb-1"
+                    style={{ color: '#fff' }}
+                  >
+                    {p.progress}%
+                  </p>
+                  {/* Progress bar at bottom */}
+                  <div
+                    className="absolute bottom-0 left-0 right-0"
+                    style={{ height: 4, backgroundColor: 'rgba(255,255,255,0.2)' }}
+                  >
+                    <div
+                      style={{
+                        width: `${p.progress}%`,
+                        height: '100%',
+                        backgroundColor: 'var(--accent)',
+                        transition: 'width 0.15s ease',
+                      }}
+                    />
+                  </div>
+                </div>
+              )}
+
+              {/* Error overlay */}
+              {p.error && (
+                <div
+                  className="absolute inset-0 flex flex-col items-center justify-center p-1"
+                  style={{ backgroundColor: 'rgba(0,0,0,0.7)' }}
+                >
+                  <p
+                    className="text-xs text-center leading-tight mb-1"
+                    style={{ color: '#fca5a5' }}
+                  >
+                    {p.error}
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => dismissPending(p.id)}
+                    className="w-5 h-5 rounded-full flex items-center justify-center"
+                    style={{ backgroundColor: 'rgba(239,68,68,0.7)', color: '#fff' }}
+                  >
+                    <FaTimes size={8} />
+                  </button>
+                </div>
+              )}
+            </div>
+          ))}
         </div>
       )}
+
       {addMode === null && (
         <div className="flex items-center gap-2">
           <button
@@ -458,13 +641,14 @@ const MultiImageField = ({
           >
             <FaLink size={10} /> Add URL
           </button>
-          {images.length === 0 && (
+          {!hasItems && (
             <span className="text-xs" style={{ color: 'var(--text-muted)' }}>
               No images yet
             </span>
           )}
         </div>
       )}
+
       {addMode === 'upload' && (
         <div className="space-y-2">
           <div
@@ -512,6 +696,7 @@ const MultiImageField = ({
           </button>
         </div>
       )}
+
       {addMode === 'url' && (
         <div className="flex items-center gap-2">
           <input
@@ -564,16 +749,6 @@ const MultiImageField = ({
             Cancel
           </button>
         </div>
-      )}
-      {uploading && (
-        <p className="text-xs" style={{ color: 'var(--accent)' }}>
-          Uploading…
-        </p>
-      )}
-      {uploadError && (
-        <p className="text-xs" style={{ color: '#ef4444' }}>
-          {uploadError}
-        </p>
       )}
     </div>
   );
@@ -989,9 +1164,14 @@ const AdminCrudForm = memo(() => {
     if (!formFields) return;
     if (!isNew && recordStatus !== 'succeeded') return;
     const data = isNew ? {} : (currentRecord ?? {});
+    // Supabase returns all column names lowercased; build a lowercase lookup map
+    // so camelCase field keys like 'imageURL' still find 'imageurl' in the record.
+    const lowerData = Object.fromEntries(
+      Object.entries(data as Record<string, unknown>).map(([k, v]) => [k.toLowerCase(), v])
+    );
     setValues(
       formFields.reduce<Record<string, unknown>>((acc, f) => {
-        const raw = (data as Record<string, unknown>)[f.key];
+        const raw = lowerData[f.key.toLowerCase()];
         acc[f.key] =
           raw !== undefined && raw !== null ? raw : defaultForType(f.type);
         return acc;
@@ -1049,152 +1229,124 @@ const AdminCrudForm = memo(() => {
 
   return (
     <>
-      <div className="p-6 max-w-3xl mx-auto">
-        {/* Header */}
-        <div className="flex items-center gap-3 mb-6">
-          <motion.button
-            whileTap={{ scale: 0.9 }}
-            onClick={() => navigate(`/admin/${moduleId}`)}
-            className="w-9 h-9 flex items-center justify-center rounded-lg"
-            style={{
-              backgroundColor: 'var(--glass-bg-raised)',
-              border: '1px solid var(--glass-border)',
-              color: 'var(--text-muted)',
-            }}
-          >
-            <FaArrowLeft size={13} />
-          </motion.button>
-          <div>
-            <h2
-              className="text-xl font-bold"
+      {/* form wraps both header and body so type="submit" in header works */}
+      <form onSubmit={handleSave} className="h-full flex flex-col">
+
+        {/* ── Sticky page header ── */}
+        <div
+          className="shrink-0 flex items-center justify-between gap-3 px-4 sm:px-6 py-3 sm:py-4"
+          style={{ borderBottom: '1px solid var(--glass-border)' }}
+        >
+          <Breadcrumbs
+            items={[
+              { label: mod.label, onClick: () => navigate(`/admin/${moduleId}`) },
+              { label: isNew ? 'New' : `#${id}` },
+            ]}
+          />
+
+          {/* Right: actions */}
+          <div className="flex items-center gap-2 shrink-0">
+            {!isNew && (
+              <motion.button
+                type="button"
+                whileTap={{ scale: 0.96 }}
+                onClick={() => setShowDelete(true)}
+                className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs sm:text-sm font-medium"
+                style={{
+                  backgroundColor: 'rgba(239,68,68,0.1)',
+                  border: '1px solid rgba(239,68,68,0.25)',
+                  color: '#ef4444',
+                }}
+              >
+                <FaTrash size={12} />
+                <span className="hidden sm:inline">Delete</span>
+              </motion.button>
+            )}
+            <button
+              type="button"
+              onClick={() => navigate(`/admin/${moduleId}`)}
+              className="px-3 py-2 rounded-lg text-xs sm:text-sm font-medium"
               style={{
-                color: 'var(--text-primary)',
-                fontFamily: '"Syne", sans-serif',
+                color: 'var(--text-muted)',
+                backgroundColor: 'var(--glass-bg-raised)',
+                border: '1px solid var(--glass-border)',
               }}
             >
-              {isNew ? `New ${mod.label}` : `Edit ${mod.label}`}
-            </h2>
-            {!isNew && (
-              <p
-                className="text-xs mt-0.5"
-                style={{ color: 'var(--text-muted)' }}
-              >
-                ID: {id}
-              </p>
-            )}
+              Cancel
+            </button>
+            <motion.button
+              type="submit"
+              whileTap={{ scale: 0.97 }}
+              disabled={saving}
+              className="flex items-center gap-1.5 px-3 py-2 sm:px-4 sm:py-2.5 rounded-lg text-xs sm:text-sm font-semibold disabled:opacity-60"
+              style={{ backgroundColor: 'var(--accent)', color: '#fff' }}
+            >
+              <FaSave size={12} />
+              <span>{saving ? 'Saving…' : 'Save'}</span>
+            </motion.button>
           </div>
         </div>
 
-        {/* Form card */}
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4 }}
-          className="rounded-2xl p-6"
-          style={{
-            backgroundColor: 'var(--glass-bg)',
-            border: '1px solid var(--glass-border)',
-          }}
-        >
-          {isLoading ? (
-            <FormSkeleton />
-          ) : (
-            <form onSubmit={handleSave}>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                {(formFields ?? []).map((field) => (
-                  <div
-                    key={field.key}
-                    className={
-                      field.span === 'full' ||
-                      field.type === 'toggle' ||
-                      field.type === 'checkbox'
-                        ? 'sm:col-span-2'
-                        : ''
-                    }
-                  >
-                    {field.type !== 'toggle' && field.type !== 'checkbox' && (
-                      <label
-                        className="block text-xs font-semibold mb-1.5"
-                        style={{ color: 'var(--text-muted)' }}
-                      >
-                        {field.label}
-                        {field.required && (
-                          <span
-                            className="ml-1"
-                            style={{ color: 'var(--accent)' }}
-                          >
-                            *
-                          </span>
-                        )}
-                      </label>
-                    )}
-                    <Field
-                      field={field}
-                      value={values[field.key]}
-                      folder={moduleFolder(moduleId, String(values.slug ?? ''))}
-                      onChange={(val) => handleChange(field.key, val)}
-                    />
-                  </div>
-                ))}
-              </div>
+        {/* ── Scrollable form body ── */}
+        <div className="flex-1 min-h-0 overflow-y-auto no-scrollbar">
+          <div className="p-6 max-w-3xl mx-auto">
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4 }}
+              className="rounded-2xl p-6"
+              style={{
+                backgroundColor: 'var(--glass-bg)',
+                border: '1px solid var(--glass-border)',
+              }}
+            >
+              {isLoading ? (
+                <FormSkeleton />
+              ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                  {(formFields ?? []).map((field) => (
+                    <div
+                      key={field.key}
+                      className={
+                        field.span === 'full' ||
+                        field.type === 'toggle' ||
+                        field.type === 'checkbox'
+                          ? 'sm:col-span-2'
+                          : ''
+                      }
+                    >
+                      {field.type !== 'toggle' && field.type !== 'checkbox' && (
+                        <label
+                          className="block text-xs font-semibold mb-1.5"
+                          style={{ color: 'var(--text-muted)' }}
+                        >
+                          {field.label}
+                          {field.required && (
+                            <span className="ml-1" style={{ color: 'var(--accent)' }}>*</span>
+                          )}
+                        </label>
+                      )}
+                      <Field
+                        field={field}
+                        value={values[field.key]}
+                        folder={moduleFolder(moduleId, String(values.slug ?? ''))}
+                        onChange={(val) => handleChange(field.key, val)}
+                      />
+                    </div>
+                  ))}
+                </div>
+              )}
 
-              {/* Save error */}
               {saveError && (
                 <p className="mt-4 text-sm" style={{ color: '#ef4444' }}>
                   {saveError}
                 </p>
               )}
+            </motion.div>
+          </div>
+        </div>
 
-              {/* Actions */}
-              <div
-                className="flex items-center justify-between mt-8 pt-6"
-                style={{ borderTop: '1px solid var(--glass-border)' }}
-              >
-                {!isNew ? (
-                  <motion.button
-                    type="button"
-                    whileTap={{ scale: 0.96 }}
-                    onClick={() => setShowDelete(true)}
-                    className="flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium"
-                    style={{
-                      backgroundColor: 'rgba(239,68,68,0.1)',
-                      border: '1px solid rgba(239,68,68,0.25)',
-                      color: '#ef4444',
-                    }}
-                  >
-                    <FaTrash size={12} /> Delete
-                  </motion.button>
-                ) : (
-                  <span />
-                )}
-                <div className="flex items-center gap-3">
-                  <button
-                    type="button"
-                    onClick={() => navigate(`/admin/${moduleId}`)}
-                    className="px-4 py-2.5 rounded-lg text-sm font-medium"
-                    style={{
-                      color: 'var(--text-muted)',
-                      backgroundColor: 'var(--glass-bg-raised)',
-                      border: '1px solid var(--glass-border)',
-                    }}
-                  >
-                    Cancel
-                  </button>
-                  <motion.button
-                    type="submit"
-                    whileTap={{ scale: 0.97 }}
-                    disabled={saving}
-                    className="flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold disabled:opacity-60"
-                    style={{ backgroundColor: 'var(--accent)', color: '#fff' }}
-                  >
-                    <FaSave size={12} /> {saving ? 'Saving…' : 'Save'}
-                  </motion.button>
-                </div>
-              </div>
-            </form>
-          )}
-        </motion.div>
-      </div>
+      </form>
 
       <AnimatePresence>
         {showDelete && (

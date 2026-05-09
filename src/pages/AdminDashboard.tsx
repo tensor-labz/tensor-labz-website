@@ -10,6 +10,8 @@ import AdminSidebar from '../features/admin/components/AdminSidebar';
 import AdminOverview from '../features/admin/components/AdminOverview';
 import AdminDataTable from '../features/admin/components/AdminDataTable';
 import AdminCrudForm from '../features/admin/components/AdminCrudForm';
+import AdminFormBuilder from '../features/admin/components/AdminFormBuilder';
+import AdminSiteControl from '../features/admin/components/AdminSiteControl';
 import AdminUsers from '../features/admin/components/AdminUsers';
 import AdminBilling from '../features/admin/components/AdminBilling';
 import AdminSettings from '../features/admin/components/AdminSettings';
@@ -124,7 +126,9 @@ const AdminDashboard = memo(() => {
             <Route path="users" element={<AdminUsers />} />
             <Route path="billing" element={<AdminBilling />} />
             <Route path="settings" element={<AdminSettings />} />
+            <Route path="site-control" element={<AdminSiteControl />} />
             <Route path=":module" element={<AdminDataTable />} />
+            <Route path=":module/form-config" element={<AdminFormBuilder />} />
             <Route path=":module/:id" element={<AdminCrudForm />} />
           </Routes>
         </main>
