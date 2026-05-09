@@ -466,12 +466,39 @@ const ColRow = memo(
           </button>
         </div>
 
-        {/* Expanded: link URL */}
+        {/* Expanded: cell type + link URL */}
         {expanded && (
           <div
-            className="px-3 pb-3 pt-2 space-y-2"
+            className="px-3 pb-3 pt-2 space-y-3"
             style={{ borderTop: '1px solid var(--glass-border-subtle)' }}
           >
+            {/* Cell type */}
+            <div>
+              <p
+                className="text-[10px] font-semibold uppercase tracking-widest mb-1.5"
+                style={{ color: 'var(--text-muted)' }}
+              >
+                Cell Type
+              </p>
+              <div className="flex gap-1.5">
+                {(['text', 'url'] as const).map((t) => (
+                  <button
+                    key={t}
+                    type="button"
+                    onClick={() => onChange({ type: t === 'text' ? undefined : t })}
+                    className="flex-1 py-1 rounded-lg text-xs font-medium"
+                    style={
+                      (col.type ?? 'text') === t
+                        ? { backgroundColor: 'var(--accent)', color: '#fff' }
+                        : { backgroundColor: 'var(--glass-bg)', color: 'var(--text-muted)', border: '1px solid var(--glass-border)' }
+                    }
+                  >
+                    {t === 'url' ? 'URL (icon)' : 'Text'}
+                  </button>
+                ))}
+              </div>
+            </div>
+
             <p
               className="text-[10px] font-semibold uppercase tracking-widest"
               style={{ color: 'var(--text-muted)' }}

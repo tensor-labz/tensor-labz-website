@@ -8,6 +8,7 @@ export interface TableColumnConfig {
   height?: string;         // fixed row/cell height e.g. "48px"
   align?: 'left' | 'center' | 'right';
   link?: string;           // URL template — use ${fieldName} for dynamic row values, e.g. /admin/services/${service_id}
+  type?: 'url';            // render the cell value as a clickable external-link icon instead of text
 }
 
 export interface TableConfig {

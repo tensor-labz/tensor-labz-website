@@ -5,7 +5,7 @@ import DataTable, {
   type TableColumn,
 } from 'react-data-table-component';
 import { FaPlus } from 'react-icons/fa';
-import { FiSearch, FiX } from 'react-icons/fi';
+import { FiSearch, FiX, FiExternalLink } from 'react-icons/fi';
 import { MODULES } from '../config/modules';
 import { supabase } from '../../../lib/supabase';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
@@ -269,7 +269,30 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
           const isDesc = c.field.toLowerCase() === mod.descriptionField?.toLowerCase();
           const relMap = relationMaps[c.field];
 
-          if (isImg) {
+          if (c.type === 'url') {
+            cols.push({
+              id: c.field,
+              name: c.title,
+              width: c.width ?? '48px',
+              sortable: false,
+              center: true,
+              cell: (row) => {
+                const url = String(rowVal(row, c.field) ?? '');
+                if (!url) return null;
+                return (
+                  <a
+                    href={url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={(e) => e.stopPropagation()}
+                    style={{ color: 'var(--text-muted)', display: 'flex', alignItems: 'center' }}
+                  >
+                    <FiExternalLink size={15} />
+                  </a>
+                );
+              },
+            });
+          } else if (isImg) {
             /* Extra image field — render thumbnail */
             cols.push({
               id: c.field,
