@@ -6,16 +6,16 @@ Supabase RLS controls who can read and write each table. Run all policies after 
 
 ## Policy pattern
 
-| Table | Public read | Authenticated write |
-|---|---|---|
-| `hero` | ✅ | ✅ |
-| `services` | ✅ | ✅ |
-| `projects` | ✅ | ✅ |
-| `about` | ✅ | ✅ |
-| `contact` | ✅ | ✅ |
-| `social` | ✅ | ✅ |
-| `table_config` | ✅ | ✅ |
-| `form_config` | ✅ | ✅ |
+| Table          | Public read | Authenticated write |
+| -------------- | ----------- | ------------------- |
+| `hero`         | ✅          | ✅                  |
+| `services`     | ✅          | ✅                  |
+| `projects`     | ✅          | ✅                  |
+| `about`        | ✅          | ✅                  |
+| `contact`      | ✅          | ✅                  |
+| `social`       | ✅          | ✅                  |
+| `table_config` | ✅          | ✅                  |
+| `form_config`  | ✅          | ✅                  |
 
 - **Public read** — the React frontend reads these tables without auth (anonymous browsing).
 - **Authenticated write** — only logged-in admin users can insert, update, delete.
@@ -108,9 +108,9 @@ $$;
 
 ## Anon key vs Service role key
 
-| Key | Used by | Can bypass RLS? |
-|---|---|---|
-| `anon` / `publishable` | Frontend browser | No — subject to RLS |
-| `service_role` (secret) | Server-side scripts only | Yes — skips RLS |
+| Key                     | Used by                  | Can bypass RLS?     |
+| ----------------------- | ------------------------ | ------------------- |
+| `anon` / `publishable`  | Frontend browser         | No — subject to RLS |
+| `service_role` (secret) | Server-side scripts only | Yes — skips RLS     |
 
 Never expose the `service_role` key in the frontend bundle. The `anon` key is safe to commit in `.env.example`.

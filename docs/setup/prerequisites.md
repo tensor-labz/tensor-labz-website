@@ -6,12 +6,12 @@ Everything you need before running the project locally.
 
 ## Required accounts
 
-| Service | Purpose | URL |
-|---|---|---|
-| Supabase | Database + Auth | [supabase.com](https://supabase.com) |
-| AWS | S3 + Lambda | [aws.amazon.com](https://aws.amazon.com) |
+| Service  | Purpose         | URL                                                |
+| -------- | --------------- | -------------------------------------------------- |
+| Supabase | Database + Auth | [supabase.com](https://supabase.com)               |
+| AWS      | S3 + Lambda     | [aws.amazon.com](https://aws.amazon.com)           |
 | Firebase | Staging hosting | [firebase.google.com](https://firebase.google.com) |
-| GitHub | Source control | [github.com](https://github.com) |
+| GitHub   | Source control  | [github.com](https://github.com)                   |
 
 ---
 
@@ -60,7 +60,7 @@ firebase projects:list  # should show tensor-labz-website
 ```
 
 !!! note "Headless server"
-    On a server without a browser, use `firebase login --no-localhost`.
+On a server without a browser, use `firebase login --no-localhost`.
 
 ### Git + GitHub CLI (optional but useful)
 

@@ -205,9 +205,14 @@ icon:         row.imageurl,
 
 ```json
 [
-  { "key": "imageurl",    "label": "Image",       "visible": true,  "align": "left" },
-  { "key": "title",       "label": "Title",        "visible": true,  "align": "left" },
-  { "key": "description", "label": "Description",  "visible": false, "align": "left" }
+  { "key": "imageurl", "label": "Image", "visible": true, "align": "left" },
+  { "key": "title", "label": "Title", "visible": true, "align": "left" },
+  {
+    "key": "description",
+    "label": "Description",
+    "visible": false,
+    "align": "left"
+  }
 ]
 ```
 
@@ -215,8 +220,19 @@ icon:         row.imageurl,
 
 ```json
 [
-  { "key": "title",  "label": "Title",  "type": "text",   "span": "half", "required": true },
-  { "key": "status", "label": "Status", "type": "select", "span": "half",
-    "options": ["Draft", "Published", "Archived"] }
+  {
+    "key": "title",
+    "label": "Title",
+    "type": "text",
+    "span": "half",
+    "required": true
+  },
+  {
+    "key": "status",
+    "label": "Status",
+    "type": "select",
+    "span": "half",
+    "options": ["Draft", "Published", "Archived"]
+  }
 ]
 ```

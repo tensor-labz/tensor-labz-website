@@ -8,17 +8,17 @@ Repository: [ThanuMahee12/tensor-labz-image-lambda](https://github.com/ThanuMahe
 
 ## Infrastructure
 
-| Resource | Value |
-|---|---|
-| Function name | `tensor-labz-image-handler` |
-| Runtime | Node.js 20.x |
-| Region | `eu-north-1` |
-| Memory | 256 MB |
-| Timeout | 15 seconds |
-| API Gateway | HTTP API — `ewf03ybvmc` |
-| Base URL | `https://ewf03ybvmc.execute-api.eu-north-1.amazonaws.com` |
-| S3 bucket | `tensor-labz-store` |
-| IAM role | `tensor-labz-lambda-exec` |
+| Resource      | Value                                                     |
+| ------------- | --------------------------------------------------------- |
+| Function name | `tensor-labz-image-handler`                               |
+| Runtime       | Node.js 20.x                                              |
+| Region        | `eu-north-1`                                              |
+| Memory        | 256 MB                                                    |
+| Timeout       | 15 seconds                                                |
+| API Gateway   | HTTP API — `ewf03ybvmc`                                   |
+| Base URL      | `https://ewf03ybvmc.execute-api.eu-north-1.amazonaws.com` |
+| S3 bucket     | `tensor-labz-store`                                       |
+| IAM role      | `tensor-labz-lambda-exec`                                 |
 
 ---
 
@@ -118,7 +118,7 @@ The folder is determined by `moduleFolder()` in `src/lib/imageUpload.ts`:
 
 ```typescript
 export function moduleFolder(moduleId: string, slug?: string): string {
-  if (moduleId === 'hero')     return 'Home/Hero';
+  if (moduleId === 'hero') return 'Home/Hero';
   if (moduleId === 'services') return 'Insights';
   if (moduleId === 'projects') return `projects/${slug ?? 'draft'}`;
   return moduleId;

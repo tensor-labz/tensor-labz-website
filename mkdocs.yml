@@ -70,27 +70,27 @@ markdown_extensions:
 nav:
   - Home: index.md
   - Setup:
-    - Prerequisites: setup/prerequisites.md
-    - Environment Variables: setup/environment-variables.md
-    - Local Development: setup/local-development.md
+      - Prerequisites: setup/prerequisites.md
+      - Environment Variables: setup/environment-variables.md
+      - Local Development: setup/local-development.md
   - Architecture:
-    - System Overview: architecture/overview.md
+      - System Overview: architecture/overview.md
   - Supabase:
-    - Schema: supabase/schema.md
-    - RLS Policies: supabase/rls-policies.md
-    - Authentication: supabase/auth.md
+      - Schema: supabase/schema.md
+      - RLS Policies: supabase/rls-policies.md
+      - Authentication: supabase/auth.md
   - Lambda — Image Service:
-    - Overview: lambda/overview.md
-    - Deployment Guide: lambda/deployment.md
-    - API Reference: lambda/api-reference.md
+      - Overview: lambda/overview.md
+      - Deployment Guide: lambda/deployment.md
+      - API Reference: lambda/api-reference.md
   - Admin Panel:
-    - Overview: admin/overview.md
-    - Content Modules: admin/modules.md
-    - Dynamic Table Config: admin/table-config.md
-    - Dynamic Form Config: admin/form-config.md
+      - Overview: admin/overview.md
+      - Content Modules: admin/modules.md
+      - Dynamic Table Config: admin/table-config.md
+      - Dynamic Form Config: admin/form-config.md
   - Deployment:
-    - Staging — Firebase: deployment/staging.md
-    - Production — Amplify: deployment/production.md
+      - Staging — Firebase: deployment/staging.md
+      - Production — Amplify: deployment/production.md
 
 extra:
   social:

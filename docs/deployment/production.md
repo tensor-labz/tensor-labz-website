@@ -2,12 +2,12 @@
 
 Production deploys automatically when code is pushed to the `main` branch.
 
-| Item | Value |
-|---|---|
-| Trigger | Push to `main` branch |
-| Build command | `npm run build` |
-| Output | `dist/` |
-| CDN | AWS CloudFront (global) |
+| Item          | Value                   |
+| ------------- | ----------------------- |
+| Trigger       | Push to `main` branch   |
+| Build command | `npm run build`         |
+| Output        | `dist/`                 |
+| CDN           | AWS CloudFront (global) |
 
 ---
 
@@ -122,8 +122,8 @@ frontend:
 
 Add a rewrite rule in **Amplify Console → Rewrites and redirects**:
 
-| Source | Target | Type |
-|---|---|---|
+| Source | Target        | Type            |
+| ------ | ------------- | --------------- |
 | `/<*>` | `/index.html` | `200 (Rewrite)` |
 
 Without this, refreshing any `/admin/*` URL returns 404.

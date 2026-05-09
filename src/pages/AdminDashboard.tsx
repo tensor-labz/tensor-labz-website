@@ -63,13 +63,20 @@ const AdminDashboard = memo(() => {
 
           {data?.layout?.logo && (
             <Link to="/">
-              <img src={data.layout.logo} alt="Tensor Labz" className="h-8 object-contain" />
+              <img
+                src={data.layout.logo}
+                alt="Tensor Labz"
+                className="h-8 object-contain"
+              />
             </Link>
           )}
         </div>
 
         <div className="flex items-center gap-2.5">
-          <span className="text-xs hidden sm:block" style={{ color: 'var(--text-muted)' }}>
+          <span
+            className="text-xs hidden sm:block"
+            style={{ color: 'var(--text-muted)' }}
+          >
             {user?.email}
           </span>
 
@@ -105,7 +112,10 @@ const AdminDashboard = memo(() => {
 
       {/* ── Body: sidebar + content ── */}
       <div className="flex flex-1">
-        <AdminSidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+        <AdminSidebar
+          open={sidebarOpen}
+          onClose={() => setSidebarOpen(false)}
+        />
 
         {/* Main area — offset by fixed sidebar width on desktop */}
         <main className="flex-1 min-h-0 overflow-y-auto lg:ml-56">

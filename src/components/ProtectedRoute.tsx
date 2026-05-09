@@ -1,13 +1,16 @@
 import { Navigate, useLocation } from 'react-router-dom';
 import { useAppSelector } from '../app/hooks';
-import { selectIsAuthenticated, selectAuthInitialized } from '../store/authSlice';
+import {
+  selectIsAuthenticated,
+  selectAuthInitialized,
+} from '../store/authSlice';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
 }
 
 const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
-  const initialized   = useAppSelector(selectAuthInitialized);
+  const initialized = useAppSelector(selectAuthInitialized);
   const isAuthenticated = useAppSelector(selectIsAuthenticated);
   const location = useLocation();
 

@@ -49,7 +49,7 @@ npm run build:zip     # creates function.zip ready for AWS
 ```
 
 !!! note "No local HTTP server"
-    There is no `npm run dev` that spins up a local HTTP API. To test endpoints, deploy to Lambda and use `curl` or the AWS Console Test tab.
+There is no `npm run dev` that spins up a local HTTP API. To test endpoints, deploy to Lambda and use `curl` or the AWS Console Test tab.
 
 ---
 
@@ -63,9 +63,9 @@ The admin panel is part of the same React app, routed at `/admin/*`.
 4. Log in with your Supabase Auth credentials
 
 !!! tip "Creating an admin user"
-    Go to **Supabase Dashboard → Authentication → Users → Invite user**.
-    Enter your email. You'll receive a link to set a password.
-    That email + password is what you use on the `/login` page.
+Go to **Supabase Dashboard → Authentication → Users → Invite user**.
+Enter your email. You'll receive a link to set a password.
+That email + password is what you use on the `/login` page.
 
 ---
 

@@ -27,7 +27,8 @@ type SocialMediaDataContextProviderProps = {
 export default function SocialMediaDataContextProvider({
   children,
 }: SocialMediaDataContextProviderProps) {
-  const [link_data, setData] = useState<SocialMediaDataContextType['link_data']>(null);
+  const [link_data, setData] =
+    useState<SocialMediaDataContextType['link_data']>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<Error | null>(null);
 
@@ -39,7 +40,9 @@ export default function SocialMediaDataContextProvider({
       setData({ social_media: rows });
     } catch (err) {
       if (err instanceof Error && err.name === 'AbortError') return;
-      setError(err instanceof Error ? err : new Error('An unknown error occurred'));
+      setError(
+        err instanceof Error ? err : new Error('An unknown error occurred')
+      );
     } finally {
       setIsLoading(false);
     }

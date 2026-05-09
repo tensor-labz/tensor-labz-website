@@ -28,39 +28,78 @@ import {
 
 /* ── Module metadata (colours + icons, counts loaded live) ── */
 const MODULE_META = [
-  { id: 'hero',     name: 'Hero',     icon: FaImages,         color: '#38bdf8' },
-  { id: 'services', name: 'Services', icon: FaCogs,           color: '#818cf8' },
-  { id: 'projects', name: 'Projects', icon: FaProjectDiagram, color: '#34d399' },
-  { id: 'about',    name: 'About',    icon: FaInfoCircle,     color: '#fb923c' },
-  { id: 'contact',  name: 'Contact',  icon: FaEnvelope,       color: '#f472b6' },
-  { id: 'social',   name: 'Social',   icon: FaAddressBook,    color: '#a78bfa' },
+  { id: 'hero', name: 'Hero', icon: FaImages, color: '#38bdf8' },
+  { id: 'services', name: 'Services', icon: FaCogs, color: '#818cf8' },
+  {
+    id: 'projects',
+    name: 'Projects',
+    icon: FaProjectDiagram,
+    color: '#34d399',
+  },
+  { id: 'about', name: 'About', icon: FaInfoCircle, color: '#fb923c' },
+  { id: 'contact', name: 'Contact', icon: FaEnvelope, color: '#f472b6' },
+  { id: 'social', name: 'Social', icon: FaAddressBook, color: '#a78bfa' },
 ];
 
 const MONTHLY_ACTIVITY = [
-  { month: 'Jan', updates: 4,  additions: 2  },
-  { month: 'Feb', updates: 7,  additions: 3  },
-  { month: 'Mar', updates: 5,  additions: 5  },
-  { month: 'Apr', updates: 9,  additions: 4  },
-  { month: 'May', updates: 6,  additions: 7  },
-  { month: 'Jun', updates: 12, additions: 6  },
-  { month: 'Jul', updates: 8,  additions: 9  },
-  { month: 'Aug', updates: 15, additions: 5  },
-  { month: 'Sep', updates: 10, additions: 8  },
+  { month: 'Jan', updates: 4, additions: 2 },
+  { month: 'Feb', updates: 7, additions: 3 },
+  { month: 'Mar', updates: 5, additions: 5 },
+  { month: 'Apr', updates: 9, additions: 4 },
+  { month: 'May', updates: 6, additions: 7 },
+  { month: 'Jun', updates: 12, additions: 6 },
+  { month: 'Jul', updates: 8, additions: 9 },
+  { month: 'Aug', updates: 15, additions: 5 },
+  { month: 'Sep', updates: 10, additions: 8 },
   { month: 'Oct', updates: 18, additions: 11 },
-  { month: 'Nov', updates: 14, additions: 7  },
+  { month: 'Nov', updates: 14, additions: 7 },
   { month: 'Dec', updates: 22, additions: 13 },
 ];
 
-
 const RECENT_ACTIVITY = [
-  { module: 'Projects', action: 'Updated', title: 'Smart Farm Monitor',    time: '2 min ago',  type: 'update' },
-  { module: 'Services', action: 'Created', title: 'IoT Solutions',         time: '1 hr ago',   type: 'create' },
-  { module: 'About',    action: 'Updated', title: 'Our Mission',           time: '3 hrs ago',  type: 'update' },
-  { module: 'Social',   action: 'Created', title: 'YouTube Link',          time: '1 day ago',  type: 'create' },
-  { module: 'Hero',     action: 'Deleted', title: 'Old Hero Slide',        time: '2 days ago', type: 'delete' },
-  { module: 'Contact',  action: 'Updated', title: 'Email Us',              time: '3 days ago', type: 'update' },
+  {
+    module: 'Projects',
+    action: 'Updated',
+    title: 'Smart Farm Monitor',
+    time: '2 min ago',
+    type: 'update',
+  },
+  {
+    module: 'Services',
+    action: 'Created',
+    title: 'IoT Solutions',
+    time: '1 hr ago',
+    type: 'create',
+  },
+  {
+    module: 'About',
+    action: 'Updated',
+    title: 'Our Mission',
+    time: '3 hrs ago',
+    type: 'update',
+  },
+  {
+    module: 'Social',
+    action: 'Created',
+    title: 'YouTube Link',
+    time: '1 day ago',
+    type: 'create',
+  },
+  {
+    module: 'Hero',
+    action: 'Deleted',
+    title: 'Old Hero Slide',
+    time: '2 days ago',
+    type: 'delete',
+  },
+  {
+    module: 'Contact',
+    action: 'Updated',
+    title: 'Email Us',
+    time: '3 days ago',
+    type: 'update',
+  },
 ];
-
 
 const actColor: Record<string, string> = {
   update: '#38bdf8',
@@ -152,7 +191,9 @@ const AreaTip = ({ active, payload, label }: any) => {
         color: 'var(--text-primary)',
       }}
     >
-      <p className="font-semibold mb-1" style={{ color: 'var(--text-muted)' }}>{label}</p>
+      <p className="font-semibold mb-1" style={{ color: 'var(--text-muted)' }}>
+        {label}
+      </p>
       {payload.map((p: any) => (
         <p key={p.dataKey} style={{ color: p.color }}>
           {p.name}: <span className="font-bold">{p.value}</span>
@@ -173,7 +214,12 @@ const BarTip = ({ active, payload, label }: any) => {
         color: 'var(--text-primary)',
       }}
     >
-      <p className="font-semibold mb-0.5" style={{ color: 'var(--text-muted)' }}>{label}</p>
+      <p
+        className="font-semibold mb-0.5"
+        style={{ color: 'var(--text-muted)' }}
+      >
+        {label}
+      </p>
       <p style={{ color: payload[0]?.fill }}>
         Records: <span className="font-bold">{payload[0]?.value}</span>
       </p>
@@ -184,7 +230,10 @@ const BarTip = ({ active, payload, label }: any) => {
 /* ── Main ── */
 const AdminOverview = memo(() => {
   const today = new Date().toLocaleDateString('en-US', {
-    weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
   });
 
   const [counts, setCounts] = useState<Record<string, number>>({});
@@ -217,30 +266,65 @@ const AdminOverview = memo(() => {
   const totalRecords = MODULE_COUNTS.reduce((a, m) => a + m.count, 0);
 
   const RADIAL_DATA = MODULE_COUNTS.map((m) => ({
-    name: m.name, value: m.count, fill: m.color,
+    name: m.name,
+    value: m.count,
+    fill: m.color,
   }));
 
   const STATS = [
-    { label: 'Total Records',    value: totalRecords,         delta: `${MODULE_COUNTS.length} modules`, up: true,  color: '#38bdf8', bg: 'rgba(56,189,248,0.1)'   },
-    { label: 'Active Modules',   value: MODULE_COUNTS.length, delta: 'All operational',                  up: true,  color: '#34d399', bg: 'rgba(52,211,153,0.1)'   },
-    { label: 'Featured Projects',value: featuredCount,        delta: 'Marked is_top',                    up: true,  color: '#818cf8', bg: 'rgba(129,140,248,0.1)'  },
-    { label: 'Hero Slides',      value: counts['hero'] ?? 0,  delta: 'Live on homepage',                 up: true,  color: '#fb923c', bg: 'rgba(251,146,60,0.1)'   },
+    {
+      label: 'Total Records',
+      value: totalRecords,
+      delta: `${MODULE_COUNTS.length} modules`,
+      up: true,
+      color: '#38bdf8',
+      bg: 'rgba(56,189,248,0.1)',
+    },
+    {
+      label: 'Active Modules',
+      value: MODULE_COUNTS.length,
+      delta: 'All operational',
+      up: true,
+      color: '#34d399',
+      bg: 'rgba(52,211,153,0.1)',
+    },
+    {
+      label: 'Featured Projects',
+      value: featuredCount,
+      delta: 'Marked is_top',
+      up: true,
+      color: '#818cf8',
+      bg: 'rgba(129,140,248,0.1)',
+    },
+    {
+      label: 'Hero Slides',
+      value: counts['hero'] ?? 0,
+      delta: 'Live on homepage',
+      up: true,
+      color: '#fb923c',
+      bg: 'rgba(251,146,60,0.1)',
+    },
   ];
 
   return (
     <div className="p-6 space-y-5 max-w-[1400px] mx-auto">
-
       {/* ── Page heading ── */}
       <FadeIn delay={0}>
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
           <div>
             <h2
               className="text-2xl font-bold"
-              style={{ color: 'var(--text-primary)', fontFamily: '"Syne", sans-serif' }}
+              style={{
+                color: 'var(--text-primary)',
+                fontFamily: '"Syne", sans-serif',
+              }}
             >
               Dashboard
             </h2>
-            <p className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>
+            <p
+              className="text-xs mt-0.5"
+              style={{ color: 'var(--text-muted)' }}
+            >
               {today}
             </p>
           </div>
@@ -278,11 +362,17 @@ const AdminOverview = memo(() => {
               </div>
               <p
                 className="text-4xl font-bold tracking-tight"
-                style={{ color: 'var(--text-primary)', fontFamily: '"Syne", sans-serif' }}
+                style={{
+                  color: 'var(--text-primary)',
+                  fontFamily: '"Syne", sans-serif',
+                }}
               >
                 <Counter target={s.value} />
               </p>
-              <p className="text-xs mt-auto" style={{ color: s.up ? '#34d399' : '#fb923c' }}>
+              <p
+                className="text-xs mt-auto"
+                style={{ color: s.up ? '#34d399' : '#fb923c' }}
+              >
                 {s.delta}
               </p>
             </Card>
@@ -292,46 +382,105 @@ const AdminOverview = memo(() => {
 
       {/* ── Row 2: Area chart (2/3) + Radial chart (1/3) ── */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 items-stretch">
-
         {/* Area chart */}
         <FadeIn delay={0.28} className="lg:col-span-2 flex">
           <Card className="flex-1 flex flex-col">
             <div className="flex items-start justify-between gap-3 mb-5">
-              <CardHeader title="Content Activity" sub="Updates & additions over the year" />
-              <div className="flex items-center gap-4 text-xs shrink-0 pt-0.5" style={{ color: 'var(--text-muted)' }}>
+              <CardHeader
+                title="Content Activity"
+                sub="Updates & additions over the year"
+              />
+              <div
+                className="flex items-center gap-4 text-xs shrink-0 pt-0.5"
+                style={{ color: 'var(--text-muted)' }}
+              >
                 <span className="flex items-center gap-1.5">
-                  <span className="w-3 h-px inline-block" style={{ backgroundColor: '#38bdf8' }} />
+                  <span
+                    className="w-3 h-px inline-block"
+                    style={{ backgroundColor: '#38bdf8' }}
+                  />
                   Updates
                 </span>
                 <span className="flex items-center gap-1.5">
-                  <span className="w-3 h-px inline-block" style={{ backgroundColor: '#818cf8' }} />
+                  <span
+                    className="w-3 h-px inline-block"
+                    style={{ backgroundColor: '#818cf8' }}
+                  />
                   Additions
                 </span>
               </div>
             </div>
             <div className="h-[220px] min-w-0">
               <ResponsiveContainer width="100%" height="100%">
-                <AreaChart data={MONTHLY_ACTIVITY} margin={{ top: 4, right: 4, left: -22, bottom: 0 }}>
+                <AreaChart
+                  data={MONTHLY_ACTIVITY}
+                  margin={{ top: 4, right: 4, left: -22, bottom: 0 }}
+                >
                   <defs>
                     <linearGradient id="gUpdates" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%"  stopColor="#38bdf8" stopOpacity={0.22} />
-                      <stop offset="95%" stopColor="#38bdf8" stopOpacity={0}    />
+                      <stop
+                        offset="5%"
+                        stopColor="#38bdf8"
+                        stopOpacity={0.22}
+                      />
+                      <stop offset="95%" stopColor="#38bdf8" stopOpacity={0} />
                     </linearGradient>
                     <linearGradient id="gAdditions" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%"  stopColor="#818cf8" stopOpacity={0.18} />
-                      <stop offset="95%" stopColor="#818cf8" stopOpacity={0}    />
+                      <stop
+                        offset="5%"
+                        stopColor="#818cf8"
+                        stopOpacity={0.18}
+                      />
+                      <stop offset="95%" stopColor="#818cf8" stopOpacity={0} />
                     </linearGradient>
                   </defs>
-                  <CartesianGrid strokeDasharray="3 3" stroke="var(--glass-border)" vertical={false} />
-                  <XAxis dataKey="month" tick={{ fontSize: 10, fill: 'var(--text-muted)' }} axisLine={false} tickLine={false} />
-                  <YAxis tick={{ fontSize: 10, fill: 'var(--text-muted)' }} axisLine={false} tickLine={false} />
+                  <CartesianGrid
+                    strokeDasharray="3 3"
+                    stroke="var(--glass-border)"
+                    vertical={false}
+                  />
+                  <XAxis
+                    dataKey="month"
+                    tick={{ fontSize: 10, fill: 'var(--text-muted)' }}
+                    axisLine={false}
+                    tickLine={false}
+                  />
+                  <YAxis
+                    tick={{ fontSize: 10, fill: 'var(--text-muted)' }}
+                    axisLine={false}
+                    tickLine={false}
+                  />
                   <Tooltip content={<AreaTip />} />
-                  <Area type="monotone" dataKey="updates" name="Updates" stroke="#38bdf8" strokeWidth={2}
-                    fill="url(#gUpdates)" dot={false}
-                    activeDot={{ r: 4, fill: '#38bdf8', stroke: 'var(--bg-surface)', strokeWidth: 2 }} />
-                  <Area type="monotone" dataKey="additions" name="Additions" stroke="#818cf8" strokeWidth={2}
-                    fill="url(#gAdditions)" dot={false}
-                    activeDot={{ r: 4, fill: '#818cf8', stroke: 'var(--bg-surface)', strokeWidth: 2 }} />
+                  <Area
+                    type="monotone"
+                    dataKey="updates"
+                    name="Updates"
+                    stroke="#38bdf8"
+                    strokeWidth={2}
+                    fill="url(#gUpdates)"
+                    dot={false}
+                    activeDot={{
+                      r: 4,
+                      fill: '#38bdf8',
+                      stroke: 'var(--bg-surface)',
+                      strokeWidth: 2,
+                    }}
+                  />
+                  <Area
+                    type="monotone"
+                    dataKey="additions"
+                    name="Additions"
+                    stroke="#818cf8"
+                    strokeWidth={2}
+                    fill="url(#gAdditions)"
+                    dot={false}
+                    activeDot={{
+                      r: 4,
+                      fill: '#818cf8',
+                      stroke: 'var(--bg-surface)',
+                      strokeWidth: 2,
+                    }}
+                  />
                 </AreaChart>
               </ResponsiveContainer>
             </div>
@@ -345,23 +494,44 @@ const AdminOverview = memo(() => {
             <div className="h-[170px] min-w-0 flex items-center justify-center">
               <ResponsiveContainer width="100%" height="100%">
                 <RadialBarChart
-                  cx="50%" cy="50%"
-                  innerRadius="18%" outerRadius="88%"
+                  cx="50%"
+                  cy="50%"
+                  innerRadius="18%"
+                  outerRadius="88%"
                   barSize={9}
                   data={RADIAL_DATA}
-                  startAngle={90} endAngle={-270}
+                  startAngle={90}
+                  endAngle={-270}
                 >
-                  <RadialBar background={{ fill: 'var(--glass-bg-raised)' }} dataKey="value" cornerRadius={5} />
+                  <RadialBar
+                    background={{ fill: 'var(--glass-bg-raised)' }}
+                    dataKey="value"
+                    cornerRadius={5}
+                  />
                   <Tooltip
                     content={({ active, payload }) => {
                       if (!active || !payload?.length) return null;
                       const d = payload[0].payload;
                       return (
-                        <div className="rounded-xl px-3 py-2 text-xs shadow-xl"
-                          style={{ backgroundColor: 'var(--bg-surface)', border: '1px solid var(--glass-border-strong)', color: 'var(--text-primary)' }}>
-                          <p style={{ color: d.fill }} className="font-bold">{d.name}</p>
+                        <div
+                          className="rounded-xl px-3 py-2 text-xs shadow-xl"
+                          style={{
+                            backgroundColor: 'var(--bg-surface)',
+                            border: '1px solid var(--glass-border-strong)',
+                            color: 'var(--text-primary)',
+                          }}
+                        >
+                          <p style={{ color: d.fill }} className="font-bold">
+                            {d.name}
+                          </p>
                           <p style={{ color: 'var(--text-muted)' }}>
-                            Records: <span className="font-semibold" style={{ color: 'var(--text-primary)' }}>{d.value}</span>
+                            Records:{' '}
+                            <span
+                              className="font-semibold"
+                              style={{ color: 'var(--text-primary)' }}
+                            >
+                              {d.value}
+                            </span>
                           </p>
                         </div>
                       );
@@ -370,13 +540,27 @@ const AdminOverview = memo(() => {
                 </RadialBarChart>
               </ResponsiveContainer>
             </div>
-            <div className="grid grid-cols-2 gap-x-3 gap-y-2 pt-3" style={{ borderTop: '1px solid var(--glass-border-subtle)' }}>
+            <div
+              className="grid grid-cols-2 gap-x-3 gap-y-2 pt-3"
+              style={{ borderTop: '1px solid var(--glass-border-subtle)' }}
+            >
               {MODULE_COUNTS.map((m) => (
                 <div key={m.name} className="flex items-center gap-1.5 min-w-0">
-                  <span className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: m.color }} />
-                  <span className="text-xs truncate" style={{ color: 'var(--text-muted)' }}>
+                  <span
+                    className="w-2 h-2 rounded-full shrink-0"
+                    style={{ backgroundColor: m.color }}
+                  />
+                  <span
+                    className="text-xs truncate"
+                    style={{ color: 'var(--text-muted)' }}
+                  >
                     {m.name}
-                    <span className="ml-1 font-semibold" style={{ color: 'var(--text-primary)' }}>{m.count}</span>
+                    <span
+                      className="ml-1 font-semibold"
+                      style={{ color: 'var(--text-primary)' }}
+                    >
+                      {m.count}
+                    </span>
                   </span>
                 </div>
               ))}
@@ -387,22 +571,45 @@ const AdminOverview = memo(() => {
 
       {/* ── Row 3: Bar chart (1/2) + Activity feed (1/2) ── */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 items-stretch">
-
         {/* Bar chart */}
         <FadeIn delay={0.44} className="flex">
           <Card className="flex-1 flex flex-col">
-            <CardHeader title="Records by Module" sub="Total content entries per section" />
+            <CardHeader
+              title="Records by Module"
+              sub="Total content entries per section"
+            />
             <div className="h-[210px] min-w-0">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart
-                  data={MODULE_COUNTS.map((m) => ({ name: m.name, count: m.count, color: m.color }))}
+                  data={MODULE_COUNTS.map((m) => ({
+                    name: m.name,
+                    count: m.count,
+                    color: m.color,
+                  }))}
                   margin={{ top: 4, right: 4, left: -22, bottom: 0 }}
                   barCategoryGap="34%"
                 >
-                  <CartesianGrid strokeDasharray="3 3" stroke="var(--glass-border)" vertical={false} />
-                  <XAxis dataKey="name" tick={{ fontSize: 10, fill: 'var(--text-muted)' }} axisLine={false} tickLine={false} />
-                  <YAxis tick={{ fontSize: 10, fill: 'var(--text-muted)' }} axisLine={false} tickLine={false} allowDecimals={false} />
-                  <Tooltip content={<BarTip />} cursor={{ fill: 'var(--glass-bg-raised)' }} />
+                  <CartesianGrid
+                    strokeDasharray="3 3"
+                    stroke="var(--glass-border)"
+                    vertical={false}
+                  />
+                  <XAxis
+                    dataKey="name"
+                    tick={{ fontSize: 10, fill: 'var(--text-muted)' }}
+                    axisLine={false}
+                    tickLine={false}
+                  />
+                  <YAxis
+                    tick={{ fontSize: 10, fill: 'var(--text-muted)' }}
+                    axisLine={false}
+                    tickLine={false}
+                    allowDecimals={false}
+                  />
+                  <Tooltip
+                    content={<BarTip />}
+                    cursor={{ fill: 'var(--glass-bg-raised)' }}
+                  />
                   <Bar dataKey="count" radius={[5, 5, 0, 0]}>
                     {MODULE_COUNTS.map((m) => (
                       <Cell key={m.name} fill={m.color} fillOpacity={0.88} />
@@ -417,26 +624,43 @@ const AdminOverview = memo(() => {
         {/* Recent activity feed */}
         <FadeIn delay={0.51} className="flex">
           <Card className="flex-1 flex flex-col">
-            <CardHeader title="Recent Activity" sub="Latest changes across all modules" />
+            <CardHeader
+              title="Recent Activity"
+              sub="Latest changes across all modules"
+            />
             <div className="flex-1 flex flex-col">
               {RECENT_ACTIVITY.map((item, i) => (
                 <motion.div
                   key={i}
                   initial={{ opacity: 0, x: -8 }}
                   animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.54 + i * 0.06, duration: 0.3, ease: 'easeOut' }}
+                  transition={{
+                    delay: 0.54 + i * 0.06,
+                    duration: 0.3,
+                    ease: 'easeOut',
+                  }}
                   className="flex items-start gap-3 py-3 flex-1"
                   style={{
-                    borderBottom: i < RECENT_ACTIVITY.length - 1
-                      ? '1px solid var(--glass-border-subtle)'
-                      : 'none',
+                    borderBottom:
+                      i < RECENT_ACTIVITY.length - 1
+                        ? '1px solid var(--glass-border-subtle)'
+                        : 'none',
                   }}
                 >
                   {/* Timeline */}
                   <div className="flex flex-col items-center shrink-0 mt-0.5">
-                    <span className="w-2 h-2 rounded-full" style={{ backgroundColor: actColor[item.type] }} />
+                    <span
+                      className="w-2 h-2 rounded-full"
+                      style={{ backgroundColor: actColor[item.type] }}
+                    />
                     {i < RECENT_ACTIVITY.length - 1 && (
-                      <span className="w-px flex-1 mt-1.5" style={{ backgroundColor: 'var(--glass-border-subtle)', minHeight: 16 }} />
+                      <span
+                        className="w-px flex-1 mt-1.5"
+                        style={{
+                          backgroundColor: 'var(--glass-border-subtle)',
+                          minHeight: 16,
+                        }}
+                      />
                     )}
                   </div>
                   {/* Text */}
@@ -444,15 +668,24 @@ const AdminOverview = memo(() => {
                     <div className="flex items-center gap-2 flex-wrap">
                       <span
                         className="text-[11px] font-semibold px-1.5 py-0.5 rounded"
-                        style={{ backgroundColor: `${actColor[item.type]}18`, color: actColor[item.type] }}
+                        style={{
+                          backgroundColor: `${actColor[item.type]}18`,
+                          color: actColor[item.type],
+                        }}
                       >
                         {item.action}
                       </span>
-                      <span className="text-xs font-medium truncate" style={{ color: 'var(--text-primary)' }}>
+                      <span
+                        className="text-xs font-medium truncate"
+                        style={{ color: 'var(--text-primary)' }}
+                      >
                         {item.title}
                       </span>
                     </div>
-                    <p className="text-[11px] mt-0.5" style={{ color: 'var(--text-muted)' }}>
+                    <p
+                      className="text-[11px] mt-0.5"
+                      style={{ color: 'var(--text-muted)' }}
+                    >
                       {item.module} · {item.time}
                     </p>
                   </div>
@@ -466,7 +699,10 @@ const AdminOverview = memo(() => {
       {/* ── Row 4: Module health ── */}
       <FadeIn delay={0.58}>
         <Card>
-          <CardHeader title="Module Health" sub="Record count relative to the busiest module" />
+          <CardHeader
+            title="Module Health"
+            sub="Record count relative to the busiest module"
+          />
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
             {MODULE_COUNTS.map((m, i) => {
               const Icon = m.icon;
@@ -477,7 +713,11 @@ const AdminOverview = memo(() => {
                   key={m.name}
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 0.6 + i * 0.055, duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                  transition={{
+                    delay: 0.6 + i * 0.055,
+                    duration: 0.35,
+                    ease: [0.22, 1, 0.36, 1],
+                  }}
                   className="rounded-xl p-3.5 flex flex-col gap-3"
                   style={{
                     backgroundColor: 'var(--glass-bg-raised)',
@@ -493,21 +733,34 @@ const AdminOverview = memo(() => {
                   <div>
                     <p
                       className="text-2xl font-bold leading-none"
-                      style={{ color: 'var(--text-primary)', fontFamily: '"Syne", sans-serif' }}
+                      style={{
+                        color: 'var(--text-primary)',
+                        fontFamily: '"Syne", sans-serif',
+                      }}
                     >
                       {m.count}
                     </p>
-                    <p className="text-xs mt-1" style={{ color: 'var(--text-muted)' }}>
+                    <p
+                      className="text-xs mt-1"
+                      style={{ color: 'var(--text-muted)' }}
+                    >
                       {m.name}
                     </p>
                   </div>
-                  <div className="h-1.5 rounded-full overflow-hidden" style={{ backgroundColor: 'var(--glass-bg)' }}>
+                  <div
+                    className="h-1.5 rounded-full overflow-hidden"
+                    style={{ backgroundColor: 'var(--glass-bg)' }}
+                  >
                     <motion.div
                       className="h-full rounded-full"
                       style={{ backgroundColor: m.color }}
                       initial={{ width: 0 }}
                       animate={{ width: `${pct}%` }}
-                      transition={{ delay: 0.68 + i * 0.055, duration: 0.65, ease: 'easeOut' }}
+                      transition={{
+                        delay: 0.68 + i * 0.055,
+                        duration: 0.65,
+                        ease: 'easeOut',
+                      }}
                     />
                   </div>
                 </motion.div>
@@ -516,7 +769,6 @@ const AdminOverview = memo(() => {
           </div>
         </Card>
       </FadeIn>
-
     </div>
   );
 });

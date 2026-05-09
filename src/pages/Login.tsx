@@ -29,7 +29,8 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   // Redirect to the page the user originally tried to visit, or /admin
-  const from = (location.state as { from?: Location })?.from?.pathname ?? '/admin';
+  const from =
+    (location.state as { from?: Location })?.from?.pathname ?? '/admin';
 
   useEffect(() => {
     if (isAuthenticated) navigate(from, { replace: true });
@@ -174,7 +175,11 @@ const Login = () => {
                   style={{ color: 'var(--text-muted)' }}
                   aria-label={showPassword ? 'Hide password' : 'Show password'}
                 >
-                  {showPassword ? <FaEyeSlash size={14} /> : <FaEye size={14} />}
+                  {showPassword ? (
+                    <FaEyeSlash size={14} />
+                  ) : (
+                    <FaEye size={14} />
+                  )}
                 </button>
               </div>
             </div>
@@ -186,13 +191,14 @@ const Login = () => {
                 animate={{ opacity: 1, y: 0 }}
                 className="text-sm text-red-400 text-center"
               >
-                {error.includes('Invalid login credentials') || error.includes('invalid_credentials')
+                {error.includes('Invalid login credentials') ||
+                error.includes('invalid_credentials')
                   ? 'Invalid email or password.'
                   : error.includes('Email not confirmed')
-                  ? 'Please confirm your email before signing in.'
-                  : error.includes('rate limit') || error.includes('too many')
-                  ? 'Too many attempts. Please try again later.'
-                  : 'Sign in failed. Please try again.'}
+                    ? 'Please confirm your email before signing in.'
+                    : error.includes('rate limit') || error.includes('too many')
+                      ? 'Too many attempts. Please try again later.'
+                      : 'Sign in failed. Please try again.'}
               </motion.p>
             )}
 

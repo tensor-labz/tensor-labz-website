@@ -7,6 +7,7 @@ All notable changes to the Tensor Labs website are documented here.
 ## [Unreleased]
 
 ---
+
 ## [v1.1.0] — 2026-05-07
 
 ### Added
@@ -105,8 +106,6 @@ All notable changes to the Tensor Labs website are documented here.
 - add CLAUDE.md, update README.md, add CHANGELOG.md
 - Merge pull request #3 from ThanuMahee12/stagging
 - Merge pull request #2 from ThanuMahee12/HEAD
-
-
 
 ### Security
 

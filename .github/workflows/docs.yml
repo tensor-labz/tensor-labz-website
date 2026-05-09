@@ -6,10 +6,10 @@ on:
     paths:
       - 'docs/**'
       - 'mkdocs.yml'
-  workflow_dispatch:   # allow manual trigger from Actions tab
+  workflow_dispatch: # allow manual trigger from Actions tab
 
 permissions:
-  contents: write      # needed for gh-deploy to push to gh-pages branch
+  contents: write # needed for gh-deploy to push to gh-pages branch
 
 jobs:
   deploy:
@@ -19,7 +19,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0   # full history — mkdocs uses git dates for pages
+          fetch-depth: 0 # full history — mkdocs uses git dates for pages
 
       - uses: actions/setup-python@v5
         with:

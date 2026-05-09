@@ -6,7 +6,9 @@ export interface SocialLink {
   value: string;
 }
 
-export const fetchSocialLinks = async (signal?: AbortSignal): Promise<SocialLink[]> => {
+export const fetchSocialLinks = async (
+  signal?: AbortSignal
+): Promise<SocialLink[]> => {
   const { data, error } = await supabase
     .from('social')
     .select('*')

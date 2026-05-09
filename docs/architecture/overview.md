@@ -117,11 +117,11 @@ sequenceDiagram
 
 ## Key design decisions
 
-| Decision | Reason |
-|---|---|
-| Supabase over Firestore | Relational PostgreSQL — better for structured CMS with joins |
-| Lambda for S3 (not direct SDK) | AWS credentials never in browser bundle |
-| Supabase JWT for Lambda auth | Single auth system — no second token service |
-| Presigned PUT (browser → S3 direct) | Lambda never handles binary — no 6 MB API Gateway limit |
-| Redux Toolkit | Consistent async state, memoized selectors, avoids prop drilling |
-| Dynamic table/form config in Supabase | Schema changes without code deployments |
+| Decision                              | Reason                                                           |
+| ------------------------------------- | ---------------------------------------------------------------- |
+| Supabase over Firestore               | Relational PostgreSQL — better for structured CMS with joins     |
+| Lambda for S3 (not direct SDK)        | AWS credentials never in browser bundle                          |
+| Supabase JWT for Lambda auth          | Single auth system — no second token service                     |
+| Presigned PUT (browser → S3 direct)   | Lambda never handles binary — no 6 MB API Gateway limit          |
+| Redux Toolkit                         | Consistent async state, memoized selectors, avoids prop drilling |
+| Dynamic table/form config in Supabase | Schema changes without code deployments                          |

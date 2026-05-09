@@ -6,7 +6,9 @@ export interface AboutItem {
   value: string;
 }
 
-export const fetchAboutData = async (signal?: AbortSignal): Promise<AboutItem[]> => {
+export const fetchAboutData = async (
+  signal?: AbortSignal
+): Promise<AboutItem[]> => {
   const { data, error } = await supabase
     .from('about')
     .select('*')
