@@ -6,6 +6,12 @@ import { FiSearch, FiX } from 'react-icons/fi';
 import { HiArrowsUpDown } from 'react-icons/hi2';
 import { MODULES } from '../config/modules';
 import { supabase } from '../../../lib/supabase';
+import { useAppDispatch, useAppSelector } from '../../../app/hooks';
+import {
+  fetchRecords,
+  selectModuleRecords,
+  selectModuleStatus,
+} from '../../../store/adminSlice';
 import type { TableColumnConfig } from '../../../shared/types/tableConfig';
 
 type SortKey = 'id-asc' | 'id-desc' | 'title-asc' | 'title-desc';
@@ -29,29 +35,26 @@ const rowVariants = {
 
 const AdminDataTable = memo(() => {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const { module: moduleId = 'hero' } = useParams();
 
   const mod = MODULES.find((m) => m.id === moduleId);
 
-  const [rows, setRows] = useState<Record<string, unknown>[]>([]);
-  const [loading, setLoading] = useState(true);
+  const rows = useAppSelector(selectModuleRecords(moduleId));
+  const status = useAppSelector(selectModuleStatus(moduleId));
+  const loading = status === 'idle' || status === 'loading';
+
   const [search, setSearch] = useState('');
   const [sort, setSort] = useState<SortKey>('id-asc');
   const [colConfig, setColConfig] = useState<TableColumnConfig[] | null>(null);
 
-  /* ── fetch rows ── */
+  /* ── fetch rows via Redux ── */
   useEffect(() => {
-    setLoading(true);
     setSearch('');
-    supabase
-      .from(moduleId)
-      .select('*')
-      .order('id')
-      .then(({ data, error }) => {
-        if (!error && data) setRows(data as Record<string, unknown>[]);
-        setLoading(false);
-      });
-  }, [moduleId]);
+    if (status === 'idle') {
+      dispatch(fetchRecords(moduleId));
+    }
+  }, [moduleId, status, dispatch]);
 
   /* ── fetch column config ── */
   useEffect(() => {

@@ -1,5 +1,10 @@
 import { memo, useEffect, useMemo, useState } from 'react';
-import { supabase } from '../../../lib/supabase';
+import { useAppDispatch, useAppSelector } from '../../../app/hooks';
+import {
+  fetchModuleCounts,
+  selectModuleCounts,
+  selectCountsStatus,
+} from '../../../store/adminSlice';
 import { motion } from 'motion/react';
 import {
   AreaChart,
@@ -229,6 +234,10 @@ const BarTip = ({ active, payload, label }: any) => {
 
 /* ── Main ── */
 const AdminOverview = memo(() => {
+  const dispatch = useAppDispatch();
+  const counts = useAppSelector(selectModuleCounts);
+  const countsStatus = useAppSelector(selectCountsStatus);
+
   const today = new Date().toLocaleDateString('en-US', {
     weekday: 'long',
     year: 'numeric',
@@ -236,27 +245,13 @@ const AdminOverview = memo(() => {
     day: 'numeric',
   });
 
-  const [counts, setCounts] = useState<Record<string, number>>({});
-  const [featuredCount, setFeaturedCount] = useState(0);
-
   useEffect(() => {
-    Promise.all(
-      MODULE_META.map(async (m) => {
-        const { count } = await supabase
-          .from(m.id)
-          .select('*', { count: 'exact', head: true });
-        return { id: m.id, count: count ?? 0 };
-      })
-    ).then((results) => {
-      setCounts(Object.fromEntries(results.map((r) => [r.id, r.count])));
-    });
+    if (countsStatus === 'idle') {
+      dispatch(fetchModuleCounts(MODULE_META.map((m) => m.id)));
+    }
+  }, [countsStatus, dispatch]);
 
-    supabase
-      .from('projects')
-      .select('*', { count: 'exact', head: true })
-      .eq('is_top', true)
-      .then(({ count }) => setFeaturedCount(count ?? 0));
-  }, []);
+  const featuredCount = counts['projects:featured'] ?? 0;
 
   const MODULE_COUNTS = useMemo(
     () => MODULE_META.map((m) => ({ ...m, count: counts[m.id] ?? 0 })),
