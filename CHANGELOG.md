@@ -7,6 +7,15 @@ All notable changes to the Tensor Labs website are documented here.
 ## [Unreleased]
 
 ---
+## [v1.11.0] — 2026-05-10
+
+### Added
+
+- Customers and Orders CRUD modules with tabbed forms (#31)
+
+
+
+---
 ## [v1.10.0] — 2026-05-10
 
 ### Added
