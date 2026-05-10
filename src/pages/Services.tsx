@@ -5,14 +5,15 @@ import ServiceHero from '../features/services-page/components/ServiceHero';
 import TabBar from '../features/services-page/components/TabBar';
 import ServiceDropDown from '../features/services-page/components/ServiceDropDown';
 import ServiceContainer from '../features/services-page/components/ServiceContainer';
+import { fadeIn } from '../lib/motion';
 
 const Services = memo(() => {
   return (
     <Page HeadProps={{ title: 'Services' }}>
       <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.5, ease: 'easeOut' }}
+        variants={fadeIn()}
+        initial="hidden"
+        animate="visible"
         className="min-h-screen flex flex-col"
       >
         <ServiceHero />

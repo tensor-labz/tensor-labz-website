@@ -5,6 +5,7 @@
 :root {
   /* light mode defaults */
   --bg-base: #f8fafc; /* slate-50  */
+  --grid-dot: rgba(100, 116, 139, 0.10); /* slate-500 @ 10% */
   --bg-surface: #ffffff; /* white     */
   --bg-raised: #f1f5f9; /* slate-100 */
   --text-primary: #0f172a; /* slate-900 */
@@ -32,6 +33,7 @@
 
 .dark {
   --bg-base: #020617; /* slate-950 */
+  --grid-dot: rgba(56, 189, 248, 0.05); /* accent-cyan @ 5% */
   --bg-surface: #0f172a; /* slate-900 */
   --bg-raised: #1e293b; /* slate-800 */
   --text-primary: #f8fafc; /* slate-50  */
@@ -75,6 +77,8 @@ body {
   background-color: var(--bg-base);
   color: var(--text-primary);
   font-family: 'Exo', sans-serif;
+  background-image: radial-gradient(var(--grid-dot) 1px, transparent 1px);
+  background-size: 24px 24px;
 }
 
 #root {

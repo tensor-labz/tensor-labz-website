@@ -36,11 +36,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
 
   return (
     <motion.div
-      className="rounded-2xl shadow-lg overflow-hidden w-full h-full flex flex-col"
-      style={{
-        backgroundColor: 'var(--bg-surface)',
-        border: '1px solid var(--border)',
-      }}
+      className="rounded-2xl shadow-lg overflow-hidden w-full h-full flex flex-col bg-surface border border-glass-rim"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 20 }}
@@ -67,17 +63,13 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
           <div className="p-4 w-full">
             <motion.button
               onClick={handleExplore}
-              className="px-4 py-2 rounded-full font-medium text-sm flex items-center gap-2"
-              style={{
-                backgroundColor: 'var(--bg-surface)',
-                color: 'var(--text-primary)',
-              }}
+              className="px-4 py-2 rounded-full font-medium text-sm flex items-center gap-2 bg-surface text-fg"
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
             >
-              <ReactIcon name="FiEye" size={16} style={{ color: 'var(--accent)' }} />
+              <ReactIcon name="FiEye" size={16} className="text-accent" />
               <span>Quick View</span>
-              <ReactIcon name="FiArrowRight" size={16} style={{ color: 'var(--accent)' }} />
+              <ReactIcon name="FiArrowRight" size={16} className="text-accent" />
             </motion.button>
           </div>
         </motion.div>
@@ -97,8 +89,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
         )}
 
         <h3
-          className="text-xl md:text-2xl font-bold mb-2 line-clamp-1 pr-16"
-          style={{ color: 'var(--text-primary)' }}
+          className="text-xl md:text-2xl font-bold font-display mb-2 line-clamp-1 pr-16 text-fg"
         >
           {title}
         </h3>
@@ -108,11 +99,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
             {services.slice(0, 3).map((service, index) => (
               <motion.span
                 key={index}
-                className="px-3 py-1 text-xs font-medium rounded-full"
-                style={{
-                  backgroundColor: 'var(--accent-soft)',
-                  color: 'var(--accent)',
-                }}
+                className="px-3 py-1 text-xs font-medium rounded-full bg-glass-raised text-accent"
                 initial={{ opacity: 0, x: -5 }}
                 animate={{
                   opacity: 1,
@@ -125,11 +112,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
             ))}
             {services.length > 3 && (
               <motion.span
-                className="px-3 py-1 text-xs font-medium rounded-full"
-                style={{
-                  backgroundColor: 'var(--bg-raised)',
-                  color: 'var(--text-muted)',
-                }}
+                className="px-3 py-1 text-xs font-medium rounded-full bg-raised text-muted"
                 initial={{ opacity: 0, x: -5 }}
                 animate={{ opacity: 1, x: 0 }}
               >
@@ -139,10 +122,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
           </AnimatePresence>
         </div>
 
-        <p
-          className="mb-10 line-clamp-2 flex-grow text-sm"
-          style={{ color: 'var(--text-muted)' }}
-        >
+        <p className="mb-10 line-clamp-2 flex-grow text-sm text-muted">
           {description}
         </p>
 
@@ -154,10 +134,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
           onClick={handleExplore}
         >
           <motion.div
-            className="flex items-center overflow-hidden rounded-full shadow-md text-white"
-            style={{
-              background: 'linear-gradient(to right, var(--accent), #0c4a6e)',
-            }}
+            className="flex items-center overflow-hidden rounded-full shadow-md text-white bg-gradient-to-r from-accent to-sky-900"
             variants={{ initial: { width: 40 }, expanded: { width: 160 } }}
             transition={{ type: 'spring', stiffness: 500, damping: 30 }}
           >
