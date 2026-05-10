@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { motion } from 'motion/react';
 import { useInView } from 'react-intersection-observer';
 import Section from '../../../shared/components/ui/Section';
-import HeroGear3D from './HeroGear3D';
+import HeroImageSlider from './HeroImageSlider';
 import HeroKeyPoint from './HeroKeyPoint';
 import { useHeroController } from '../hooks/useHeroController';
 import { useAppSelector } from '../../../app/hooks';
@@ -102,7 +102,7 @@ const HeroSection: React.FC = memo(() => {
             transition={{ duration: 0.4, ease: 'easeOut' }}
             className="w-full h-full relative rounded-2xl overflow-hidden"
           >
-            <HeroGear3D />
+            <HeroImageSlider />
           </motion.div>
         </motion.div>
 
