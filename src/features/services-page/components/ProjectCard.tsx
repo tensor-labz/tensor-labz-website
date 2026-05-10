@@ -1,8 +1,7 @@
 import React, { memo, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useNavigate } from 'react-router-dom';
-import { FiArrowRight, FiEye } from 'react-icons/fi';
-import { AiTwotoneCrown } from 'react-icons/ai';
+import ReactIcon from '../../../shared/components/ui/ReactIcon';
 
 interface ProjectCardProps {
   id: string | number;
@@ -76,12 +75,9 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
             >
-              <FiEye style={{ color: 'var(--accent)' }} />
+              <ReactIcon name="FiEye" size={16} style={{ color: 'var(--accent)' }} />
               <span>Quick View</span>
-              <FiArrowRight
-                className="h-4 w-4"
-                style={{ color: 'var(--accent)' }}
-              />
+              <ReactIcon name="FiArrowRight" size={16} style={{ color: 'var(--accent)' }} />
             </motion.button>
           </div>
         </motion.div>
@@ -95,7 +91,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
             animate={{ scale: 1, opacity: 1 }}
             transition={{ delay: 0.2 }}
           >
-            <AiTwotoneCrown className="h-3 w-3" />
+            <ReactIcon name="AiTwotoneCrown" size={12} />
             <span>Premium</span>
           </motion.div>
         )}
@@ -169,7 +165,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
               className="h-10 w-10 flex items-center relative justify-center rounded-full"
               whileTap={{ scale: 0.9 }}
             >
-              <FiArrowRight className="h-5 w-5" />
+              <ReactIcon name="FiArrowRight" size={20} />
             </motion.button>
             <motion.span
               className="whitespace-nowrap pr-4 pl-1 font-medium mx-auto"

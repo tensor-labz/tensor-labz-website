@@ -1,5 +1,5 @@
 import React, { memo } from 'react';
-import { BsRobot } from 'react-icons/bs';
+import ReactIcon from '../../../shared/components/ui/ReactIcon';
 import { motion } from 'motion/react';
 
 const ServiceEmpty: React.FC = memo(() => {
@@ -22,7 +22,7 @@ const ServiceEmpty: React.FC = memo(() => {
             animate={{ rotate: 360 }}
             transition={{ duration: 8, repeat: Infinity, ease: 'linear' }}
           >
-            <BsRobot className="text-5xl" style={{ color: 'var(--accent)' }} />
+            <ReactIcon name="BsRobot" size={48} style={{ color: 'var(--accent)' }} />
           </motion.div>
         </div>
       </motion.div>

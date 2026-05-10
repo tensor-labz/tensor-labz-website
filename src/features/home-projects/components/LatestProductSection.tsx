@@ -1,6 +1,6 @@
 import React, { useState, useEffect, memo, useMemo } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
+import ReactIcon from '../../../shared/components/ui/ReactIcon';
 import Section from '../../../shared/components/ui/Section';
 import { useDevice } from '../../../shared/hooks/useDevice';
 import MobileTopCarousel from './MobileTopCarousel';
@@ -121,20 +121,20 @@ const LatestProductSection: React.FC = memo(() => {
                 </motion.div>
               </AnimatePresence>
 
-              <div className="absolute top-1/2 -translate-y-1/2 -left-10 p-2 cursor-pointer">
-                <FiChevronLeft
+              <div className="absolute top-1/2 -translate-y-1/2 -left-10 p-2 cursor-pointer" onClick={handlePrev}>
+                <ReactIcon
+                  name="FiChevronLeft"
                   size={32}
                   style={{ color: 'var(--text-muted)' }}
                   className="font-bold hover:text-sky-500 transition-colors"
-                  onClick={handlePrev}
                 />
               </div>
-              <div className="absolute top-1/2 -translate-y-1/2 -right-10 p-2 cursor-pointer">
-                <FiChevronRight
+              <div className="absolute top-1/2 -translate-y-1/2 -right-10 p-2 cursor-pointer" onClick={handleNext}>
+                <ReactIcon
+                  name="FiChevronRight"
                   size={32}
                   style={{ color: 'var(--text-muted)' }}
                   className="font-bold hover:text-sky-500 transition-colors"
-                  onClick={handleNext}
                 />
               </div>
 

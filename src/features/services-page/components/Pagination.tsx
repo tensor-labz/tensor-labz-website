@@ -1,12 +1,7 @@
 import { memo, useEffect, useState, useCallback } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useDevice } from '../../../shared/hooks/useDevice';
-import {
-  FiChevronsLeft,
-  FiChevronLeft,
-  FiChevronRight,
-  FiChevronsRight,
-} from 'react-icons/fi';
+import ReactIcon from '../../../shared/components/ui/ReactIcon';
 
 interface PaginationProps {
   totalItems: number;
@@ -106,13 +101,13 @@ const Pagination = memo(({ totalItems, itemsPerPage }: PaginationProps) => {
   return (
     <div className="flex md:justify-end justify-center items-center gap-1.5 mt-6 flex-wrap">
       {[
-        { icon: FiChevronsLeft, page: 1, disabled: currentPage === 1 },
+        { icon: 'FiChevronsLeft', page: 1, disabled: currentPage === 1 },
         {
-          icon: FiChevronLeft,
+          icon: 'FiChevronLeft',
           page: currentPage - 1,
           disabled: currentPage === 1,
         },
-      ].map(({ icon: Icon, page, disabled }) => (
+      ].map(({ icon, page, disabled }) => (
         <button
           key={page}
           onClick={() => handlePageChange(page)}
@@ -120,7 +115,7 @@ const Pagination = memo(({ totalItems, itemsPerPage }: PaginationProps) => {
           className={btnClass}
           style={btnStyle}
         >
-          <Icon size={18} />
+          <ReactIcon name={icon} size={18} />
         </button>
       ))}
 
@@ -137,16 +132,16 @@ const Pagination = memo(({ totalItems, itemsPerPage }: PaginationProps) => {
 
       {[
         {
-          icon: FiChevronRight,
+          icon: 'FiChevronRight',
           page: currentPage + 1,
           disabled: currentPage === totalPages,
         },
         {
-          icon: FiChevronsRight,
+          icon: 'FiChevronsRight',
           page: totalPages,
           disabled: currentPage === totalPages,
         },
-      ].map(({ icon: Icon, page, disabled }) => (
+      ].map(({ icon, page, disabled }) => (
         <button
           key={page}
           onClick={() => handlePageChange(page)}
@@ -154,7 +149,7 @@ const Pagination = memo(({ totalItems, itemsPerPage }: PaginationProps) => {
           className={btnClass}
           style={btnStyle}
         >
-          <Icon size={18} />
+          <ReactIcon name={icon} size={18} />
         </button>
       ))}
     </div>

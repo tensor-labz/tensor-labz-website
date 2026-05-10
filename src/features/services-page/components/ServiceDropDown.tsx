@@ -1,6 +1,6 @@
 import { memo, useState, FC, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { IoFilterSharp } from 'react-icons/io5';
+import ReactIcon from '../../../shared/components/ui/ReactIcon';
 import { useServicesPageController } from '../hooks/useServicesPageController';
 
 const dropdownVariants = {
@@ -63,7 +63,9 @@ const ServiceDropDown: FC = memo(() => {
           animate={{ opacity: 1, y: 0 }}
           aria-label="Filter services"
         >
-          <IoFilterSharp
+          <ReactIcon
+            name="IoFilterSharp"
+            size={16}
             className={`transition-transform duration-300 ${toggle ? 'rotate-180' : ''}`}
           />
         </motion.button>

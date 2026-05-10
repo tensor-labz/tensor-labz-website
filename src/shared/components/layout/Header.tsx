@@ -1,7 +1,7 @@
 import React, { memo } from 'react';
 import { motion } from 'motion/react';
 import { Link } from 'react-router-dom';
-import { RiSunLine, RiMoonLine } from 'react-icons/ri';
+import ReactIcon from '../ui/ReactIcon';
 import logo from '../../../assets/images/logo.png';
 import useScroll from '../../hooks/useScroll';
 import { useTheme } from '../../hooks/useTheme';
@@ -56,7 +56,7 @@ const Header: React.FC<{ className?: string }> = memo(({ className = '' }) => {
               bg-[var(--bg-raised)] border border-[var(--border)]
               transition-colors duration-200 text-base shrink-0"
           >
-            {theme === 'dark' ? <RiSunLine /> : <RiMoonLine />}
+            {theme === 'dark' ? <ReactIcon name="RiSunLine" size={16} /> : <ReactIcon name="RiMoonLine" size={16} />}
           </motion.button>
           <MobileNavigation />
         </div>
