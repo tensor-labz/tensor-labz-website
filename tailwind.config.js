@@ -18,6 +18,7 @@ export default {
         'glass-rim':    'var(--glass-border)',
         'glass-raised': 'var(--glass-bg-raised)',
         'glass-hover':  'var(--glass-bg-hover)',
+        'footer-bg':    'var(--footer-bg)',
         /* ── legacy palette (backwards compat) ── */
         primary: {
           100: '#F0F0E4', 200: '#C2C2A3', 300: '#A3A380',

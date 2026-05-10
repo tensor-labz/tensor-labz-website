@@ -74,9 +74,9 @@ const Footer = () => {
   }));
 
   return (
-    <footer
-      className="text-muted"
-    >
+    <footer className="relative bg-footer-bg text-muted">
+      {/* gradient fade from page into footer */}
+      <div className="absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-canvas to-transparent pointer-events-none" />
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
