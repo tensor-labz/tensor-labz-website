@@ -1,12 +1,7 @@
 import React, { memo, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import {
-  RiCloseLine,
-  RiMenu3Line,
-  RiSunLine,
-  RiMoonLine,
-} from 'react-icons/ri';
+import ReactIcon from '../ui/ReactIcon';
 import navData from '../../../data/nav_data';
 import logo from '../../../assets/images/logo.png';
 import { useTheme } from '../../hooks/useTheme';
@@ -76,7 +71,7 @@ const MobileNavigation: React.FC = memo(() => {
           aria-label="Toggle navigation"
           className="text-[var(--text-muted)] hover:text-[var(--text-primary)] text-2xl focus:outline-none transition-colors"
         >
-          {isOpen ? <RiCloseLine /> : <RiMenu3Line />}
+          {isOpen ? <ReactIcon name="RiCloseLine" size={24} /> : <ReactIcon name="RiMenu3Line" size={24} />}
         </motion.button>
       </div>
 
@@ -136,7 +131,7 @@ const MobileNavigation: React.FC = memo(() => {
                       bg-[var(--bg-raised)] border border-[var(--border)]
                       transition-colors text-base"
                   >
-                    {theme === 'dark' ? <RiSunLine /> : <RiMoonLine />}
+                    {theme === 'dark' ? <ReactIcon name="RiSunLine" size={16} /> : <ReactIcon name="RiMoonLine" size={16} />}
                   </motion.button>
                   <motion.button
                     type="button"
@@ -144,7 +139,7 @@ const MobileNavigation: React.FC = memo(() => {
                     onClick={close}
                     className="text-[var(--text-muted)] hover:text-[var(--text-primary)] text-2xl transition-colors"
                   >
-                    <RiCloseLine />
+                    <ReactIcon name="RiCloseLine" size={24} />
                   </motion.button>
                 </div>
               </div>

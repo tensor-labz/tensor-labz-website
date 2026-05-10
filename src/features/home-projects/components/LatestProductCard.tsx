@@ -2,7 +2,7 @@ import React, { memo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Card from '../../../shared/components/ui/Card';
 import type { ProjectItem } from '../../../shared/types/project';
-import { FiArrowRight } from 'react-icons/fi';
+import ReactIcon from '../../../shared/components/ui/ReactIcon';
 
 type LatestProductCardProps = Pick<
   ProjectItem,
@@ -43,7 +43,7 @@ const LatestProductCard: React.FC<LatestProductCardProps> = memo((project) => {
           <h5 className="text-white text-2xl font-bold mb-2">
             {project.title}
           </h5>
-          <FiArrowRight className="text-white w-6 h-6" />
+          <ReactIcon name="FiArrowRight" size={24} className="text-white" />
         </div>
       </div>
 

@@ -20,30 +20,16 @@ import {
   Tooltip,
   Cell,
 } from 'recharts';
-import {
-  FaProjectDiagram,
-  FaCogs,
-  FaImages,
-  FaEnvelope,
-  FaInfoCircle,
-  FaAddressBook,
-  FaArrowUp,
-  FaArrowDown,
-} from 'react-icons/fa';
+import ReactIcon from '../../../shared/components/ui/ReactIcon';
 
 /* ── Module metadata (colours + icons, counts loaded live) ── */
 const MODULE_META = [
-  { id: 'hero', name: 'Hero', icon: FaImages, color: '#38bdf8' },
-  { id: 'services', name: 'Services', icon: FaCogs, color: '#818cf8' },
-  {
-    id: 'projects',
-    name: 'Projects',
-    icon: FaProjectDiagram,
-    color: '#34d399',
-  },
-  { id: 'about', name: 'About', icon: FaInfoCircle, color: '#fb923c' },
-  { id: 'contact', name: 'Contact', icon: FaEnvelope, color: '#f472b6' },
-  { id: 'social', name: 'Social', icon: FaAddressBook, color: '#a78bfa' },
+  { id: 'hero', name: 'Hero', icon: 'FaImages', color: '#38bdf8' },
+  { id: 'services', name: 'Services', icon: 'FaCogs', color: '#818cf8' },
+  { id: 'projects', name: 'Projects', icon: 'FaProjectDiagram', color: '#34d399' },
+  { id: 'about', name: 'About', icon: 'FaInfoCircle', color: '#fb923c' },
+  { id: 'contact', name: 'Contact', icon: 'FaEnvelope', color: '#f472b6' },
+  { id: 'social', name: 'Social', icon: 'FaAddressBook', color: '#a78bfa' },
 ];
 
 const MONTHLY_ACTIVITY = [
@@ -352,7 +338,7 @@ const AdminOverview = memo(() => {
                   className="w-7 h-7 flex items-center justify-center rounded-lg shrink-0"
                   style={{ backgroundColor: s.bg, color: s.color }}
                 >
-                  {s.up ? <FaArrowUp size={11} /> : <FaArrowDown size={11} />}
+                  {s.up ? <ReactIcon name="FaArrowUp" size={11} /> : <ReactIcon name="FaArrowDown" size={11} />}
                 </span>
               </div>
               <p
@@ -700,7 +686,6 @@ const AdminOverview = memo(() => {
           />
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
             {MODULE_COUNTS.map((m, i) => {
-              const Icon = m.icon;
               const max = Math.max(...MODULE_COUNTS.map((x) => x.count));
               const pct = Math.round((m.count / max) * 100);
               return (
@@ -723,7 +708,7 @@ const AdminOverview = memo(() => {
                     className="w-9 h-9 rounded-xl flex items-center justify-center"
                     style={{ backgroundColor: `${m.color}18`, color: m.color }}
                   >
-                    <Icon size={16} />
+                    <ReactIcon name={m.icon} size={16} />
                   </div>
                   <div>
                     <p

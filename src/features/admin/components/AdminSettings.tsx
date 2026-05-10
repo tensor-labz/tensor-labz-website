@@ -1,22 +1,7 @@
 import { memo, useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'motion/react';
-import {
-  FaGlobe,
-  FaPalette,
-  FaPlug,
-  FaShieldAlt,
-  FaSave,
-  FaEye,
-  FaEyeSlash,
-  FaCheck,
-  FaTable,
-  FaListAlt,
-  FaChevronDown,
-  FaChevronUp,
-  FaColumns,
-} from 'react-icons/fa';
-import { FiAlignLeft, FiAlignCenter, FiAlignRight } from 'react-icons/fi';
+import ReactIcon from '../../../shared/components/ui/ReactIcon';
 import { MODULES } from '../config/modules';
 import {
   DEFAULT_PAGE_COMPONENTS,
@@ -37,61 +22,19 @@ type SectionId =
 interface Section {
   id: SectionId;
   label: string;
-  icon: React.ElementType;
+  icon: string;
   color: string;
   bg: string;
 }
 
 const SECTIONS: Section[] = [
-  {
-    id: 'general',
-    label: 'General',
-    icon: FaGlobe,
-    color: '#38bdf8',
-    bg: 'rgba(56,189,248,0.1)',
-  },
-  {
-    id: 'appearance',
-    label: 'Appearance',
-    icon: FaPalette,
-    color: '#a78bfa',
-    bg: 'rgba(167,139,250,0.1)',
-  },
-  {
-    id: 'integrations',
-    label: 'Integrations',
-    icon: FaPlug,
-    color: '#34d399',
-    bg: 'rgba(52,211,153,0.1)',
-  },
-  {
-    id: 'security',
-    label: 'Security',
-    icon: FaShieldAlt,
-    color: '#fb923c',
-    bg: 'rgba(251,146,60,0.1)',
-  },
-  {
-    id: 'pages',
-    label: 'Pages',
-    icon: FaColumns,
-    color: '#818cf8',
-    bg: 'rgba(129,140,248,0.1)',
-  },
-  {
-    id: 'tables',
-    label: 'Tables',
-    icon: FaTable,
-    color: '#f472b6',
-    bg: 'rgba(244,114,182,0.1)',
-  },
-  {
-    id: 'forms',
-    label: 'Forms',
-    icon: FaListAlt,
-    color: '#fb923c',
-    bg: 'rgba(251,146,60,0.1)',
-  },
+  { id: 'general', label: 'General', icon: 'FaGlobe', color: '#38bdf8', bg: 'rgba(56,189,248,0.1)' },
+  { id: 'appearance', label: 'Appearance', icon: 'FaPalette', color: '#a78bfa', bg: 'rgba(167,139,250,0.1)' },
+  { id: 'integrations', label: 'Integrations', icon: 'FaPlug', color: '#34d399', bg: 'rgba(52,211,153,0.1)' },
+  { id: 'security', label: 'Security', icon: 'FaShieldAlt', color: '#fb923c', bg: 'rgba(251,146,60,0.1)' },
+  { id: 'pages', label: 'Pages', icon: 'FaColumns', color: '#818cf8', bg: 'rgba(129,140,248,0.1)' },
+  { id: 'tables', label: 'Tables', icon: 'FaTable', color: '#f472b6', bg: 'rgba(244,114,182,0.1)' },
+  { id: 'forms', label: 'Forms', icon: 'FaListAlt', color: '#fb923c', bg: 'rgba(251,146,60,0.1)' },
 ];
 
 /* ── Shared input ── */
@@ -139,7 +82,7 @@ const Input = ({
             className="absolute right-3 top-1/2 -translate-y-1/2"
             style={{ color: 'var(--text-muted)' }}
           >
-            {show ? <FaEyeSlash size={13} /> : <FaEye size={13} />}
+            {show ? <ReactIcon name="FaEyeSlash" size={13} /> : <ReactIcon name="FaEye" size={13} />}
           </button>
         )}
       </div>
@@ -193,7 +136,7 @@ const MaskedField = ({
           className="absolute right-3 top-1/2 -translate-y-1/2"
           style={{ color: 'var(--text-muted)' }}
         >
-          {reveal ? <FaEyeSlash size={13} /> : <FaEye size={13} />}
+          {reveal ? <ReactIcon name="FaEyeSlash" size={13} /> : <ReactIcon name="FaEye" size={13} />}
         </button>
       </div>
       {hint && (
@@ -276,7 +219,7 @@ const SavedToast = ({ visible }: { visible: boolean }) => (
     className="fixed bottom-6 right-6 z-50 flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium shadow-xl pointer-events-none"
     style={{ backgroundColor: '#34d399', color: '#fff' }}
   >
-    <FaCheck size={12} /> Settings saved
+    <ReactIcon name="FaCheck" size={12} /> Settings saved
   </motion.div>
 );
 
@@ -327,16 +270,16 @@ const SectionCard = ({
         className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold"
         style={{ backgroundColor: 'var(--accent)', color: '#fff' }}
       >
-        <FaSave size={12} /> Save Changes
+        <ReactIcon name="FaSave" size={12} /> Save Changes
       </motion.button>
     </div>
   </div>
 );
 
 const ALIGN_ICONS = {
-  left: <FiAlignLeft size={13} />,
-  center: <FiAlignCenter size={13} />,
-  right: <FiAlignRight size={13} />,
+  left: <ReactIcon name="FiAlignLeft" size={13} />,
+  center: <ReactIcon name="FiAlignCenter" size={13} />,
+  right: <ReactIcon name="FiAlignRight" size={13} />,
 };
 
 /* ── helpers ── */
@@ -532,7 +475,7 @@ const PageConfigSection = memo(() => {
                 }
                 title={visible ? 'Hide component' : 'Show component'}
               >
-                {visible ? <FaEye size={11} /> : <FaEyeSlash size={11} />}
+                {visible ? <ReactIcon name="FaEye" size={11} /> : <ReactIcon name="FaEyeSlash" size={11} />}
               </button>
             </motion.div>
           );
@@ -556,11 +499,11 @@ const PageConfigSection = memo(() => {
         >
           {saved ? (
             <>
-              <FaCheck size={11} /> Saved
+              <ReactIcon name="FaCheck" size={11} /> Saved
             </>
           ) : (
             <>
-              <FaSave size={11} /> {saving ? 'Saving…' : 'Save Changes'}
+              <ReactIcon name="FaSave" size={11} /> {saving ? 'Saving…' : 'Save Changes'}
             </>
           )}
         </motion.button>
@@ -648,9 +591,9 @@ const ColRow = memo(
               title={col.visible !== false ? 'Hide column' : 'Show column'}
             >
               {col.visible !== false ? (
-                <FaEye size={11} />
+                <ReactIcon name="FaEye" size={11} />
               ) : (
-                <FaEyeSlash size={11} />
+                <ReactIcon name="FaEyeSlash" size={11} />
               )}
             </button>
           </div>
@@ -695,7 +638,7 @@ const ColRow = memo(
             }
             title="Advanced options"
           >
-            {expanded ? <FaChevronUp size={9} /> : <FaChevronDown size={9} />}
+            {expanded ? <ReactIcon name="FaChevronUp" size={9} /> : <ReactIcon name="FaChevronDown" size={9} />}
           </button>
         </div>
 
@@ -934,11 +877,11 @@ const TableColumnsSection = memo(() => {
         >
           {saved ? (
             <>
-              <FaCheck size={11} /> Saved
+              <ReactIcon name="FaCheck" size={11} /> Saved
             </>
           ) : (
             <>
-              <FaSave size={11} /> {saving ? 'Saving…' : 'Save Changes'}
+              <ReactIcon name="FaSave" size={11} /> {saving ? 'Saving…' : 'Save Changes'}
             </>
           )}
         </motion.button>
@@ -1037,7 +980,6 @@ const AdminSettings = memo(() => {
           {/* Sidebar tabs */}
           <div className="w-full lg:w-48 shrink-0 flex flex-row lg:flex-col gap-1.5 flex-wrap">
             {SECTIONS.map((s) => {
-              const Icon = s.icon;
               const active = activeSection === s.id;
               return (
                 <button
@@ -1061,7 +1003,7 @@ const AdminSettings = memo(() => {
                       color: active ? '#fff' : s.color,
                     }}
                   >
-                    <Icon size={12} />
+                    <ReactIcon name={s.icon} size={12} />
                   </span>
                   {s.label}
                 </button>
@@ -1198,7 +1140,7 @@ const AdminSettings = memo(() => {
                           }}
                         >
                           {accentPick === idx && (
-                            <FaCheck size={10} color="#fff" />
+                            <ReactIcon name="FaCheck" size={10} color="#fff" />
                           )}
                         </button>
                       ))}

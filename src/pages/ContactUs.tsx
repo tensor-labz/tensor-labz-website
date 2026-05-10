@@ -1,21 +1,6 @@
 import React, { memo, Suspense, lazy } from 'react';
 import { motion } from 'motion/react';
-import {
-  FaEnvelope,
-  FaPhone,
-  FaMapMarkerAlt,
-  FaClock,
-  FaGlobe,
-  FaWhatsapp,
-  FaFacebookF,
-  FaLinkedinIn,
-  FaInstagram,
-  FaTiktok,
-  FaYoutube,
-  FaTwitter,
-  FaExternalLinkAlt,
-} from 'react-icons/fa';
-import type { IconType } from 'react-icons';
+import ReactIcon from '../shared/components/ui/ReactIcon';
 import Page from '../components/resuable/Page';
 import { useCompanyInfo } from '../shared/hooks/useCompanyInfo';
 import type { ContactRow, SocialLink } from '../shared/hooks/useCompanyInfo';
@@ -23,30 +8,28 @@ import type { ContactRow, SocialLink } from '../shared/hooks/useCompanyInfo';
 const Globe = lazy(() => import('../features/contact/components/Globe'));
 
 /* ── icon helpers ── */
-function contactIcon(type: string): IconType {
+function contactIcon(type: string): string {
   const t = type.toLowerCase();
-  if (t.includes('email') || t.includes('mail')) return FaEnvelope;
-  if (t.includes('phone') || t.includes('tel') || t.includes('mobile'))
-    return FaPhone;
-  if (t.includes('address') || t.includes('location') || t.includes('map'))
-    return FaMapMarkerAlt;
-  if (t.includes('whatsapp')) return FaWhatsapp;
-  return FaClock;
+  if (t.includes('email') || t.includes('mail')) return 'FaEnvelope';
+  if (t.includes('phone') || t.includes('tel') || t.includes('mobile')) return 'FaPhone';
+  if (t.includes('address') || t.includes('location') || t.includes('map')) return 'FaMapMarkerAlt';
+  if (t.includes('whatsapp')) return 'FaWhatsapp';
+  return 'FaClock';
 }
 
-const SOCIAL_ICONS: [string, IconType][] = [
-  ['whatsapp', FaWhatsapp],
-  ['facebook', FaFacebookF],
-  ['linkedin', FaLinkedinIn],
-  ['instagram', FaInstagram],
-  ['tiktok', FaTiktok],
-  ['youtube', FaYoutube],
-  ['twitter', FaTwitter],
-  ['x', FaTwitter],
+const SOCIAL_ICONS: [string, string][] = [
+  ['whatsapp', 'FaWhatsapp'],
+  ['facebook', 'FaFacebookF'],
+  ['linkedin', 'FaLinkedinIn'],
+  ['instagram', 'FaInstagram'],
+  ['tiktok', 'FaTiktok'],
+  ['youtube', 'FaYoutube'],
+  ['twitter', 'FaTwitter'],
+  ['x', 'FaTwitter'],
 ];
-function socialIcon(platform: string): IconType {
+function socialIcon(platform: string): string {
   const key = platform.toLowerCase();
-  return SOCIAL_ICONS.find(([p]) => key.includes(p))?.[1] ?? FaGlobe;
+  return SOCIAL_ICONS.find(([p]) => key.includes(p))?.[1] ?? 'FaGlobe';
 }
 
 function cardHref(row: ContactRow): string | undefined {
@@ -65,7 +48,6 @@ function cardHref(row: ContactRow): string | undefined {
 /* ── Contact card ── */
 const ContactCard = memo(
   ({ row, index }: { row: ContactRow; index: number }) => {
-    const Icon = contactIcon(row.type);
     const href = cardHref(row);
 
     return (
@@ -88,7 +70,7 @@ const ContactCard = memo(
           className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
           style={{ backgroundColor: 'var(--accent-soft)' }}
         >
-          <Icon size={16} style={{ color: 'var(--accent)' }} />
+          <ReactIcon name={contactIcon(row.type)} size={16} style={{ color: 'var(--accent)' }} />
         </div>
         <div className="min-w-0">
           <p
@@ -131,7 +113,6 @@ ContactCard.displayName = 'ContactCard';
 /* ── Social pill ── */
 const SocialPill = memo(
   ({ link, index }: { link: SocialLink; index: number }) => {
-    const Icon = socialIcon(link.platform);
     return (
       <motion.a
         href={link.url}
@@ -163,7 +144,7 @@ const SocialPill = memo(
             'var(--glass-border)';
         }}
       >
-        <Icon size={14} />
+        <ReactIcon name={socialIcon(link.platform)} size={14} />
       </motion.a>
     );
   }
@@ -196,7 +177,7 @@ const MapCard = memo(
         }}
       >
         <div className="flex items-center gap-2">
-          <FaMapMarkerAlt size={11} style={{ color: 'var(--accent)' }} />
+          <ReactIcon name="FaMapMarkerAlt" size={11} style={{ color: 'var(--accent)' }} />
           <span
             className="text-xs font-medium"
             style={{ color: 'var(--text-primary)' }}
@@ -215,7 +196,7 @@ const MapCard = memo(
             (e.currentTarget.style.color = 'var(--text-muted)')
           }
         >
-          Open in Maps <FaExternalLinkAlt size={9} />
+          Open in Maps <ReactIcon name="FaExternalLinkAlt" size={9} />
         </a>
       </div>
       <iframe
@@ -336,7 +317,7 @@ const ContactUs: React.FC = memo(() => {
                     className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
                     style={{ backgroundColor: 'var(--accent-soft)' }}
                   >
-                    <FaClock size={16} style={{ color: 'var(--accent)' }} />
+                    <ReactIcon name="FaClock" size={16} style={{ color: 'var(--accent)' }} />
                   </div>
                   <div>
                     <p

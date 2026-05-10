@@ -1,7 +1,6 @@
 import { memo } from 'react';
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
-import { FaTimes } from 'react-icons/fa';
 import ReactIcon from '../../../shared/components/ui/ReactIcon';
 import { MODULES } from '../config/modules';
 
@@ -224,7 +223,7 @@ const AdminSidebar = memo(({ open, onClose }: AdminSidebarProps) => {
                   onClick={onClose}
                   style={{ color: 'var(--text-muted)' }}
                 >
-                  <FaTimes size={16} />
+                  <ReactIcon name="FaTimes" size={16} />
                 </button>
               </div>
               <div className="flex-1 overflow-y-auto">

@@ -1,6 +1,6 @@
 import React, { memo, useState, useEffect, useRef } from 'react';
 import { motion } from 'motion/react';
-import { MdSignalWifiOff, MdRefresh } from 'react-icons/md';
+import ReactIcon from '../ui/ReactIcon';
 import { throttle } from '../../utils/throttle';
 
 const OfflineWarning: React.FC = memo(() => {
@@ -30,13 +30,13 @@ const OfflineWarning: React.FC = memo(() => {
       exit={{ opacity: 0, y: -50 }}
       className="fixed top-0 left-0 w-full bg-red-500 text-white p-3 z-[1000] flex items-center justify-center space-x-2"
     >
-      <MdSignalWifiOff className="w-6 h-6" />
+      <ReactIcon name="MdSignalWifiOff" size={24} />
       <span className="font-semibold">No Internet Connection</span>
       <button
         onClick={() => window.location.reload()}
         className="ml-4 bg-white text-red-500 px-3 py-1 rounded flex items-center space-x-1 hover:bg-gray-100 transition"
       >
-        <MdRefresh />
+        <ReactIcon name="MdRefresh" size={16} />
         <span>Retry</span>
       </button>
     </motion.div>

@@ -1,14 +1,6 @@
 import { memo, useState, useEffect, useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import {
-  FaBuilding,
-  FaSave,
-  FaCheck,
-  FaPlus,
-  FaTrash,
-  FaEdit,
-  FaTimes,
-} from 'react-icons/fa';
+import ReactIcon from '../../../shared/components/ui/ReactIcon';
 import { supabase } from '../../../lib/supabase';
 import { ImageField } from './AdminCrudForm';
 
@@ -69,7 +61,7 @@ const COMPANY_DEFAULT: CompanyInfo = {
    Tab definitions — add more here as Site Control grows
 ════════════════════════════════════════════════════════ */
 const TABS = [
-  { id: 'company', label: 'Company Info', icon: FaBuilding },
+  { id: 'company', label: 'Company Info', icon: 'FaBuilding' },
 ] as const;
 
 type TabId = (typeof TABS)[number]['id'];
@@ -152,12 +144,12 @@ const SectionDivider = ({
 
 const IconBtn = ({
   onClick,
-  icon: Icon,
+  icon,
   title,
   danger,
 }: {
   onClick: () => void;
-  icon: React.ElementType;
+  icon: string;
   title?: string;
   danger?: boolean;
 }) => (
@@ -172,7 +164,7 @@ const IconBtn = ({
       color: danger ? 'var(--error, #ef4444)' : 'var(--text-muted)',
     }}
   >
-    <Icon size={11} />
+    <ReactIcon name={icon} size={11} />
   </button>
 );
 
@@ -183,7 +175,7 @@ const SaveRowBtn = ({ onClick }: { onClick: () => void }) => (
     className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold shrink-0"
     style={{ backgroundColor: 'var(--accent)', color: '#fff' }}
   >
-    <FaCheck size={10} /> Save
+    <ReactIcon name="FaCheck" size={10} /> Save
   </button>
 );
 
@@ -370,7 +362,7 @@ const CompanyInfoTab = ({
               opacity: contactEdit !== null ? 0.5 : 1,
             }}
           >
-            <FaPlus size={10} /> Add
+            <ReactIcon name="FaPlus" size={10} /> Add
           </button>
         </div>
 
@@ -430,7 +422,7 @@ const CompanyInfoTab = ({
                   <SaveRowBtn onClick={saveContact} />
                   <IconBtn
                     onClick={() => setContactEdit(null)}
-                    icon={FaTimes}
+                    icon="FaTimes"
                   />
                 </div>
               </div>
@@ -513,7 +505,7 @@ const CompanyInfoTab = ({
                     <SaveRowBtn onClick={saveContact} />
                     <IconBtn
                       onClick={() => setContactEdit(null)}
-                      icon={FaTimes}
+                      icon="FaTimes"
                     />
                   </div>
                 </div>
@@ -555,7 +547,7 @@ const CompanyInfoTab = ({
                       setContactEdit(row.id!);
                       setContactDraft({ ...row, link: row.link ?? '' });
                     }}
-                    icon={FaEdit}
+                    icon="FaEdit"
                     title="Edit"
                   />
                   <IconBtn
@@ -563,7 +555,7 @@ const CompanyInfoTab = ({
                       await supabase.from('contact').delete().eq('id', row.id!);
                       refreshContact();
                     }}
-                    icon={FaTrash}
+                    icon="FaTrash"
                     title="Delete"
                     danger
                   />
@@ -598,7 +590,7 @@ const CompanyInfoTab = ({
               opacity: socialEdit !== null ? 0.5 : 1,
             }}
           >
-            <FaPlus size={10} /> Add
+            <ReactIcon name="FaPlus" size={10} /> Add
           </button>
         </div>
 
@@ -634,7 +626,7 @@ const CompanyInfoTab = ({
               />
               <div className="flex gap-1.5 shrink-0">
                 <SaveRowBtn onClick={saveSocial} />
-                <IconBtn onClick={() => setSocialEdit(null)} icon={FaTimes} />
+                <IconBtn onClick={() => setSocialEdit(null)} icon="FaTimes" />
               </div>
             </div>
           )}
@@ -685,7 +677,7 @@ const CompanyInfoTab = ({
                 />
                 <div className="flex gap-1.5 shrink-0">
                   <SaveRowBtn onClick={saveSocial} />
-                  <IconBtn onClick={() => setSocialEdit(null)} icon={FaTimes} />
+                  <IconBtn onClick={() => setSocialEdit(null)} icon="FaTimes" />
                 </div>
               </div>
             ) : (
@@ -718,7 +710,7 @@ const CompanyInfoTab = ({
                       setSocialEdit(row.id!);
                       setSocialDraft({ ...row });
                     }}
-                    icon={FaEdit}
+                    icon="FaEdit"
                     title="Edit"
                   />
                   <IconBtn
@@ -726,7 +718,7 @@ const CompanyInfoTab = ({
                       await supabase.from('social').delete().eq('id', row.id!);
                       refreshSocial();
                     }}
-                    icon={FaTrash}
+                    icon="FaTrash"
                     title="Delete"
                     danger
                   />
@@ -851,7 +843,7 @@ const AdminSiteControl = memo(() => {
             opacity: saving || loading ? 0.6 : 1,
           }}
         >
-          {saved ? <FaCheck size={11} /> : <FaSave size={11} />}
+          {saved ? <ReactIcon name="FaCheck" size={11} /> : <ReactIcon name="FaSave" size={11} />}
           {saved ? 'Saved!' : saving ? 'Saving…' : 'Save'}
         </button>
       </div>
@@ -861,7 +853,7 @@ const AdminSiteControl = memo(() => {
         className="shrink-0 flex overflow-x-auto no-scrollbar"
         style={{ borderBottom: '1px solid var(--glass-border)' }}
       >
-        {TABS.map(({ id, label, icon: Icon }) => {
+        {TABS.map(({ id, label, icon }) => {
           const isActive = activeTab === id;
           return (
             <button
@@ -874,7 +866,7 @@ const AdminSiteControl = memo(() => {
                 marginBottom: '-1px',
               }}
             >
-              <Icon size={12} />
+              <ReactIcon name={icon} size={12} />
               {label}
             </button>
           );

@@ -2,9 +2,7 @@ import React, { useState, useEffect, memo, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useAppSelector } from '../../../app/hooks';
 import { selectServices } from '../../../store/servicesSlice';
-import { FaCrown } from 'react-icons/fa';
-import { FiArrowRight, FiMessageCircle, FiPhone } from 'react-icons/fi';
-import { FcOnlineSupport } from 'react-icons/fc';
+import ReactIcon from '../../../shared/components/ui/ReactIcon';
 import data from '../../../data/data';
 
 interface ProjectHeroProps {
@@ -31,9 +29,9 @@ const GetSupportButton: React.FC<{ title: string }> = memo(({ title }) => {
         transition-all duration-300 backdrop-blur-sm border
         bg-white/10 hover:bg-white/20 text-white border-white/25 hover:border-white/50"
     >
-      <FiMessageCircle className="text-xl" />
+      <ReactIcon name="FiMessageCircle" size={20} />
       <span className="font-medium">Get Support</span>
-      <FiArrowRight className="text-lg transition-transform group-hover:translate-x-1" />
+      <ReactIcon name="FiArrowRight" size={18} className="transition-transform group-hover:translate-x-1" />
     </Link>
   );
 });
@@ -110,7 +108,7 @@ const ProjectHero: React.FC<ProjectHeroProps> = ({
             >
               {title}
               {is_top && (
-                <FaCrown className="inline-block text-xl md:text-2xl text-amber-400 drop-shadow" />
+                <ReactIcon name="FaCrown" size={20} className="inline-block text-amber-400 drop-shadow" />
               )}
             </h1>
 
@@ -138,14 +136,14 @@ const ProjectHero: React.FC<ProjectHeroProps> = ({
             <div className="flex items-center gap-2">
               <Link to="/contact-us">
                 <div className="p-2 rounded-full transition-all duration-300 cursor-pointer bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/25 text-white">
-                  <FcOnlineSupport className="text-2xl" />
+                  <ReactIcon name="FcOnlineSupport" size={24} />
                 </div>
               </Link>
               <a
                 href="tel:+94770484739"
                 className="p-2 rounded-full cursor-pointer transition-all duration-300 bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/25 text-white"
               >
-                <FiPhone className="text-xl" />
+                <ReactIcon name="FiPhone" size={20} />
               </a>
             </div>
           </div>

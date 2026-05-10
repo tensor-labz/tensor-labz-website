@@ -12,15 +12,7 @@ import {
   Pie,
   Cell,
 } from 'recharts';
-import {
-  FaCreditCard,
-  FaCheckCircle,
-  FaClock,
-  FaTimesCircle,
-  FaDownload,
-  FaSearch,
-  FaFilter,
-} from 'react-icons/fa';
+import ReactIcon from '../../../shared/components/ui/ReactIcon';
 
 type PlanType = 'Starter' | 'Pro' | 'Enterprise';
 type TxStatus = 'Paid' | 'Pending' | 'Failed' | 'Refunded';
@@ -150,22 +142,22 @@ const TX_META: Record<
   Paid: {
     color: '#34d399',
     bg: 'rgba(52,211,153,0.12)',
-    icon: <FaCheckCircle size={10} />,
+    icon: <ReactIcon name="FaCheckCircle" size={10} />,
   },
   Pending: {
     color: '#fb923c',
     bg: 'rgba(251,146,60,0.12)',
-    icon: <FaClock size={10} />,
+    icon: <ReactIcon name="FaClock" size={10} />,
   },
   Failed: {
     color: '#f87171',
     bg: 'rgba(248,113,113,0.12)',
-    icon: <FaTimesCircle size={10} />,
+    icon: <ReactIcon name="FaTimesCircle" size={10} />,
   },
   Refunded: {
     color: '#94a3b8',
     bg: 'rgba(148,163,184,0.12)',
-    icon: <FaCreditCard size={10} />,
+    icon: <ReactIcon name="FaCreditCard" size={10} />,
   },
 };
 
@@ -270,7 +262,7 @@ const AdminBilling = memo(() => {
             color: 'var(--text-primary)',
           }}
         >
-          <FaDownload size={12} /> Export CSV
+          <ReactIcon name="FaDownload" size={12} /> Export CSV
         </motion.button>
       </div>
 
@@ -296,7 +288,7 @@ const AdminBilling = memo(() => {
                 className="w-7 h-7 rounded-lg flex items-center justify-center"
                 style={{ backgroundColor: s.bg, color: s.color }}
               >
-                <FaCreditCard size={11} />
+                <ReactIcon name="FaCreditCard" size={11} />
               </span>
             </div>
             <p
@@ -495,7 +487,8 @@ const AdminBilling = memo(() => {
       {/* Filters */}
       <div className="flex flex-col sm:flex-row gap-3">
         <div className="relative flex-1">
-          <FaSearch
+          <ReactIcon
+            name="FaSearch"
             size={12}
             className="absolute left-3 top-1/2 -translate-y-1/2"
             style={{ color: 'var(--text-muted)' }}
@@ -515,7 +508,7 @@ const AdminBilling = memo(() => {
           />
         </div>
         <div className="flex items-center gap-2">
-          <FaFilter size={11} style={{ color: 'var(--text-muted)' }} />
+          <ReactIcon name="FaFilter" size={11} style={{ color: 'var(--text-muted)' }} />
           {(['All', 'Starter', 'Pro', 'Enterprise'] as const).map((p) => (
             <button
               key={p}
