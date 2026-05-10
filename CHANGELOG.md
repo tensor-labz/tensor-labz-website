@@ -7,6 +7,36 @@ All notable changes to the Tensor Labs website are documented here.
 ## [Unreleased]
 
 ---
+## [v1.9.0] — 2026-05-10
+
+### Added
+
+- sort_order field for projects, services, posts — number type in admin form
+- dynamic page content via site_settings — admin Page Content tab + live section titles/descriptions/pagination
+- replace latest projects hero+grid with dual-row auto-scrolling marquee
+
+### Bug Fixes
+
+- resolve pre-existing TS errors — duplicate className, unused imports, type casts
+- replace mobile marquee with swipeable slider in LatestProductSection
+- add page horizontal padding to latest projects marquee section
+
+### Refactor
+
+- rename blog → posts across codebase and Supabase table references
+
+### Style
+
+- remove tag filter pills from Posts page
+
+### Other
+
+- Merge pull request #28 from tensor-labz/staging
+- Merge pull request #27 from tensor-labz/dev
+
+
+
+---
 ## [v1.8.0] — 2026-05-10
 
 ### Added
