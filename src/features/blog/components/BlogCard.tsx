@@ -5,9 +5,11 @@ import ReactIcon from '../../../shared/components/ui/ReactIcon';
 import type { Blog } from '../../../services/blogService';
 import { EASE_EXPO } from '../../../lib/motion';
 
-type Props = Pick<Blog, 'slug' | 'title' | 'description' | 'cover_image' | 'tags' | 'created_at'>;
+type Props = Pick<Blog, 'slug' | 'title' | 'description' | 'cover_image' | 'tags' | 'created_at'> & {
+  reverse?: boolean;
+};
 
-const BlogCard: React.FC<Props> = memo(({ slug, title, description, cover_image, tags, created_at }) => {
+const BlogCard: React.FC<Props> = memo(({ slug, title, description, cover_image, tags, created_at, reverse = false }) => {
   const navigate = useNavigate();
   const date = created_at
     ? new Date(created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })
@@ -20,10 +22,11 @@ const BlogCard: React.FC<Props> = memo(({ slug, title, description, cover_image,
       viewport={{ once: true, margin: '-40px' }}
       transition={{ duration: 0.55, ease: EASE_EXPO }}
       onClick={() => navigate(`/blog/${slug}`)}
-      className="group relative flex flex-col md:flex-row rounded-xl overflow-hidden
+      className={`group relative flex flex-col overflow-hidden rounded-xl
         bg-surface border border-rim cursor-pointer
         hover:border-accent/40 hover:shadow-[0_8px_40px_-8px_rgba(56,189,248,0.12)]
-        transition-all duration-300"
+        transition-all duration-300
+        ${reverse ? 'md:flex-row-reverse' : 'md:flex-row'}`}
     >
       {/* ── Cover image ── */}
       <div className="relative aspect-video md:aspect-auto md:w-[44%] md:shrink-0 overflow-hidden bg-raised">
@@ -39,7 +42,7 @@ const BlogCard: React.FC<Props> = memo(({ slug, title, description, cover_image,
           </div>
         )}
 
-        {/* Engineering grid overlay */}
+        {/* Engineering grid on hover */}
         <div
           className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500"
           style={{
@@ -49,10 +52,18 @@ const BlogCard: React.FC<Props> = memo(({ slug, title, description, cover_image,
           }}
         />
 
-        {/* Gradient — fades into content on desktop, bottom fade on mobile */}
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/50 via-transparent to-transparent md:bg-gradient-to-r md:from-transparent md:to-slate-950/30 transition-opacity duration-300" />
+        {/* Gradient fade toward content side */}
+        <div
+          className={`absolute inset-0 transition-opacity duration-300
+            bg-gradient-to-t from-slate-950/50 via-transparent to-transparent
+            md:bg-gradient-to-t md:from-transparent
+            ${reverse
+              ? 'md:bg-gradient-to-l md:from-slate-950/25 md:to-transparent'
+              : 'md:bg-gradient-to-r md:from-transparent md:to-slate-950/25'
+            }`}
+        />
 
-        {/* Type badge — desktop only */}
+        {/* Live badge */}
         <div className="hidden md:flex absolute top-4 left-4 items-center gap-1.5
           px-2 py-0.5 rounded border border-accent/40 bg-black/60 backdrop-blur-sm">
           <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
@@ -61,7 +72,7 @@ const BlogCard: React.FC<Props> = memo(({ slug, title, description, cover_image,
       </div>
 
       {/* ── Content ── */}
-      <div className="flex flex-col flex-1 p-5 md:p-8 gap-3 md:gap-4 md:justify-center">
+      <div className="flex flex-col flex-1 p-5 md:p-8 lg:p-10 gap-3 md:gap-4 md:justify-center">
 
         {/* Tags */}
         {tags.length > 0 && (
@@ -94,7 +105,7 @@ const BlogCard: React.FC<Props> = memo(({ slug, title, description, cover_image,
           </p>
         )}
 
-        {/* Separator — desktop only */}
+        {/* Separator */}
         <div className="hidden md:block h-px bg-gradient-to-r from-accent/20 via-rim to-transparent" />
 
         {/* Footer */}
