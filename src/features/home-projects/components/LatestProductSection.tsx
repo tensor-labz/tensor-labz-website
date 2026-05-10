@@ -113,23 +113,25 @@ const LatestProductSection: React.FC = memo(() => {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={VIEWPORT}
         transition={{ duration: 0.6, ease: EASE_EXPO }}
-        className="text-center mb-10 px-6"
+        className="text-center mb-10 px-6 lg:px-16"
       >
         <p className="text-[10px] font-mono tracking-[0.3em] uppercase text-accent mb-3">◈ Featured Work</p>
         <h2 className="text-2xl sm:text-4xl font-bold font-display text-fg">Our Latest Projects</h2>
         <p className="text-muted text-base mt-2">Selected engineering projects and innovations.</p>
       </motion.div>
 
-      {/* Marquee rows — edge fade via mask */}
-      <div
-        className="w-full flex flex-col gap-4"
-        style={{ maskImage: 'linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%)' }}
-      >
-        <div className="overflow-hidden">
-          {ready ? <MarqueeTrack projects={topProjects} direction="left" /> : <SkeletonRow />}
-        </div>
-        <div className="overflow-hidden">
-          {ready ? <MarqueeTrack projects={row2} direction="right" /> : <SkeletonRow />}
+      {/* Marquee rows — padded to match page layout, edge fade via mask */}
+      <div className="px-6 lg:px-16">
+        <div
+          className="w-full flex flex-col gap-4"
+          style={{ maskImage: 'linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%)' }}
+        >
+          <div className="overflow-hidden">
+            {ready ? <MarqueeTrack projects={topProjects} direction="left" /> : <SkeletonRow />}
+          </div>
+          <div className="overflow-hidden">
+            {ready ? <MarqueeTrack projects={row2} direction="right" /> : <SkeletonRow />}
+          </div>
         </div>
       </div>
 
