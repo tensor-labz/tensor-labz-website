@@ -1007,7 +1007,10 @@ const StructuredListField = ({
 };
 
 /* ── Sub-records field — inline editor for a FK-related table ── */
-type SubRow = Record<string, string> & { id?: number; _deleted?: boolean };
+type SubRow = Record<string, string | number | boolean | undefined> & {
+  id?: number;
+  _deleted?: boolean;
+};
 
 const SubRecordsField = ({
   parentId,

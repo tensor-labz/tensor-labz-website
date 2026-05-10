@@ -21,6 +21,7 @@ function AuthListener({ children }: { children: React.ReactNode }) {
                 uid: user.id,
                 email: user.email ?? null,
                 displayName: (user.user_metadata?.full_name as string) ?? null,
+                avatarUrl: (user.user_metadata?.avatar_url as string) ?? null,
               }
             : null
         )
