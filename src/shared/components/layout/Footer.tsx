@@ -75,7 +75,7 @@ const Footer = () => {
 
   return (
     <footer
-      className="text-muted border-t border-rim/20"
+      className="text-muted"
     >
       <motion.div
         initial={{ opacity: 0, y: 20 }}
