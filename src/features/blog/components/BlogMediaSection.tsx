@@ -2,19 +2,22 @@ import React, { memo, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import ReactIcon from '../../../shared/components/ui/ReactIcon';
 import { EASE_EXPO } from '../../../lib/motion';
-import { detectCoverType, toYouTubeEmbed } from '../../../services/blogService';
+import { toYouTubeEmbed, BlogAdditionalMedia } from '../../../services/blogService';
 
 interface Props {
-  images: string[];
-  videos: string[];
+  media: BlogAdditionalMedia[];
 }
 
-const BlogMediaSection: React.FC<Props> = memo(({ images, videos }) => {
-  const [activeIndex, setActiveIndex] = useState(0);
-  const hasImages = images.length > 0;
-  const hasVideos = videos.length > 0;
+const isImage = (type: BlogAdditionalMedia['type']) =>
+  type === 'image' || type === 'drive_image';
 
-  if (!hasImages && !hasVideos) return null;
+const BlogMediaSection: React.FC<Props> = memo(({ media }) => {
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  const images = media.filter((m) => isImage(m.type));
+  const videos = media.filter((m) => !isImage(m.type));
+
+  if (media.length === 0) return null;
 
   return (
     <section className="mt-12 pt-8 border-t border-rim">
@@ -23,53 +26,50 @@ const BlogMediaSection: React.FC<Props> = memo(({ images, videos }) => {
       </p>
 
       {/* Video players */}
-      {hasVideos && (
+      {videos.length > 0 && (
         <div className="space-y-4 mb-6">
-          {videos.map((url, i) => {
-            const type = detectCoverType(url);
-            return (
-              <div
-                key={i}
-                className="rounded-xl overflow-hidden border border-accent/20 aspect-video"
-              >
-                {type === 'youtube' ? (
-                  <iframe
-                    src={toYouTubeEmbed(url)}
-                    title={`Video ${i + 1}`}
-                    className="w-full h-full"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                  />
-                ) : type === 'drive_video' ? (
-                  <iframe
-                    src={url}
-                    title={`Video ${i + 1}`}
-                    className="w-full h-full"
-                    allow="autoplay"
-                    allowFullScreen
-                  />
-                ) : (
-                  <video
-                    src={url}
-                    controls
-                    className="w-full h-full object-contain bg-black"
-                  />
-                )}
-              </div>
-            );
-          })}
+          {videos.map((item, i) => (
+            <div
+              key={item.id}
+              className="rounded-xl overflow-hidden border border-accent/20 aspect-video"
+            >
+              {item.type === 'youtube' ? (
+                <iframe
+                  src={toYouTubeEmbed(item.url)}
+                  title={`Video ${i + 1}`}
+                  className="w-full h-full"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              ) : item.type === 'drive_video' ? (
+                <iframe
+                  src={item.url}
+                  title={`Video ${i + 1}`}
+                  className="w-full h-full"
+                  allow="autoplay"
+                  allowFullScreen
+                />
+              ) : (
+                <video
+                  src={item.url}
+                  controls
+                  className="w-full h-full object-contain bg-black"
+                />
+              )}
+            </div>
+          ))}
         </div>
       )}
 
       {/* Image gallery */}
-      {hasImages && (
+      {images.length > 0 && (
         <div className="space-y-4">
           {/* Main image viewer */}
           <div className="relative rounded-xl overflow-hidden border border-accent/20 bg-raised aspect-video">
             <AnimatePresence mode="wait">
               <motion.img
                 key={activeIndex}
-                src={images[activeIndex]}
+                src={images[activeIndex].url}
                 alt={`Media ${activeIndex + 1}`}
                 className="w-full h-full object-contain"
                 initial={{ opacity: 0 }}
@@ -122,14 +122,14 @@ const BlogMediaSection: React.FC<Props> = memo(({ images, videos }) => {
           {/* Thumbnail strip */}
           {images.length > 1 && (
             <div className="flex gap-2 flex-wrap">
-              {images.map((src, i) => (
+              {images.map((item, i) => (
                 <button
-                  key={i}
+                  key={item.id}
                   onClick={() => setActiveIndex(i)}
                   className={`w-16 h-12 rounded-lg overflow-hidden border-2 transition-all duration-200 shrink-0
                     ${i === activeIndex ? 'border-accent' : 'border-rim hover:border-accent/40'}`}
                 >
-                  <img src={src} alt={`Thumb ${i + 1}`} className="w-full h-full object-cover" />
+                  <img src={item.url} alt={`Thumb ${i + 1}`} className="w-full h-full object-cover" />
                 </button>
               ))}
             </div>

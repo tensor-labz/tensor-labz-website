@@ -8,25 +8,31 @@ export interface BlogSocialLink {
 
 export type CoverMediaType = 'image' | 'video' | 'youtube' | 'drive_image' | 'drive_video';
 
+export interface BlogAdditionalMedia {
+  id: number;
+  blog_id: number;
+  url: string;
+  type: CoverMediaType;
+}
+
 export interface Blog {
   id: number;
   title: string;
   slug: string;
-  cover_image?: string;          // URL — image, direct video, or YouTube URL
+  cover_image?: string;
   cover_media_type: CoverMediaType;
-  description?: string;          // internal / meta description
-  meta_title?: string;           // SEO title override
-  content?: string;              // rich text HTML
+  description?: string;
+  meta_title?: string;
+  content?: string;
   tags: string[];
   status: 'draft' | 'published' | 'hidden';
   social_links: BlogSocialLink[];
-  additional_images: string[];   // gallery images shown after content
-  additional_videos: string[];   // video URLs (YouTube or direct) shown after content
+  additional_media: BlogAdditionalMedia[];
   created_at: string;
   updated_at: string;
 }
 
-/* ── Media type detection (fallback for additional_videos array items) ── */
+/* ── Media type detection (used as fallback) ── */
 export function detectCoverType(url?: string): CoverMediaType {
   if (!url) return 'image';
   if (url.includes('youtube.com') || url.includes('youtu.be')) return 'youtube';
@@ -41,7 +47,7 @@ export function toYouTubeEmbed(url: string): string {
   if (short) return `https://www.youtube.com/embed/${short[1]}`;
   const watch = url.match(/[?&]v=([^&]+)/);
   if (watch) return `https://www.youtube.com/embed/${watch[1]}`;
-  return url; // already embed or unknown
+  return url;
 }
 
 /* Parse comma-separated string OR JSON array OR PostgreSQL array → string[] */
@@ -68,6 +74,16 @@ function rowToBlog(row: Record<string, unknown>): Blog {
       }))
     : [];
 
+  const rawMedia = row.blog_additional_media;
+  const additional_media: BlogAdditionalMedia[] = Array.isArray(rawMedia)
+    ? (rawMedia as Record<string, unknown>[]).map((m) => ({
+        id: m.id as number,
+        blog_id: m.blog_id as number,
+        url: (m.url as string) ?? '',
+        type: (m.type as CoverMediaType) ?? 'image',
+      }))
+    : [];
+
   const cover_image = (row.cover_image as string) || undefined;
 
   return {
@@ -82,8 +98,7 @@ function rowToBlog(row: Record<string, unknown>): Blog {
     tags: parseArray(row.tags),
     status: (row.status as Blog['status']) ?? 'draft',
     social_links,
-    additional_images: parseArray(row.additional_images),
-    additional_videos: parseArray(row.additional_videos),
+    additional_media,
     created_at: (row.created_at as string) ?? '',
     updated_at: (row.updated_at as string) ?? '',
   };
@@ -91,7 +106,8 @@ function rowToBlog(row: Record<string, unknown>): Blog {
 
 const BLOG_SELECT = `
   *,
-  blog_social_links ( id, platform, url )
+  blog_social_links ( id, platform, url ),
+  blog_additional_media ( id, blog_id, url, type )
 `;
 
 export async function fetchPublishedBlogs(): Promise<Blog[]> {

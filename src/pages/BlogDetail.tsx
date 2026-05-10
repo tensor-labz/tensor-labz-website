@@ -197,8 +197,8 @@ const BlogDetail: React.FC = memo(() => {
           />
         )}
 
-        {/* Media section — images / videos after content */}
-        <BlogMediaSection images={blog.additional_images} videos={blog.additional_videos} />
+        {/* Media section */}
+        <BlogMediaSection media={blog.additional_media} />
 
         {/* Social share footer */}
         {socialLinks.length > 0 && (
