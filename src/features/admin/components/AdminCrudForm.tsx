@@ -1089,12 +1089,12 @@ const SubRecordsField = ({
                 </label>
                 {sf.type === 'covertype' ? (
                   <CoverTypeSelect
-                    value={row[sf.key] ?? 'image'}
+                    value={String(row[sf.key] ?? 'image')}
                     onChange={(v) => update(realIdx, sf.key, v)}
                   />
                 ) : sf.type === 'socialplatform' ? (
                   <SocialPlatformSelect
-                    value={row[sf.key] ?? 'linkedin'}
+                    value={String(row[sf.key] ?? 'linkedin')}
                     onChange={(v) => update(realIdx, sf.key, v)}
                   />
                 ) : sf.type === 'radio' && sf.options ? (
@@ -1120,7 +1120,7 @@ const SubRecordsField = ({
                 ) : (
                   <input
                     type={sf.type === 'url' ? 'url' : 'text'}
-                    value={row[sf.key] ?? ''}
+                    value={String(row[sf.key] ?? '')}
                     onChange={(e) => update(realIdx, sf.key, e.target.value)}
                     placeholder={sf.placeholder ?? sf.label}
                     className="w-full px-3 py-2 rounded-lg text-sm"
