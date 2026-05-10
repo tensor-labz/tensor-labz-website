@@ -17,6 +17,7 @@ import {
 } from '../../../store/servicesSlice';
 import { selectCurrentSlide } from '../../../store/heroSlice';
 import { useCompanyInfo } from '../../../shared/hooks/useCompanyInfo';
+import { useSiteSettings } from '../../../shared/hooks/useSiteSettings';
 import ReactIcon from '../../../shared/components/ui/ReactIcon';
 import { EASE_EXPO } from '../../../lib/motion';
 
@@ -37,6 +38,7 @@ const HeroSection: React.FC = memo(() => {
 
   const slide = useAppSelector(selectCurrentSlide);
   const { tagline } = useCompanyInfo();
+  const { get } = useSiteSettings();
 
   const projects = useAppSelector(selectAllProjects);
   const projectsStatus = useAppSelector(selectProjectsStatus);
@@ -46,19 +48,19 @@ const HeroSection: React.FC = memo(() => {
   const stats = [
     {
       value: `${projects.length}+`,
-      label: 'Projects',
+      label: get('hero.stat_projects', 'Projects'),
       icon: 'FaCube',
       loading: projectsStatus === 'idle' || projectsStatus === 'loading',
     },
     {
       value: `${services.length}+`,
-      label: 'Services',
+      label: get('hero.stat_services', 'Services'),
       icon: 'FaRobot',
       loading: servicesStatus === 'idle' || servicesStatus === 'loading',
     },
     {
       value: `${new Date().getFullYear() - 2023}+`,
-      label: 'Years',
+      label: get('hero.stat_years', 'Years'),
       icon: 'FaBolt',
       loading: false,
     },
