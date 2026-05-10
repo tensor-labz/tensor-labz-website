@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { motion } from 'motion/react';
 import { useInView } from 'react-intersection-observer';
 import Section from '../../../shared/components/ui/Section';
-import HeroImageSlider from './HeroImageSlider';
+import HolographicFrame from './HolographicFrame';
 import HeroKeyPoint from './HeroKeyPoint';
 import { useHeroController } from '../hooks/useHeroController';
 import { useAppSelector } from '../../../app/hooks';
@@ -70,11 +70,22 @@ const HeroSection: React.FC = memo(() => {
       className="relative min-h-screen flex items-center bg-canvas
         pt-20 pb-12 sm:pt-24 sm:pb-16 lg:pt-36 lg:pb-24 px-6 md:px-8 lg:px-12"
     >
+      {/* radial vignette */}
       <div
         className="absolute inset-0 z-0 pointer-events-none"
         style={{
           background:
             'radial-gradient(ellipse 70% 60% at 60% 40%, transparent 0%, var(--bg-base) 70%)',
+        }}
+      />
+      {/* engineering grid — subtle across the hero */}
+      <div
+        className="absolute inset-0 z-0 pointer-events-none"
+        style={{
+          backgroundImage:
+            'linear-gradient(var(--grid-dot) 1px, transparent 1px), linear-gradient(90deg, var(--grid-dot) 1px, transparent 1px)',
+          backgroundSize: '48px 48px',
+          opacity: 0.6,
         }}
       />
 
@@ -102,7 +113,7 @@ const HeroSection: React.FC = memo(() => {
             transition={{ duration: 0.4, ease: 'easeOut' }}
             className="w-full h-full relative rounded-2xl overflow-hidden"
           >
-            <HeroImageSlider />
+            <HolographicFrame />
           </motion.div>
         </motion.div>
 
@@ -138,9 +149,28 @@ const HeroSection: React.FC = memo(() => {
             <HeroKeyPoint />
           </motion.div>
 
+          {/* Domain chips — always visible, communicates brand instantly */}
+          <motion.div
+            custom={3}
+            variants={textVariants}
+            initial="hidden"
+            animate={inView ? 'visible' : 'hidden'}
+            className="flex flex-wrap justify-center lg:justify-start gap-2 mb-5"
+          >
+            {['Mechatronics', '3D CAD', 'PCB Design', 'Embedded Systems'].map((chip) => (
+              <span
+                key={chip}
+                className="px-2.5 py-1 rounded border border-accent/25 bg-accent/5
+                  text-accent text-[10px] font-mono tracking-wider uppercase"
+              >
+                {chip}
+              </span>
+            ))}
+          </motion.div>
+
           {slide?.cta_label && slide?.cta_link && (
             <motion.div
-              custom={3}
+              custom={4}
               variants={textVariants}
               initial="hidden"
               animate={inView ? 'visible' : 'hidden'}
@@ -157,7 +187,7 @@ const HeroSection: React.FC = memo(() => {
           )}
 
           <motion.div
-            custom={4}
+            custom={5}
             variants={textVariants}
             initial="hidden"
             animate={inView ? 'visible' : 'hidden'}

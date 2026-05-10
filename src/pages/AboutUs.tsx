@@ -67,8 +67,7 @@ const AboutUs: React.FC = memo(() => {
           HERO  — Three.js particle constellation background
       ══════════════════════════════════════════════════ */}
       <section
-        className="relative min-h-screen flex items-center justify-center px-6 lg:px-16 text-center overflow-hidden"
-        style={{ paddingTop: 'calc(57px + 4rem)', paddingBottom: '4rem' }}
+        className="relative flex items-center justify-center px-6 lg:px-16 text-center overflow-hidden pt-32 pb-16 lg:pt-36 lg:pb-20"
       >
         {/* Particle background */}
         <div className="absolute inset-0 z-0">
@@ -120,6 +119,46 @@ const AboutUs: React.FC = memo(() => {
           >
             {description}
           </motion.p>
+
+          {/* Domain capability chips */}
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.5, ease: EASE_EXPO }}
+            className="flex flex-wrap justify-center gap-2 mt-6"
+          >
+            {['Mechatronics', '3D CAD Modeling', 'PCB Design', 'Embedded Systems'].map((chip) => (
+              <span
+                key={chip}
+                className="px-3 py-1 rounded border border-accent/30 bg-accent/5 text-accent text-[11px] font-mono tracking-wider uppercase"
+              >
+                {chip}
+              </span>
+            ))}
+          </motion.div>
+
+          {/* Mission / Vision inline preview */}
+          {(info.vision || info.mission) && (
+            <motion.div
+              initial={{ opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.7, ease: EASE_EXPO }}
+              className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-2xl mx-auto mt-8 text-left"
+            >
+              {info.vision && (
+                <div className="rounded-xl border border-glass-rim bg-glass-raised backdrop-blur-sm px-4 py-3">
+                  <p className="text-[9px] font-mono tracking-widest uppercase text-accent mb-1">◈ Vision</p>
+                  <p className="text-xs text-muted leading-relaxed line-clamp-3">{info.vision}</p>
+                </div>
+              )}
+              {info.mission && (
+                <div className="rounded-xl border border-glass-rim bg-glass-raised backdrop-blur-sm px-4 py-3">
+                  <p className="text-[9px] font-mono tracking-widest uppercase text-accent mb-1">◈ Mission</p>
+                  <p className="text-xs text-muted leading-relaxed line-clamp-3">{info.mission}</p>
+                </div>
+              )}
+            </motion.div>
+          )}
         </div>
 
         {/* Scroll indicator */}
@@ -145,7 +184,7 @@ const AboutUs: React.FC = memo(() => {
           VISION & MISSION
       ══════════════════════════════════════════════════ */}
       {(info.vision || info.mission) && (
-        <section className="px-6 lg:px-16 py-20 lg:py-28">
+        <section className="px-6 lg:px-16 pt-12 pb-20 lg:pt-16 lg:pb-28">
           <div className="max-w-7xl mx-auto">
             <motion.div
               variants={fadeUp(0)}
