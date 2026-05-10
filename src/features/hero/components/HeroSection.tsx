@@ -15,7 +15,8 @@ import {
   selectServices,
   selectServicesStatus,
 } from '../../../store/servicesSlice';
-import { selectCurrentSlide, selectHeroStatus } from '../../../store/heroSlice';
+import { selectCurrentSlide } from '../../../store/heroSlice';
+import { useCompanyInfo } from '../../../shared/hooks/useCompanyInfo';
 import ReactIcon from '../../../shared/components/ui/ReactIcon';
 
 const textVariants = {
@@ -34,8 +35,7 @@ const HeroSection: React.FC = memo(() => {
   useHeroController();
 
   const slide = useAppSelector(selectCurrentSlide);
-  const heroStatus = useAppSelector(selectHeroStatus);
-  const heroLoading = heroStatus === 'idle' || heroStatus === 'loading';
+  const { tagline } = useCompanyInfo();
 
   const projects = useAppSelector(selectAllProjects);
   const projectsStatus = useAppSelector(selectProjectsStatus);
@@ -122,27 +122,8 @@ const HeroSection: React.FC = memo(() => {
               fontFamily: '"Syne", sans-serif',
             }}
           >
-            {heroLoading ? (
-              <span className="block h-12 w-64 rounded-lg animate-pulse" style={{ backgroundColor: 'var(--glass-bg)' }} />
-            ) : (
-              slide?.title && (
-                <span className="block">{slide.title}</span>
-              )
-            )}
+            {tagline}
           </motion.h1>
-
-          {slide?.subtitle && !heroLoading && (
-            <motion.p
-              custom={1}
-              variants={textVariants}
-              initial="hidden"
-              animate={inView ? 'visible' : 'hidden'}
-              className="text-base sm:text-lg mb-4 leading-relaxed"
-              style={{ color: 'var(--text-muted)' }}
-            >
-              {slide.subtitle}
-            </motion.p>
-          )}
 
           <motion.div
             initial={{ width: 0 }}
@@ -162,7 +143,7 @@ const HeroSection: React.FC = memo(() => {
             <HeroKeyPoint />
           </motion.div>
 
-          {slide?.cta_label && slide?.cta_link && !heroLoading && (
+          {slide?.cta_label && slide?.cta_link && (
             <motion.div
               custom={3}
               variants={textVariants}
