@@ -2,14 +2,73 @@ import React, { memo } from 'react';
 import { motion } from 'motion/react';
 import { useNavigate } from 'react-router-dom';
 import ReactIcon from '../../../shared/components/ui/ReactIcon';
-import type { Blog } from '../../../services/blogService';
+import type { Blog, CoverMediaType } from '../../../services/blogService';
 import { EASE_EXPO } from '../../../lib/motion';
 
-type Props = Pick<Blog, 'slug' | 'title' | 'description' | 'cover_image' | 'tags' | 'created_at'> & {
+type Props = Pick<Blog, 'slug' | 'title' | 'description' | 'cover_image' | 'cover_media_type' | 'tags' | 'created_at'> & {
   reverse?: boolean;
 };
 
-const BlogCard: React.FC<Props> = memo(({ slug, title, description, cover_image, tags, created_at, reverse = false }) => {
+function youtubeThumbnail(url: string): string {
+  const short = url.match(/youtu\.be\/([^?&]+)/);
+  if (short) return `https://img.youtube.com/vi/${short[1]}/hqdefault.jpg`;
+  const watch = url.match(/[?&]v=([^&]+)/);
+  if (watch) return `https://img.youtube.com/vi/${watch[1]}/hqdefault.jpg`;
+  const embed = url.match(/embed\/([^?&/]+)/);
+  if (embed) return `https://img.youtube.com/vi/${embed[1]}/hqdefault.jpg`;
+  return '';
+}
+
+const CoverPreview = ({ url, type, title }: { url: string; type: CoverMediaType; title: string }) => {
+  if (type === 'youtube') {
+    const thumb = youtubeThumbnail(url);
+    return thumb ? (
+      <div className="relative w-full h-full">
+        <img src={thumb} alt={title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="w-10 h-10 rounded-full bg-black/60 border border-white/20 flex items-center justify-center backdrop-blur-sm">
+            <ReactIcon name="FaYoutube" size={18} className="text-red-500" />
+          </div>
+        </div>
+      </div>
+    ) : (
+      <div className="w-full h-full flex items-center justify-center bg-slate-900">
+        <ReactIcon name="FaYoutube" size={32} className="text-red-500/60" />
+      </div>
+    );
+  }
+
+  if (type === 'video') {
+    return (
+      <div className="relative w-full h-full">
+        <video src={url} muted preload="metadata" className="w-full h-full object-cover" />
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="w-10 h-10 rounded-full bg-black/60 border border-white/20 flex items-center justify-center backdrop-blur-sm">
+            <ReactIcon name="FaPlay" size={12} className="text-white ml-0.5" />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (type === 'drive_video') {
+    return (
+      <div className="w-full h-full flex flex-col items-center justify-center gap-2 bg-slate-900">
+        <div className="w-10 h-10 rounded-full bg-accent/15 border border-accent/30 flex items-center justify-center">
+          <ReactIcon name="FaPlay" size={12} className="text-accent ml-0.5" />
+        </div>
+        <span className="text-[10px] font-mono text-muted/50 tracking-widest">DRIVE VIDEO</span>
+      </div>
+    );
+  }
+
+  /* image / drive_image */
+  return (
+    <img src={url} alt={title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+  );
+};
+
+const BlogCard: React.FC<Props> = memo(({ slug, title, description, cover_image, cover_media_type, tags, created_at, reverse = false }) => {
   const navigate = useNavigate();
   const date = created_at
     ? new Date(created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })
@@ -28,14 +87,10 @@ const BlogCard: React.FC<Props> = memo(({ slug, title, description, cover_image,
         transition-all duration-300
         ${reverse ? 'md:flex-row-reverse' : 'md:flex-row'}`}
     >
-      {/* ── Cover image ── */}
+      {/* ── Cover media ── */}
       <div className="relative aspect-video md:aspect-auto md:w-[44%] md:shrink-0 overflow-hidden bg-raised">
         {cover_image ? (
-          <img
-            src={cover_image}
-            alt={title}
-            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-          />
+          <CoverPreview url={cover_image} type={cover_media_type} title={title} />
         ) : (
           <div className="w-full h-full flex items-center justify-center">
             <ReactIcon name="FaNewspaper" size={40} className="text-muted/20" />

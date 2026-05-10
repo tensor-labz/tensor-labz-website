@@ -8,6 +8,7 @@ import { MODULES, type FieldConfig } from '../config/modules';
 import Breadcrumbs from '../../../shared/components/ui/Breadcrumbs';
 import { supabase } from '../../../lib/supabase';
 import { uploadImage, moduleFolder } from '../../../lib/imageUpload';
+import { detectCoverType, toYouTubeEmbed } from '../../../services/blogService';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import {
   fetchRecord,
@@ -163,12 +164,46 @@ export const ImageField = ({
     [onChange, folder, value]
   );
 
-  /* Detect if the URL is a non-image media type */
-  const isMediaUrl = (url: string) =>
-    url.includes('youtube.com') ||
-    url.includes('youtu.be') ||
-    url.includes('drive.google.com') ||
-    /\.(mp4|webm|ogg|mov)(\?|$)/i.test(url);
+  /* Render the appropriate preview element based on detected media type */
+  const renderPreview = (url: string) => {
+    const type = detectCoverType(url);
+    if (type === 'youtube') {
+      return (
+        <iframe
+          src={toYouTubeEmbed(url)}
+          title="preview"
+          className="w-full h-full"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+        />
+      );
+    }
+    if (type === 'drive_video') {
+      return (
+        <iframe
+          src={url}
+          title="preview"
+          className="w-full h-full"
+          allow="autoplay"
+          allowFullScreen
+        />
+      );
+    }
+    if (type === 'video') {
+      return (
+        <video src={url} controls className="w-full h-full object-contain bg-black" />
+      );
+    }
+    /* image / drive_image */
+    return (
+      <img
+        src={url}
+        alt="preview"
+        className="w-full h-full object-cover"
+        onError={() => { if (!uploading) setPreview(''); }}
+      />
+    );
+  };
 
   return (
     <div className="space-y-3">
@@ -203,25 +238,7 @@ export const ImageField = ({
             backgroundColor: 'var(--glass-bg-raised)',
           }}
         >
-          {isMediaUrl(preview) ? (
-            /* Non-image URL: show a URL badge instead of broken <img> */
-            <div
-              className="w-full h-full flex flex-col items-center justify-center gap-2 px-4"
-              style={{ backgroundColor: 'var(--glass-bg-raised)' }}
-            >
-              <ReactIcon name="FaLink" size={22} style={{ color: 'var(--accent)', opacity: 0.7 }} />
-              <p className="text-xs text-center break-all font-mono" style={{ color: 'var(--text-muted)' }}>
-                {preview}
-              </p>
-            </div>
-          ) : (
-            <img
-              src={preview}
-              alt="preview"
-              className="w-full h-full object-cover"
-              onError={() => { if (!uploading) setPreview(''); }}
-            />
-          )}
+          {renderPreview(preview)}
 
           {/* Upload progress overlay */}
           {uploading && (
@@ -264,12 +281,12 @@ export const ImageField = ({
               >
                 <ReactIcon name="FaTimes" size={11} />
               </button>
-              {!isMediaUrl(preview) && (
+              {fileName && (
                 <div
                   className="absolute bottom-0 left-0 right-0 px-3 py-1.5 text-xs truncate"
                   style={{ backgroundColor: 'rgba(0,0,0,0.45)', color: 'rgba(255,255,255,0.85)' }}
                 >
-                  {fileName || preview}
+                  {fileName}
                 </div>
               )}
             </>

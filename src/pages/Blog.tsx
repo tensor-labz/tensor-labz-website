@@ -185,6 +185,7 @@ const Blog: React.FC = memo(() => {
                 title={blog.title}
                 description={blog.description}
                 cover_image={blog.cover_image}
+                cover_media_type={blog.cover_media_type}
                 tags={blog.tags}
                 created_at={blog.created_at}
                 reverse={i % 2 !== 0}
