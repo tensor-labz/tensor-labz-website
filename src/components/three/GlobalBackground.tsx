@@ -1,6 +1,6 @@
 import { useEffect, useRef, memo } from 'react';
 import * as THREE from 'three';
-import { useTheme } from '../../contexts/ThemeContext';
+import { useTheme } from '../../shared/hooks/useTheme';
 
 /**
  * ONE animation — every page.

@@ -44,6 +44,7 @@ interface CompanyInfo {
   who_we_are: string;
   vision: string;
   mission: string;
+  domains: string;
 }
 interface ContactRow {
   id?: number;
