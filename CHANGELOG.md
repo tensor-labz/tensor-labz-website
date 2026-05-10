@@ -7,6 +7,15 @@ All notable changes to the Tensor Labs website are documented here.
 ## [Unreleased]
 
 ---
+## [v1.11.1] — 2026-05-10
+
+### Other
+
+- staging → main (enforce branch flow) (#33)
+
+
+
+---
 ## [v1.11.0] — 2026-05-10
 
 ### Added
