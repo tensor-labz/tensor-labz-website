@@ -1,8 +1,8 @@
 import appData from '../data/app_data';
 import { Helmet } from 'react-helmet-async';
 import HeaderHelmentProps from './type/HeaderHelmentProps.d';
+import { useCompanyInfo } from '../shared/hooks/useCompanyInfo';
 
-// Define the HeaderHelment component
 export default function HeaderHelment({
   title,
   description,
@@ -11,42 +11,37 @@ export default function HeaderHelment({
   og,
   twitter,
 }: HeaderHelmentProps) {
-  // Merge the keywords from the appData and the keywords passed as props
+  const info = useCompanyInfo();
+  const siteName = info.name || appData.title;
+  const siteDescription = info.description || appData.description;
   const keywordContent = [...(keywords ?? appData.keywords)].join(',') ?? '';
-  // Return the Helmet component with the title, description and keywords
+
   return (
     <Helmet>
       <title>
-        {appData.title} | {title}
+        {siteName} | {title}
       </title>
-      {/* desecription */}
-      <meta name="description" content={description ?? appData?.description} />
+      <meta name="description" content={description ?? siteDescription} />
       <meta name="keywords" content={keywordContent} />
       <meta name="author" content={appData.author} />
       <meta name="theme-color" content="#1245de" />
       {/* Open Graph */}
-      <meta name="og:title" content={og?.title ?? appData.title} />
-      <meta
-        name="og:description"
-        content={og?.description ?? appData.description}
-      />
+      <meta name="og:title" content={og?.title ?? siteName} />
+      <meta name="og:description" content={og?.description ?? siteDescription} />
       <meta name="og:image" content={og?.image ?? logo} />
       <meta name="og:type" content="website" />
       <meta name="og:url" content={window.location.href} />
-      <meta name="og:site_name" content={appData.title} />
+      <meta name="og:site_name" content={siteName} />
       <meta name="og:image:width" content="1200" />
       <meta name="og:image:height" content="630" />
       {/* Twitter */}
       <meta name="twitter:card" content={twitter?.card} />
-      <meta name="twitter:site" content={appData.title} />
+      <meta name="twitter:site" content={siteName} />
       <meta name="twitter:creator" content={appData.author} />
-      <meta name="twitter:title" content={og?.title ?? appData.title} />
-      <meta
-        name="twitter:description"
-        content={og?.description ?? appData.description}
-      />
+      <meta name="twitter:title" content={og?.title ?? siteName} />
+      <meta name="twitter:description" content={og?.description ?? siteDescription} />
       <meta name="twitter:image" content={og?.image ?? logo} />
-      <meta name="twitter:image:alt" content={og?.title ?? appData.title} />
+      <meta name="twitter:image:alt" content={og?.title ?? siteName} />
       <meta name="twitter:image:width" content="1200" />
       <meta name="twitter:image:height" content="630" />
       <meta name="twitter:domain" content=".tec" />
