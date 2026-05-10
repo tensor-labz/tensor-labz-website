@@ -72,7 +72,7 @@ const BlogDetail: React.FC = memo(() => {
 
       {/* ── Hero ── */}
       <div className="relative min-h-[45vh] flex items-end overflow-hidden bg-raised">
-        {blog.cover_image && blog.cover_media_type === 'image' && (
+        {blog.cover_image && (blog.cover_media_type === 'image' || blog.cover_media_type === 'drive_image') && (
           <motion.img
             src={blog.cover_image}
             alt={blog.title}
@@ -88,6 +88,15 @@ const BlogDetail: React.FC = memo(() => {
             title={blog.title}
             className="absolute inset-0 w-full h-full"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          />
+        )}
+        {blog.cover_image && blog.cover_media_type === 'drive_video' && (
+          <iframe
+            src={blog.cover_image}
+            title={blog.title}
+            className="absolute inset-0 w-full h-full"
+            allow="autoplay"
             allowFullScreen
           />
         )}

@@ -40,6 +40,14 @@ const BlogMediaSection: React.FC<Props> = memo(({ images, videos }) => {
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     allowFullScreen
                   />
+                ) : type === 'drive_video' ? (
+                  <iframe
+                    src={url}
+                    title={`Video ${i + 1}`}
+                    className="w-full h-full"
+                    allow="autoplay"
+                    allowFullScreen
+                  />
                 ) : (
                   <video
                     src={url}

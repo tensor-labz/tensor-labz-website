@@ -213,7 +213,14 @@ export const MODULES: ModuleConfig[] = [
     descriptionField: 'description',
     tableColumns: ['status', 'tags'],
     fields: [
-      { key: 'cover_image', label: 'Cover Image', type: 'image', span: 'full' },
+      {
+        key: 'cover_image_type',
+        label: 'Cover Media Type',
+        type: 'radio',
+        span: 'full',
+        options: ['image', 'video', 'youtube', 'drive_image', 'drive_video'],
+      },
+      { key: 'cover_image', label: 'Cover URL / File', type: 'image', span: 'full' },
       { key: 'title', label: 'Title', type: 'text', required: true, span: 'half' },
       { key: 'slug', label: 'Slug', type: 'text', required: true, span: 'half', placeholder: 'my-blog-post' },
       {

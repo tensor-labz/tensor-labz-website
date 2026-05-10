@@ -6,7 +6,7 @@ export interface BlogSocialLink {
   url: string;
 }
 
-export type CoverMediaType = 'youtube' | 'video' | 'image';
+export type CoverMediaType = 'image' | 'video' | 'youtube' | 'drive_image' | 'drive_video';
 
 export interface Blog {
   id: number;
@@ -26,10 +26,11 @@ export interface Blog {
   updated_at: string;
 }
 
-/* ── Media type detection ── */
+/* ── Media type detection (fallback for additional_videos array items) ── */
 export function detectCoverType(url?: string): CoverMediaType {
   if (!url) return 'image';
   if (url.includes('youtube.com') || url.includes('youtu.be')) return 'youtube';
+  if (url.includes('drive.google.com')) return 'drive_video';
   if (/\.(mp4|webm|ogg|mov)(\?|$)/i.test(url)) return 'video';
   return 'image';
 }
@@ -74,7 +75,7 @@ function rowToBlog(row: Record<string, unknown>): Blog {
     title: (row.title as string) ?? '',
     slug: (row.slug as string) ?? '',
     cover_image,
-    cover_media_type: detectCoverType(cover_image),
+    cover_media_type: (row.cover_image_type as CoverMediaType) || detectCoverType(cover_image),
     description: (row.description as string) || undefined,
     meta_title: (row.meta_title as string) || undefined,
     content: (row.content as string) || undefined,
