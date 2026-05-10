@@ -1,11 +1,6 @@
 import React, { memo, Suspense, lazy } from 'react';
 import { motion } from 'motion/react';
-import {
-  FaLightbulb,
-  FaRocket,
-  FaQuoteLeft,
-  FaChevronDown,
-} from 'react-icons/fa';
+import ReactIcon from '../shared/components/ui/ReactIcon';
 import Page from '../components/resuable/Page';
 import { useAboutController } from '../features/about/hooks/useAboutController';
 import { useCompanyInfo } from '../shared/hooks/useCompanyInfo';
@@ -176,7 +171,11 @@ const AboutUs: React.FC = memo(() => {
             animate={{ y: [0, 5, 0] }}
             transition={{ repeat: Infinity, duration: 1.6, ease: 'easeInOut' }}
           >
-            <FaChevronDown size={11} style={{ color: 'var(--accent)' }} />
+            <ReactIcon
+              name="FaChevronDown"
+              size={11}
+              style={{ color: 'var(--accent)' }}
+            />
           </motion.div>
         </motion.div>
       </section>
@@ -209,7 +208,8 @@ const AboutUs: React.FC = memo(() => {
                       className="w-12 h-12 rounded-xl flex items-center justify-center mb-6"
                       style={{ backgroundColor: 'var(--accent-soft)' }}
                     >
-                      <FaLightbulb
+                      <ReactIcon
+                        name="FaLightbulb"
                         size={20}
                         style={{ color: 'var(--accent)' }}
                       />
@@ -239,7 +239,11 @@ const AboutUs: React.FC = memo(() => {
                       className="w-12 h-12 rounded-xl flex items-center justify-center mb-6"
                       style={{ backgroundColor: 'var(--accent-soft)' }}
                     >
-                      <FaRocket size={20} style={{ color: 'var(--accent)' }} />
+                      <ReactIcon
+                        name="FaRocket"
+                        size={20}
+                        style={{ color: 'var(--accent)' }}
+                      />
                     </div>
                     <h3
                       className="text-xl font-bold mb-4"
@@ -292,7 +296,8 @@ const AboutUs: React.FC = memo(() => {
 
             <motion.div {...inView(0.15)}>
               <Card>
-                <FaQuoteLeft
+                <ReactIcon
+                  name="FaQuoteLeft"
                   size={32}
                   style={{
                     color: 'var(--accent)',

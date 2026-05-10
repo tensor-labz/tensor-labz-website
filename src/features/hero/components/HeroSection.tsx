@@ -15,7 +15,7 @@ import {
   selectServicesStatus,
 } from '../../../store/servicesSlice';
 import data from '../../../data/data';
-import { FaRobot, FaCube, FaBolt } from 'react-icons/fa';
+import ReactIcon from '../../../shared/components/ui/ReactIcon';
 
 const textVariants = {
   hidden: { opacity: 0, y: 24 },
@@ -41,19 +41,19 @@ const HeroSection: React.FC = memo(() => {
     {
       value: `${projects.length}+`,
       label: 'Projects',
-      icon: FaCube,
+      icon: 'FaCube',
       loading: projectsStatus === 'idle' || projectsStatus === 'loading',
     },
     {
       value: `${services.length}+`,
       label: 'Services',
-      icon: FaRobot,
+      icon: 'FaRobot',
       loading: servicesStatus === 'idle' || servicesStatus === 'loading',
     },
     {
       value: `${new Date().getFullYear() - 2023}+`,
       label: 'Years',
-      icon: FaBolt,
+      icon: 'FaBolt',
       loading: false,
     },
   ];
@@ -168,7 +168,7 @@ const HeroSection: React.FC = memo(() => {
             animate={inView ? 'visible' : 'hidden'}
             className="flex justify-center lg:justify-start gap-8 md:gap-10"
           >
-            {stats.map(({ value, label, icon: Icon, loading }) =>
+            {stats.map(({ value, label, icon, loading }) =>
               loading ? (
                 <div key={label} className="flex items-center gap-2">
                   <motion.div
@@ -184,7 +184,8 @@ const HeroSection: React.FC = memo(() => {
                 </div>
               ) : (
                 <div key={label} className="flex items-center gap-2.5">
-                  <Icon
+                  <ReactIcon
+                    name={icon}
                     className="text-xl shrink-0"
                     style={{ color: 'var(--accent)' }}
                   />

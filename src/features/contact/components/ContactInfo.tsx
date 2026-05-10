@@ -1,21 +1,19 @@
 import { memo } from 'react';
 import { motion } from 'motion/react';
-import { IconType } from 'react-icons';
-import { MdEmail, MdPhone, MdLocationOn } from 'react-icons/md';
-import { FaWhatsapp } from 'react-icons/fa';
+import ReactIcon from '../../../shared/components/ui/ReactIcon';
 
 export type ContactLinkType = 'email' | 'phone' | 'whatsapp' | 'default';
 
-export const contactInfoIcon = {
-  email: MdEmail,
-  phoneNo: MdPhone,
-  address: MdLocationOn,
-  whatsapp: FaWhatsapp,
-  default: MdLocationOn,
+export const contactInfoIcon: Record<string, string> = {
+  email: 'MdEmail',
+  phoneNo: 'MdPhone',
+  address: 'MdLocationOn',
+  whatsapp: 'FaWhatsapp',
+  default: 'MdLocationOn',
 };
 
 interface ContactInfoItemProps {
-  icon: IconType;
+  icon: string;
   title: string;
   value: string;
   link?: string;
@@ -24,7 +22,7 @@ interface ContactInfoItemProps {
 
 const ContactInfoItem = memo(
   ({
-    icon: Icon,
+    icon,
     title,
     value,
     link,
@@ -60,9 +58,11 @@ const ContactInfoItem = memo(
           className="p-3 rounded-full shrink-0 mb-3 sm:mb-0 transition-colors"
           style={{ backgroundColor: 'var(--accent-soft)' }}
         >
-          <Icon
-            className="w-7 h-7 sm:w-8 sm:h-8 transition-colors"
+          <ReactIcon
+            name={icon}
+            size={30}
             style={{ color: 'var(--accent)' }}
+            className="transition-colors"
           />
         </div>
 
