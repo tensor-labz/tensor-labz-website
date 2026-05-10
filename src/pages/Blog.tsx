@@ -6,7 +6,7 @@ import ReactIcon from '../shared/components/ui/ReactIcon';
 import { useBlogListController } from '../features/blog/hooks/useBlogListController';
 import { EASE_EXPO, VIEWPORT } from '../lib/motion';
 
-const PAGE_SIZE = 5;
+const PAGE_SIZE = 20;
 
 const BlogSkeleton = () => (
   <div className="rounded-xl overflow-hidden border border-rim bg-surface animate-pulse flex flex-col md:flex-row">
