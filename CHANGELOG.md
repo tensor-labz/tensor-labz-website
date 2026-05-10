@@ -7,6 +7,60 @@ All notable changes to the Tensor Labs website are documented here.
 ## [Unreleased]
 
 ---
+## [v1.8.0] — 2026-05-10
+
+### Added
+
+- combined covermedia field in blog admin — type dropdown + url/upload input
+- proper media previews for all URL types in BlogCard and admin ImageField
+- ImageField input mode dropdown — S3 Upload vs Direct URL
+- blog listing — alternating card layout, search bar, pagination
+- blog listing — full-width horizontal card on desktop, vertical card on mobile
+- add cover_image_type column with 5 media types (image/video/youtube/drive_image/drive_video)
+- support image/video/youtube cover + additional_images/additional_videos arrays on blogs
+- blog feature — public listing/detail pages, admin CRUD module, Redux slice, media gallery, social links
+- engineering theme — HolographicFrame hero, dot-grid texture, About Us content density, unified motion/react animations
+- site control, Three.js hero cube, dynamic icons (#21)
+- Hero Slides and About Media tabs in Site Control (#20)
+- add ReactIcon shared component — dynamic react-icons loader with prefix-based lazy loading and module cache
+
+### Bug Fixes
+
+- service card description contrast — dark overlay bg with slate-200 text
+- duplicate className bugs, inline styles to Tailwind, h1→h2 in ServiceHero
+- home page components — semantic headings, ServiceCard className bug, inline styles to Tailwind
+- add footer background and gradient fade separation from page
+- remove unwanted top border from footer
+- correct ReactIcon import path in Footer.tsx (../../ → ../)
+- add all missing react-icons packages (fa6, hi2, io5, ci, go, lia) and handle shared prefixes via parallel Promise.all load
+
+### Refactor
+
+- replace additional_images/additional_videos arrays with blog_additional_media FK table
+- blog social links as separate FK table — blog_social_links with nested Supabase select
+- home sections — engineering theme on service cards, fix LatestHero brand colors, technical overlays on project cards
+- Tailwind-first styling across all public pages
+- decouple all Supabase calls from UI into Redux (#22)
+- replace all remaining static react-icons imports with ReactIcon component
+- replace static react-icons imports with ReactIcon shared component
+
+### Style
+
+- increase blog pagination page size from 5 to 20
+
+### Other
+
+- Merge pull request #26 from tensor-labz/staging
+- Merge pull request #25 from tensor-labz/dev
+- Merge pull request #23 from tensor-labz/feat/page-animations-redesign
+- blog detail hero — split layout with engineering display frame + circuit traces
+- Merge remote-tracking branch 'origin/staging' into dev
+- add PR attribution rule and Redux decoupling rule to CLAUDE.md
+- Merge pull request #19 from tensor-labz/feat/dynamic-react-icon
+
+
+
+---
 ## [v1.7.0] — 2026-05-09
 
 ### Added
