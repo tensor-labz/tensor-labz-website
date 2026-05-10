@@ -69,7 +69,11 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
             >
               <ReactIcon name="FiEye" size={16} className="text-accent" />
               <span>Quick View</span>
-              <ReactIcon name="FiArrowRight" size={16} className="text-accent" />
+              <ReactIcon
+                name="FiArrowRight"
+                size={16}
+                className="text-accent"
+              />
             </motion.button>
           </div>
         </motion.div>
@@ -88,9 +92,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
           </motion.div>
         )}
 
-        <h3
-          className="text-xl md:text-2xl font-bold font-display mb-2 line-clamp-1 pr-16 text-fg"
-        >
+        <h3 className="text-xl md:text-2xl font-bold font-display mb-2 line-clamp-1 pr-16 text-fg">
           {title}
         </h3>
 

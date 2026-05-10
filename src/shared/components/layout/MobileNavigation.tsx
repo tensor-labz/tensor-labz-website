@@ -71,7 +71,11 @@ const MobileNavigation: React.FC = memo(() => {
           aria-label="Toggle navigation"
           className="text-[var(--text-muted)] hover:text-[var(--text-primary)] text-2xl focus:outline-none transition-colors"
         >
-          {isOpen ? <ReactIcon name="RiCloseLine" size={24} /> : <ReactIcon name="RiMenu3Line" size={24} />}
+          {isOpen ? (
+            <ReactIcon name="RiCloseLine" size={24} />
+          ) : (
+            <ReactIcon name="RiMenu3Line" size={24} />
+          )}
         </motion.button>
       </div>
 
@@ -131,7 +135,11 @@ const MobileNavigation: React.FC = memo(() => {
                       bg-[var(--bg-raised)] border border-[var(--border)]
                       transition-colors text-base"
                   >
-                    {theme === 'dark' ? <ReactIcon name="RiSunLine" size={16} /> : <ReactIcon name="RiMoonLine" size={16} />}
+                    {theme === 'dark' ? (
+                      <ReactIcon name="RiSunLine" size={16} />
+                    ) : (
+                      <ReactIcon name="RiMoonLine" size={16} />
+                    )}
                   </motion.button>
                   <motion.button
                     type="button"

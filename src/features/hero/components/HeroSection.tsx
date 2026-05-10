@@ -196,16 +196,10 @@ const HeroSection: React.FC = memo(() => {
                     className="text-xl shrink-0 text-accent"
                   />
                   <div>
-                    <div
-                      className="text-xl font-bold leading-none text-fg font-display"
-                    >
+                    <div className="text-xl font-bold leading-none text-fg font-display">
                       {value}
                     </div>
-                    <div
-                      className="text-xs mt-0.5 text-muted"
-                    >
-                      {label}
-                    </div>
+                    <div className="text-xs mt-0.5 text-muted">{label}</div>
                   </div>
                 </div>
               )

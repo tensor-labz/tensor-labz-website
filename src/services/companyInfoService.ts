@@ -42,7 +42,9 @@ export const DEFAULTS: CompanyInfo = {
   social_links: [],
 };
 
-export async function fetchCompanyInfo(signal?: AbortSignal): Promise<CompanyInfo> {
+export async function fetchCompanyInfo(
+  signal?: AbortSignal
+): Promise<CompanyInfo> {
   const [{ data: ci }, { data: social }, { data: contact }] = await Promise.all(
     [
       supabase.from('company_info').select('*').maybeSingle(),

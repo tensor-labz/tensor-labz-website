@@ -7,7 +7,11 @@ import {
 } from '../../store/companyInfoSlice';
 
 // Re-export types from the service so existing consumers keep working
-export type { CompanyInfo, ContactRow, SocialLink } from '../../services/companyInfoService';
+export type {
+  CompanyInfo,
+  ContactRow,
+  SocialLink,
+} from '../../services/companyInfoService';
 
 /** Returns the correct logo URL for the given theme, falling back to local asset. */
 export function resolveLogo(

@@ -19,8 +19,10 @@ const Globe = lazy(() => import('../features/contact/components/Globe'));
 function contactIcon(type: string): string {
   const t = type.toLowerCase();
   if (t.includes('email') || t.includes('mail')) return 'FaEnvelope';
-  if (t.includes('phone') || t.includes('tel') || t.includes('mobile')) return 'FaPhone';
-  if (t.includes('address') || t.includes('location') || t.includes('map')) return 'FaMapMarkerAlt';
+  if (t.includes('phone') || t.includes('tel') || t.includes('mobile'))
+    return 'FaPhone';
+  if (t.includes('address') || t.includes('location') || t.includes('map'))
+    return 'FaMapMarkerAlt';
   if (t.includes('whatsapp')) return 'FaWhatsapp';
   return 'FaClock';
 }
@@ -67,7 +69,11 @@ const ContactCard = memo(
                    bg-glass-raised border border-glass-rim backdrop-blur-md"
       >
         <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 bg-accent-soft">
-          <ReactIcon name={contactIcon(row.type)} size={16} className="text-accent" />
+          <ReactIcon
+            name={contactIcon(row.type)}
+            size={16}
+            className="text-accent"
+          />
         </div>
         <div className="min-w-0">
           <p className="text-[10px] font-semibold tracking-widest uppercase mb-0.5 text-muted">
@@ -83,9 +89,7 @@ const ContactCard = memo(
               {row.value}
             </a>
           ) : (
-            <p className="text-sm font-medium truncate text-fg">
-              {row.value}
-            </p>
+            <p className="text-sm font-medium truncate text-fg">{row.value}</p>
           )}
         </div>
       </motion.div>
@@ -95,26 +99,24 @@ const ContactCard = memo(
 ContactCard.displayName = 'ContactCard';
 
 /* ── Social pill ── */
-const SocialPill = memo(
-  ({ link }: { link: SocialLink }) => {
-    return (
-      <motion.a
-        href={link.url}
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label={link.platform}
-        variants={staggerItem}
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.95 }}
-        className="w-9 h-9 flex items-center justify-center rounded-xl transition-colors duration-200
+const SocialPill = memo(({ link }: { link: SocialLink }) => {
+  return (
+    <motion.a
+      href={link.url}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={link.platform}
+      variants={staggerItem}
+      whileHover={{ scale: 1.1 }}
+      whileTap={{ scale: 0.95 }}
+      className="w-9 h-9 flex items-center justify-center rounded-xl transition-colors duration-200
                    bg-glass-raised border border-glass-rim text-muted
                    hover:bg-accent hover:text-white hover:border-accent"
-      >
-        <ReactIcon name={socialIcon(link.platform)} size={14} />
-      </motion.a>
-    );
-  }
-);
+    >
+      <ReactIcon name={socialIcon(link.platform)} size={14} />
+    </motion.a>
+  );
+});
 SocialPill.displayName = 'SocialPill';
 
 /* ── Map card (reused on desktop right panel + mobile) ── */
@@ -249,7 +251,11 @@ const ContactUs: React.FC = memo(() => {
                              bg-glass-raised border border-glass-rim backdrop-blur-md"
                 >
                   <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 bg-accent-soft">
-                    <ReactIcon name="FaClock" size={16} className="text-accent" />
+                    <ReactIcon
+                      name="FaClock"
+                      size={16}
+                      className="text-accent"
+                    />
                   </div>
                   <div>
                     <p className="text-[10px] font-semibold tracking-widest uppercase mb-0.5 text-muted">

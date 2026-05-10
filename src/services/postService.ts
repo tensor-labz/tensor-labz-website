@@ -1,4 +1,5 @@
 import { supabase } from '../lib/supabase';
+import { type CoverTypeValue } from '../shared/components/ui/CoverTypeSelect';
 
 export interface PostSocialLink {
   id: number;
@@ -6,7 +7,7 @@ export interface PostSocialLink {
   url: string;
 }
 
-export type CoverMediaType = 'image' | 'video' | 'youtube' | 'drive_image' | 'drive_video';
+export type CoverMediaType = CoverTypeValue;
 
 export interface PostAdditionalMedia {
   id: number;
@@ -57,9 +58,16 @@ function parseArray(val: unknown): string[] {
   if (typeof val === 'string') {
     const t = val.trim();
     if (t.startsWith('[')) {
-      try { return JSON.parse(t) as string[]; } catch { /* fall through */ }
+      try {
+        return JSON.parse(t) as string[];
+      } catch {
+        /* fall through */
+      }
     }
-    return t.split(',').map((s) => s.trim()).filter(Boolean);
+    return t
+      .split(',')
+      .map((s) => s.trim())
+      .filter(Boolean);
   }
   return [];
 }
@@ -91,7 +99,8 @@ function rowToPost(row: Record<string, unknown>): Post {
     title: (row.title as string) ?? '',
     slug: (row.slug as string) ?? '',
     cover_image,
-    cover_media_type: (row.cover_image_type as CoverMediaType) || detectCoverType(cover_image),
+    cover_media_type:
+      (row.cover_image_type as CoverMediaType) || detectCoverType(cover_image),
     description: (row.description as string) || undefined,
     meta_title: (row.meta_title as string) || undefined,
     content: (row.content as string) || undefined,

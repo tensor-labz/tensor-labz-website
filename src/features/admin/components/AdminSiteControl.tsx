@@ -220,7 +220,7 @@ const CompanyInfoTab = ({
   });
 
   const refreshContact = useCallback(() => {
-    dispatch(fetchRecords('contact'));
+    dispatch(fetchRecords({ moduleId: 'contact' }));
   }, [dispatch]);
 
   useEffect(() => {
@@ -239,10 +239,16 @@ const CompanyInfoTab = ({
     if (contactEdit === 'new') {
       await dispatch(createRecord({ moduleId: 'contact', data: payload }));
     } else {
-      await dispatch(updateRecord({ moduleId: 'contact', id: contactEdit as number, data: payload }));
+      await dispatch(
+        updateRecord({
+          moduleId: 'contact',
+          id: contactEdit as number,
+          data: payload,
+        })
+      );
     }
     setContactEdit(null);
-    dispatch(fetchRecords('contact'));
+    dispatch(fetchRecords({ moduleId: 'contact' }));
   };
 
   /* ── Social CRUD ── */
@@ -257,7 +263,7 @@ const CompanyInfoTab = ({
   });
 
   const refreshSocial = useCallback(() => {
-    dispatch(fetchRecords('social'));
+    dispatch(fetchRecords({ moduleId: 'social' }));
   }, [dispatch]);
 
   useEffect(() => {
@@ -266,18 +272,29 @@ const CompanyInfoTab = ({
 
   const saveSocial = async () => {
     if (socialEdit === 'new') {
-      await dispatch(createRecord({ moduleId: 'social', data: {
-        social_media: socialDraft.social_media,
-        value: socialDraft.value,
-      }}));
+      await dispatch(
+        createRecord({
+          moduleId: 'social',
+          data: {
+            social_media: socialDraft.social_media,
+            value: socialDraft.value,
+          },
+        })
+      );
     } else {
-      await dispatch(updateRecord({ moduleId: 'social', id: socialEdit as number, data: {
-        social_media: socialDraft.social_media,
-        value: socialDraft.value,
-      }}));
+      await dispatch(
+        updateRecord({
+          moduleId: 'social',
+          id: socialEdit as number,
+          data: {
+            social_media: socialDraft.social_media,
+            value: socialDraft.value,
+          },
+        })
+      );
     }
     setSocialEdit(null);
-    dispatch(fetchRecords('social'));
+    dispatch(fetchRecords({ moduleId: 'social' }));
   };
 
   return (
@@ -325,7 +342,10 @@ const CompanyInfoTab = ({
               onChange={set('domains')}
               placeholder="Mechatronics, 3D CAD Modeling, PCB Design, Embedded Systems"
             />
-            <p className="text-[10px] mt-1" style={{ color: 'var(--text-muted)' }}>
+            <p
+              className="text-[10px] mt-1"
+              style={{ color: 'var(--text-muted)' }}
+            >
               Comma-separated tags shown on the About page.
             </p>
           </div>
@@ -572,8 +592,10 @@ const CompanyInfoTab = ({
                   />
                   <IconBtn
                     onClick={async () => {
-                      await dispatch(deleteRecord({ moduleId: 'contact', id: row.id! }));
-                      dispatch(fetchRecords('contact'));
+                      await dispatch(
+                        deleteRecord({ moduleId: 'contact', id: row.id! })
+                      );
+                      dispatch(fetchRecords({ moduleId: 'contact' }));
                     }}
                     icon="FaTrash"
                     title="Delete"
@@ -735,8 +757,10 @@ const CompanyInfoTab = ({
                   />
                   <IconBtn
                     onClick={async () => {
-                      await dispatch(deleteRecord({ moduleId: 'social', id: row.id! }));
-                      dispatch(fetchRecords('social'));
+                      await dispatch(
+                        deleteRecord({ moduleId: 'social', id: row.id! })
+                      );
+                      dispatch(fetchRecords({ moduleId: 'social' }));
                     }}
                     icon="FaTrash"
                     title="Delete"
@@ -820,7 +844,7 @@ const HeroSlidesTab = () => {
   const [loading, setLoading] = useState(true);
 
   const refresh = useCallback(() => {
-    dispatch(fetchRecords('hero'));
+    dispatch(fetchRecords({ moduleId: 'hero' }));
   }, [dispatch]);
 
   useEffect(() => {
@@ -840,10 +864,12 @@ const HeroSlidesTab = () => {
     if (editId === 'new') {
       await dispatch(createRecord({ moduleId: 'hero', data: payload }));
     } else {
-      await dispatch(updateRecord({ moduleId: 'hero', id: editId as number, data: payload }));
+      await dispatch(
+        updateRecord({ moduleId: 'hero', id: editId as number, data: payload })
+      );
     }
     setEditId(null);
-    dispatch(fetchRecords('hero'));
+    dispatch(fetchRecords({ moduleId: 'hero' }));
   };
 
   const startEdit = (row: HeroRow) => {
@@ -859,7 +885,9 @@ const HeroSlidesTab = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-32">
-        <p className="text-sm" style={{ color: 'var(--text-muted)' }}>Loading…</p>
+        <p className="text-sm" style={{ color: 'var(--text-muted)' }}>
+          Loading…
+        </p>
       </div>
     );
   }
@@ -934,29 +962,48 @@ const HeroSlidesTab = () => {
                   alt={row.title}
                   className="w-14 h-10 object-cover rounded-lg shrink-0"
                   onError={(e) => {
-                    (e.currentTarget as HTMLImageElement).style.display = 'none';
+                    (e.currentTarget as HTMLImageElement).style.display =
+                      'none';
                   }}
                 />
               )}
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium truncate" style={{ color: 'var(--text-primary)' }}>
+                <p
+                  className="text-sm font-medium truncate"
+                  style={{ color: 'var(--text-primary)' }}
+                >
                   {row.title || '(No title)'}
                 </p>
                 {row.subtitle && (
-                  <p className="text-xs truncate mt-0.5" style={{ color: 'var(--text-muted)' }}>
+                  <p
+                    className="text-xs truncate mt-0.5"
+                    style={{ color: 'var(--text-muted)' }}
+                  >
                     {row.subtitle}
                   </p>
                 )}
               </div>
-              <span className="text-xs px-2 py-0.5 rounded-md shrink-0" style={{ color: 'var(--text-muted)', backgroundColor: 'var(--glass-bg-raised)' }}>
+              <span
+                className="text-xs px-2 py-0.5 rounded-md shrink-0"
+                style={{
+                  color: 'var(--text-muted)',
+                  backgroundColor: 'var(--glass-bg-raised)',
+                }}
+              >
                 #{row.sort_order}
               </span>
               <div className="flex gap-1.5 shrink-0">
-                <IconBtn onClick={() => startEdit(row)} icon="FaEdit" title="Edit" />
+                <IconBtn
+                  onClick={() => startEdit(row)}
+                  icon="FaEdit"
+                  title="Edit"
+                />
                 <IconBtn
                   onClick={async () => {
-                    await dispatch(deleteRecord({ moduleId: 'hero', id: row.id! }));
-                    dispatch(fetchRecords('hero'));
+                    await dispatch(
+                      deleteRecord({ moduleId: 'hero', id: row.id! })
+                    );
+                    dispatch(fetchRecords({ moduleId: 'hero' }));
                   }}
                   icon="FaTrash"
                   title="Delete"
@@ -994,10 +1041,30 @@ const HeroSlideForm = ({
       }}
     >
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        <Field label="Title" value={draft.title} onChange={set('title')} placeholder="Main heading" />
-        <Field label="Subtitle" value={draft.subtitle} onChange={set('subtitle')} placeholder="Short supporting text" />
-        <Field label="CTA Label" value={draft.cta_label} onChange={set('cta_label')} placeholder="e.g. Learn More" />
-        <Field label="CTA Link" value={draft.cta_link} onChange={set('cta_link')} placeholder="/services/all" />
+        <Field
+          label="Title"
+          value={draft.title}
+          onChange={set('title')}
+          placeholder="Main heading"
+        />
+        <Field
+          label="Subtitle"
+          value={draft.subtitle}
+          onChange={set('subtitle')}
+          placeholder="Short supporting text"
+        />
+        <Field
+          label="CTA Label"
+          value={draft.cta_label}
+          onChange={set('cta_label')}
+          placeholder="e.g. Learn More"
+        />
+        <Field
+          label="CTA Link"
+          value={draft.cta_link}
+          onChange={set('cta_link')}
+          placeholder="/services/all"
+        />
         <Field
           label="Sort Order"
           value={String(draft.sort_order)}
@@ -1007,7 +1074,10 @@ const HeroSlideForm = ({
         />
       </div>
       <div className="flex flex-col gap-1.5">
-        <label className="text-xs font-medium" style={{ color: 'var(--text-muted)' }}>
+        <label
+          className="text-xs font-medium"
+          style={{ color: 'var(--text-muted)' }}
+        >
           Slide Image
         </label>
         <ImageField
@@ -1053,7 +1123,7 @@ const AboutMediaTab = () => {
   const [loading, setLoading] = useState(true);
 
   const refresh = useCallback(() => {
-    dispatch(fetchRecords('about_media'));
+    dispatch(fetchRecords({ moduleId: 'about_media' }));
   }, [dispatch]);
 
   useEffect(() => {
@@ -1071,10 +1141,16 @@ const AboutMediaTab = () => {
     if (editId === 'new') {
       await dispatch(createRecord({ moduleId: 'about_media', data: payload }));
     } else {
-      await dispatch(updateRecord({ moduleId: 'about_media', id: editId as number, data: payload }));
+      await dispatch(
+        updateRecord({
+          moduleId: 'about_media',
+          id: editId as number,
+          data: payload,
+        })
+      );
     }
     setEditId(null);
-    dispatch(fetchRecords('about_media'));
+    dispatch(fetchRecords({ moduleId: 'about_media' }));
   };
 
   const startEdit = (row: MediaRow) => {
@@ -1090,7 +1166,9 @@ const AboutMediaTab = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-32">
-        <p className="text-sm" style={{ color: 'var(--text-muted)' }}>Loading…</p>
+        <p className="text-sm" style={{ color: 'var(--text-muted)' }}>
+          Loading…
+        </p>
       </div>
     );
   }
@@ -1166,35 +1244,58 @@ const AboutMediaTab = () => {
                 <ReactIcon
                   name={row.type === 'video' ? 'FaYoutube' : 'FaImage'}
                   size={16}
-                  style={{ color: row.type === 'video' ? '#ef4444' : 'var(--accent)' }}
+                  style={{
+                    color: row.type === 'video' ? '#ef4444' : 'var(--accent)',
+                  }}
                 />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium truncate" style={{ color: 'var(--text-primary)' }}>
+                <p
+                  className="text-sm font-medium truncate"
+                  style={{ color: 'var(--text-primary)' }}
+                >
                   {row.title || '(No title)'}
                 </p>
-                <p className="text-xs truncate mt-0.5" style={{ color: 'var(--text-muted)' }}>
+                <p
+                  className="text-xs truncate mt-0.5"
+                  style={{ color: 'var(--text-muted)' }}
+                >
                   {row.url}
                 </p>
               </div>
               <span
                 className="text-xs px-2 py-0.5 rounded-md shrink-0 font-medium"
                 style={{
-                  backgroundColor: row.type === 'video' ? 'rgba(239,68,68,0.1)' : 'var(--accent-soft)',
+                  backgroundColor:
+                    row.type === 'video'
+                      ? 'rgba(239,68,68,0.1)'
+                      : 'var(--accent-soft)',
                   color: row.type === 'video' ? '#ef4444' : 'var(--accent)',
                 }}
               >
                 {row.type}
               </span>
-              <span className="text-xs px-2 py-0.5 rounded-md shrink-0" style={{ color: 'var(--text-muted)', backgroundColor: 'var(--glass-bg-raised)' }}>
+              <span
+                className="text-xs px-2 py-0.5 rounded-md shrink-0"
+                style={{
+                  color: 'var(--text-muted)',
+                  backgroundColor: 'var(--glass-bg-raised)',
+                }}
+              >
                 #{row.sort_order}
               </span>
               <div className="flex gap-1.5 shrink-0">
-                <IconBtn onClick={() => startEdit(row)} icon="FaEdit" title="Edit" />
+                <IconBtn
+                  onClick={() => startEdit(row)}
+                  icon="FaEdit"
+                  title="Edit"
+                />
                 <IconBtn
                   onClick={async () => {
-                    await dispatch(deleteRecord({ moduleId: 'about_media', id: row.id! }));
-                    dispatch(fetchRecords('about_media'));
+                    await dispatch(
+                      deleteRecord({ moduleId: 'about_media', id: row.id! })
+                    );
+                    dispatch(fetchRecords({ moduleId: 'about_media' }));
                   }}
                   icon="FaTrash"
                   title="Delete"
@@ -1249,14 +1350,22 @@ const MediaItemForm = ({
                   }
             }
           >
-            <ReactIcon name={t === 'video' ? 'FaYoutube' : 'FaImage'} size={11} />
+            <ReactIcon
+              name={t === 'video' ? 'FaYoutube' : 'FaImage'}
+              size={11}
+            />
             {t}
           </button>
         ))}
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        <Field label="Title" value={draft.title} onChange={set('title')} placeholder="Caption shown below media" />
+        <Field
+          label="Title"
+          value={draft.title}
+          onChange={set('title')}
+          placeholder="Caption shown below media"
+        />
         <Field
           label="Sort Order"
           value={String(draft.sort_order)}
@@ -1275,7 +1384,10 @@ const MediaItemForm = ({
         />
       ) : (
         <div className="flex flex-col gap-1.5">
-          <label className="text-xs font-medium" style={{ color: 'var(--text-muted)' }}>
+          <label
+            className="text-xs font-medium"
+            style={{ color: 'var(--text-muted)' }}
+          >
             Image
           </label>
           <ImageField
@@ -1337,13 +1449,15 @@ interface PageContentDraft {
 const PAGE_CONTENT_DEFAULTS: PageContentDraft = {
   'services.label': '◈ What We Do',
   'services.title': 'What We Offer',
-  'services.description': 'Innovative solutions tailored to your digital transformation needs.',
+  'services.description':
+    'Innovative solutions tailored to your digital transformation needs.',
   'projects.label': '◈ Featured Work',
   'projects.title': 'Our Latest Projects',
   'projects.description': 'Selected engineering projects and innovations.',
   'posts.label': '◈ Insights',
   'posts.title': 'Posts & Articles',
-  'posts.description': 'Engineering articles, project deep-dives, and technical insights from the team.',
+  'posts.description':
+    'Engineering articles, project deep-dives, and technical insights from the team.',
   'posts.page_size': '20',
   'about.hero_label': 'Who We Are',
   'about.vision_label': 'What Drives Us',
@@ -1379,7 +1493,9 @@ const PageContentTab = () => {
     if (status === 'succeeded') {
       setDraft((prev) => {
         const next = { ...prev };
-        (Object.keys(PAGE_CONTENT_DEFAULTS) as (keyof PageContentDraft)[]).forEach((k) => {
+        (
+          Object.keys(PAGE_CONTENT_DEFAULTS) as (keyof PageContentDraft)[]
+        ).forEach((k) => {
           if (settings[k] !== undefined) next[k] = settings[k];
         });
         return next;
@@ -1401,7 +1517,9 @@ const PageContentTab = () => {
   if (status === 'loading' || status === 'idle') {
     return (
       <div className="flex items-center justify-center h-32">
-        <p className="text-sm" style={{ color: 'var(--text-muted)' }}>Loading…</p>
+        <p className="text-sm" style={{ color: 'var(--text-muted)' }}>
+          Loading…
+        </p>
       </div>
     );
   }
@@ -1420,7 +1538,9 @@ const PageContentTab = () => {
           disabled={saving}
           className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all"
           style={{
-            backgroundColor: saved ? 'var(--success, #22c55e)' : 'var(--accent)',
+            backgroundColor: saved
+              ? 'var(--success, #22c55e)'
+              : 'var(--accent)',
             color: '#fff',
             opacity: saving ? 0.6 : 1,
           }}
@@ -1433,111 +1553,289 @@ const PageContentTab = () => {
       {/* Services section */}
       <div
         className="rounded-xl p-4 space-y-3"
-        style={{ backgroundColor: 'var(--glass-bg)', border: '1px solid var(--glass-border)' }}
+        style={{
+          backgroundColor: 'var(--glass-bg)',
+          border: '1px solid var(--glass-border)',
+        }}
       >
-        <p className="text-xs font-semibold uppercase tracking-widest" style={{ color: 'var(--text-muted)' }}>
+        <p
+          className="text-xs font-semibold uppercase tracking-widest"
+          style={{ color: 'var(--text-muted)' }}
+        >
           Services Section
         </p>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <Field label="Accent Label" value={draft['services.label']} onChange={set('services.label')} placeholder="◈ What We Do" />
-          <Field label="Heading" value={draft['services.title']} onChange={set('services.title')} placeholder="What We Offer" />
+          <Field
+            label="Accent Label"
+            value={draft['services.label']}
+            onChange={set('services.label')}
+            placeholder="◈ What We Do"
+          />
+          <Field
+            label="Heading"
+            value={draft['services.title']}
+            onChange={set('services.title')}
+            placeholder="What We Offer"
+          />
         </div>
-        <Field label="Description" value={draft['services.description']} onChange={set('services.description')} placeholder="Short tagline shown below the heading" multiline />
+        <Field
+          label="Description"
+          value={draft['services.description']}
+          onChange={set('services.description')}
+          placeholder="Short tagline shown below the heading"
+          multiline
+        />
       </div>
 
       {/* Projects section */}
       <div
         className="rounded-xl p-4 space-y-3"
-        style={{ backgroundColor: 'var(--glass-bg)', border: '1px solid var(--glass-border)' }}
+        style={{
+          backgroundColor: 'var(--glass-bg)',
+          border: '1px solid var(--glass-border)',
+        }}
       >
-        <p className="text-xs font-semibold uppercase tracking-widest" style={{ color: 'var(--text-muted)' }}>
+        <p
+          className="text-xs font-semibold uppercase tracking-widest"
+          style={{ color: 'var(--text-muted)' }}
+        >
           Latest Projects Section
         </p>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <Field label="Accent Label" value={draft['projects.label']} onChange={set('projects.label')} placeholder="◈ Featured Work" />
-          <Field label="Heading" value={draft['projects.title']} onChange={set('projects.title')} placeholder="Our Latest Projects" />
+          <Field
+            label="Accent Label"
+            value={draft['projects.label']}
+            onChange={set('projects.label')}
+            placeholder="◈ Featured Work"
+          />
+          <Field
+            label="Heading"
+            value={draft['projects.title']}
+            onChange={set('projects.title')}
+            placeholder="Our Latest Projects"
+          />
         </div>
-        <Field label="Description" value={draft['projects.description']} onChange={set('projects.description')} placeholder="Short tagline shown below the heading" multiline />
+        <Field
+          label="Description"
+          value={draft['projects.description']}
+          onChange={set('projects.description')}
+          placeholder="Short tagline shown below the heading"
+          multiline
+        />
       </div>
 
       {/* Posts page */}
       <div
         className="rounded-xl p-4 space-y-3"
-        style={{ backgroundColor: 'var(--glass-bg)', border: '1px solid var(--glass-border)' }}
+        style={{
+          backgroundColor: 'var(--glass-bg)',
+          border: '1px solid var(--glass-border)',
+        }}
       >
-        <p className="text-xs font-semibold uppercase tracking-widest" style={{ color: 'var(--text-muted)' }}>
+        <p
+          className="text-xs font-semibold uppercase tracking-widest"
+          style={{ color: 'var(--text-muted)' }}
+        >
           Posts Page
         </p>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <Field label="Accent Label" value={draft['posts.label']} onChange={set('posts.label')} placeholder="◈ Tensor Labz // Posts" />
-          <Field label="Page Title" value={draft['posts.title']} onChange={set('posts.title')} placeholder="Insights & Updates" />
+          <Field
+            label="Accent Label"
+            value={draft['posts.label']}
+            onChange={set('posts.label')}
+            placeholder="◈ Tensor Labz // Posts"
+          />
+          <Field
+            label="Page Title"
+            value={draft['posts.title']}
+            onChange={set('posts.title')}
+            placeholder="Insights & Updates"
+          />
         </div>
-        <Field label="Description" value={draft['posts.description']} onChange={set('posts.description')} placeholder="Shown below the page title" multiline />
+        <Field
+          label="Description"
+          value={draft['posts.description']}
+          onChange={set('posts.description')}
+          placeholder="Shown below the page title"
+          multiline
+        />
       </div>
 
       {/* Posts pagination */}
       <div
         className="rounded-xl p-4 space-y-3"
-        style={{ backgroundColor: 'var(--glass-bg)', border: '1px solid var(--glass-border)' }}
+        style={{
+          backgroundColor: 'var(--glass-bg)',
+          border: '1px solid var(--glass-border)',
+        }}
       >
-        <p className="text-xs font-semibold uppercase tracking-widest" style={{ color: 'var(--text-muted)' }}>
+        <p
+          className="text-xs font-semibold uppercase tracking-widest"
+          style={{ color: 'var(--text-muted)' }}
+        >
           Posts Pagination
         </p>
         <div className="max-w-xs">
-          <Field label="Posts per page" value={draft['posts.page_size']} onChange={set('posts.page_size')} type="number" placeholder="20" />
+          <Field
+            label="Posts per page"
+            value={draft['posts.page_size']}
+            onChange={set('posts.page_size')}
+            type="number"
+            placeholder="20"
+          />
         </div>
-        <p className="text-xs" style={{ color: 'var(--text-muted)' }}>Number of posts shown per page.</p>
+        <p className="text-xs" style={{ color: 'var(--text-muted)' }}>
+          Number of posts shown per page.
+        </p>
       </div>
 
       {/* About page */}
       <div
         className="rounded-xl p-4 space-y-3"
-        style={{ backgroundColor: 'var(--glass-bg)', border: '1px solid var(--glass-border)' }}
+        style={{
+          backgroundColor: 'var(--glass-bg)',
+          border: '1px solid var(--glass-border)',
+        }}
       >
-        <p className="text-xs font-semibold uppercase tracking-widest" style={{ color: 'var(--text-muted)' }}>
+        <p
+          className="text-xs font-semibold uppercase tracking-widest"
+          style={{ color: 'var(--text-muted)' }}
+        >
           About Page
         </p>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <Field label="Hero Label" value={draft['about.hero_label']} onChange={set('about.hero_label')} placeholder="Who We Are" />
-          <Field label="Vision Section Label" value={draft['about.vision_label']} onChange={set('about.vision_label')} placeholder="What Drives Us" />
-          <Field label="Vision Section Title" value={draft['about.vision_title']} onChange={set('about.vision_title')} placeholder="Vision & Mission" />
-          <Field label="Vision Card Heading" value={draft['about.our_vision']} onChange={set('about.our_vision')} placeholder="Our Vision" />
-          <Field label="Mission Card Heading" value={draft['about.our_mission']} onChange={set('about.our_mission')} placeholder="Our Mission" />
-          <Field label="Story Section Label" value={draft['about.story_label']} onChange={set('about.story_label')} placeholder="Our Story" />
-          <Field label="Story Section Title" value={draft['about.story_title']} onChange={set('about.story_title')} placeholder="Building a Better Tomorrow" />
-          <Field label="Media Section Label" value={draft['about.media_label']} onChange={set('about.media_label')} placeholder="In Focus" />
-          <Field label="Media Section Title" value={draft['about.media_title']} onChange={set('about.media_title')} placeholder="Our Work & Story" />
-          <Field label="Facts Section Label" value={draft['about.facts_label']} onChange={set('about.facts_label')} placeholder="Key Facts" />
-          <Field label="Facts Section Title" value={draft['about.facts_title']} onChange={set('about.facts_title')} placeholder="By the Numbers" />
+          <Field
+            label="Hero Label"
+            value={draft['about.hero_label']}
+            onChange={set('about.hero_label')}
+            placeholder="Who We Are"
+          />
+          <Field
+            label="Vision Section Label"
+            value={draft['about.vision_label']}
+            onChange={set('about.vision_label')}
+            placeholder="What Drives Us"
+          />
+          <Field
+            label="Vision Section Title"
+            value={draft['about.vision_title']}
+            onChange={set('about.vision_title')}
+            placeholder="Vision & Mission"
+          />
+          <Field
+            label="Vision Card Heading"
+            value={draft['about.our_vision']}
+            onChange={set('about.our_vision')}
+            placeholder="Our Vision"
+          />
+          <Field
+            label="Mission Card Heading"
+            value={draft['about.our_mission']}
+            onChange={set('about.our_mission')}
+            placeholder="Our Mission"
+          />
+          <Field
+            label="Story Section Label"
+            value={draft['about.story_label']}
+            onChange={set('about.story_label')}
+            placeholder="Our Story"
+          />
+          <Field
+            label="Story Section Title"
+            value={draft['about.story_title']}
+            onChange={set('about.story_title')}
+            placeholder="Building a Better Tomorrow"
+          />
+          <Field
+            label="Media Section Label"
+            value={draft['about.media_label']}
+            onChange={set('about.media_label')}
+            placeholder="In Focus"
+          />
+          <Field
+            label="Media Section Title"
+            value={draft['about.media_title']}
+            onChange={set('about.media_title')}
+            placeholder="Our Work & Story"
+          />
+          <Field
+            label="Facts Section Label"
+            value={draft['about.facts_label']}
+            onChange={set('about.facts_label')}
+            placeholder="Key Facts"
+          />
+          <Field
+            label="Facts Section Title"
+            value={draft['about.facts_title']}
+            onChange={set('about.facts_title')}
+            placeholder="By the Numbers"
+          />
         </div>
       </div>
 
       {/* Contact & Services pages */}
       <div
         className="rounded-xl p-4 space-y-3"
-        style={{ backgroundColor: 'var(--glass-bg)', border: '1px solid var(--glass-border)' }}
+        style={{
+          backgroundColor: 'var(--glass-bg)',
+          border: '1px solid var(--glass-border)',
+        }}
       >
-        <p className="text-xs font-semibold uppercase tracking-widest" style={{ color: 'var(--text-muted)' }}>
+        <p
+          className="text-xs font-semibold uppercase tracking-widest"
+          style={{ color: 'var(--text-muted)' }}
+        >
           Contact & Services Pages
         </p>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <Field label="Contact Hero Label" value={draft['contact.hero_label']} onChange={set('contact.hero_label')} placeholder="Get In Touch" />
-          <Field label="Services Hero Label" value={draft['services.hero_label']} onChange={set('services.hero_label')} placeholder="Insights & Services" />
+          <Field
+            label="Contact Hero Label"
+            value={draft['contact.hero_label']}
+            onChange={set('contact.hero_label')}
+            placeholder="Get In Touch"
+          />
+          <Field
+            label="Services Hero Label"
+            value={draft['services.hero_label']}
+            onChange={set('services.hero_label')}
+            placeholder="Insights & Services"
+          />
         </div>
       </div>
 
       {/* Hero stat labels */}
       <div
         className="rounded-xl p-4 space-y-3"
-        style={{ backgroundColor: 'var(--glass-bg)', border: '1px solid var(--glass-border)' }}
+        style={{
+          backgroundColor: 'var(--glass-bg)',
+          border: '1px solid var(--glass-border)',
+        }}
       >
-        <p className="text-xs font-semibold uppercase tracking-widest" style={{ color: 'var(--text-muted)' }}>
+        <p
+          className="text-xs font-semibold uppercase tracking-widest"
+          style={{ color: 'var(--text-muted)' }}
+        >
           Home Hero — Stat Labels
         </p>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-          <Field label="Projects Label" value={draft['hero.stat_projects']} onChange={set('hero.stat_projects')} placeholder="Projects" />
-          <Field label="Services Label" value={draft['hero.stat_services']} onChange={set('hero.stat_services')} placeholder="Services" />
-          <Field label="Years Label" value={draft['hero.stat_years']} onChange={set('hero.stat_years')} placeholder="Years" />
+          <Field
+            label="Projects Label"
+            value={draft['hero.stat_projects']}
+            onChange={set('hero.stat_projects')}
+            placeholder="Projects"
+          />
+          <Field
+            label="Services Label"
+            value={draft['hero.stat_services']}
+            onChange={set('hero.stat_services')}
+            placeholder="Services"
+          />
+          <Field
+            label="Years Label"
+            value={draft['hero.stat_years']}
+            onChange={set('hero.stat_years')}
+            placeholder="Years"
+          />
         </div>
       </div>
     </div>
@@ -1557,11 +1855,14 @@ const AdminSiteControl = memo(() => {
   const [saved, setSaved] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  const selectCompanyRecords = useMemo(() => selectModuleRecords('company_info'), []);
+  const selectCompanyRecords = useMemo(
+    () => selectModuleRecords('company_info'),
+    []
+  );
   const companyRecords = useAppSelector(selectCompanyRecords);
 
   useEffect(() => {
-    dispatch(fetchRecords('company_info'));
+    dispatch(fetchRecords({ moduleId: 'company_info' }));
   }, [dispatch]);
 
   useEffect(() => {
@@ -1585,7 +1886,13 @@ const AdminSiteControl = memo(() => {
 
   const handleSave = async () => {
     setSaving(true);
-    await dispatch(updateRecord({ moduleId: 'company_info', id: 1, data: { id: 1, ...company } }));
+    await dispatch(
+      updateRecord({
+        moduleId: 'company_info',
+        id: 1,
+        data: { id: 1, ...company },
+      })
+    );
     setSaving(false);
     setSaved(true);
     setTimeout(() => setSaved(false), 2500);
@@ -1621,7 +1928,11 @@ const AdminSiteControl = memo(() => {
               opacity: saving || loading ? 0.6 : 1,
             }}
           >
-            {saved ? <ReactIcon name="FaCheck" size={11} /> : <ReactIcon name="FaSave" size={11} />}
+            {saved ? (
+              <ReactIcon name="FaCheck" size={11} />
+            ) : (
+              <ReactIcon name="FaSave" size={11} />
+            )}
             {saved ? 'Saved!' : saving ? 'Saving…' : 'Save'}
           </button>
         )}

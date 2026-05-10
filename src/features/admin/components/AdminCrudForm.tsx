@@ -1,13 +1,22 @@
-import { memo, useState, useRef, useCallback, useEffect } from 'react';
+import { memo, useState, useRef, useCallback, useEffect, useMemo } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import ReactIcon from '../../../shared/components/ui/ReactIcon';
 import ReactQuill from 'react-quill-new';
 import 'react-quill-new/dist/quill.snow.css';
-import { MODULES, type FieldConfig } from '../config/modules';
+import {
+  MODULES,
+  getModuleFields,
+  type FieldConfig,
+  type SubFieldConfig,
+  type SubRecordConfig,
+} from '../config/modules';
+import CoverTypeSelect from '../../../shared/components/ui/CoverTypeSelect';
+import SocialPlatformSelect from '../../../shared/components/ui/SocialPlatformSelect';
 import Breadcrumbs from '../../../shared/components/ui/Breadcrumbs';
 import { supabase } from '../../../lib/supabase';
 import { uploadImage, moduleFolder } from '../../../lib/imageUpload';
+import { uploadAvatar } from '../../../lib/supabaseStorage';
 import { detectCoverType, toYouTubeEmbed } from '../../../services/postService';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import {
@@ -20,12 +29,24 @@ import {
   selectCurrentRecordStatus,
   selectCurrentRecordError,
 } from '../../../store/adminSlice';
+import {
+  updateCurrentUserProfile,
+  sendPasswordReset,
+  selectCurrentUid,
+} from '../../../store/authSlice';
 
 /* ── helpers ── */
 function defaultForType(type: FieldConfig['type']): unknown {
-  if (type === 'images' || type === 'multiinput') return [];
+  if (
+    type === 'images' ||
+    type === 'multiinput' ||
+    type === 'structuredlist' ||
+    type === 'subrecords'
+  )
+    return [];
   if (type === 'toggle' || type === 'checkbox') return false;
   if (type === 'number') return 0;
+  if (type === 'resetpassword') return null;
   return '';
 }
 
@@ -107,10 +128,14 @@ export const ImageField = ({
   value,
   onChange,
   folder,
+  storageBackend = 's3',
+  userId,
 }: {
   value: unknown;
   onChange: (v: unknown) => void;
   folder: string;
+  storageBackend?: 's3' | 'supabase';
+  userId?: string | null;
 }) => {
   const [mode, setMode] = useState<'upload' | 'url'>('upload');
   const [dragging, setDragging] = useState(false);
@@ -145,16 +170,24 @@ export const ImageField = ({
       setFileName(file.name);
       setPreview(localUrl);
       try {
-        const { publicUrl } = await uploadImage(
-          file,
-          folder,
-          originalValue,
-          (pct) => setProgress(pct)
-        );
+        let publicUrl: string;
+        if (storageBackend === 'supabase') {
+          const uid =
+            userId ??
+            (await supabase.auth.getUser()).data.user?.id ??
+            'unknown';
+          publicUrl = await uploadAvatar(file, uid);
+        } else {
+          ({ publicUrl } = await uploadImage(
+            file,
+            folder,
+            originalValue,
+            (pct) => setProgress(pct)
+          ));
+        }
         setPreview(publicUrl);
         onChange(publicUrl);
       } catch (err) {
-        // Revert preview to the original saved value on failure
         setPreview(originalValueRef.current);
         setUploadError(err instanceof Error ? err.message : 'Upload failed');
       } finally {
@@ -162,7 +195,7 @@ export const ImageField = ({
         setProgress(0);
       }
     },
-    [onChange, folder, value]
+    [onChange, folder, value, storageBackend, userId]
   );
 
   /* Render the appropriate preview element based on detected media type */
@@ -192,7 +225,11 @@ export const ImageField = ({
     }
     if (type === 'video') {
       return (
-        <video src={url} controls className="w-full h-full object-contain bg-black" />
+        <video
+          src={url}
+          controls
+          className="w-full h-full object-contain bg-black"
+        />
       );
     }
     /* image / drive_image */
@@ -201,33 +238,42 @@ export const ImageField = ({
         src={url}
         alt="preview"
         className="w-full h-full object-cover"
-        onError={() => { if (!uploading) setPreview(''); }}
+        onError={() => {
+          if (!uploading) setPreview('');
+        }}
       />
     );
   };
 
   return (
     <div className="space-y-3">
-      {/* ── Input mode dropdown ── */}
-      <div className="flex items-center gap-2">
-        <label className="text-xs font-medium shrink-0" style={{ color: 'var(--text-muted)' }}>
-          Input via
-        </label>
-        <select
-          value={mode}
-          onChange={(e) => setMode(e.target.value as 'upload' | 'url')}
-          className="flex-1 px-3 py-1.5 rounded-lg text-xs font-medium appearance-none cursor-pointer"
-          style={{
-            backgroundColor: 'var(--bg-surface)',
-            border: '1px solid var(--input-border)',
-            color: 'var(--text-primary)',
-            outline: 'none',
-          }}
-        >
-          <option value="upload">S3 Upload (file)</option>
-          <option value="url">Direct URL (YouTube / video / Drive / image)</option>
-        </select>
-      </div>
+      {/* ── Input mode dropdown — hidden for Supabase Storage fields ── */}
+      {storageBackend !== 'supabase' && (
+        <div className="flex items-center gap-2">
+          <label
+            className="text-xs font-medium shrink-0"
+            style={{ color: 'var(--text-muted)' }}
+          >
+            Input via
+          </label>
+          <select
+            value={mode}
+            onChange={(e) => setMode(e.target.value as 'upload' | 'url')}
+            className="flex-1 px-3 py-1.5 rounded-lg text-xs font-medium appearance-none cursor-pointer"
+            style={{
+              backgroundColor: 'var(--bg-surface)',
+              border: '1px solid var(--input-border)',
+              color: 'var(--text-primary)',
+              outline: 'none',
+            }}
+          >
+            <option value="upload">S3 Upload (file)</option>
+            <option value="url">
+              Direct URL (YouTube / video / Drive / image)
+            </option>
+          </select>
+        </div>
+      )}
 
       {/* ── Preview card ── */}
       {preview && (
@@ -252,7 +298,11 @@ export const ImageField = ({
               </p>
               <div
                 className="rounded-full overflow-hidden"
-                style={{ width: '60%', height: 6, backgroundColor: 'rgba(255,255,255,0.25)' }}
+                style={{
+                  width: '60%',
+                  height: 6,
+                  backgroundColor: 'rgba(255,255,255,0.25)',
+                }}
               >
                 <div
                   style={{
@@ -285,7 +335,10 @@ export const ImageField = ({
               {fileName && (
                 <div
                   className="absolute bottom-0 left-0 right-0 px-3 py-1.5 text-xs truncate"
-                  style={{ backgroundColor: 'rgba(0,0,0,0.45)', color: 'rgba(255,255,255,0.85)' }}
+                  style={{
+                    backgroundColor: 'rgba(0,0,0,0.45)',
+                    color: 'rgba(255,255,255,0.85)',
+                  }}
                 >
                   {fileName}
                 </div>
@@ -389,11 +442,15 @@ export const ImageField = ({
         </>
       )}
 
-      {/* URL mode */}
-      {mode === 'url' && (
+      {/* URL mode — S3/Lambda fields only */}
+      {storageBackend !== 'supabase' && mode === 'url' && (
         <div className="space-y-2">
           <div className="flex items-center gap-2">
-            <ReactIcon name="FaLink" size={12} style={{ color: 'var(--text-muted)', flexShrink: 0 }} />
+            <ReactIcon
+              name="FaLink"
+              size={12}
+              style={{ color: 'var(--text-muted)', flexShrink: 0 }}
+            />
             <input
               type="url"
               value={preview}
@@ -407,7 +464,8 @@ export const ImageField = ({
             />
           </div>
           <p className="text-xs" style={{ color: 'var(--text-muted)' }}>
-            Accepts image URLs, YouTube links, direct video URLs, or Google Drive links.
+            Accepts image URLs, YouTube links, direct video URLs, or Google
+            Drive links.
           </p>
         </div>
       )}
@@ -832,6 +890,283 @@ const MultiInputField = ({
   );
 };
 
+/* ── Structured list field — array of objects ── */
+const StructuredListField = ({
+  value,
+  onChange,
+  subFields,
+}: {
+  value: unknown;
+  onChange: (v: Record<string, string>[]) => void;
+  subFields: SubFieldConfig[];
+}) => {
+  const rows: Record<string, string>[] = Array.isArray(value)
+    ? (value as Record<string, string>[])
+    : [];
+
+  const update = (idx: number, key: string, val: string) =>
+    onChange(rows.map((row, i) => (i === idx ? { ...row, [key]: val } : row)));
+
+  const remove = (idx: number) => onChange(rows.filter((_, i) => i !== idx));
+
+  const add = () => {
+    const blank: Record<string, string> = {};
+    subFields.forEach((f) => {
+      blank[f.key] =
+        f.type === 'radio' && f.options?.length ? f.options[0] : '';
+    });
+    onChange([...rows, blank]);
+  };
+
+  const inputStyle = {
+    backgroundColor: 'var(--input-bg)',
+    border: '1px solid var(--input-border)',
+    color: 'var(--text-primary)',
+    outline: 'none',
+  };
+
+  return (
+    <div className="space-y-3">
+      {rows.map((row, idx) => (
+        <div
+          key={idx}
+          className="flex flex-wrap gap-2 items-start p-3 rounded-lg"
+          style={{
+            backgroundColor: 'var(--glass-bg-raised)',
+            border: '1px solid var(--glass-border)',
+          }}
+        >
+          {subFields.map((sf) => (
+            <div key={sf.key} className="flex-1 min-w-[140px]">
+              <label
+                className="block text-[10px] font-medium mb-1"
+                style={{ color: 'var(--text-muted)' }}
+              >
+                {sf.label}
+              </label>
+              {sf.type === 'radio' && sf.options ? (
+                <div className="flex flex-wrap gap-2">
+                  {sf.options.map((opt) => (
+                    <label
+                      key={opt}
+                      className="flex items-center gap-1 text-xs cursor-pointer"
+                      style={{ color: 'var(--text-primary)' }}
+                    >
+                      <input
+                        type="radio"
+                        name={`sl-${idx}-${sf.key}`}
+                        value={opt}
+                        checked={row[sf.key] === opt}
+                        onChange={() => update(idx, sf.key, opt)}
+                        className="accent-[var(--accent)]"
+                      />
+                      {opt}
+                    </label>
+                  ))}
+                </div>
+              ) : (
+                <input
+                  type={sf.type === 'url' ? 'url' : 'text'}
+                  value={row[sf.key] ?? ''}
+                  onChange={(e) => update(idx, sf.key, e.target.value)}
+                  placeholder={sf.placeholder ?? sf.label}
+                  className="w-full px-3 py-2 rounded-lg text-sm"
+                  style={inputStyle}
+                />
+              )}
+            </div>
+          ))}
+          <button
+            type="button"
+            onClick={() => remove(idx)}
+            className="mt-5 w-7 h-7 flex items-center justify-center rounded-lg shrink-0"
+            style={{
+              backgroundColor: 'rgba(239,68,68,0.1)',
+              color: '#ef4444',
+              border: '1px solid rgba(239,68,68,0.2)',
+            }}
+          >
+            <ReactIcon name="FaTimes" size={10} />
+          </button>
+        </div>
+      ))}
+      <button
+        type="button"
+        onClick={add}
+        className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium"
+        style={{
+          backgroundColor: 'var(--glass-bg-raised)',
+          color: 'var(--text-muted)',
+          border: '1px solid var(--glass-border)',
+        }}
+      >
+        <ReactIcon name="FaPlus" size={9} /> Add row
+      </button>
+    </div>
+  );
+};
+
+/* ── Sub-records field — inline editor for a FK-related table ── */
+type SubRow = Record<string, string | number | boolean | undefined> & {
+  id?: number;
+  _deleted?: boolean;
+};
+
+const SubRecordsField = ({
+  parentId,
+  config,
+  value,
+  onChange,
+}: {
+  parentId: number | string | null;
+  config: SubRecordConfig;
+  value: SubRow[];
+  onChange: (rows: SubRow[]) => void;
+}) => {
+  const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
+    if (!parentId || loaded) return;
+    supabase
+      .from(config.table)
+      .select('*')
+      .eq(config.foreignKey, parentId)
+      .then(({ data }) => {
+        if (data) onChange(data as SubRow[]);
+        setLoaded(true);
+      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [parentId]);
+
+  const update = (idx: number, key: string, val: string) =>
+    onChange(value.map((row, i) => (i === idx ? { ...row, [key]: val } : row)));
+
+  const remove = (idx: number) =>
+    onChange(
+      value.map((row, i) => (i === idx ? { ...row, _deleted: true } : row))
+    );
+
+  const add = () => {
+    const blank: SubRow = {};
+    config.subFields.forEach((f) => {
+      if (f.type === 'radio' && f.options?.length) blank[f.key] = f.options[0];
+      else if (f.type === 'covertype') blank[f.key] = 'image';
+      else if (f.type === 'socialplatform') blank[f.key] = 'linkedin';
+      else blank[f.key] = '';
+    });
+    onChange([...value, blank]);
+  };
+
+  const visible = value.filter((r) => !r._deleted);
+
+  const inputStyle = {
+    backgroundColor: 'var(--input-bg)',
+    border: '1px solid var(--input-border)',
+    color: 'var(--text-primary)',
+    outline: 'none',
+  };
+
+  return (
+    <div className="space-y-3">
+      {visible.map((row, visIdx) => {
+        const realIdx = value.indexOf(row);
+        return (
+          <div
+            key={row.id ?? visIdx}
+            className="flex flex-wrap gap-2 items-start p-3 rounded-lg"
+            style={{
+              backgroundColor: 'var(--glass-bg-raised)',
+              border: '1px solid var(--glass-border)',
+            }}
+          >
+            {config.subFields.map((sf) => (
+              <div key={sf.key} className="flex-1 min-w-[140px]">
+                <label
+                  className="block text-[10px] font-medium mb-1"
+                  style={{ color: 'var(--text-muted)' }}
+                >
+                  {sf.label}
+                </label>
+                {sf.type === 'covertype' ? (
+                  <CoverTypeSelect
+                    value={String(row[sf.key] ?? 'image')}
+                    onChange={(v) => update(realIdx, sf.key, v)}
+                  />
+                ) : sf.type === 'socialplatform' ? (
+                  <SocialPlatformSelect
+                    value={String(row[sf.key] ?? 'linkedin')}
+                    onChange={(v) => update(realIdx, sf.key, v)}
+                  />
+                ) : sf.type === 'radio' && sf.options ? (
+                  <div className="flex flex-wrap gap-2">
+                    {sf.options.map((opt) => (
+                      <label
+                        key={opt}
+                        className="flex items-center gap-1 text-xs cursor-pointer"
+                        style={{ color: 'var(--text-primary)' }}
+                      >
+                        <input
+                          type="radio"
+                          name={`sr-${realIdx}-${sf.key}`}
+                          value={opt}
+                          checked={row[sf.key] === opt}
+                          onChange={() => update(realIdx, sf.key, opt)}
+                          className="accent-[var(--accent)]"
+                        />
+                        {opt}
+                      </label>
+                    ))}
+                  </div>
+                ) : (
+                  <input
+                    type={sf.type === 'url' ? 'url' : 'text'}
+                    value={String(row[sf.key] ?? '')}
+                    onChange={(e) => update(realIdx, sf.key, e.target.value)}
+                    placeholder={sf.placeholder ?? sf.label}
+                    className="w-full px-3 py-2 rounded-lg text-sm"
+                    style={inputStyle}
+                  />
+                )}
+              </div>
+            ))}
+            <button
+              type="button"
+              onClick={() => remove(realIdx)}
+              className="mt-5 w-7 h-7 flex items-center justify-center rounded-lg shrink-0"
+              style={{
+                backgroundColor: 'rgba(239,68,68,0.1)',
+                color: '#ef4444',
+                border: '1px solid rgba(239,68,68,0.2)',
+              }}
+            >
+              <ReactIcon name="FaTimes" size={10} />
+            </button>
+          </div>
+        );
+      })}
+      {!parentId && (
+        <p className="text-xs" style={{ color: 'var(--text-muted)' }}>
+          Save the post first — then you can add related records here.
+        </p>
+      )}
+      {parentId && (
+        <button
+          type="button"
+          onClick={add}
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium"
+          style={{
+            backgroundColor: 'var(--glass-bg-raised)',
+            color: 'var(--text-muted)',
+            border: '1px solid var(--glass-border)',
+          }}
+        >
+          <ReactIcon name="FaPlus" size={9} /> Add row
+        </button>
+      )}
+    </div>
+  );
+};
+
 /* ── Static select (options array) ── */
 const selectStyle = {
   backgroundColor: 'var(--bg-surface)',
@@ -920,14 +1255,6 @@ const RelationSelect = ({
 };
 
 /* ── Combined cover media field (type dropdown + url/upload) ── */
-const COVER_TYPES = [
-  { value: 'image',       label: 'Image',        icon: 'FaImage' },
-  { value: 'video',       label: 'Video (direct)', icon: 'FaVideo' },
-  { value: 'youtube',     label: 'YouTube',       icon: 'FaYoutube' },
-  { value: 'drive_image', label: 'Drive Image',   icon: 'FaGoogleDrive' },
-  { value: 'drive_video', label: 'Drive Video',   icon: 'FaGoogleDrive' },
-] as const;
-
 const CoverMediaField = ({
   urlValue,
   typeValue,
@@ -953,19 +1280,18 @@ const CoverMediaField = ({
     <div className="space-y-3">
       {/* Type dropdown */}
       <div className="flex items-center gap-2">
-        <label className="text-xs font-medium shrink-0" style={{ color: 'var(--text-muted)' }}>
+        <label
+          className="text-xs font-medium shrink-0"
+          style={{ color: 'var(--text-muted)' }}
+        >
           Type
         </label>
-        <select
+        <CoverTypeSelect
           value={currentType}
-          onChange={(e) => onChangeMultiple({ cover_image_type: e.target.value, cover_image: '' })}
-          className="flex-1 px-3 py-1.5 rounded-lg text-sm appearance-none cursor-pointer"
-          style={{ ...inputStyle, backgroundColor: 'var(--bg-surface)' }}
-        >
-          {COVER_TYPES.map((t) => (
-            <option key={t.value} value={t.value}>{t.label}</option>
-          ))}
-        </select>
+          onChange={(v) =>
+            onChangeMultiple({ cover_image_type: v, cover_image: '' })
+          }
+        />
       </div>
 
       {/* S3 uploader for image type */}
@@ -981,16 +1307,25 @@ const CoverMediaField = ({
       {!isUploadType && (
         <div className="space-y-2">
           <div className="flex items-center gap-2">
-            <ReactIcon name="FaLink" size={12} style={{ color: 'var(--text-muted)', flexShrink: 0 }} />
+            <ReactIcon
+              name="FaLink"
+              size={12}
+              style={{ color: 'var(--text-muted)', flexShrink: 0 }}
+            />
             <input
               type="url"
               value={String(urlValue ?? '')}
-              onChange={(e) => onChangeMultiple({ cover_image: e.target.value })}
+              onChange={(e) =>
+                onChangeMultiple({ cover_image: e.target.value })
+              }
               placeholder={
-                currentType === 'youtube'     ? 'https://youtube.com/watch?v=... or youtu.be/...' :
-                currentType === 'drive_video' ? 'https://drive.google.com/file/d/FILE_ID/preview' :
-                currentType === 'drive_image' ? 'https://drive.google.com/uc?id=FILE_ID' :
-                'https://example.com/video.mp4'
+                currentType === 'youtube'
+                  ? 'https://youtube.com/watch?v=... or youtu.be/...'
+                  : currentType === 'drive_video'
+                    ? 'https://drive.google.com/file/d/FILE_ID/preview'
+                    : currentType === 'drive_image'
+                      ? 'https://drive.google.com/uc?id=FILE_ID'
+                      : 'https://example.com/video.mp4'
               }
               className="flex-1 px-3 py-2.5 rounded-lg text-sm"
               style={inputStyle}
@@ -1000,18 +1335,52 @@ const CoverMediaField = ({
           {String(urlValue ?? '') && (
             <div
               className="rounded-xl overflow-hidden"
-              style={{ aspectRatio: '16/9', maxHeight: 220, backgroundColor: 'var(--glass-bg-raised)' }}
+              style={{
+                aspectRatio: '16/9',
+                maxHeight: 220,
+                backgroundColor: 'var(--glass-bg-raised)',
+              }}
             >
               {(() => {
                 const url = String(urlValue ?? '');
                 const type = detectCoverType(url);
                 if (type === 'youtube')
-                  return <iframe src={toYouTubeEmbed(url)} title="preview" className="w-full h-full" allowFullScreen />;
+                  return (
+                    <iframe
+                      src={toYouTubeEmbed(url)}
+                      title="preview"
+                      className="w-full h-full"
+                      allowFullScreen
+                    />
+                  );
                 if (type === 'drive_video')
-                  return <iframe src={url} title="preview" className="w-full h-full" allow="autoplay" allowFullScreen />;
+                  return (
+                    <iframe
+                      src={url}
+                      title="preview"
+                      className="w-full h-full"
+                      allow="autoplay"
+                      allowFullScreen
+                    />
+                  );
                 if (type === 'video')
-                  return <video src={url} controls className="w-full h-full object-contain bg-black" />;
-                return <img src={url} alt="preview" className="w-full h-full object-cover" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />;
+                  return (
+                    <video
+                      src={url}
+                      controls
+                      className="w-full h-full object-contain bg-black"
+                    />
+                  );
+                return (
+                  <img
+                    src={url}
+                    alt="preview"
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).style.display = 'none';
+                    }}
+                  />
+                );
               })()}
             </div>
           )}
@@ -1029,6 +1398,8 @@ const Field = ({
   onChangeMultiple,
   typeValue,
   folder,
+  parentId,
+  userId,
 }: {
   field: FieldConfig;
   value: unknown;
@@ -1036,6 +1407,8 @@ const Field = ({
   onChangeMultiple?: (changes: Record<string, unknown>) => void;
   typeValue?: unknown;
   folder: string;
+  parentId?: number | string | null;
+  userId?: string | null;
 }) => {
   const str = String(value ?? '');
 
@@ -1047,7 +1420,15 @@ const Field = ({
   };
 
   if (field.type === 'image')
-    return <ImageField value={value} onChange={onChange} folder={folder} />;
+    return (
+      <ImageField
+        value={value}
+        onChange={onChange}
+        folder={folder}
+        storageBackend={field.storage === 'supabase' ? 'supabase' : 's3'}
+        userId={userId}
+      />
+    );
   if (field.type === 'images')
     return (
       <MultiImageField
@@ -1062,6 +1443,25 @@ const Field = ({
         value={value}
         onChange={(v) => onChange(v)}
         placeholder={field.placeholder}
+      />
+    );
+
+  if (field.type === 'structuredlist')
+    return (
+      <StructuredListField
+        value={value}
+        onChange={(v) => onChange(v)}
+        subFields={field.subFields ?? []}
+      />
+    );
+
+  if (field.type === 'subrecords' && field.subRecordConfig)
+    return (
+      <SubRecordsField
+        parentId={parentId ?? null}
+        config={field.subRecordConfig}
+        value={Array.isArray(value) ? (value as SubRow[]) : []}
+        onChange={(v) => onChange(v)}
       />
     );
 
@@ -1219,7 +1619,9 @@ const Field = ({
       <input
         type="number"
         value={value === '' || value === undefined ? '' : String(value)}
-        onChange={(e) => onChange(e.target.value === '' ? 0 : Number(e.target.value))}
+        onChange={(e) =>
+          onChange(e.target.value === '' ? 0 : Number(e.target.value))
+        }
         placeholder={field.placeholder ?? '0'}
         min={0}
         className="w-full px-3 py-2.5 rounded-lg text-sm"
@@ -1235,6 +1637,17 @@ const Field = ({
         typeValue={typeValue}
         onChangeMultiple={onChangeMultiple}
         folder={folder}
+      />
+    );
+
+  if (field.type === 'date')
+    return (
+      <input
+        type="date"
+        value={str}
+        onChange={(e) => onChange(e.target.value)}
+        className="w-full px-3 py-2.5 rounded-lg text-sm"
+        style={inputStyle}
       />
     );
 
@@ -1272,6 +1685,12 @@ const AdminCrudForm = memo(() => {
   const isNew = id === 'new';
 
   const mod = MODULES.find((m) => m.id === moduleId);
+  const tableId = mod?.table;
+  const currentUid = useAppSelector(selectCurrentUid);
+
+  // Handles both integer ids ("3") and UUID ids ("some-uuid-string")
+  const parsedId: number | string | null =
+    id && id !== 'new' ? (isNaN(Number(id)) ? id : Number(id)) : null;
 
   /* ── Redux state ── */
   const currentRecord = useAppSelector(selectCurrentRecord(moduleId));
@@ -1284,34 +1703,41 @@ const AdminCrudForm = memo(() => {
   const [showDelete, setShowDelete] = useState(false);
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
+  const [resetSent, setResetSent] = useState(false);
+  const [resetSending, setResetSending] = useState(false);
+  const [activeTab, setActiveTab] = useState(0);
 
-  /* Step 1 — load form field config (Supabase dynamic, falls back to static) */
+  // All fields across all tabs (used for value init, save payload, syncSubRecords)
+  const allFields = useMemo<FieldConfig[]>(() => {
+    if (mod?.tabs?.length) return getModuleFields(mod);
+    return formFields ?? [];
+  }, [mod, formFields]);
+
+  // Fields visible in the current view (tab-aware)
+  const activeFields = useMemo<FieldConfig[]>(() => {
+    if (mod?.tabs?.length) return mod.tabs[activeTab]?.fields ?? [];
+    return formFields ?? [];
+  }, [mod, activeTab, formFields]);
+
+  /* Step 1 — load form field config from static module definition */
   useEffect(() => {
-    setFormFields(null);
-    supabase
-      .from('form_config')
-      .select('fields')
-      .eq('module_id', moduleId)
-      .maybeSingle()
-      .then(({ data }) => {
-        setFormFields((data?.fields as FieldConfig[]) ?? mod?.fields ?? []);
-      });
+    setFormFields(mod?.fields ?? []);
+    setActiveTab(0);
   }, [moduleId, mod]);
 
   /* Step 2 — fetch existing record via Redux (edit mode only) */
   useEffect(() => {
-    if (!isNew) {
-      const numId = Number(id);
-      if (!isNaN(numId)) dispatch(fetchRecord({ moduleId, id: numId }));
+    if (!isNew && parsedId != null) {
+      dispatch(fetchRecord({ moduleId, id: parsedId, tableId }));
     }
     return () => {
       dispatch(clearCurrentRecord(moduleId));
     };
-  }, [moduleId, id, isNew, dispatch]);
+  }, [moduleId, id, isNew, dispatch]); // eslint-disable-line react-hooks/exhaustive-deps
 
   /* Step 3 — init form values once config + record are both ready */
   useEffect(() => {
-    if (!formFields) return;
+    if (!formFields && !mod?.tabs) return;
     if (!isNew && recordStatus !== 'succeeded') return;
     const data = isNew ? {} : (currentRecord ?? {});
     // Supabase returns all column names lowercased; build a lowercase lookup map
@@ -1323,7 +1749,7 @@ const AdminCrudForm = memo(() => {
       ])
     );
     setValues(
-      formFields.reduce<Record<string, unknown>>((acc, f) => {
+      allFields.reduce<Record<string, unknown>>((acc, f) => {
         const raw = lowerData[f.key.toLowerCase()];
         acc[f.key] =
           raw !== undefined && raw !== null ? raw : defaultForType(f.type);
@@ -1335,23 +1761,78 @@ const AdminCrudForm = memo(() => {
         return acc;
       }, {})
     );
-  }, [formFields, currentRecord, isNew, recordStatus]);
+  }, [allFields, currentRecord, isNew, recordStatus]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleChange = (key: string, val: unknown) =>
     setValues((prev) => ({ ...prev, [key]: val }));
+
+  const syncSubRecords = async (parentId: number | string) => {
+    const subFields = allFields.filter(
+      (f) => f.type === 'subrecords' && f.subRecordConfig
+    );
+    for (const field of subFields) {
+      const cfg = field.subRecordConfig!;
+      const rows = (
+        Array.isArray(values[field.key]) ? values[field.key] : []
+      ) as SubRow[];
+
+      const toDelete = rows
+        .filter((r) => r._deleted && r.id)
+        .map((r) => r.id as number);
+      const toUpsert = rows
+        .filter((r) => !r._deleted)
+        .map((r) => {
+          const { id, _deleted, ...rest } = r; // eslint-disable-line @typescript-eslint/no-unused-vars
+          return { ...(id ? { id } : {}), ...rest, [cfg.foreignKey]: parentId };
+        });
+
+      if (toDelete.length)
+        await supabase.from(cfg.table).delete().in('id', toDelete);
+      if (toUpsert.length) await supabase.from(cfg.table).upsert(toUpsert);
+    }
+  };
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     setSaving(true);
     setSaveError(null);
+
+    // Strip subrecords + action fields from the main record payload
+    const subRecordKeys = new Set(
+      allFields
+        .filter((f) => f.type === 'subrecords' || f.type === 'resetpassword')
+        .map((f) => f.key)
+    );
+    const mainValues = Object.fromEntries(
+      Object.entries(values).filter(([k]) => !subRecordKeys.has(k))
+    );
+
     try {
+      let parentId: number | string;
       if (isNew) {
-        await dispatch(createRecord({ moduleId, data: values })).unwrap();
+        const result = await dispatch(
+          createRecord({ moduleId, data: mainValues, tableId })
+        ).unwrap();
+        parentId = result.record.id;
       } else {
         await dispatch(
-          updateRecord({ moduleId, id: Number(id), data: values })
+          updateRecord({ moduleId, id: parsedId!, data: mainValues, tableId })
         ).unwrap();
+        parentId = parsedId!;
       }
+      await syncSubRecords(parentId as number | string);
+
+      // If editing the currently logged-in user's own profile, sync auth metadata
+      if (moduleId === 'users' && String(parsedId) === currentUid) {
+        const patch: { full_name?: string; avatar_url?: string } = {};
+        if (mainValues.name) patch.full_name = mainValues.name as string;
+        if (mainValues.avatar_url)
+          patch.avatar_url = mainValues.avatar_url as string;
+        if (Object.keys(patch).length) {
+          dispatch(updateCurrentUserProfile(patch));
+        }
+      }
+
       navigate(`/admin/${moduleId}`);
     } catch (err) {
       setSaveError(err instanceof Error ? err.message : 'Save failed');
@@ -1360,7 +1841,7 @@ const AdminCrudForm = memo(() => {
   };
 
   const handleDelete = async () => {
-    const imageKeys = (formFields ?? [])
+    const imageKeys = allFields
       .filter((f) => f.type === 'image' || f.type === 'images')
       .flatMap((f) => {
         const v = values[f.key];
@@ -1369,7 +1850,7 @@ const AdminCrudForm = memo(() => {
       })
       .filter(Boolean);
     await dispatch(
-      deleteRecord({ moduleId, id: Number(id), imageKeys })
+      deleteRecord({ moduleId, id: parsedId!, imageKeys, tableId })
     ).unwrap();
     navigate(`/admin/${moduleId}`);
   };
@@ -1383,7 +1864,8 @@ const AdminCrudForm = memo(() => {
     );
 
   const isLoading =
-    formFields === null || (!isNew && recordStatus === 'loading');
+    (formFields === null && !mod?.tabs) ||
+    (!isNew && recordStatus === 'loading');
 
   return (
     <>
@@ -1460,54 +1942,157 @@ const AdminCrudForm = memo(() => {
                 border: '1px solid var(--glass-border)',
               }}
             >
+              {/* ── Tab bar (tabbed modules only) ── */}
+              {mod.tabs && (
+                <div
+                  className="flex gap-1 mb-5 p-1 rounded-xl"
+                  style={{ backgroundColor: 'var(--glass-bg-raised)' }}
+                >
+                  {mod.tabs.map((tab, i) => (
+                    <button
+                      key={tab.label}
+                      type="button"
+                      onClick={() => setActiveTab(i)}
+                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold flex-1 justify-center transition-colors"
+                      style={
+                        activeTab === i
+                          ? { backgroundColor: 'var(--accent)', color: '#fff' }
+                          : { color: 'var(--text-muted)' }
+                      }
+                    >
+                      {tab.icon && <ReactIcon name={tab.icon} size={11} />}
+                      {tab.label}
+                    </button>
+                  ))}
+                </div>
+              )}
+
               {isLoading ? (
                 <FormSkeleton />
               ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                  {(formFields ?? []).map((field) => (
+                  {activeFields.map((field) => (
                     <div
                       key={field.key}
                       className={
                         field.span === 'full' ||
                         field.type === 'toggle' ||
-                        field.type === 'checkbox'
+                        field.type === 'checkbox' ||
+                        field.type === 'resetpassword'
                           ? 'sm:col-span-2'
                           : ''
                       }
                     >
-                      {field.type !== 'toggle' && field.type !== 'checkbox' && (
-                        <label
-                          className="block text-xs font-semibold mb-1.5"
-                          style={{ color: 'var(--text-muted)' }}
+                      {field.type === 'resetpassword' ? (
+                        /* ── Password reset action ── */
+                        <div
+                          className="flex items-center justify-between gap-4 px-4 py-3 rounded-xl"
+                          style={{
+                            backgroundColor: 'var(--glass-bg-raised)',
+                            border: '1px solid var(--glass-border)',
+                          }}
                         >
-                          {field.label}
-                          {field.required && (
-                            <span
-                              className="ml-1"
-                              style={{ color: 'var(--accent)' }}
+                          <div>
+                            <p
+                              className="text-xs font-semibold"
+                              style={{ color: 'var(--text-primary)' }}
                             >
-                              *
-                            </span>
-                          )}
-                        </label>
+                              {field.label}
+                            </p>
+                            <p
+                              className="text-xs mt-0.5"
+                              style={{ color: 'var(--text-muted)' }}
+                            >
+                              {resetSent
+                                ? `Reset link sent to ${String(values.email ?? '')}`
+                                : `Send a reset link to ${String(values.email ?? '')}`}
+                            </p>
+                          </div>
+                          <motion.button
+                            type="button"
+                            whileTap={{ scale: 0.95 }}
+                            disabled={
+                              resetSending ||
+                              resetSent ||
+                              !values.email ||
+                              isNew
+                            }
+                            onClick={async () => {
+                              const email = String(values.email ?? '');
+                              if (!email) return;
+                              setResetSending(true);
+                              try {
+                                await dispatch(
+                                  sendPasswordReset(email)
+                                ).unwrap();
+                                setResetSent(true);
+                              } finally {
+                                setResetSending(false);
+                              }
+                            }}
+                            className="flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-semibold shrink-0"
+                            style={{
+                              backgroundColor: resetSent
+                                ? 'transparent'
+                                : 'var(--accent)',
+                              color: resetSent ? 'var(--text-muted)' : '#fff',
+                              border: resetSent
+                                ? '1px solid var(--glass-border)'
+                                : 'none',
+                              opacity: resetSending || isNew ? 0.5 : 1,
+                            }}
+                          >
+                            <ReactIcon
+                              name={resetSent ? 'FaCheck' : 'FaKey'}
+                              size={11}
+                            />
+                            {resetSent
+                              ? 'Sent'
+                              : resetSending
+                                ? 'Sending…'
+                                : 'Send reset email'}
+                          </motion.button>
+                        </div>
+                      ) : (
+                        <>
+                          {field.type !== 'toggle' &&
+                            field.type !== 'checkbox' && (
+                              <label
+                                className="block text-xs font-semibold mb-1.5"
+                                style={{ color: 'var(--text-muted)' }}
+                              >
+                                {field.label}
+                                {field.required && (
+                                  <span
+                                    className="ml-1"
+                                    style={{ color: 'var(--accent)' }}
+                                  >
+                                    *
+                                  </span>
+                                )}
+                              </label>
+                            )}
+                          <Field
+                            field={field}
+                            value={values[field.key]}
+                            folder={moduleFolder(
+                              moduleId,
+                              String(values.slug ?? '')
+                            )}
+                            onChange={(val) => handleChange(field.key, val)}
+                            onChangeMultiple={(changes) =>
+                              setValues((prev) => ({ ...prev, ...changes }))
+                            }
+                            typeValue={
+                              field.type === 'covermedia'
+                                ? values['cover_image_type']
+                                : undefined
+                            }
+                            parentId={isNew ? null : parsedId}
+                            userId={String(parsedId ?? currentUid ?? '')}
+                          />
+                        </>
                       )}
-                      <Field
-                        field={field}
-                        value={values[field.key]}
-                        folder={moduleFolder(
-                          moduleId,
-                          String(values.slug ?? '')
-                        )}
-                        onChange={(val) => handleChange(field.key, val)}
-                        onChangeMultiple={(changes) =>
-                          setValues((prev) => ({ ...prev, ...changes }))
-                        }
-                        typeValue={
-                          field.type === 'covermedia'
-                            ? values['cover_image_type']
-                            : undefined
-                        }
-                      />
                     </div>
                   ))}
                 </div>

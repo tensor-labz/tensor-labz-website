@@ -17,7 +17,12 @@ const cornerStyles: Record<CornerPos, string> = {
   bl: 'bottom-3 left-3 border-b border-l',
   br: 'bottom-3 right-3 border-b border-r',
 };
-const cornerDelays: Record<CornerPos, number> = { tl: 0.3, tr: 0.4, bl: 0.5, br: 0.6 };
+const cornerDelays: Record<CornerPos, number> = {
+  tl: 0.3,
+  tr: 0.4,
+  bl: 0.5,
+  br: 0.6,
+};
 
 const CornerBracket = memo(({ pos }: { pos: CornerPos }) => (
   <motion.div
@@ -36,7 +41,6 @@ const HolographicFrame = memo(() => {
 
   return (
     <div className="relative w-full h-full flex flex-col gap-2">
-
       {/* ── status bar ── */}
       <div className="flex items-center justify-between px-0.5">
         <div className="flex items-center gap-1.5">
@@ -56,7 +60,6 @@ const HolographicFrame = memo(() => {
 
       {/* ── main frame ── */}
       <div className="relative flex-1 overflow-hidden rounded-xl border border-accent/20">
-
         {/* engineering grid overlay */}
         <div
           className="absolute inset-0 z-[5] pointer-events-none"
@@ -69,7 +72,9 @@ const HolographicFrame = memo(() => {
         />
 
         {/* corner brackets */}
-        {POSITIONS.map((p) => <CornerBracket key={p} pos={p} />)}
+        {POSITIONS.map((p) => (
+          <CornerBracket key={p} pos={p} />
+        ))}
 
         {/* slide image */}
         <AnimatePresence mode="wait">
@@ -107,7 +112,12 @@ const HolographicFrame = memo(() => {
             top: '0%',
           }}
           animate={{ top: ['0%', '100%'] }}
-          transition={{ duration: 3.2, repeat: Infinity, ease: 'linear', repeatDelay: 2 }}
+          transition={{
+            duration: 3.2,
+            repeat: Infinity,
+            ease: 'linear',
+            repeatDelay: 2,
+          }}
         />
 
         {/* bottom annotation */}
@@ -145,7 +155,7 @@ const HolographicFrame = memo(() => {
       {/* ── footer bar ── */}
       <div className="flex items-center justify-between px-0.5">
         <span className="text-[9px] font-mono text-muted/40 select-none">
-          // FRAME {currentIndex + 1}/{slides.length || '—'}
+          {'// FRAME'} {currentIndex + 1}/{slides.length || '—'}
         </span>
         <div className="flex items-center gap-1">
           <motion.div
@@ -153,7 +163,9 @@ const HolographicFrame = memo(() => {
             animate={{ opacity: [1, 0.2, 1] }}
             transition={{ duration: 1.6, repeat: Infinity }}
           />
-          <span className="text-[9px] font-mono text-accent/60 select-none">LIVE</span>
+          <span className="text-[9px] font-mono text-accent/60 select-none">
+            LIVE
+          </span>
         </div>
       </div>
     </div>

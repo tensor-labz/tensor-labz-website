@@ -18,7 +18,9 @@ export const usePostDetailController = () => {
     if (slug) {
       dispatch(loadPostBySlug(slug));
     }
-    return () => { dispatch(clearSelectedPost()); };
+    return () => {
+      dispatch(clearSelectedPost());
+    };
   }, [slug, dispatch]);
 
   return {

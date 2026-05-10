@@ -1,4 +1,8 @@
-import { createSlice, createAsyncThunk, createSelector } from '@reduxjs/toolkit';
+import {
+  createSlice,
+  createAsyncThunk,
+  createSelector,
+} from '@reduxjs/toolkit';
 import type { RootState } from '../app/store';
 import {
   fetchPublishedPosts,
@@ -20,7 +24,10 @@ const initialState: PostState = {
   detailStatus: 'idle',
 };
 
-export const loadPosts = createAsyncThunk('posts/loadPosts', fetchPublishedPosts);
+export const loadPosts = createAsyncThunk(
+  'posts/loadPosts',
+  fetchPublishedPosts
+);
 
 export const loadPostBySlug = createAsyncThunk(
   'posts/loadPostBySlug',
@@ -38,19 +45,27 @@ const postSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(loadPosts.pending, (state) => { state.listStatus = 'loading'; })
+      .addCase(loadPosts.pending, (state) => {
+        state.listStatus = 'loading';
+      })
       .addCase(loadPosts.fulfilled, (state, { payload }) => {
         state.list = payload;
         state.listStatus = 'succeeded';
       })
-      .addCase(loadPosts.rejected, (state) => { state.listStatus = 'failed'; })
+      .addCase(loadPosts.rejected, (state) => {
+        state.listStatus = 'failed';
+      })
 
-      .addCase(loadPostBySlug.pending, (state) => { state.detailStatus = 'loading'; })
+      .addCase(loadPostBySlug.pending, (state) => {
+        state.detailStatus = 'loading';
+      })
       .addCase(loadPostBySlug.fulfilled, (state, { payload }) => {
         state.selected = payload;
         state.detailStatus = 'succeeded';
       })
-      .addCase(loadPostBySlug.rejected, (state) => { state.detailStatus = 'failed'; });
+      .addCase(loadPostBySlug.rejected, (state) => {
+        state.detailStatus = 'failed';
+      });
   },
 });
 
@@ -61,6 +76,15 @@ export default postSlice.reducer;
 const selectPostState = (state: RootState) => state.posts;
 
 export const selectPostList = createSelector(selectPostState, (s) => s.list);
-export const selectPostListStatus = createSelector(selectPostState, (s) => s.listStatus);
-export const selectSelectedPost = createSelector(selectPostState, (s) => s.selected);
-export const selectPostDetailStatus = createSelector(selectPostState, (s) => s.detailStatus);
+export const selectPostListStatus = createSelector(
+  selectPostState,
+  (s) => s.listStatus
+);
+export const selectSelectedPost = createSelector(
+  selectPostState,
+  (s) => s.selected
+);
+export const selectPostDetailStatus = createSelector(
+  selectPostState,
+  (s) => s.detailStatus
+);

@@ -16,9 +16,7 @@ const ServiceSection: React.FC = memo(() => {
         <p className="text-[10px] font-mono tracking-[0.3em] uppercase text-accent mb-3">
           {get('services.label')}
         </p>
-        <h2
-          className="sm:text-4xl text-xl sm:font-bold font-semibold text-fg font-display"
-        >
+        <h2 className="sm:text-4xl text-xl sm:font-bold font-semibold text-fg font-display">
           {get('services.title')}
         </h2>
         <p className="sm:text-lg text-base text-muted">

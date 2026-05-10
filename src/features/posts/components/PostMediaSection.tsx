@@ -2,7 +2,10 @@ import React, { memo, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import ReactIcon from '../../../shared/components/ui/ReactIcon';
 import { EASE_EXPO } from '../../../lib/motion';
-import { toYouTubeEmbed, PostAdditionalMedia } from '../../../services/postService';
+import {
+  toYouTubeEmbed,
+  PostAdditionalMedia,
+} from '../../../services/postService';
 
 interface Props {
   media: PostAdditionalMedia[];
@@ -93,7 +96,11 @@ const PostMediaSection: React.FC<Props> = memo(({ media }) => {
             {images.length > 1 && (
               <>
                 <button
-                  onClick={() => setActiveIndex((p) => (p - 1 + images.length) % images.length)}
+                  onClick={() =>
+                    setActiveIndex(
+                      (p) => (p - 1 + images.length) % images.length
+                    )
+                  }
                   className="absolute left-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full
                     bg-black/50 border border-accent/30 text-white flex items-center justify-center
                     hover:bg-black/70 hover:border-accent/60 transition-all duration-200"
@@ -129,7 +136,11 @@ const PostMediaSection: React.FC<Props> = memo(({ media }) => {
                   className={`w-16 h-12 rounded-lg overflow-hidden border-2 transition-all duration-200 shrink-0
                     ${i === activeIndex ? 'border-accent' : 'border-rim hover:border-accent/40'}`}
                 >
-                  <img src={item.url} alt={`Thumb ${i + 1}`} className="w-full h-full object-cover" />
+                  <img
+                    src={item.url}
+                    alt={`Thumb ${i + 1}`}
+                    className="w-full h-full object-cover"
+                  />
                 </button>
               ))}
             </div>

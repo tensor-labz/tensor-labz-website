@@ -6,7 +6,7 @@ import DataTable, {
   type TableColumn,
 } from 'react-data-table-component';
 import ReactIcon from '../../../shared/components/ui/ReactIcon';
-import { MODULES } from '../config/modules';
+import { MODULES, getModuleFields } from '../config/modules';
 import { supabase } from '../../../lib/supabase';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import {
@@ -297,7 +297,7 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
   const relationMaps = useMemo<Record<string, Record<string, string>>>(() => {
     if (!mod) return {};
     const maps: Record<string, Record<string, string>> = {};
-    mod.fields
+    getModuleFields(mod)
       .filter((f) => f.type === 'select' && f.relation)
       .forEach((f) => {
         const rel = f.relation!;
@@ -318,13 +318,14 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
   /* Fetch rows via Redux */
   useEffect(() => {
     setSearch('');
-    if (status === 'idle') dispatch(fetchRecords(moduleId));
+    if (status === 'idle')
+      dispatch(fetchRecords({ moduleId, tableId: mod?.table }));
   }, [moduleId, status, dispatch]);
 
   /* Dispatch fetchRelationOptions for any select+relation fields */
   useEffect(() => {
     if (!mod) return;
-    mod.fields
+    getModuleFields(mod)
       .filter((f) => f.type === 'select' && f.relation)
       .forEach((f) => {
         const rel = f.relation!;
@@ -357,7 +358,7 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
   const imageTypeKeys = useMemo(() => {
     if (!mod) return new Set<string>();
     return new Set(
-      mod.fields
+      getModuleFields(mod)
         .filter((f) => f.type === 'image' || f.type === 'images')
         .map((f) => f.key.toLowerCase())
     );
@@ -410,7 +411,7 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
           const isDesc =
             c.field.toLowerCase() === mod.descriptionField?.toLowerCase();
           const relMap = relationMaps[c.field];
-          const fieldDef = mod.fields.find((f) => f.key === c.field);
+          const fieldDef = getModuleFields(mod).find((f) => f.key === c.field);
           const isUrlField = c.type === 'url' || fieldDef?.type === 'url';
 
           if (isUrlField) {
@@ -515,7 +516,7 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
 
       /* Extra columns declared in ModuleConfig.tableColumns */
       (mod.tableColumns ?? []).forEach((key) => {
-        const fieldDef = mod.fields.find((f) => f.key === key);
+        const fieldDef = getModuleFields(mod).find((f) => f.key === key);
         const relMap = relationMaps[key];
         const rel = fieldDef?.relation;
         const isUrl = fieldDef?.type === 'url';
@@ -654,7 +655,11 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
           />
           {search && (
             <button onClick={() => setSearch('')} className="flex-shrink-0">
-              <ReactIcon name="FiX" size={13} style={{ color: 'var(--text-muted)' }} />
+              <ReactIcon
+                name="FiX"
+                size={13}
+                style={{ color: 'var(--text-muted)' }}
+              />
             </button>
           )}
         </div>

@@ -18,7 +18,10 @@ interface ProjectHeroProps {
 
 const GetSupportButton: React.FC<{ title: string }> = memo(({ title }) => {
   const message = useMemo(
-    () => encodeURIComponent(`Hello, I need assistance with the project: ${title}.`),
+    () =>
+      encodeURIComponent(
+        `Hello, I need assistance with the project: ${title}.`
+      ),
     [title]
   );
   return (
@@ -30,7 +33,11 @@ const GetSupportButton: React.FC<{ title: string }> = memo(({ title }) => {
     >
       <ReactIcon name="FiMessageCircle" size={20} />
       <span className="font-medium">Get Support</span>
-      <ReactIcon name="FiArrowRight" size={18} className="transition-transform group-hover:translate-x-1" />
+      <ReactIcon
+        name="FiArrowRight"
+        size={18}
+        className="transition-transform group-hover:translate-x-1"
+      />
     </Link>
   );
 });
@@ -52,12 +59,20 @@ const ProjectHero: React.FC<ProjectHeroProps> = ({
 
   const containerVariants = {
     hidden: { opacity: 0, y: -32 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: EASE_EXPO } },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.6, ease: EASE_EXPO },
+    },
   };
 
   const itemVariants = (delay: number) => ({
     hidden: { opacity: 0, y: 10 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.55, delay, ease: EASE_EXPO } },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.55, delay, ease: EASE_EXPO },
+    },
   });
 
   return (
@@ -116,7 +131,11 @@ const ProjectHero: React.FC<ProjectHeroProps> = ({
             >
               {title}
               {is_top && (
-                <ReactIcon name="FaCrown" size={20} className="inline-block text-amber-400 drop-shadow" />
+                <ReactIcon
+                  name="FaCrown"
+                  size={20}
+                  className="inline-block text-amber-400 drop-shadow"
+                />
               )}
             </motion.h1>
 
