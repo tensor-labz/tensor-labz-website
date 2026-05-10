@@ -121,21 +121,23 @@ const AboutUs: React.FC = memo(() => {
           </motion.p>
 
           {/* Domain capability chips */}
-          <motion.div
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.5, ease: EASE_EXPO }}
-            className="flex flex-wrap justify-center gap-2 mt-6"
-          >
-            {['Mechatronics', '3D CAD Modeling', 'PCB Design', 'Embedded Systems'].map((chip) => (
-              <span
-                key={chip}
-                className="px-3 py-1 rounded border border-accent/30 bg-accent/5 text-accent text-[11px] font-mono tracking-wider uppercase"
-              >
-                {chip}
-              </span>
-            ))}
-          </motion.div>
+          {info.domains && (
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.5, ease: EASE_EXPO }}
+              className="flex flex-wrap justify-center gap-2 mt-6"
+            >
+              {info.domains.split(',').map((chip) => chip.trim()).filter(Boolean).map((chip) => (
+                <span
+                  key={chip}
+                  className="px-3 py-1 rounded border border-accent/30 bg-accent/5 text-accent text-[11px] font-mono tracking-wider uppercase"
+                >
+                  {chip}
+                </span>
+              ))}
+            </motion.div>
+          )}
 
           {/* Mission / Vision inline preview */}
           {(info.vision || info.mission) && (

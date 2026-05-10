@@ -22,6 +22,7 @@ export interface CompanyInfo {
   who_we_are: string;
   vision: string;
   mission: string;
+  domains: string; // comma-separated capability tags e.g. "Mechatronics,PCB Design"
   contact_rows: ContactRow[];
   social_links: SocialLink[];
 }
@@ -37,6 +38,7 @@ export const DEFAULTS: CompanyInfo = {
   who_we_are: '',
   vision: '',
   mission: '',
+  domains: '',
   contact_rows: [
     { type: 'address', title: 'Address', value: 'Jaffna, Sri Lanka' },
     { type: 'email', title: 'Email', value: 'tensoragri@gmail.com' },
@@ -106,6 +108,7 @@ export async function fetchCompanyInfo(signal?: AbortSignal): Promise<CompanyInf
     who_we_are: (ci?.who_we_are as string) || DEFAULTS.who_we_are,
     vision: (ci?.vision as string) || DEFAULTS.vision,
     mission: (ci?.mission as string) || DEFAULTS.mission,
+    domains: (ci?.domains as string) || DEFAULTS.domains,
     contact_rows: contactRows,
     social_links: socialLinks,
   };

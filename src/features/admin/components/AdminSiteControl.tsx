@@ -68,6 +68,7 @@ const COMPANY_DEFAULT: CompanyInfo = {
   who_we_are: '',
   vision: '',
   mission: '',
+  domains: '',
 };
 
 const TABS = [
@@ -315,6 +316,17 @@ const CompanyInfoTab = ({
               onChange={set('available_hours')}
               placeholder="Mon – Fri: 8:00 AM – 6:00 PM"
             />
+          </div>
+          <div className="sm:col-span-2">
+            <Field
+              label="Domains / Capabilities"
+              value={data.domains}
+              onChange={set('domains')}
+              placeholder="Mechatronics, 3D CAD Modeling, PCB Design, Embedded Systems"
+            />
+            <p className="text-[10px] mt-1" style={{ color: 'var(--text-muted)' }}>
+              Comma-separated tags shown on the About page.
+            </p>
           </div>
           <div className="flex flex-col gap-1.5">
             <label
@@ -1481,6 +1493,7 @@ const AdminSiteControl = memo(() => {
         who_we_are: (row.who_we_are as string) ?? '',
         vision: (row.vision as string) ?? '',
         mission: (row.mission as string) ?? '',
+        domains: (row.domains as string) ?? '',
       });
     }
     setLoading(false);
