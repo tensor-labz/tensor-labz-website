@@ -1,5 +1,5 @@
 import { useState, useEffect, FormEvent } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import ReactIcon from '../shared/components/ui/ReactIcon';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
@@ -209,14 +209,16 @@ const Login = () => {
         {/* Center content */}
         <div className="relative z-10 text-center px-14">
           {logoSrc && (
-            <motion.img
-              src={logoSrc}
-              alt={info.name}
-              className="h-14 mx-auto mb-8 object-contain"
-              initial={{ opacity: 0, scale: 0.88 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.45, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-            />
+            <Link to="/">
+              <motion.img
+                src={logoSrc}
+                alt={info.name}
+                className="h-14 mx-auto mb-8 object-contain"
+                initial={{ opacity: 0, scale: 0.88 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.45, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+              />
+            </Link>
           )}
 
           <motion.div
@@ -306,11 +308,13 @@ const Login = () => {
           {/* Mobile logo */}
           <div className="lg:hidden text-center mb-8">
             {logoSrc && (
-              <img
-                src={logoSrc}
-                alt={info.name}
-                className="h-10 mx-auto mb-3 object-contain"
-              />
+              <Link to="/">
+                <img
+                  src={logoSrc}
+                  alt={info.name}
+                  className="h-10 mx-auto mb-3 object-contain"
+                />
+              </Link>
             )}
           </div>
 
@@ -504,12 +508,22 @@ const Login = () => {
           </motion.div>
 
           {/* Footer */}
-          <p
-            className="text-center text-[9px] font-mono mt-6 select-none"
-            style={{ color: 'var(--text-muted)', opacity: 0.35 }}
-          >
-            {info.name.toUpperCase()} // SECURE ADMIN ACCESS // {new Date().getFullYear()}
-          </p>
+          <div className="mt-6 flex flex-col items-center gap-2">
+            <Link
+              to="/"
+              className="flex items-center gap-1.5 text-[10px] font-mono tracking-wide transition-colors duration-200"
+              style={{ color: 'var(--text-muted)' }}
+            >
+              <ReactIcon name="FiArrowLeft" size={10} />
+              Back to site
+            </Link>
+            <p
+              className="text-center text-[9px] font-mono select-none"
+              style={{ color: 'var(--text-muted)', opacity: 0.35 }}
+            >
+              {info.name.toUpperCase()} // SECURE ADMIN ACCESS // {new Date().getFullYear()}
+            </p>
+          </div>
         </motion.div>
       </div>
     </div>
