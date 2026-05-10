@@ -1,21 +1,7 @@
 import { memo } from 'react';
 import { motion } from 'motion/react';
 import { Link } from 'react-router-dom';
-import {
-  FaFacebookF,
-  FaLinkedinIn,
-  FaInstagram,
-  FaWhatsapp,
-  FaTiktok,
-  FaYoutube,
-  FaTwitter,
-  FaMapMarkerAlt,
-  FaEnvelope,
-  FaPhone,
-  FaClock,
-  FaGlobe,
-} from 'react-icons/fa';
-import type { IconType } from 'react-icons';
+import ReactIcon from '../ui/ReactIcon';
 import logo from '../../../assets/images/logo.png';
 import { useAppSelector } from '../../../app/hooks';
 import {
@@ -26,31 +12,34 @@ import { useCompanyInfo } from '../../hooks/useCompanyInfo';
 import type { ContactRow } from '../../hooks/useCompanyInfo';
 
 /* Map social platform name → icon */
-const PLATFORM_ICONS: [string, IconType][] = [
-  ['whatsapp', FaWhatsapp],
-  ['facebook', FaFacebookF],
-  ['linkedin', FaLinkedinIn],
-  ['instagram', FaInstagram],
-  ['tiktok', FaTiktok],
-  ['youtube', FaYoutube],
-  ['twitter', FaTwitter],
-  ['x', FaTwitter],
-];
+const PLATFORM_ICON_NAMES: Record<string, string> = {
+  whatsapp: 'FaWhatsapp',
+  facebook: 'FaFacebookF',
+  linkedin: 'FaLinkedinIn',
+  instagram: 'FaInstagram',
+  tiktok: 'FaTiktok',
+  youtube: 'FaYoutube',
+  twitter: 'FaTwitter',
+  x: 'FaTwitter',
+};
 
-function socialIcon(platform: string): IconType {
+function socialIconName(platform: string): string {
   const key = platform.toLowerCase();
-  return PLATFORM_ICONS.find(([p]) => key.includes(p))?.[1] ?? FaGlobe;
+  const match = Object.entries(PLATFORM_ICON_NAMES).find(([p]) =>
+    key.includes(p)
+  );
+  return match?.[1] ?? 'FaGlobe';
 }
 
 /* Infer icon and href from the contact row type field */
-function contactIcon(type: string): IconType {
+function contactIconName(type: string): string {
   const t = type.toLowerCase();
-  if (t.includes('email') || t.includes('mail')) return FaEnvelope;
+  if (t.includes('email') || t.includes('mail')) return 'FaEnvelope';
   if (t.includes('phone') || t.includes('tel') || t.includes('mobile'))
-    return FaPhone;
+    return 'FaPhone';
   if (t.includes('address') || t.includes('location') || t.includes('map'))
-    return FaMapMarkerAlt;
-  return FaClock;
+    return 'FaMapMarkerAlt';
+  return 'FaClock';
 }
 
 function contactHref(row: ContactRow): string | undefined {
@@ -118,7 +107,6 @@ const Footer = () => {
             </p>
             <div className="flex items-center justify-center sm:justify-start gap-3 pt-1 flex-wrap">
               {info.social_links.map(({ platform, url }) => {
-                const Icon = socialIcon(platform);
                 return (
                   <a
                     key={platform}
@@ -130,7 +118,7 @@ const Footer = () => {
                       bg-white/5 text-slate-500 hover:bg-sky-500/20 hover:text-sky-400
                       transition-all duration-200 text-sm border border-white/5 hover:border-sky-500/30"
                   >
-                    <Icon />
+                    <ReactIcon name={socialIconName(platform)} size={14} />
                   </a>
                 );
               })}
@@ -189,14 +177,17 @@ const Footer = () => {
             </h4>
             <ul className="flex flex-col items-center sm:items-start gap-3">
               {info.contact_rows.map((row) => {
-                const Icon = contactIcon(row.type);
                 const href = contactHref(row);
                 return (
                   <li
                     key={row.type + row.value}
                     className="flex items-start gap-3"
                   >
-                    <Icon className="text-slate-600 mt-0.5 shrink-0 text-sm" />
+                    <ReactIcon
+                      name={contactIconName(row.type)}
+                      size={13}
+                      className="text-slate-600 mt-0.5 shrink-0"
+                    />
                     {href ? (
                       <a
                         href={href}
@@ -214,7 +205,11 @@ const Footer = () => {
               })}
               {info.available_hours && (
                 <li className="flex items-start gap-3">
-                  <FaClock className="text-slate-600 mt-0.5 shrink-0 text-sm" />
+                  <ReactIcon
+                    name="FaClock"
+                    size={13}
+                    className="text-slate-600 mt-0.5 shrink-0"
+                  />
                   <span className="text-sm text-slate-500 leading-snug">
                     {info.available_hours}
                   </span>

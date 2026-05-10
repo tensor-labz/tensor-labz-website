@@ -1,14 +1,7 @@
 import { memo } from 'react';
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
-import {
-  FaTimes,
-  FaChartPie,
-  FaUsers,
-  FaCreditCard,
-  FaCog,
-  FaGlobe,
-} from 'react-icons/fa';
+import ReactIcon from '../../../shared/components/ui/ReactIcon';
 import { MODULES } from '../config/modules';
 
 /* Modules consolidated into Site Control — hidden from the main sidebar */
@@ -43,13 +36,13 @@ const AdminSidebar = memo(({ open, onClose }: AdminSidebarProps) => {
   const NavBtn = ({
     isActive,
     onClick,
-    icon: Icon,
+    icon,
     label,
     layoutId,
   }: {
     isActive: boolean;
     onClick: () => void;
-    icon: React.ElementType;
+    icon: string;
     label: string;
     layoutId?: string;
   }) => (
@@ -63,7 +56,7 @@ const AdminSidebar = memo(({ open, onClose }: AdminSidebarProps) => {
           : { backgroundColor: 'transparent', color: 'var(--text-muted)' }
       }
     >
-      <Icon size={15} className="shrink-0" />
+      <ReactIcon name={icon} size={15} className="shrink-0" />
       <span>{label}</span>
       {isActive && (
         <motion.div
@@ -85,7 +78,7 @@ const AdminSidebar = memo(({ open, onClose }: AdminSidebarProps) => {
       <NavBtn
         isActive={isOverview}
         onClick={() => handleNav('/admin')}
-        icon={FaChartPie}
+        icon="FaChartPie"
         label="Dashboard"
         layoutId="sidebar-indicator"
       />
@@ -104,7 +97,7 @@ const AdminSidebar = memo(({ open, onClose }: AdminSidebarProps) => {
       <NavBtn
         isActive={isSiteControl}
         onClick={() => handleNav('/admin/site-control')}
-        icon={FaGlobe}
+        icon="FaGlobe"
         label="Site Control"
       />
       {MODULES.filter((mod) => !SITE_CONTROL_IDS.has(mod.id)).map((mod) => {
@@ -140,13 +133,13 @@ const AdminSidebar = memo(({ open, onClose }: AdminSidebarProps) => {
       <NavBtn
         isActive={isUsers}
         onClick={() => handleNav('/admin/users')}
-        icon={FaUsers}
+        icon="FaUsers"
         label="Users"
       />
       <NavBtn
         isActive={isBilling}
         onClick={() => handleNav('/admin/billing')}
-        icon={FaCreditCard}
+        icon="FaCreditCard"
         label="Billing"
       />
 
@@ -164,7 +157,7 @@ const AdminSidebar = memo(({ open, onClose }: AdminSidebarProps) => {
       <NavBtn
         isActive={isSettings}
         onClick={() => handleNav('/admin/settings')}
-        icon={FaCog}
+        icon="FaCog"
         label="Settings"
       />
     </nav>
@@ -230,7 +223,7 @@ const AdminSidebar = memo(({ open, onClose }: AdminSidebarProps) => {
                   onClick={onClose}
                   style={{ color: 'var(--text-muted)' }}
                 >
-                  <FaTimes size={16} />
+                  <ReactIcon name="FaTimes" size={16} />
                 </button>
               </div>
               <div className="flex-1 overflow-y-auto">

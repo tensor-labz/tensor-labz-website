@@ -1,8 +1,7 @@
 import { memo, useState } from 'react';
 import { motion } from 'motion/react';
 import { Routes, Route, Link, useNavigate } from 'react-router-dom';
-import { FaSignOutAlt, FaBars } from 'react-icons/fa';
-import { RiSunLine, RiMoonLine } from 'react-icons/ri';
+import ReactIcon from '../shared/components/ui/ReactIcon';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
 import { signOut, selectAuthUser } from '../store/authSlice';
 import { useTheme } from '../shared/hooks/useTheme';
@@ -60,7 +59,7 @@ const AdminDashboard = memo(() => {
             }}
             aria-label="Open menu"
           >
-            <FaBars size={13} />
+            <ReactIcon name="FaBars" size={13} />
           </motion.button>
 
           {data?.layout?.logo && (
@@ -93,7 +92,7 @@ const AdminDashboard = memo(() => {
               color: 'var(--text-muted)',
             }}
           >
-            {theme === 'dark' ? <RiSunLine /> : <RiMoonLine />}
+            {theme === 'dark' ? <ReactIcon name="RiSunLine" size={16} /> : <ReactIcon name="RiMoonLine" size={16} />}
           </motion.button>
 
           <motion.button
@@ -106,7 +105,7 @@ const AdminDashboard = memo(() => {
               color: 'var(--text-primary)',
             }}
           >
-            <FaSignOutAlt size={12} />
+            <ReactIcon name="FaSignOutAlt" size={12} />
             <span className="hidden sm:inline">Sign out</span>
           </motion.button>
         </div>

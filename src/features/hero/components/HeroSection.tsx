@@ -1,4 +1,5 @@
 import React, { memo } from 'react';
+import { Link } from 'react-router-dom';
 import { motion } from 'motion/react';
 import { useInView } from 'react-intersection-observer';
 import Section from '../../../shared/components/ui/Section';
@@ -14,8 +15,9 @@ import {
   selectServices,
   selectServicesStatus,
 } from '../../../store/servicesSlice';
-import data from '../../../data/data';
-import { FaRobot, FaCube, FaBolt } from 'react-icons/fa';
+import { selectCurrentSlide } from '../../../store/heroSlice';
+import { useCompanyInfo } from '../../../shared/hooks/useCompanyInfo';
+import ReactIcon from '../../../shared/components/ui/ReactIcon';
 
 const textVariants = {
   hidden: { opacity: 0, y: 24 },
@@ -32,6 +34,9 @@ const HeroSection: React.FC = memo(() => {
   // Kick off hero slides load + auto-advance
   useHeroController();
 
+  const slide = useAppSelector(selectCurrentSlide);
+  const { tagline } = useCompanyInfo();
+
   const projects = useAppSelector(selectAllProjects);
   const projectsStatus = useAppSelector(selectProjectsStatus);
   const services = useAppSelector(selectServices);
@@ -41,19 +46,19 @@ const HeroSection: React.FC = memo(() => {
     {
       value: `${projects.length}+`,
       label: 'Projects',
-      icon: FaCube,
+      icon: 'FaCube',
       loading: projectsStatus === 'idle' || projectsStatus === 'loading',
     },
     {
       value: `${services.length}+`,
       label: 'Services',
-      icon: FaRobot,
+      icon: 'FaRobot',
       loading: servicesStatus === 'idle' || servicesStatus === 'loading',
     },
     {
       value: `${new Date().getFullYear() - 2023}+`,
       label: 'Years',
-      icon: FaBolt,
+      icon: 'FaBolt',
       loading: false,
     },
   ];
@@ -106,19 +111,8 @@ const HeroSection: React.FC = memo(() => {
           className="w-full flex flex-col order-2 lg:order-1 lg:w-6/12
             items-center text-center lg:items-start lg:text-left"
         >
-          <motion.span
-            custom={0}
-            variants={textVariants}
-            initial="hidden"
-            animate={inView ? 'visible' : 'hidden'}
-            className="text-[10px] font-semibold tracking-[0.3em] uppercase mb-4"
-            style={{ color: 'var(--accent)' }}
-          >
-            Mechatronics & Engineering
-          </motion.span>
-
           <motion.h1
-            custom={1}
+            custom={0}
             variants={textVariants}
             initial="hidden"
             animate={inView ? 'visible' : 'hidden'}
@@ -128,19 +122,7 @@ const HeroSection: React.FC = memo(() => {
               fontFamily: '"Syne", sans-serif',
             }}
           >
-            {data?.Home?.hero?.title?.map((line: string, i: number) => (
-              <span
-                key={i}
-                className="block"
-                style={
-                  i === (data?.Home?.hero?.title?.length ?? 0) - 1
-                    ? { color: 'var(--accent)' }
-                    : undefined
-                }
-              >
-                {line}
-              </span>
-            ))}
+            {tagline}
           </motion.h1>
 
           <motion.div
@@ -156,19 +138,38 @@ const HeroSection: React.FC = memo(() => {
             variants={textVariants}
             initial="hidden"
             animate={inView ? 'visible' : 'hidden'}
-            className="mb-8 w-full"
+            className="mb-6 w-full"
           >
             <HeroKeyPoint />
           </motion.div>
 
+          {slide?.cta_label && slide?.cta_link && (
+            <motion.div
+              custom={3}
+              variants={textVariants}
+              initial="hidden"
+              animate={inView ? 'visible' : 'hidden'}
+              className="mb-8 flex justify-center lg:justify-start"
+            >
+              <Link
+                to={slide.cta_link}
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all"
+                style={{ backgroundColor: 'var(--accent)', color: '#fff' }}
+              >
+                {slide.cta_label}
+                <ReactIcon name="FiArrowRight" size={15} />
+              </Link>
+            </motion.div>
+          )}
+
           <motion.div
-            custom={3}
+            custom={4}
             variants={textVariants}
             initial="hidden"
             animate={inView ? 'visible' : 'hidden'}
             className="flex justify-center lg:justify-start gap-8 md:gap-10"
           >
-            {stats.map(({ value, label, icon: Icon, loading }) =>
+            {stats.map(({ value, label, icon, loading }) =>
               loading ? (
                 <div key={label} className="flex items-center gap-2">
                   <motion.div
@@ -184,7 +185,8 @@ const HeroSection: React.FC = memo(() => {
                 </div>
               ) : (
                 <div key={label} className="flex items-center gap-2.5">
-                  <Icon
+                  <ReactIcon
+                    name={icon}
                     className="text-xl shrink-0"
                     style={{ color: 'var(--accent)' }}
                   />

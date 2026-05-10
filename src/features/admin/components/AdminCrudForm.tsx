@@ -1,15 +1,7 @@
 import { memo, useState, useRef, useCallback, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
-import {
-  FaTrash,
-  FaSave,
-  FaCloudUploadAlt,
-  FaLink,
-  FaImage,
-  FaTimes,
-  FaPlus,
-} from 'react-icons/fa';
+import ReactIcon from '../../../shared/components/ui/ReactIcon';
 import ReactQuill from 'react-quill-new';
 import 'react-quill-new/dist/quill.snow.css';
 import { MODULES, type FieldConfig } from '../config/modules';
@@ -67,7 +59,7 @@ const DeleteModal = ({
         className="w-12 h-12 rounded-full flex items-center justify-center mb-4 mx-auto"
         style={{ backgroundColor: 'rgba(239,68,68,0.12)' }}
       >
-        <FaTrash size={18} style={{ color: '#ef4444' }} />
+        <ReactIcon name="FaTrash" size={18} style={{ color: '#ef4444' }} />
       </div>
       <h3
         className="text-lg font-bold text-center mb-2"
@@ -199,8 +191,8 @@ export const ImageField = ({
     <div className="space-y-3">
       {/* Tab bar — always visible */}
       <div className="flex items-center gap-2">
-        {tabBtn('Upload File', 'upload', <FaCloudUploadAlt size={11} />)}
-        {tabBtn('S3 / URL', 'url', <FaLink size={10} />)}
+        {tabBtn('Upload File', 'upload', <ReactIcon name="FaCloudUploadAlt" size={11} />)}
+        {tabBtn('S3 / URL', 'url', <ReactIcon name="FaLink" size={10} />)}
       </div>
 
       {/* Prominent full-width preview card — shown whenever a preview exists */}
@@ -266,7 +258,7 @@ export const ImageField = ({
                 className="absolute top-2 right-2 w-7 h-7 rounded-full flex items-center justify-center shadow-lg"
                 style={{ backgroundColor: 'rgba(0,0,0,0.55)', color: '#fff' }}
               >
-                <FaTimes size={11} />
+                <ReactIcon name="FaTimes" size={11} />
               </button>
               <div
                 className="absolute bottom-0 left-0 right-0 px-3 py-1.5 text-xs truncate"
@@ -333,7 +325,8 @@ export const ImageField = ({
             ) : (
               /* Full drop zone */
               <>
-                <FaCloudUploadAlt
+                <ReactIcon
+                  name="FaCloudUploadAlt"
                   size={22}
                   style={{
                     color: dragging ? 'var(--accent)' : 'var(--text-muted)',
@@ -379,7 +372,8 @@ export const ImageField = ({
       {mode === 'url' && (
         <div className="space-y-2">
           <div className="flex items-center gap-2">
-            <FaLink
+            <ReactIcon
+              name="FaLink"
               size={12}
               style={{ color: 'var(--text-muted)', flexShrink: 0 }}
             />
@@ -411,7 +405,8 @@ export const ImageField = ({
             border: '1px solid var(--glass-border-subtle)',
           }}
         >
-          <FaImage
+          <ReactIcon
+            name="FaImage"
             size={20}
             style={{ color: 'var(--text-muted)', opacity: 0.3 }}
           />
@@ -531,7 +526,7 @@ const MultiImageField = ({
                 className="absolute top-1 right-1 w-5 h-5 rounded-full flex items-center justify-center"
                 style={{ backgroundColor: 'rgba(0,0,0,0.6)', color: '#fff' }}
               >
-                <FaTimes size={9} />
+                <ReactIcon name="FaTimes" size={9} />
               </button>
             </div>
           ))}
@@ -605,7 +600,7 @@ const MultiImageField = ({
                       color: '#fff',
                     }}
                   >
-                    <FaTimes size={8} />
+                    <ReactIcon name="FaTimes" size={8} />
                   </button>
                 </div>
               )}
@@ -626,7 +621,7 @@ const MultiImageField = ({
               border: '1px solid var(--glass-border)',
             }}
           >
-            <FaCloudUploadAlt size={11} /> Upload
+            <ReactIcon name="FaCloudUploadAlt" size={11} /> Upload
           </button>
           <button
             type="button"
@@ -638,7 +633,7 @@ const MultiImageField = ({
               border: '1px solid var(--glass-border)',
             }}
           >
-            <FaLink size={10} /> Add URL
+            <ReactIcon name="FaLink" size={10} /> Add URL
           </button>
           {!hasItems && (
             <span className="text-xs" style={{ color: 'var(--text-muted)' }}>
@@ -677,7 +672,8 @@ const MultiImageField = ({
               className="hidden"
               onChange={(e) => handleFiles(e.target.files)}
             />
-            <FaCloudUploadAlt
+            <ReactIcon
+              name="FaCloudUploadAlt"
               size={18}
               style={{ color: 'var(--text-muted)' }}
             />
@@ -799,7 +795,7 @@ const MultiInputField = ({
               border: '1px solid rgba(239,68,68,0.2)',
             }}
           >
-            <FaTimes size={10} />
+            <ReactIcon name="FaTimes" size={10} />
           </button>
         </div>
       ))}
@@ -813,7 +809,7 @@ const MultiInputField = ({
           border: '1px solid var(--glass-border)',
         }}
       >
-        <FaPlus size={9} /> Add item
+        <ReactIcon name="FaPlus" size={9} /> Add item
       </button>
     </div>
   );
@@ -1270,7 +1266,7 @@ const AdminCrudForm = memo(() => {
                   color: '#ef4444',
                 }}
               >
-                <FaTrash size={12} />
+                <ReactIcon name="FaTrash" size={12} />
                 <span className="hidden sm:inline">Delete</span>
               </motion.button>
             )}
@@ -1293,7 +1289,7 @@ const AdminCrudForm = memo(() => {
               className="flex items-center gap-1.5 px-3 py-2 sm:px-4 sm:py-2.5 rounded-lg text-xs sm:text-sm font-semibold disabled:opacity-60"
               style={{ backgroundColor: 'var(--accent)', color: '#fff' }}
             >
-              <FaSave size={12} />
+              <ReactIcon name="FaSave" size={12} />
               <span>{saving ? 'Saving…' : 'Save'}</span>
             </motion.button>
           </div>

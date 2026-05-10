@@ -5,7 +5,7 @@ import DataTable, {
   createTheme,
   type TableColumn,
 } from 'react-data-table-component';
-import { FiSearch, FiX, FiExternalLink, FiChevronRight } from 'react-icons/fi';
+import ReactIcon from '../../../shared/components/ui/ReactIcon';
 import { MODULES } from '../config/modules';
 import { supabase } from '../../../lib/supabase';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
@@ -251,7 +251,8 @@ const MobileCardList = ({
                 </p>
               )}
             </div>
-            <FiChevronRight
+            <ReactIcon
+              name="FiChevronRight"
               size={15}
               style={{ color: 'var(--text-muted)', flexShrink: 0 }}
             />
@@ -418,7 +419,7 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
                       flexShrink: 0,
                     }}
                   >
-                    <FiExternalLink size={14} />
+                    <ReactIcon name="FiExternalLink" size={14} />
                   </a>
                 );
               },
@@ -525,7 +526,7 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
                     flexShrink: 0,
                   }}
                 >
-                  <FiExternalLink size={14} />
+                  <ReactIcon name="FiExternalLink" size={14} />
                 </a>
               );
             },
@@ -620,7 +621,8 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
             border: '1px solid var(--glass-border)',
           }}
         >
-          <FiSearch
+          <ReactIcon
+            name="FiSearch"
             size={14}
             style={{ color: 'var(--text-muted)', flexShrink: 0 }}
           />
@@ -634,7 +636,7 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
           />
           {search && (
             <button onClick={() => setSearch('')} className="flex-shrink-0">
-              <FiX size={13} style={{ color: 'var(--text-muted)' }} />
+              <ReactIcon name="FiX" size={13} style={{ color: 'var(--text-muted)' }} />
             </button>
           )}
         </div>

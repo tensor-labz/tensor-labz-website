@@ -1,6 +1,6 @@
 import { memo, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FaCog, FaPlus } from 'react-icons/fa';
+import ReactIcon from '../../../shared/components/ui/ReactIcon';
 import { MODULES } from '../config/modules';
 import { supabase } from '../../../lib/supabase';
 import {
@@ -62,7 +62,7 @@ const AdminModulePage = memo(({ moduleId }: { moduleId: string }) => {
             }}
             title="Configure form fields"
           >
-            <FaCog size={12} />
+            <ReactIcon name="FaCog" size={12} />
             <span className="hidden sm:inline">Form Builder</span>
           </button>
           <button
@@ -70,7 +70,7 @@ const AdminModulePage = memo(({ moduleId }: { moduleId: string }) => {
             className="flex items-center gap-1.5 px-3 py-2 sm:px-4 sm:py-2.5 rounded-xl text-xs sm:text-sm font-semibold"
             style={{ backgroundColor: 'var(--accent)', color: '#fff' }}
           >
-            <FaPlus size={10} /> <span>Add New</span>
+            <ReactIcon name="FaPlus" size={10} /> <span>Add New</span>
           </button>
         </div>
       </div>

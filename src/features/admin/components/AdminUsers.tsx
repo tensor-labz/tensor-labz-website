@@ -1,18 +1,6 @@
 import { memo, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import {
-  FaUserPlus,
-  FaSearch,
-  FaTrash,
-  FaEdit,
-  FaShieldAlt,
-  FaUserCheck,
-  FaUserClock,
-  FaBan,
-  FaEllipsisV,
-  FaTimes,
-  FaSave,
-} from 'react-icons/fa';
+import ReactIcon from '../../../shared/components/ui/ReactIcon';
 
 type Role = 'Super Admin' | 'Admin' | 'Editor' | 'Viewer';
 type Status = 'Active' | 'Inactive' | 'Suspended';
@@ -99,17 +87,17 @@ const STATUS_META: Record<
   Active: {
     color: '#34d399',
     bg: 'rgba(52,211,153,0.12)',
-    icon: <FaUserCheck size={10} />,
+    icon: <ReactIcon name="FaUserCheck" size={10} />,
   },
   Inactive: {
     color: '#94a3b8',
     bg: 'rgba(148,163,184,0.12)',
-    icon: <FaUserClock size={10} />,
+    icon: <ReactIcon name="FaUserClock" size={10} />,
   },
   Suspended: {
     color: '#f87171',
     bg: 'rgba(248,113,113,0.12)',
-    icon: <FaBan size={10} />,
+    icon: <ReactIcon name="FaBan" size={10} />,
   },
 };
 
@@ -216,7 +204,7 @@ const UserModal = ({
             {isNew ? 'Invite User' : 'Edit User'}
           </h3>
           <button onClick={onClose} style={{ color: 'var(--text-muted)' }}>
-            <FaTimes size={14} />
+            <ReactIcon name="FaTimes" size={14} />
           </button>
         </div>
         <div className="space-y-4">
@@ -313,7 +301,7 @@ const UserModal = ({
             className="flex-1 py-2.5 rounded-lg text-sm font-semibold flex items-center justify-center gap-2"
             style={{ backgroundColor: 'var(--accent)', color: '#fff' }}
           >
-            <FaSave size={12} />
+            <ReactIcon name="FaSave" size={12} />
             {isNew ? 'Send Invite' : 'Save Changes'}
           </button>
         </div>
@@ -342,7 +330,7 @@ const ActionMenu = ({
           backgroundColor: open ? 'var(--glass-bg-raised)' : 'transparent',
         }}
       >
-        <FaEllipsisV size={12} />
+        <ReactIcon name="FaEllipsisV" size={12} />
       </button>
       <AnimatePresence>
         {open && (
@@ -365,7 +353,7 @@ const ActionMenu = ({
               className="flex items-center gap-2.5 w-full px-3.5 py-2.5 text-xs font-medium hover:bg-[var(--glass-bg-raised)] transition-colors"
               style={{ color: 'var(--text-primary)' }}
             >
-              <FaEdit size={11} style={{ color: '#38bdf8' }} /> Edit
+              <ReactIcon name="FaEdit" size={11} style={{ color: '#38bdf8' }} /> Edit
             </button>
             <button
               onClick={() => {
@@ -375,7 +363,7 @@ const ActionMenu = ({
               className="flex items-center gap-2.5 w-full px-3.5 py-2.5 text-xs font-medium hover:bg-[var(--glass-bg-raised)] transition-colors"
               style={{ color: '#f87171' }}
             >
-              <FaTrash size={11} /> Remove
+              <ReactIcon name="FaTrash" size={11} /> Remove
             </button>
           </motion.div>
         )}
@@ -430,7 +418,7 @@ const AdminUsers = memo(() => {
             className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold self-start sm:self-auto"
             style={{ backgroundColor: 'var(--accent)', color: '#fff' }}
           >
-            <FaUserPlus size={13} /> Invite User
+            <ReactIcon name="FaUserPlus" size={13} /> Invite User
           </motion.button>
         </div>
 
@@ -449,7 +437,7 @@ const AdminUsers = memo(() => {
                 className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0"
                 style={{ backgroundColor: s.bg, color: s.color }}
               >
-                <FaShieldAlt size={14} />
+                <ReactIcon name="FaShieldAlt" size={14} />
               </div>
               <div>
                 <p
@@ -475,7 +463,8 @@ const AdminUsers = memo(() => {
         {/* Filters */}
         <div className="flex flex-col sm:flex-row gap-3">
           <div className="relative flex-1">
-            <FaSearch
+            <ReactIcon
+              name="FaSearch"
               size={12}
               className="absolute left-3 top-1/2 -translate-y-1/2"
               style={{ color: 'var(--text-muted)' }}

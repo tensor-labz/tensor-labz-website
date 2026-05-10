@@ -1,7 +1,7 @@
 import React, { memo, useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import LatestProductCard from './LatestProductCard';
-import { FaAngleLeft, FaAngleRight } from 'react-icons/fa';
+import ReactIcon from '../../../shared/components/ui/ReactIcon';
 import { useAppSelector } from '../../../app/hooks';
 import { selectTopProjects } from '../../../store/projectsSlice';
 
@@ -49,12 +49,12 @@ const MobileTopCarousel: React.FC = memo(() => {
 
         {[
           {
-            icon: <FaAngleLeft size={16} />,
+            icon: <ReactIcon name="FaAngleLeft" size={16} />,
             position: 'left-2',
             onClick: goPrev,
           },
           {
-            icon: <FaAngleRight size={16} />,
+            icon: <ReactIcon name="FaAngleRight" size={16} />,
             position: 'right-2',
             onClick: goNext,
           },

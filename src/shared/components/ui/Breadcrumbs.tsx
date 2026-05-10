@@ -1,4 +1,4 @@
-import { FaChevronRight } from 'react-icons/fa';
+import ReactIcon from './ReactIcon';
 
 export interface BreadcrumbItem {
   label: string;
@@ -16,7 +16,8 @@ const Breadcrumbs = ({ items }: BreadcrumbsProps) => (
       return (
         <span key={idx} className="flex items-center gap-1.5 min-w-0">
           {idx > 0 && (
-            <FaChevronRight
+            <ReactIcon
+              name="FaChevronRight"
               size={9}
               style={{
                 color: 'var(--text-muted)',

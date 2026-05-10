@@ -1,13 +1,3 @@
-import {
-  FaImages,
-  FaCogs,
-  FaProjectDiagram,
-  FaInfoCircle,
-  FaEnvelope,
-  FaAddressBook,
-} from 'react-icons/fa';
-import { IconType } from 'react-icons';
-
 export interface RelationConfig {
   table: string; // Supabase table to fetch options from
   labelField: string; // field to display in the dropdown
@@ -40,7 +30,7 @@ export interface FieldConfig {
 export interface ModuleConfig {
   id: string;
   label: string;
-  icon: IconType;
+  icon: string;
   imageField?: string;
   titleField: string;
   descriptionField?: string;
@@ -50,34 +40,9 @@ export interface ModuleConfig {
 
 export const MODULES: ModuleConfig[] = [
   {
-    id: 'hero',
-    label: 'Hero Slides',
-    icon: FaImages,
-    imageField: 'img',
-    titleField: 'title',
-    descriptionField: 'subtitle',
-    fields: [
-      {
-        key: 'img',
-        label: 'Image',
-        type: 'image',
-        required: true,
-        span: 'full',
-      },
-      {
-        key: 'title',
-        label: 'Title',
-        type: 'text',
-        required: true,
-        span: 'full',
-      },
-      { key: 'subtitle', label: 'Subtitle', type: 'text', span: 'full' },
-    ],
-  },
-  {
     id: 'services',
     label: 'Services',
-    icon: FaCogs,
+    icon: 'FaCogs',
     imageField: 'imageURL',
     titleField: 'title',
     descriptionField: 'description',
@@ -116,7 +81,7 @@ export const MODULES: ModuleConfig[] = [
   {
     id: 'projects',
     label: 'Projects',
-    icon: FaProjectDiagram,
+    icon: 'FaProjectDiagram',
     imageField: 'imageURL',
     titleField: 'title',
     descriptionField: 'description',
@@ -187,7 +152,7 @@ export const MODULES: ModuleConfig[] = [
   {
     id: 'about',
     label: 'About Us',
-    icon: FaInfoCircle,
+    icon: 'FaInfoCircle',
     titleField: 'components',
     descriptionField: 'value',
     fields: [
@@ -210,7 +175,7 @@ export const MODULES: ModuleConfig[] = [
   {
     id: 'contact',
     label: 'Contact Info',
-    icon: FaEnvelope,
+    icon: 'FaEnvelope',
     titleField: 'title',
     descriptionField: 'value',
     fields: [
@@ -242,7 +207,7 @@ export const MODULES: ModuleConfig[] = [
   {
     id: 'social',
     label: 'Social Links',
-    icon: FaAddressBook,
+    icon: 'FaAddressBook',
     titleField: 'social_media',
     descriptionField: 'value',
     fields: [

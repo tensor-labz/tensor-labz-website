@@ -1,8 +1,7 @@
 import { useState, useEffect, FormEvent } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'motion/react';
-import { FaEnvelope, FaLock, FaEye, FaEyeSlash } from 'react-icons/fa';
-import { RiSunLine, RiMoonLine } from 'react-icons/ri';
+import ReactIcon from '../shared/components/ui/ReactIcon';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
 import { useTheme } from '../shared/hooks/useTheme';
 import {
@@ -64,7 +63,7 @@ const Login = () => {
           color: 'var(--text-muted)',
         }}
       >
-        {theme === 'dark' ? <RiSunLine /> : <RiMoonLine />}
+        {theme === 'dark' ? <ReactIcon name="RiSunLine" size={16} /> : <ReactIcon name="RiMoonLine" size={16} />}
       </motion.button>
       <HeaderHelmet title="Admin Login" />
 
@@ -117,7 +116,8 @@ const Login = () => {
                 Email address
               </label>
               <div className="relative">
-                <FaEnvelope
+                <ReactIcon
+                  name="FaEnvelope"
                   className="absolute left-3 top-1/2 -translate-y-1/2 text-sm"
                   style={{ color: 'var(--text-muted)' }}
                 />
@@ -149,7 +149,8 @@ const Login = () => {
                 Password
               </label>
               <div className="relative">
-                <FaLock
+                <ReactIcon
+                  name="FaLock"
                   className="absolute left-3 top-1/2 -translate-y-1/2 text-sm"
                   style={{ color: 'var(--text-muted)' }}
                 />
@@ -176,9 +177,9 @@ const Login = () => {
                   aria-label={showPassword ? 'Hide password' : 'Show password'}
                 >
                   {showPassword ? (
-                    <FaEyeSlash size={14} />
+                    <ReactIcon name="FaEyeSlash" size={14} />
                   ) : (
-                    <FaEye size={14} />
+                    <ReactIcon name="FaEye" size={14} />
                   )}
                 </button>
               </div>
