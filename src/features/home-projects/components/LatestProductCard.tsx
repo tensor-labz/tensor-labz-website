@@ -1,8 +1,10 @@
 import React, { memo } from 'react';
+import { motion } from 'motion/react';
 import { useNavigate } from 'react-router-dom';
 import Card from '../../../shared/components/ui/Card';
 import type { ProjectItem } from '../../../shared/types/project';
-import { FiArrowRight } from 'react-icons/fi';
+import ReactIcon from '../../../shared/components/ui/ReactIcon';
+import { EASE_EXPO } from '../../../lib/motion';
 
 type LatestProductCardProps = Pick<
   ProjectItem,
@@ -10,54 +12,68 @@ type LatestProductCardProps = Pick<
 >;
 
 const LatestProductCard: React.FC<LatestProductCardProps> = memo((project) => {
-  const safeId = project.id ?? 0;
   const navigate = useNavigate();
-
-  const customAnimation = {
-    initial: { opacity: 0, scale: 0.95, x: safeId % 2 !== 0 ? 50 : -50 },
-    whileInView: { opacity: 1, x: 0, scale: 1 },
-    transition: { type: 'spring', stiffness: 300, damping: 20 },
-  };
 
   return (
     <Card
-      animation={customAnimation}
-      className="relative flex flex-col md:flex-row w-full md:max-w-2xl rounded-xl shadow-md
-        overflow-hidden md:h-[300px] cursor-pointer transition-all duration-300"
-      style={{
-        backgroundColor: 'var(--bg-surface)',
-        border: '1px solid var(--border)',
+      animation={{
+        initial: { opacity: 0, y: 20 },
+        whileInView: { opacity: 1, y: 0 },
+        transition: { duration: 0.55, ease: EASE_EXPO },
       }}
+      className="group relative flex flex-col w-full rounded-xl shadow-md
+        overflow-hidden cursor-pointer transition-all duration-300
+        bg-surface border border-rim hover:border-accent/40
+        hover:shadow-[0_8px_32px_-8px_rgba(56,189,248,0.15)]"
       onClick={() => navigate(`/project/${project.slug}`)}
     >
-      {/* IMAGE */}
-      <div className="w-full md:w-full h-[250px] md:h-full relative">
+      {/* Image */}
+      <div className="w-full aspect-video relative overflow-hidden">
         <img
           src={project.imageURL}
-          alt="Project Illustration"
-          className="object-cover w-full h-full transition-transform duration-300"
+          alt={project.title}
+          className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
         />
 
-        {/* Overlay on md+ */}
-        <div className="hidden md:flex absolute inset-0 flex-col justify-end bg-gradient-to-t from-black/55 to-transparent p-6">
-          <h5 className="text-white text-2xl font-bold mb-2">
-            {project.title}
-          </h5>
-          <FiArrowRight className="text-white w-6 h-6" />
+        {/* Engineering grid overlay on image */}
+        <div
+          className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+          style={{
+            backgroundImage:
+              'linear-gradient(rgba(56,189,248,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(56,189,248,0.06) 1px, transparent 1px)',
+            backgroundSize: '28px 28px',
+          }}
+        />
+
+        {/* Gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+
+        {/* Arrow badge on hover */}
+        <motion.div
+          className="absolute bottom-3 right-3 w-8 h-8 rounded-full bg-accent/90 flex items-center justify-center
+            opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-300"
+        >
+          <ReactIcon name="FiArrowRight" size={14} className="text-white" />
+        </motion.div>
+
+        {/* Technical label top-left */}
+        <div className="absolute top-2 left-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          <span className="text-[8px] font-mono tracking-widest uppercase text-accent/90 bg-black/50 backdrop-blur-sm px-2 py-0.5 rounded border border-accent/20">
+            ◈ View Project
+          </span>
         </div>
       </div>
 
-      {/* Mobile content */}
-      <div className="flex flex-col p-4 md:hidden">
-        <h5
-          className="mb-2 text-xl font-bold"
-          style={{ color: 'var(--text-primary)' }}
-        >
+      {/* Title strip */}
+      <div className="px-3 py-2.5 flex items-center justify-between gap-2">
+        <h5 className="text-sm font-semibold font-display text-fg truncate leading-snug">
           {project.title}
         </h5>
-        <p className="text-sm" style={{ color: 'var(--text-muted)' }}>
-          {project.description}
-        </p>
+        <ReactIcon
+          name="FiArrowRight"
+          size={14}
+          className="text-muted shrink-0 transition-all duration-300 group-hover:text-accent group-hover:translate-x-0.5"
+        />
       </div>
     </Card>
   );

@@ -1,28 +1,7 @@
 import { memo, useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { AnimatePresence, motion } from 'motion/react';
-import {
-  FaAlignLeft,
-  FaCaretDown,
-  FaCheck,
-  FaCheckSquare,
-  FaChevronDown,
-  FaChevronUp,
-  FaCode,
-  FaDotCircle,
-  FaEdit,
-  FaFont,
-  FaImage,
-  FaImages,
-  FaLink,
-  FaList,
-  FaPlus,
-  FaSave,
-  FaTags,
-  FaToggleOn,
-  FaTrash,
-  FaUndo,
-} from 'react-icons/fa';
+import ReactIcon from '../../../shared/components/ui/ReactIcon';
 import { MODULES, type FieldConfig } from '../config/modules';
 import Breadcrumbs from '../../../shared/components/ui/Breadcrumbs';
 import { supabase } from '../../../lib/supabase';
@@ -44,18 +23,18 @@ interface FieldDraft {
 /* ── Constants ── */
 
 const TYPES: { value: FieldType; label: string; icon: React.ReactNode }[] = [
-  { value: 'text', label: 'Text', icon: <FaFont size={11} /> },
-  { value: 'textarea', label: 'Textarea', icon: <FaAlignLeft size={11} /> },
-  { value: 'richtext', label: 'Rich Text', icon: <FaCode size={11} /> },
-  { value: 'url', label: 'URL', icon: <FaLink size={11} /> },
-  { value: 'image', label: 'Image', icon: <FaImage size={11} /> },
-  { value: 'images', label: 'Multi-Image', icon: <FaImages size={11} /> },
-  { value: 'toggle', label: 'Toggle', icon: <FaToggleOn size={11} /> },
-  { value: 'checkbox', label: 'Checkbox', icon: <FaCheckSquare size={11} /> },
-  { value: 'tags', label: 'Tags', icon: <FaTags size={11} /> },
-  { value: 'multiinput', label: 'Multi-Input', icon: <FaList size={11} /> },
-  { value: 'radio', label: 'Radio', icon: <FaDotCircle size={11} /> },
-  { value: 'select', label: 'Select', icon: <FaCaretDown size={11} /> },
+  { value: 'text', label: 'Text', icon: <ReactIcon name="FaFont" size={11} /> },
+  { value: 'textarea', label: 'Textarea', icon: <ReactIcon name="FaAlignLeft" size={11} /> },
+  { value: 'richtext', label: 'Rich Text', icon: <ReactIcon name="FaCode" size={11} /> },
+  { value: 'url', label: 'URL', icon: <ReactIcon name="FaLink" size={11} /> },
+  { value: 'image', label: 'Image', icon: <ReactIcon name="FaImage" size={11} /> },
+  { value: 'images', label: 'Multi-Image', icon: <ReactIcon name="FaImages" size={11} /> },
+  { value: 'toggle', label: 'Toggle', icon: <ReactIcon name="FaToggleOn" size={11} /> },
+  { value: 'checkbox', label: 'Checkbox', icon: <ReactIcon name="FaCheckSquare" size={11} /> },
+  { value: 'tags', label: 'Tags', icon: <ReactIcon name="FaTags" size={11} /> },
+  { value: 'multiinput', label: 'Multi-Input', icon: <ReactIcon name="FaList" size={11} /> },
+  { value: 'radio', label: 'Radio', icon: <ReactIcon name="FaDotCircle" size={11} /> },
+  { value: 'select', label: 'Select', icon: <ReactIcon name="FaCaretDown" size={11} /> },
 ];
 
 const typeIcon = (t: FieldType) => TYPES.find((x) => x.value === t)?.icon;
@@ -320,7 +299,7 @@ const FieldEditPanel = memo(
               className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-semibold disabled:opacity-40"
               style={{ backgroundColor: 'var(--accent)', color: '#fff' }}
             >
-              <FaCheck size={11} />
+              <ReactIcon name="FaCheck" size={11} />
               {isNew ? 'Add Field' : 'Update Field'}
             </button>
           </div>
@@ -452,7 +431,7 @@ const AdminFormBuilder = memo(() => {
               color: 'var(--text-muted)',
             }}
           >
-            <FaUndo size={10} />
+            <ReactIcon name="FaUndo" size={10} />
             <span className="hidden sm:inline">Reset</span>
           </button>
           <motion.button
@@ -466,7 +445,7 @@ const AdminFormBuilder = memo(() => {
               color: '#fff',
             }}
           >
-            {saved ? <FaCheck size={12} /> : <FaSave size={12} />}
+            {saved ? <ReactIcon name="FaCheck" size={12} /> : <ReactIcon name="FaSave" size={12} />}
             <span>{saved ? 'Saved!' : saving ? 'Saving…' : 'Save'}</span>
           </motion.button>
         </div>
@@ -594,7 +573,7 @@ const AdminFormBuilder = memo(() => {
                             color: 'var(--text-muted)',
                           }}
                         >
-                          <FaChevronUp size={9} />
+                          <ReactIcon name="FaChevronUp" size={9} />
                         </button>
                         <button
                           type="button"
@@ -606,7 +585,7 @@ const AdminFormBuilder = memo(() => {
                             color: 'var(--text-muted)',
                           }}
                         >
-                          <FaChevronDown size={9} />
+                          <ReactIcon name="FaChevronDown" size={9} />
                         </button>
                         <button
                           type="button"
@@ -623,7 +602,7 @@ const AdminFormBuilder = memo(() => {
                                 : 'var(--text-muted)',
                           }}
                         >
-                          <FaEdit size={10} />
+                          <ReactIcon name="FaEdit" size={10} />
                         </button>
                         <button
                           type="button"
@@ -634,7 +613,7 @@ const AdminFormBuilder = memo(() => {
                             color: '#ef4444',
                           }}
                         >
-                          <FaTrash size={10} />
+                          <ReactIcon name="FaTrash" size={10} />
                         </button>
                       </div>
                     </div>
@@ -690,7 +669,7 @@ const AdminFormBuilder = memo(() => {
                 color: 'var(--text-muted)',
               }}
             >
-              <FaPlus size={11} /> Add Field
+              <ReactIcon name="FaPlus" size={11} /> Add Field
             </button>
           )}
         </div>

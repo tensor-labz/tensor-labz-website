@@ -25,8 +25,7 @@ const HeroKeyPoint: React.FC = memo(() => {
           initial="initial"
           animate="animate"
           exit="exit"
-          className="text-xl md:text-2xl lg:text-3xl font-semibold absolute w-full text-center lg:text-left"
-          style={{ color: 'var(--text-primary)' }}
+          className="text-xl md:text-2xl lg:text-3xl font-semibold absolute w-full text-center lg:text-left text-fg"
         >
           {slide?.title as string}
         </motion.h2>

@@ -1,8 +1,9 @@
 import React, { memo } from 'react';
+import { Link } from 'react-router-dom';
 import { motion } from 'motion/react';
 import { useInView } from 'react-intersection-observer';
 import Section from '../../../shared/components/ui/Section';
-import HeroImageSlider from './HeroImageSlider';
+import HolographicFrame from './HolographicFrame';
 import HeroKeyPoint from './HeroKeyPoint';
 import { useHeroController } from '../hooks/useHeroController';
 import { useAppSelector } from '../../../app/hooks';
@@ -14,15 +15,17 @@ import {
   selectServices,
   selectServicesStatus,
 } from '../../../store/servicesSlice';
-import data from '../../../data/data';
-import { FaRobot, FaCube, FaBolt } from 'react-icons/fa';
+import { selectCurrentSlide } from '../../../store/heroSlice';
+import { useCompanyInfo } from '../../../shared/hooks/useCompanyInfo';
+import ReactIcon from '../../../shared/components/ui/ReactIcon';
+import { EASE_EXPO } from '../../../lib/motion';
 
 const textVariants = {
   hidden: { opacity: 0, y: 24 },
   visible: (i: number) => ({
     opacity: 1,
     y: 0,
-    transition: { duration: 0.7, delay: i * 0.14, ease: [0.22, 1, 0.36, 1] },
+    transition: { duration: 0.7, delay: i * 0.14, ease: EASE_EXPO },
   }),
 };
 
@@ -31,6 +34,9 @@ const HeroSection: React.FC = memo(() => {
 
   // Kick off hero slides load + auto-advance
   useHeroController();
+
+  const slide = useAppSelector(selectCurrentSlide);
+  const { tagline } = useCompanyInfo();
 
   const projects = useAppSelector(selectAllProjects);
   const projectsStatus = useAppSelector(selectProjectsStatus);
@@ -41,19 +47,19 @@ const HeroSection: React.FC = memo(() => {
     {
       value: `${projects.length}+`,
       label: 'Projects',
-      icon: FaCube,
+      icon: 'FaCube',
       loading: projectsStatus === 'idle' || projectsStatus === 'loading',
     },
     {
       value: `${services.length}+`,
       label: 'Services',
-      icon: FaRobot,
+      icon: 'FaRobot',
       loading: servicesStatus === 'idle' || servicesStatus === 'loading',
     },
     {
       value: `${new Date().getFullYear() - 2023}+`,
       label: 'Years',
-      icon: FaBolt,
+      icon: 'FaBolt',
       loading: false,
     },
   ];
@@ -61,15 +67,25 @@ const HeroSection: React.FC = memo(() => {
   return (
     <Section
       ref={ref}
-      className="relative min-h-screen flex items-center
+      className="relative min-h-screen flex items-center bg-canvas
         pt-20 pb-12 sm:pt-24 sm:pb-16 lg:pt-36 lg:pb-24 px-6 md:px-8 lg:px-12"
-      style={{ backgroundColor: 'var(--bg-base)' }}
     >
+      {/* radial vignette */}
       <div
         className="absolute inset-0 z-0 pointer-events-none"
         style={{
           background:
             'radial-gradient(ellipse 70% 60% at 60% 40%, transparent 0%, var(--bg-base) 70%)',
+        }}
+      />
+      {/* engineering grid — subtle across the hero */}
+      <div
+        className="absolute inset-0 z-0 pointer-events-none"
+        style={{
+          backgroundImage:
+            'linear-gradient(var(--grid-dot) 1px, transparent 1px), linear-gradient(90deg, var(--grid-dot) 1px, transparent 1px)',
+          backgroundSize: '48px 48px',
+          opacity: 0.6,
         }}
       />
 
@@ -97,7 +113,7 @@ const HeroSection: React.FC = memo(() => {
             transition={{ duration: 0.4, ease: 'easeOut' }}
             className="w-full h-full relative rounded-2xl overflow-hidden"
           >
-            <HeroImageSlider />
+            <HolographicFrame />
           </motion.div>
         </motion.div>
 
@@ -106,49 +122,21 @@ const HeroSection: React.FC = memo(() => {
           className="w-full flex flex-col order-2 lg:order-1 lg:w-6/12
             items-center text-center lg:items-start lg:text-left"
         >
-          <motion.span
+          <motion.h1
             custom={0}
             variants={textVariants}
             initial="hidden"
             animate={inView ? 'visible' : 'hidden'}
-            className="text-[10px] font-semibold tracking-[0.3em] uppercase mb-4"
-            style={{ color: 'var(--accent)' }}
+            className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold leading-[1.2] tracking-tight mb-4 text-fg font-display"
           >
-            Mechatronics & Engineering
-          </motion.span>
-
-          <motion.h1
-            custom={1}
-            variants={textVariants}
-            initial="hidden"
-            animate={inView ? 'visible' : 'hidden'}
-            className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold leading-[1.2] tracking-tight mb-4"
-            style={{
-              color: 'var(--text-primary)',
-              fontFamily: '"Syne", sans-serif',
-            }}
-          >
-            {data?.Home?.hero?.title?.map((line: string, i: number) => (
-              <span
-                key={i}
-                className="block"
-                style={
-                  i === (data?.Home?.hero?.title?.length ?? 0) - 1
-                    ? { color: 'var(--accent)' }
-                    : undefined
-                }
-              >
-                {line}
-              </span>
-            ))}
+            {tagline}
           </motion.h1>
 
           <motion.div
             initial={{ width: 0 }}
             animate={inView ? { width: '3.5rem' } : { width: 0 }}
             transition={{ delay: 0.8, duration: 0.6, ease: 'easeOut' }}
-            className="h-1 rounded-full mb-6 mx-auto lg:mx-0"
-            style={{ backgroundColor: 'var(--accent)' }}
+            className="h-1 rounded-full mb-6 mx-auto lg:mx-0 bg-accent"
           />
 
           <motion.div
@@ -156,24 +144,60 @@ const HeroSection: React.FC = memo(() => {
             variants={textVariants}
             initial="hidden"
             animate={inView ? 'visible' : 'hidden'}
-            className="mb-8 w-full"
+            className="mb-6 w-full"
           >
             <HeroKeyPoint />
           </motion.div>
 
+          {/* Domain chips — always visible, communicates brand instantly */}
           <motion.div
             custom={3}
             variants={textVariants}
             initial="hidden"
             animate={inView ? 'visible' : 'hidden'}
+            className="flex flex-wrap justify-center lg:justify-start gap-2 mb-5"
+          >
+            {['Mechatronics', '3D CAD', 'PCB Design', 'Embedded Systems'].map((chip) => (
+              <span
+                key={chip}
+                className="px-2.5 py-1 rounded border border-accent/25 bg-accent/5
+                  text-accent text-[10px] font-mono tracking-wider uppercase"
+              >
+                {chip}
+              </span>
+            ))}
+          </motion.div>
+
+          {slide?.cta_label && slide?.cta_link && (
+            <motion.div
+              custom={4}
+              variants={textVariants}
+              initial="hidden"
+              animate={inView ? 'visible' : 'hidden'}
+              className="mb-8 flex justify-center lg:justify-start"
+            >
+              <Link
+                to={slide.cta_link}
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all bg-accent text-white"
+              >
+                {slide.cta_label}
+                <ReactIcon name="FiArrowRight" size={15} />
+              </Link>
+            </motion.div>
+          )}
+
+          <motion.div
+            custom={5}
+            variants={textVariants}
+            initial="hidden"
+            animate={inView ? 'visible' : 'hidden'}
             className="flex justify-center lg:justify-start gap-8 md:gap-10"
           >
-            {stats.map(({ value, label, icon: Icon, loading }) =>
+            {stats.map(({ value, label, icon, loading }) =>
               loading ? (
                 <div key={label} className="flex items-center gap-2">
                   <motion.div
-                    className="w-3 h-3 rounded-full"
-                    style={{ backgroundColor: 'var(--accent)' }}
+                    className="w-3 h-3 rounded-full bg-accent"
                     animate={{ scale: [1, 1.4, 1], opacity: [1, 0.5, 1] }}
                     transition={{
                       duration: 1,
@@ -184,23 +208,18 @@ const HeroSection: React.FC = memo(() => {
                 </div>
               ) : (
                 <div key={label} className="flex items-center gap-2.5">
-                  <Icon
-                    className="text-xl shrink-0"
-                    style={{ color: 'var(--accent)' }}
+                  <ReactIcon
+                    name={icon}
+                    className="text-xl shrink-0 text-accent"
                   />
                   <div>
                     <div
-                      className="text-xl font-bold leading-none"
-                      style={{
-                        color: 'var(--text-primary)',
-                        fontFamily: '"Syne", sans-serif',
-                      }}
+                      className="text-xl font-bold leading-none text-fg font-display"
                     >
                       {value}
                     </div>
                     <div
-                      className="text-xs mt-0.5"
-                      style={{ color: 'var(--text-muted)' }}
+                      className="text-xs mt-0.5 text-muted"
                     >
                       {label}
                     </div>

@@ -5,6 +5,9 @@ export interface HeroSlide {
   img: string;
   title?: string;
   subtitle?: string;
+  cta_label?: string;
+  cta_link?: string;
+  sort_order?: number;
 }
 
 export const fetchHeroSlides = async (

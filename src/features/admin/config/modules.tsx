@@ -1,13 +1,3 @@
-import {
-  FaImages,
-  FaCogs,
-  FaProjectDiagram,
-  FaInfoCircle,
-  FaEnvelope,
-  FaAddressBook,
-} from 'react-icons/fa';
-import { IconType } from 'react-icons';
-
 export interface RelationConfig {
   table: string; // Supabase table to fetch options from
   labelField: string; // field to display in the dropdown
@@ -29,7 +19,8 @@ export interface FieldConfig {
     | 'multiinput'
     | 'richtext'
     | 'radio'
-    | 'select';
+    | 'select'
+    | 'covermedia';  // combined cover_image_type dropdown + url/upload input
   placeholder?: string;
   required?: boolean;
   span?: 'full' | 'half';
@@ -40,7 +31,7 @@ export interface FieldConfig {
 export interface ModuleConfig {
   id: string;
   label: string;
-  icon: IconType;
+  icon: string;
   imageField?: string;
   titleField: string;
   descriptionField?: string;
@@ -50,34 +41,9 @@ export interface ModuleConfig {
 
 export const MODULES: ModuleConfig[] = [
   {
-    id: 'hero',
-    label: 'Hero Slides',
-    icon: FaImages,
-    imageField: 'img',
-    titleField: 'title',
-    descriptionField: 'subtitle',
-    fields: [
-      {
-        key: 'img',
-        label: 'Image',
-        type: 'image',
-        required: true,
-        span: 'full',
-      },
-      {
-        key: 'title',
-        label: 'Title',
-        type: 'text',
-        required: true,
-        span: 'full',
-      },
-      { key: 'subtitle', label: 'Subtitle', type: 'text', span: 'full' },
-    ],
-  },
-  {
     id: 'services',
     label: 'Services',
-    icon: FaCogs,
+    icon: 'FaCogs',
     imageField: 'imageURL',
     titleField: 'title',
     descriptionField: 'description',
@@ -116,7 +82,7 @@ export const MODULES: ModuleConfig[] = [
   {
     id: 'projects',
     label: 'Projects',
-    icon: FaProjectDiagram,
+    icon: 'FaProjectDiagram',
     imageField: 'imageURL',
     titleField: 'title',
     descriptionField: 'description',
@@ -187,7 +153,7 @@ export const MODULES: ModuleConfig[] = [
   {
     id: 'about',
     label: 'About Us',
-    icon: FaInfoCircle,
+    icon: 'FaInfoCircle',
     titleField: 'components',
     descriptionField: 'value',
     fields: [
@@ -210,7 +176,7 @@ export const MODULES: ModuleConfig[] = [
   {
     id: 'contact',
     label: 'Contact Info',
-    icon: FaEnvelope,
+    icon: 'FaEnvelope',
     titleField: 'title',
     descriptionField: 'value',
     fields: [
@@ -240,9 +206,102 @@ export const MODULES: ModuleConfig[] = [
     ],
   },
   {
+    id: 'blogs',
+    label: 'Blog Posts',
+    icon: 'FaNewspaper',
+    imageField: 'cover_image',
+    titleField: 'title',
+    descriptionField: 'description',
+    tableColumns: ['status', 'tags'],
+    fields: [
+      { key: 'cover_image', label: 'Cover Media', type: 'covermedia', span: 'full' },
+      { key: 'title', label: 'Title', type: 'text', required: true, span: 'half' },
+      { key: 'slug', label: 'Slug', type: 'text', required: true, span: 'half', placeholder: 'my-blog-post' },
+      {
+        key: 'status',
+        label: 'Status',
+        type: 'radio',
+        span: 'half',
+        options: ['draft', 'published', 'hidden'],
+      },
+      { key: 'tags', label: 'Tags (comma separated)', type: 'tags', span: 'half' },
+      { key: 'description', label: 'Meta Description (internal)', type: 'textarea', span: 'full' },
+      { key: 'meta_title', label: 'SEO Title (optional override)', type: 'text', span: 'full' },
+      { key: 'content', label: 'Full Content', type: 'richtext', span: 'full' },
+    ],
+  },
+  {
+    id: 'blog_social_links',
+    label: 'Blog Social Links',
+    icon: 'FaShareAlt',
+    titleField: 'platform',
+    descriptionField: 'url',
+    tableColumns: ['blog_id'],
+    fields: [
+      {
+        key: 'blog_id',
+        label: 'Blog Post',
+        type: 'select',
+        required: true,
+        span: 'full',
+        relation: { table: 'blogs', labelField: 'title', valueField: 'id' },
+      },
+      {
+        key: 'platform',
+        label: 'Platform',
+        type: 'text',
+        required: true,
+        span: 'half',
+        placeholder: 'twitter / linkedin / facebook / instagram / youtube',
+      },
+      {
+        key: 'url',
+        label: 'URL',
+        type: 'url',
+        required: true,
+        span: 'half',
+        placeholder: 'https://...',
+      },
+    ],
+  },
+  {
+    id: 'blog_additional_media',
+    label: 'Blog Media',
+    icon: 'FaPhotoVideo',
+    titleField: 'url',
+    descriptionField: 'type',
+    tableColumns: ['blog_id', 'type'],
+    fields: [
+      {
+        key: 'blog_id',
+        label: 'Blog Post',
+        type: 'select',
+        required: true,
+        span: 'full',
+        relation: { table: 'blogs', labelField: 'title', valueField: 'id' },
+      },
+      {
+        key: 'type',
+        label: 'Media Type',
+        type: 'radio',
+        required: true,
+        span: 'half',
+        options: ['image', 'video', 'youtube', 'drive_image', 'drive_video'],
+      },
+      {
+        key: 'url',
+        label: 'URL',
+        type: 'url',
+        required: true,
+        span: 'half',
+        placeholder: 'https://...',
+      },
+    ],
+  },
+  {
     id: 'social',
     label: 'Social Links',
-    icon: FaAddressBook,
+    icon: 'FaAddressBook',
     titleField: 'social_media',
     descriptionField: 'value',
     fields: [

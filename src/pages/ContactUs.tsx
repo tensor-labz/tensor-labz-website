@@ -1,52 +1,43 @@
 import React, { memo, Suspense, lazy } from 'react';
 import { motion } from 'motion/react';
-import {
-  FaEnvelope,
-  FaPhone,
-  FaMapMarkerAlt,
-  FaClock,
-  FaGlobe,
-  FaWhatsapp,
-  FaFacebookF,
-  FaLinkedinIn,
-  FaInstagram,
-  FaTiktok,
-  FaYoutube,
-  FaTwitter,
-  FaExternalLinkAlt,
-} from 'react-icons/fa';
-import type { IconType } from 'react-icons';
+import ReactIcon from '../shared/components/ui/ReactIcon';
 import Page from '../components/resuable/Page';
 import { useCompanyInfo } from '../shared/hooks/useCompanyInfo';
 import type { ContactRow, SocialLink } from '../shared/hooks/useCompanyInfo';
+import {
+  slideInLeft,
+  staggerContainer,
+  staggerItem,
+  fadeIn,
+  EASE_EXPO,
+  VIEWPORT,
+} from '../lib/motion';
 
 const Globe = lazy(() => import('../features/contact/components/Globe'));
 
 /* ── icon helpers ── */
-function contactIcon(type: string): IconType {
+function contactIcon(type: string): string {
   const t = type.toLowerCase();
-  if (t.includes('email') || t.includes('mail')) return FaEnvelope;
-  if (t.includes('phone') || t.includes('tel') || t.includes('mobile'))
-    return FaPhone;
-  if (t.includes('address') || t.includes('location') || t.includes('map'))
-    return FaMapMarkerAlt;
-  if (t.includes('whatsapp')) return FaWhatsapp;
-  return FaClock;
+  if (t.includes('email') || t.includes('mail')) return 'FaEnvelope';
+  if (t.includes('phone') || t.includes('tel') || t.includes('mobile')) return 'FaPhone';
+  if (t.includes('address') || t.includes('location') || t.includes('map')) return 'FaMapMarkerAlt';
+  if (t.includes('whatsapp')) return 'FaWhatsapp';
+  return 'FaClock';
 }
 
-const SOCIAL_ICONS: [string, IconType][] = [
-  ['whatsapp', FaWhatsapp],
-  ['facebook', FaFacebookF],
-  ['linkedin', FaLinkedinIn],
-  ['instagram', FaInstagram],
-  ['tiktok', FaTiktok],
-  ['youtube', FaYoutube],
-  ['twitter', FaTwitter],
-  ['x', FaTwitter],
+const SOCIAL_ICONS: [string, string][] = [
+  ['whatsapp', 'FaWhatsapp'],
+  ['facebook', 'FaFacebookF'],
+  ['linkedin', 'FaLinkedinIn'],
+  ['instagram', 'FaInstagram'],
+  ['tiktok', 'FaTiktok'],
+  ['youtube', 'FaYoutube'],
+  ['twitter', 'FaTwitter'],
+  ['x', 'FaTwitter'],
 ];
-function socialIcon(platform: string): IconType {
+function socialIcon(platform: string): string {
   const key = platform.toLowerCase();
-  return SOCIAL_ICONS.find(([p]) => key.includes(p))?.[1] ?? FaGlobe;
+  return SOCIAL_ICONS.find(([p]) => key.includes(p))?.[1] ?? 'FaGlobe';
 }
 
 function cardHref(row: ContactRow): string | undefined {
@@ -65,36 +56,21 @@ function cardHref(row: ContactRow): string | undefined {
 /* ── Contact card ── */
 const ContactCard = memo(
   ({ row, index }: { row: ContactRow; index: number }) => {
-    const Icon = contactIcon(row.type);
     const href = cardHref(row);
 
     return (
       <motion.div
-        initial={{ opacity: 0, x: -24 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{
-          duration: 0.5,
-          delay: 0.1 + index * 0.08,
-          ease: [0.22, 1, 0.36, 1],
-        }}
-        className="flex items-center gap-4 px-5 py-4 rounded-2xl transition-all duration-300"
-        style={{
-          backgroundColor: 'var(--glass-bg-raised)',
-          border: '1px solid var(--glass-border)',
-          backdropFilter: 'blur(8px)',
-        }}
+        variants={slideInLeft(0.1 + index * 0.08)}
+        initial="hidden"
+        animate="visible"
+        className="flex items-center gap-4 px-5 py-4 rounded-2xl transition-all duration-300
+                   bg-glass-raised border border-glass-rim backdrop-blur-md"
       >
-        <div
-          className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
-          style={{ backgroundColor: 'var(--accent-soft)' }}
-        >
-          <Icon size={16} style={{ color: 'var(--accent)' }} />
+        <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 bg-accent-soft">
+          <ReactIcon name={contactIcon(row.type)} size={16} className="text-accent" />
         </div>
         <div className="min-w-0">
-          <p
-            className="text-[10px] font-semibold tracking-widest uppercase mb-0.5"
-            style={{ color: 'var(--text-muted)' }}
-          >
+          <p className="text-[10px] font-semibold tracking-widest uppercase mb-0.5 text-muted">
             {row.title}
           </p>
           {href ? (
@@ -102,22 +78,12 @@ const ContactCard = memo(
               href={href}
               target={href.startsWith('http') ? '_blank' : undefined}
               rel={href.startsWith('http') ? 'noopener noreferrer' : undefined}
-              className="text-sm font-medium truncate block transition-colors duration-200"
-              style={{ color: 'var(--text-primary)' }}
-              onMouseEnter={(e) =>
-                (e.currentTarget.style.color = 'var(--accent)')
-              }
-              onMouseLeave={(e) =>
-                (e.currentTarget.style.color = 'var(--text-primary)')
-              }
+              className="text-sm font-medium truncate block transition-colors duration-200 text-fg hover:text-accent"
             >
               {row.value}
             </a>
           ) : (
-            <p
-              className="text-sm font-medium truncate"
-              style={{ color: 'var(--text-primary)' }}
-            >
+            <p className="text-sm font-medium truncate text-fg">
               {row.value}
             </p>
           )}
@@ -130,40 +96,21 @@ ContactCard.displayName = 'ContactCard';
 
 /* ── Social pill ── */
 const SocialPill = memo(
-  ({ link, index }: { link: SocialLink; index: number }) => {
-    const Icon = socialIcon(link.platform);
+  ({ link }: { link: SocialLink }) => {
     return (
       <motion.a
         href={link.url}
         target="_blank"
         rel="noopener noreferrer"
         aria-label={link.platform}
-        initial={{ opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4, delay: 0.5 + index * 0.05 }}
+        variants={staggerItem}
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.95 }}
-        className="w-9 h-9 flex items-center justify-center rounded-xl transition-colors duration-200"
-        style={{
-          backgroundColor: 'var(--glass-bg-raised)',
-          border: '1px solid var(--glass-border)',
-          color: 'var(--text-muted)',
-        }}
-        onMouseEnter={(e) => {
-          (e.currentTarget as HTMLElement).style.backgroundColor =
-            'var(--accent)';
-          (e.currentTarget as HTMLElement).style.color = '#fff';
-          (e.currentTarget as HTMLElement).style.borderColor = 'var(--accent)';
-        }}
-        onMouseLeave={(e) => {
-          (e.currentTarget as HTMLElement).style.backgroundColor =
-            'var(--glass-bg-raised)';
-          (e.currentTarget as HTMLElement).style.color = 'var(--text-muted)';
-          (e.currentTarget as HTMLElement).style.borderColor =
-            'var(--glass-border)';
-        }}
+        className="w-9 h-9 flex items-center justify-center rounded-xl transition-colors duration-200
+                   bg-glass-raised border border-glass-rim text-muted
+                   hover:bg-accent hover:text-white hover:border-accent"
       >
-        <Icon size={14} />
+        <ReactIcon name={socialIcon(link.platform)} size={14} />
       </motion.a>
     );
   }
@@ -184,23 +131,13 @@ const MapCard = memo(
     <motion.div
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6, delay }}
-      className="rounded-2xl overflow-hidden"
-      style={{ border: '1px solid var(--glass-border)' }}
+      transition={{ duration: 0.6, delay, ease: EASE_EXPO }}
+      className="rounded-2xl overflow-hidden border border-glass-rim"
     >
-      <div
-        className="flex items-center justify-between px-4 py-2.5"
-        style={{
-          backgroundColor: 'var(--glass-bg-raised)',
-          borderBottom: '1px solid var(--glass-border)',
-        }}
-      >
+      <div className="flex items-center justify-between px-4 py-2.5 bg-glass-raised border-b border-glass-rim">
         <div className="flex items-center gap-2">
-          <FaMapMarkerAlt size={11} style={{ color: 'var(--accent)' }} />
-          <span
-            className="text-xs font-medium"
-            style={{ color: 'var(--text-primary)' }}
-          >
+          <ReactIcon name="FaMapMarkerAlt" size={11} className="text-accent" />
+          <span className="text-xs font-medium text-fg">
             {addressRow?.value ?? 'Our Location'}
           </span>
         </div>
@@ -208,14 +145,10 @@ const MapCard = memo(
           href={`https://maps.google.com/search?q=${encodeURIComponent(addressRow?.value ?? '')}`}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center gap-1 text-[10px] font-medium transition-colors duration-200"
-          style={{ color: 'var(--text-muted)' }}
-          onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--accent)')}
-          onMouseLeave={(e) =>
-            (e.currentTarget.style.color = 'var(--text-muted)')
-          }
+          className="flex items-center gap-1 text-[10px] font-medium transition-colors duration-200
+                     text-muted hover:text-accent"
         >
-          Open in Maps <FaExternalLinkAlt size={9} />
+          Open in Maps <ReactIcon name="FaExternalLinkAlt" size={9} />
         </a>
       </div>
       <iframe
@@ -266,11 +199,10 @@ const ContactUs: React.FC = memo(() => {
           <div className="flex flex-col gap-5 lg:gap-6 lg:h-full lg:overflow-y-auto lg:pr-1">
             <div>
               <motion.span
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.05 }}
-                className="text-[10px] font-semibold tracking-[0.35em] uppercase block mb-4"
-                style={{ color: 'var(--accent)' }}
+                variants={fadeIn(0.05)}
+                initial="hidden"
+                animate="visible"
+                className="text-[10px] font-semibold tracking-[0.35em] uppercase block mb-4 text-accent"
               >
                 Get In Touch
               </motion.span>
@@ -278,16 +210,8 @@ const ContactUs: React.FC = memo(() => {
               <motion.h1
                 initial={{ opacity: 0, y: -16 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{
-                  duration: 0.6,
-                  delay: 0.1,
-                  ease: [0.22, 1, 0.36, 1],
-                }}
-                className="text-3xl sm:text-4xl md:text-5xl xl:text-6xl font-bold leading-tight mb-4"
-                style={{
-                  color: 'var(--text-primary)',
-                  fontFamily: '"Syne", sans-serif',
-                }}
+                transition={{ duration: 0.6, delay: 0.1, ease: EASE_EXPO }}
+                className="text-3xl sm:text-4xl md:text-5xl xl:text-6xl font-bold leading-tight mb-4 text-fg font-display"
               >
                 {info.name}
               </motion.h1>
@@ -296,16 +220,14 @@ const ContactUs: React.FC = memo(() => {
                 initial={{ width: 0 }}
                 animate={{ width: '3rem' }}
                 transition={{ delay: 0.4, duration: 0.5, ease: 'easeOut' }}
-                className="h-1 rounded-full mb-5"
-                style={{ backgroundColor: 'var(--accent)' }}
+                className="h-1 rounded-full mb-5 bg-accent"
               />
 
               <motion.p
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.25, duration: 0.6 }}
-                className="text-sm md:text-base leading-relaxed max-w-md"
-                style={{ color: 'var(--text-muted)' }}
+                className="text-sm md:text-base leading-relaxed max-w-md text-muted"
               >
                 {info.description}
               </motion.p>
@@ -319,36 +241,20 @@ const ContactUs: React.FC = memo(() => {
 
               {availableHours && (
                 <motion.div
-                  initial={{ opacity: 0, x: -24 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{
-                    duration: 0.5,
-                    delay: 0.1 + displayRows.length * 0.08,
-                  }}
-                  className="col-span-1 sm:col-span-2 flex items-center gap-4 px-5 py-4 rounded-2xl"
-                  style={{
-                    backgroundColor: 'var(--glass-bg-raised)',
-                    border: '1px solid var(--glass-border)',
-                    backdropFilter: 'blur(8px)',
-                  }}
+                  variants={slideInLeft(0.1 + displayRows.length * 0.08)}
+                  initial="hidden"
+                  animate="visible"
+                  className="col-span-1 sm:col-span-2 flex items-center gap-4 px-5 py-4 rounded-2xl
+                             bg-glass-raised border border-glass-rim backdrop-blur-md"
                 >
-                  <div
-                    className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
-                    style={{ backgroundColor: 'var(--accent-soft)' }}
-                  >
-                    <FaClock size={16} style={{ color: 'var(--accent)' }} />
+                  <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 bg-accent-soft">
+                    <ReactIcon name="FaClock" size={16} className="text-accent" />
                   </div>
                   <div>
-                    <p
-                      className="text-[10px] font-semibold tracking-widest uppercase mb-0.5"
-                      style={{ color: 'var(--text-muted)' }}
-                    >
+                    <p className="text-[10px] font-semibold tracking-widest uppercase mb-0.5 text-muted">
                       Available Hours
                     </p>
-                    <p
-                      className="text-sm font-medium"
-                      style={{ color: 'var(--text-primary)' }}
-                    >
+                    <p className="text-sm font-medium text-fg">
                       {availableHours}
                     </p>
                   </div>
@@ -358,11 +264,16 @@ const ContactUs: React.FC = memo(() => {
 
             {/* Social links */}
             {info.social_links.length > 0 && (
-              <div className="flex flex-wrap gap-2.5">
-                {info.social_links.map((link, i) => (
-                  <SocialPill key={link.platform} link={link} index={i} />
+              <motion.div
+                variants={staggerContainer(0.05, 0.5)}
+                initial="hidden"
+                animate="visible"
+                className="flex flex-wrap gap-2.5"
+              >
+                {info.social_links.map((link) => (
+                  <SocialPill key={link.platform} link={link} />
                 ))}
-              </div>
+              </motion.div>
             )}
           </div>
 
@@ -370,20 +281,14 @@ const ContactUs: React.FC = memo(() => {
           <motion.div
             initial={{ opacity: 0, x: 32 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.9, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 0.9, delay: 0.2, ease: EASE_EXPO }}
             className="hidden lg:flex flex-col gap-4"
           >
             {/* Globe — fixed height */}
             <div style={{ height: 300, position: 'relative' }}>
               <Suspense
                 fallback={
-                  <div
-                    className="w-full h-full rounded-2xl animate-pulse"
-                    style={{
-                      backgroundColor: 'var(--glass-bg-raised)',
-                      border: '1px solid var(--glass-border)',
-                    }}
-                  />
+                  <div className="w-full h-full rounded-2xl animate-pulse bg-glass-raised border border-glass-rim" />
                 }
               >
                 <Globe />

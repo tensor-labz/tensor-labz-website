@@ -7,6 +7,7 @@ This file configures how Claude Code behaves when working in this repository.
 ## Commit Rules
 
 - **Never add `Co-Authored-By` lines to commits.** Do not append any `Co-Authored-By: Claude ...` or `noreply@anthropic.com` attribution to commit messages.
+- **Never mention Claude in PR descriptions.** Do not add `🤖 Generated with Claude Code` footers or any AI attribution to pull request titles, bodies, or comments.
 - Keep commit messages concise and follow the existing convention: `type: short description` (e.g. `fix:`, `feat:`, `refactor:`, `style:`, `security:`).
 - Never commit `.env` files — they contain credentials. Only `.env.example` should be committed.
 - GPG signing may fail on this server — use `git -c commit.gpgsign=false commit` if needed.
@@ -38,6 +39,7 @@ src/app/hooks.ts                    ← useAppSelector / useAppDispatch
 
 ### Rules
 
+- **All backend logic must go through Redux — never call Supabase, fetch, or any API directly from a UI component.** Data fetching belongs in `createAsyncThunk` inside a slice; mutations belong in thunks dispatched from controller hooks. UI components are read-only consumers of the store.
 - Controller hooks dispatch thunks only when `status === 'idle'`.
 - Selectors that return arrays or objects **must** use `createSelector` to avoid unnecessary re-renders.
 - All `useEffect` fetch calls outside Redux must have an `AbortController` with `return () => controller.abort()`.

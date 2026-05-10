@@ -5,14 +5,16 @@ import DataTable, {
   createTheme,
   type TableColumn,
 } from 'react-data-table-component';
-import { FiSearch, FiX, FiExternalLink, FiChevronRight } from 'react-icons/fi';
+import ReactIcon from '../../../shared/components/ui/ReactIcon';
 import { MODULES } from '../config/modules';
 import { supabase } from '../../../lib/supabase';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import {
   fetchRecords,
+  fetchRelationOptions,
   selectModuleRecords,
   selectModuleStatus,
+  selectAllRelationOptions,
   type AdminRecord,
 } from '../../../store/adminSlice';
 import type { TableColumnConfig } from '../../../shared/types/tableConfig';
@@ -251,7 +253,8 @@ const MobileCardList = ({
                 </p>
               )}
             </div>
-            <FiChevronRight
+            <ReactIcon
+              name="FiChevronRight"
               size={15}
               style={{ color: 'var(--text-muted)', flexShrink: 0 }}
             />
@@ -286,10 +289,31 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
   const [search, setSearch] = useState('');
   const [colConfig, setColConfig] = useState<TableColumnConfig[] | null>(null);
   const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
-  // Maps fieldKey → { idString → displayLabel } for select+relation fields
-  const [relationMaps, setRelationMaps] = useState<
-    Record<string, Record<string, string>>
-  >({});
+
+  // All relation options from Redux store (keyed by table name)
+  const allRelationOptions = useAppSelector(selectAllRelationOptions);
+
+  // Maps fieldKey → { idString → displayLabel } — derived from Redux store
+  const relationMaps = useMemo<Record<string, Record<string, string>>>(() => {
+    if (!mod) return {};
+    const maps: Record<string, Record<string, string>> = {};
+    mod.fields
+      .filter((f) => f.type === 'select' && f.relation)
+      .forEach((f) => {
+        const rel = f.relation!;
+        const vf = rel.valueField ?? 'id';
+        const rows = allRelationOptions[rel.table];
+        if (!rows) return;
+        const map: Record<string, string> = {};
+        rows.forEach((row) => {
+          map[String(row[vf] ?? '')] = String(
+            row[rel.labelField] ?? row[vf] ?? ''
+          );
+        });
+        maps[f.key] = map;
+      });
+    return maps;
+  }, [mod, allRelationOptions]);
 
   /* Fetch rows via Redux */
   useEffect(() => {
@@ -297,27 +321,22 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
     if (status === 'idle') dispatch(fetchRecords(moduleId));
   }, [moduleId, status, dispatch]);
 
-  /* Fetch relation option maps for any select+relation fields */
+  /* Dispatch fetchRelationOptions for any select+relation fields */
   useEffect(() => {
     if (!mod) return;
-    setRelationMaps({});
-    const relFields = mod.fields.filter(
-      (f) => f.type === 'select' && f.relation
-    );
-    relFields.forEach(async (f) => {
-      const rel = f.relation!;
-      const vf = rel.valueField ?? 'id';
-      const { data } = await supabase.from(rel.table).select('*');
-      if (!data) return;
-      const map: Record<string, string> = {};
-      data.forEach((row) => {
-        map[String(row[vf] ?? '')] = String(
-          row[rel.labelField] ?? row[vf] ?? ''
+    mod.fields
+      .filter((f) => f.type === 'select' && f.relation)
+      .forEach((f) => {
+        const rel = f.relation!;
+        dispatch(
+          fetchRelationOptions({
+            table: rel.table,
+            labelField: rel.labelField,
+            valueField: rel.valueField,
+          })
         );
       });
-      setRelationMaps((prev) => ({ ...prev, [f.key]: map }));
-    });
-  }, [moduleId]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [moduleId, mod, dispatch]); // eslint-disable-line react-hooks/exhaustive-deps
 
   /* Fetch column + pagination config from Supabase */
   useEffect(() => {
@@ -418,7 +437,7 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
                       flexShrink: 0,
                     }}
                   >
-                    <FiExternalLink size={14} />
+                    <ReactIcon name="FiExternalLink" size={14} />
                   </a>
                 );
               },
@@ -525,7 +544,7 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
                     flexShrink: 0,
                   }}
                 >
-                  <FiExternalLink size={14} />
+                  <ReactIcon name="FiExternalLink" size={14} />
                 </a>
               );
             },
@@ -620,7 +639,8 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
             border: '1px solid var(--glass-border)',
           }}
         >
-          <FiSearch
+          <ReactIcon
+            name="FiSearch"
             size={14}
             style={{ color: 'var(--text-muted)', flexShrink: 0 }}
           />
@@ -634,7 +654,7 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
           />
           {search && (
             <button onClick={() => setSearch('')} className="flex-shrink-0">
-              <FiX size={13} style={{ color: 'var(--text-muted)' }} />
+              <ReactIcon name="FiX" size={13} style={{ color: 'var(--text-muted)' }} />
             </button>
           )}
         </div>

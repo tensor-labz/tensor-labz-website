@@ -1,21 +1,7 @@
 import { memo } from 'react';
 import { motion } from 'motion/react';
 import { Link } from 'react-router-dom';
-import {
-  FaFacebookF,
-  FaLinkedinIn,
-  FaInstagram,
-  FaWhatsapp,
-  FaTiktok,
-  FaYoutube,
-  FaTwitter,
-  FaMapMarkerAlt,
-  FaEnvelope,
-  FaPhone,
-  FaClock,
-  FaGlobe,
-} from 'react-icons/fa';
-import type { IconType } from 'react-icons';
+import ReactIcon from '../ui/ReactIcon';
 import logo from '../../../assets/images/logo.png';
 import { useAppSelector } from '../../../app/hooks';
 import {
@@ -26,31 +12,34 @@ import { useCompanyInfo } from '../../hooks/useCompanyInfo';
 import type { ContactRow } from '../../hooks/useCompanyInfo';
 
 /* Map social platform name → icon */
-const PLATFORM_ICONS: [string, IconType][] = [
-  ['whatsapp', FaWhatsapp],
-  ['facebook', FaFacebookF],
-  ['linkedin', FaLinkedinIn],
-  ['instagram', FaInstagram],
-  ['tiktok', FaTiktok],
-  ['youtube', FaYoutube],
-  ['twitter', FaTwitter],
-  ['x', FaTwitter],
-];
+const PLATFORM_ICON_NAMES: Record<string, string> = {
+  whatsapp: 'FaWhatsapp',
+  facebook: 'FaFacebookF',
+  linkedin: 'FaLinkedinIn',
+  instagram: 'FaInstagram',
+  tiktok: 'FaTiktok',
+  youtube: 'FaYoutube',
+  twitter: 'FaTwitter',
+  x: 'FaTwitter',
+};
 
-function socialIcon(platform: string): IconType {
+function socialIconName(platform: string): string {
   const key = platform.toLowerCase();
-  return PLATFORM_ICONS.find(([p]) => key.includes(p))?.[1] ?? FaGlobe;
+  const match = Object.entries(PLATFORM_ICON_NAMES).find(([p]) =>
+    key.includes(p)
+  );
+  return match?.[1] ?? 'FaGlobe';
 }
 
 /* Infer icon and href from the contact row type field */
-function contactIcon(type: string): IconType {
+function contactIconName(type: string): string {
   const t = type.toLowerCase();
-  if (t.includes('email') || t.includes('mail')) return FaEnvelope;
+  if (t.includes('email') || t.includes('mail')) return 'FaEnvelope';
   if (t.includes('phone') || t.includes('tel') || t.includes('mobile'))
-    return FaPhone;
+    return 'FaPhone';
   if (t.includes('address') || t.includes('location') || t.includes('map'))
-    return FaMapMarkerAlt;
-  return FaClock;
+    return 'FaMapMarkerAlt';
+  return 'FaClock';
 }
 
 function contactHref(row: ContactRow): string | undefined {
@@ -85,13 +74,9 @@ const Footer = () => {
   }));
 
   return (
-    <footer
-      style={{
-        backgroundColor: 'var(--footer-bg)',
-        borderColor: 'rgba(148,163,184,0.12)',
-      }}
-      className="text-slate-400 border-t"
-    >
+    <footer className="relative bg-footer-bg text-muted">
+      {/* gradient fade from page into footer */}
+      <div className="absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-canvas to-transparent pointer-events-none" />
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -113,12 +98,11 @@ const Footer = () => {
                 }}
               />
             </Link>
-            <p className="text-sm leading-relaxed text-slate-500 max-w-xs text-center sm:text-left">
+            <p className="text-sm leading-relaxed text-muted max-w-xs text-center sm:text-left">
               {info.description}
             </p>
             <div className="flex items-center justify-center sm:justify-start gap-3 pt-1 flex-wrap">
               {info.social_links.map(({ platform, url }) => {
-                const Icon = socialIcon(platform);
                 return (
                   <a
                     key={platform}
@@ -127,10 +111,10 @@ const Footer = () => {
                     rel="noopener noreferrer"
                     aria-label={platform}
                     className="w-8 h-8 flex items-center justify-center rounded
-                      bg-white/5 text-slate-500 hover:bg-sky-500/20 hover:text-sky-400
-                      transition-all duration-200 text-sm border border-white/5 hover:border-sky-500/30"
+                      bg-glass-bg text-muted hover:bg-glass-hover hover:text-accent
+                      transition-all duration-200 text-sm border border-glass-rim hover:border-accent/30"
                   >
-                    <Icon />
+                    <ReactIcon name={socialIconName(platform)} size={14} />
                   </a>
                 );
               })}
@@ -139,7 +123,7 @@ const Footer = () => {
 
           {/* Services */}
           <div className="flex flex-col items-center sm:items-start gap-4">
-            <h4 className="text-xs font-semibold tracking-widest uppercase text-slate-300">
+            <h4 className="text-xs font-semibold font-display tracking-widest uppercase text-fg">
               Services
             </h4>
             <ul className="flex flex-col items-center sm:items-start gap-2.5">
@@ -154,7 +138,7 @@ const Footer = () => {
                     <li key={s.link}>
                       <Link
                         to={s.link}
-                        className="text-sm text-slate-500 hover:text-sky-400 transition-colors duration-200"
+                        className="text-sm text-muted hover:text-accent transition-colors duration-200"
                       >
                         {s.title}
                       </Link>
@@ -165,7 +149,7 @@ const Footer = () => {
 
           {/* Company */}
           <div className="flex flex-col items-center sm:items-start gap-4">
-            <h4 className="text-xs font-semibold tracking-widest uppercase text-slate-300">
+            <h4 className="text-xs font-semibold font-display tracking-widest uppercase text-fg">
               Company
             </h4>
             <ul className="flex flex-col items-center sm:items-start gap-2.5">
@@ -173,7 +157,7 @@ const Footer = () => {
                 <li key={link}>
                   <Link
                     to={link}
-                    className="text-sm text-slate-500 hover:text-sky-400 transition-colors duration-200"
+                    className="text-sm text-muted hover:text-accent transition-colors duration-200"
                   >
                     {title}
                   </Link>
@@ -184,28 +168,31 @@ const Footer = () => {
 
           {/* Contact */}
           <div className="flex flex-col items-center sm:items-start gap-4">
-            <h4 className="text-xs font-semibold tracking-widest uppercase text-slate-300">
+            <h4 className="text-xs font-semibold font-display tracking-widest uppercase text-fg">
               Contact
             </h4>
             <ul className="flex flex-col items-center sm:items-start gap-3">
               {info.contact_rows.map((row) => {
-                const Icon = contactIcon(row.type);
                 const href = contactHref(row);
                 return (
                   <li
                     key={row.type + row.value}
                     className="flex items-start gap-3"
                   >
-                    <Icon className="text-slate-600 mt-0.5 shrink-0 text-sm" />
+                    <ReactIcon
+                      name={contactIconName(row.type)}
+                      size={13}
+                      className="text-muted mt-0.5 shrink-0"
+                    />
                     {href ? (
                       <a
                         href={href}
-                        className="text-sm text-slate-500 hover:text-sky-400 transition-colors duration-200 leading-snug"
+                        className="text-sm text-muted hover:text-accent transition-colors duration-200 leading-snug"
                       >
                         {row.value}
                       </a>
                     ) : (
-                      <span className="text-sm text-slate-500 leading-snug">
+                      <span className="text-sm text-muted leading-snug">
                         {row.value}
                       </span>
                     )}
@@ -214,8 +201,12 @@ const Footer = () => {
               })}
               {info.available_hours && (
                 <li className="flex items-start gap-3">
-                  <FaClock className="text-slate-600 mt-0.5 shrink-0 text-sm" />
-                  <span className="text-sm text-slate-500 leading-snug">
+                  <ReactIcon
+                    name="FaClock"
+                    size={13}
+                    className="text-muted mt-0.5 shrink-0"
+                  />
+                  <span className="text-sm text-muted leading-snug">
                     {info.available_hours}
                   </span>
                 </li>
@@ -224,8 +215,8 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="mt-16 pt-6 border-t border-white/5 flex justify-center">
-          <p className="text-xs text-slate-600 text-center">
+        <div className="mt-16 pt-6 border-t border-glass-rim flex justify-center">
+          <p className="text-xs text-muted text-center">
             &copy; {new Date().getFullYear()} {info.name}. All rights reserved.
           </p>
         </div>

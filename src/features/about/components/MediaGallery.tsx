@@ -1,6 +1,6 @@
 import { memo, useState, useEffect, useRef } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
-import { FaPlay, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import ReactIcon from '../../../shared/components/ui/ReactIcon';
 import { useAboutMedia } from '../hooks/useAboutMedia';
 import type { MediaItem } from '../hooks/useAboutMedia';
 
@@ -53,7 +53,11 @@ const Thumb = memo(
             className="w-full h-full flex items-center justify-center"
             style={{ backgroundColor: 'var(--glass-bg-raised)' }}
           >
-            <FaPlay size={14} style={{ color: 'var(--accent)' }} />
+            <ReactIcon
+              name="FaPlay"
+              size={14}
+              style={{ color: 'var(--accent)' }}
+            />
           </div>
         )}
         {item.type === 'video' && (
@@ -62,7 +66,7 @@ const Thumb = memo(
               className="w-6 h-6 rounded-full flex items-center justify-center"
               style={{ backgroundColor: 'rgba(0,0,0,0.55)' }}
             >
-              <FaPlay size={8} style={{ color: '#fff' }} />
+              <ReactIcon name="FaPlay" size={8} style={{ color: '#fff' }} />
             </div>
           </div>
         )}
@@ -229,7 +233,7 @@ const MediaGallery = memo(() => {
                   'rgba(0,0,0,0.45)')
               }
             >
-              <FaChevronLeft size={11} />
+              <ReactIcon name="FaChevronLeft" size={11} />
             </button>
             <button
               onClick={next}
@@ -248,7 +252,7 @@ const MediaGallery = memo(() => {
                   'rgba(0,0,0,0.45)')
               }
             >
-              <FaChevronRight size={11} />
+              <ReactIcon name="FaChevronRight" size={11} />
             </button>
           </>
         )}

@@ -1,13 +1,6 @@
 import { memo, useEffect, useState } from 'react';
 import { motion } from 'motion/react';
-import {
-  FaLinkedin,
-  FaFacebook,
-  FaInstagram,
-  FaYoutube,
-  FaTiktok,
-} from 'react-icons/fa';
-import { IconType } from 'react-icons';
+import ReactIcon from '../../../shared/components/ui/ReactIcon';
 import { fetchSocialLinks } from '../../../services/socialService';
 
 interface SocialMediaItem {
@@ -16,7 +9,7 @@ interface SocialMediaItem {
 }
 
 interface SocialLink {
-  icon: IconType;
+  icon: string;
   social_media: string;
   color: string;
   href: string;
@@ -24,27 +17,27 @@ interface SocialLink {
 
 const socialMediaConfig: Omit<SocialLink, 'href'>[] = [
   {
-    icon: FaLinkedin,
+    icon: 'FaLinkedin',
     social_media: 'Linkedin',
     color: 'text-blue-600 hover:text-blue-800',
   },
   {
-    icon: FaFacebook,
+    icon: 'FaFacebook',
     social_media: 'FaceBook',
     color: 'text-sky-700 hover:text-sky-900',
   },
   {
-    icon: FaInstagram,
+    icon: 'FaInstagram',
     social_media: 'Instagram',
     color: 'text-pink-600 hover:text-pink-800',
   },
   {
-    icon: FaYoutube,
+    icon: 'FaYoutube',
     social_media: 'Youtube',
     color: 'text-red-600 hover:text-red-800',
   },
   {
-    icon: FaTiktok,
+    icon: 'FaTiktok',
     social_media: 'Tiktok',
     color: 'text-black-400 hover:text-black-600',
   },
@@ -123,7 +116,6 @@ const SocialMediaLinks = memo(() => {
         className="flex justify-center items-center space-x-4 sm:space-x-6"
       >
         {socialLinks.map((social, index) => {
-          const IconComponent = social.icon;
           return (
             <motion.a
               key={`${social.social_media}-${index}`}
@@ -142,7 +134,7 @@ const SocialMediaLinks = memo(() => {
               transition={{ delay: 1.2 + index * 0.1, duration: 0.4 }}
               aria-label={`Follow us on ${social.social_media}`}
             >
-              <IconComponent className="w-6 h-6 md:w-8 md:h-8" />
+              <ReactIcon name={social.icon} size={28} />
             </motion.a>
           );
         })}
