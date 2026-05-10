@@ -14,15 +14,15 @@ const ServiceSection: React.FC = memo(() => {
     <Section className="md:px-14 px-0">
       <div className="px-4 text-center mb-4 mt-6">
         <p className="text-[10px] font-mono tracking-[0.3em] uppercase text-accent mb-3">
-          {get('services.label', '◈ What We Do')}
+          {get('services.label')}
         </p>
         <h2
           className="sm:text-4xl text-xl sm:font-bold font-semibold text-fg font-display"
         >
-          {get('services.title', 'What We Offer')}
+          {get('services.title')}
         </h2>
         <p className="sm:text-lg text-base text-muted">
-          {get('services.description', 'Innovative solutions tailored to your digital transformation needs.')}
+          {get('services.description')}
         </p>
       </div>
 

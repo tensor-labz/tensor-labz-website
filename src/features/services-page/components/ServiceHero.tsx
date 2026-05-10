@@ -3,22 +3,22 @@ import { motion, AnimatePresence } from 'motion/react';
 import { useAppSelector } from '../../../app/hooks';
 import { selectServices } from '../../../store/servicesSlice';
 import { selectActiveSlug } from '../../../store/projectsSlice';
-import data from '../../../data/data';
+import { useSiteSettings } from '../../../shared/hooks/useSiteSettings';
 import { EASE_EXPO } from '../../../lib/motion';
 
 const ServiceHero: FC = memo(() => {
   const services = useAppSelector(selectServices);
   const activeSlug = useAppSelector(selectActiveSlug);
+  const { get } = useSiteSettings();
 
   const selectedService = useMemo(() => {
     return (
       services.find((s) => s.slug === activeSlug) ?? {
-        service_name: data?.insight?.hero?.title ?? 'Insights',
-        description:
-          data?.insight?.hero?.description ??
-          'Stay updated with our latest insights and articles.',
+        service_name: get('services.title'),
+        description: get('services.description'),
       }
     );
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [services, activeSlug]);
 
   return (
@@ -29,7 +29,7 @@ const ServiceHero: FC = memo(() => {
         transition={{ duration: 0.5 }}
         className="text-[10px] font-semibold tracking-[0.3em] uppercase block mb-4 text-accent"
       >
-        Insights &amp; Services
+        {get('services.hero_label')}
       </motion.span>
 
       <AnimatePresence mode="wait">

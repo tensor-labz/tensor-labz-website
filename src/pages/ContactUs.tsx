@@ -4,6 +4,7 @@ import ReactIcon from '../shared/components/ui/ReactIcon';
 import Page from '../components/resuable/Page';
 import { useCompanyInfo } from '../shared/hooks/useCompanyInfo';
 import type { ContactRow, SocialLink } from '../shared/hooks/useCompanyInfo';
+import { useSiteSettings } from '../shared/hooks/useSiteSettings';
 import {
   slideInLeft,
   staggerContainer,
@@ -168,6 +169,7 @@ MapCard.displayName = 'MapCard';
 /* ── Page ── */
 const ContactUs: React.FC = memo(() => {
   const info = useCompanyInfo();
+  const { get } = useSiteSettings();
 
   const addressRow = info.contact_rows.find(
     (r) =>
@@ -203,7 +205,7 @@ const ContactUs: React.FC = memo(() => {
                 animate="visible"
                 className="text-[10px] font-semibold tracking-[0.35em] uppercase block mb-4 text-accent"
               >
-                Get In Touch
+                {get('contact.hero_label')}
               </motion.span>
 
               <motion.h1

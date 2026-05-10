@@ -68,6 +68,7 @@ const COMPANY_DEFAULT: CompanyInfo = {
   who_we_are: '',
   vision: '',
   mission: '',
+  domains: '',
 };
 
 const TABS = [
@@ -315,6 +316,17 @@ const CompanyInfoTab = ({
               onChange={set('available_hours')}
               placeholder="Mon – Fri: 8:00 AM – 6:00 PM"
             />
+          </div>
+          <div className="sm:col-span-2">
+            <Field
+              label="Domains / Capabilities"
+              value={data.domains}
+              onChange={set('domains')}
+              placeholder="Mechatronics, 3D CAD Modeling, PCB Design, Embedded Systems"
+            />
+            <p className="text-[10px] mt-1" style={{ color: 'var(--text-muted)' }}>
+              Comma-separated tags shown on the About page.
+            </p>
           </div>
           <div className="flex flex-col gap-1.5">
             <label
@@ -1286,16 +1298,39 @@ const MediaItemForm = ({
 ════════════════════════════════════════════════════════ */
 interface PageContentDraft {
   [key: string]: string;
+  // Home — services section
   'services.label': string;
   'services.title': string;
   'services.description': string;
+  // Home — projects section
   'projects.label': string;
   'projects.title': string;
   'projects.description': string;
+  // Posts page
   'posts.label': string;
   'posts.title': string;
   'posts.description': string;
   'posts.page_size': string;
+  // About page
+  'about.hero_label': string;
+  'about.vision_label': string;
+  'about.vision_title': string;
+  'about.our_vision': string;
+  'about.our_mission': string;
+  'about.story_label': string;
+  'about.story_title': string;
+  'about.media_label': string;
+  'about.media_title': string;
+  'about.facts_label': string;
+  'about.facts_title': string;
+  // Contact page
+  'contact.hero_label': string;
+  // Services / Insights page
+  'services.hero_label': string;
+  // Hero stat labels
+  'hero.stat_projects': string;
+  'hero.stat_services': string;
+  'hero.stat_years': string;
 }
 
 const PAGE_CONTENT_DEFAULTS: PageContentDraft = {
@@ -1305,10 +1340,26 @@ const PAGE_CONTENT_DEFAULTS: PageContentDraft = {
   'projects.label': '◈ Featured Work',
   'projects.title': 'Our Latest Projects',
   'projects.description': 'Selected engineering projects and innovations.',
-  'posts.label': '◈ Tensor Labz // Posts',
-  'posts.title': 'Insights & Updates',
-  'posts.description': 'Engineering articles, project deep-dives, and technical insights from the Tensor Labz team.',
+  'posts.label': '◈ Insights',
+  'posts.title': 'Posts & Articles',
+  'posts.description': 'Engineering articles, project deep-dives, and technical insights from the team.',
   'posts.page_size': '20',
+  'about.hero_label': 'Who We Are',
+  'about.vision_label': 'What Drives Us',
+  'about.vision_title': 'Vision & Mission',
+  'about.our_vision': 'Our Vision',
+  'about.our_mission': 'Our Mission',
+  'about.story_label': 'Our Story',
+  'about.story_title': 'Building a Better Tomorrow',
+  'about.media_label': 'In Focus',
+  'about.media_title': 'Our Work & Story',
+  'about.facts_label': 'Key Facts',
+  'about.facts_title': 'By the Numbers',
+  'contact.hero_label': 'Get In Touch',
+  'services.hero_label': 'Insights & Services',
+  'hero.stat_projects': 'Projects',
+  'hero.stat_services': 'Services',
+  'hero.stat_years': 'Years',
 };
 
 const PageContentTab = () => {
@@ -1432,17 +1483,61 @@ const PageContentTab = () => {
           Posts Pagination
         </p>
         <div className="max-w-xs">
-          <Field
-            label="Posts per page"
-            value={draft['posts.page_size']}
-            onChange={set('posts.page_size')}
-            type="number"
-            placeholder="20"
-          />
+          <Field label="Posts per page" value={draft['posts.page_size']} onChange={set('posts.page_size')} type="number" placeholder="20" />
         </div>
-        <p className="text-xs" style={{ color: 'var(--text-muted)' }}>
-          Number of posts shown per page on the Posts listing page.
+        <p className="text-xs" style={{ color: 'var(--text-muted)' }}>Number of posts shown per page.</p>
+      </div>
+
+      {/* About page */}
+      <div
+        className="rounded-xl p-4 space-y-3"
+        style={{ backgroundColor: 'var(--glass-bg)', border: '1px solid var(--glass-border)' }}
+      >
+        <p className="text-xs font-semibold uppercase tracking-widest" style={{ color: 'var(--text-muted)' }}>
+          About Page
         </p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <Field label="Hero Label" value={draft['about.hero_label']} onChange={set('about.hero_label')} placeholder="Who We Are" />
+          <Field label="Vision Section Label" value={draft['about.vision_label']} onChange={set('about.vision_label')} placeholder="What Drives Us" />
+          <Field label="Vision Section Title" value={draft['about.vision_title']} onChange={set('about.vision_title')} placeholder="Vision & Mission" />
+          <Field label="Vision Card Heading" value={draft['about.our_vision']} onChange={set('about.our_vision')} placeholder="Our Vision" />
+          <Field label="Mission Card Heading" value={draft['about.our_mission']} onChange={set('about.our_mission')} placeholder="Our Mission" />
+          <Field label="Story Section Label" value={draft['about.story_label']} onChange={set('about.story_label')} placeholder="Our Story" />
+          <Field label="Story Section Title" value={draft['about.story_title']} onChange={set('about.story_title')} placeholder="Building a Better Tomorrow" />
+          <Field label="Media Section Label" value={draft['about.media_label']} onChange={set('about.media_label')} placeholder="In Focus" />
+          <Field label="Media Section Title" value={draft['about.media_title']} onChange={set('about.media_title')} placeholder="Our Work & Story" />
+          <Field label="Facts Section Label" value={draft['about.facts_label']} onChange={set('about.facts_label')} placeholder="Key Facts" />
+          <Field label="Facts Section Title" value={draft['about.facts_title']} onChange={set('about.facts_title')} placeholder="By the Numbers" />
+        </div>
+      </div>
+
+      {/* Contact & Services pages */}
+      <div
+        className="rounded-xl p-4 space-y-3"
+        style={{ backgroundColor: 'var(--glass-bg)', border: '1px solid var(--glass-border)' }}
+      >
+        <p className="text-xs font-semibold uppercase tracking-widest" style={{ color: 'var(--text-muted)' }}>
+          Contact & Services Pages
+        </p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <Field label="Contact Hero Label" value={draft['contact.hero_label']} onChange={set('contact.hero_label')} placeholder="Get In Touch" />
+          <Field label="Services Hero Label" value={draft['services.hero_label']} onChange={set('services.hero_label')} placeholder="Insights & Services" />
+        </div>
+      </div>
+
+      {/* Hero stat labels */}
+      <div
+        className="rounded-xl p-4 space-y-3"
+        style={{ backgroundColor: 'var(--glass-bg)', border: '1px solid var(--glass-border)' }}
+      >
+        <p className="text-xs font-semibold uppercase tracking-widest" style={{ color: 'var(--text-muted)' }}>
+          Home Hero — Stat Labels
+        </p>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <Field label="Projects Label" value={draft['hero.stat_projects']} onChange={set('hero.stat_projects')} placeholder="Projects" />
+          <Field label="Services Label" value={draft['hero.stat_services']} onChange={set('hero.stat_services')} placeholder="Services" />
+          <Field label="Years Label" value={draft['hero.stat_years']} onChange={set('hero.stat_years')} placeholder="Years" />
+        </div>
       </div>
     </div>
   );
@@ -1481,6 +1576,7 @@ const AdminSiteControl = memo(() => {
         who_we_are: (row.who_we_are as string) ?? '',
         vision: (row.vision as string) ?? '',
         mission: (row.mission as string) ?? '',
+        domains: (row.domains as string) ?? '',
       });
     }
     setLoading(false);
