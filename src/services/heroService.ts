@@ -5,6 +5,9 @@ export interface HeroSlide {
   img: string;
   title?: string;
   subtitle?: string;
+  cta_label?: string;
+  cta_link?: string;
+  sort_order?: number;
 }
 
 export const fetchHeroSlides = async (
@@ -13,7 +16,7 @@ export const fetchHeroSlides = async (
   const { data, error } = await supabase
     .from('hero')
     .select('*')
-    .order('id')
+    .order('sort_order', { ascending: true })
     .abortSignal(signal!);
   if (error) throw new Error(error.message);
   return (data ?? []) as HeroSlide[];
