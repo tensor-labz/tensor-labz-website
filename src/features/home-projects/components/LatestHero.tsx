@@ -79,11 +79,8 @@ const LatestHero: React.FC = memo(() => {
 
   const getImageClasses = (aspectRatio: number): string => {
     const containerRatio = 16 / 9;
-    if (
-      aspectRatio > containerRatio * 1.2 ||
-      aspectRatio < containerRatio * 0.8
-    ) {
-      return 'w-full h-full object-contain object-center bg-gray-100';
+    if (aspectRatio > containerRatio * 1.2 || aspectRatio < containerRatio * 0.8) {
+      return 'w-full h-full object-contain object-center';
     }
     return 'w-full h-full object-cover object-center';
   };
@@ -91,12 +88,12 @@ const LatestHero: React.FC = memo(() => {
   if (isLoading) {
     return (
       <motion.div
-        className="w-full h-[300px] md:h-full relative rounded-2xl overflow-hidden"
+        className="w-full h-[300px] md:h-full relative rounded-2xl overflow-hidden bg-raised"
         animate={{ backgroundPosition: ['-200% 0', '200% 0'] }}
-        transition={{ repeat: Infinity, duration: 1.5, ease: 'linear' }}
+        transition={{ repeat: Infinity, duration: 1.8, ease: 'linear' }}
         style={{
           backgroundImage:
-            'linear-gradient(90deg, #e5e7eb 0%, #f3f4f6 50%, #e5e7eb 100%)',
+            'linear-gradient(90deg, var(--bg-raised) 0%, var(--bg-surface) 50%, var(--bg-raised) 100%)',
           backgroundSize: '200% 100%',
         }}
       />
@@ -117,7 +114,7 @@ const LatestHero: React.FC = memo(() => {
           playsInline
         />
       ) : latestNews?.type === 'slider' ? (
-        <div className="relative w-full h-full rounded-2xl overflow-hidden bg-gray-100">
+        <div className="relative w-full h-full rounded-2xl overflow-hidden bg-raised">
           <AnimatePresence>
             {images.length > 0 && (
               <motion.div
@@ -131,9 +128,7 @@ const LatestHero: React.FC = memo(() => {
                 <img
                   src={images[currentIndex]}
                   alt={`Slide ${currentIndex + 1}`}
-                  className={getImageClasses(
-                    imageAspectRatios[currentIndex] ?? 1
-                  )}
+                  className={getImageClasses(imageAspectRatios[currentIndex] ?? 1)}
                   style={{ maxWidth: '100%', maxHeight: '100%' }}
                 />
               </motion.div>
@@ -144,66 +139,45 @@ const LatestHero: React.FC = memo(() => {
             <>
               <motion.button
                 className="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 w-8 h-8 md:w-10 md:h-10
-                  bg-black/40 backdrop-blur-md border border-white/10 rounded-full
-                  flex items-center justify-center text-white hover:bg-black/60 transition z-10"
+                  bg-black/40 backdrop-blur-md border border-accent/20 rounded-full
+                  flex items-center justify-center text-white hover:bg-black/60 hover:border-accent/50 transition z-10"
                 onClick={handlePrev}
                 whileHover={{ scale: 1.15 }}
                 whileTap={{ scale: 0.9 }}
               >
-                <motion.svg
-                  className="w-4 h-4 md:w-5 md:h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2.5}
-                    d="M15 19l-7-7 7-7"
-                  />
+                <motion.svg className="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
                 </motion.svg>
               </motion.button>
 
               <motion.button
                 className="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 w-8 h-8 md:w-10 md:h-10
-                  bg-black/40 backdrop-blur-md border border-white/10 rounded-full
-                  flex items-center justify-center text-white hover:bg-black/60 transition z-10"
+                  bg-black/40 backdrop-blur-md border border-accent/20 rounded-full
+                  flex items-center justify-center text-white hover:bg-black/60 hover:border-accent/50 transition z-10"
                 onClick={handleNext}
                 whileHover={{ scale: 1.15 }}
                 whileTap={{ scale: 0.9 }}
               >
-                <motion.svg
-                  className="w-4 h-4 md:w-5 md:h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2.5}
-                    d="M9 5l7 7-7 7"
-                  />
+                <motion.svg className="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
                 </motion.svg>
               </motion.button>
 
-              <div className="absolute bottom-3 md:bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
+              <div className="absolute bottom-3 md:bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
                 {images.map((_, index) => (
                   <motion.button
                     key={index}
                     onClick={() => setCurrentIndex(index)}
-                    className={`w-2 h-2 rounded-full ${
-                      index === currentIndex ? 'bg-white' : 'bg-white/50'
-                    }`}
-                    whileHover={{ scale: 1.2 }}
-                    whileTap={{ scale: 0.8 }}
+                    className="h-1 rounded-full bg-accent transition-all"
+                    animate={{ width: index === currentIndex ? 20 : 6, opacity: index === currentIndex ? 1 : 0.4 }}
+                    transition={{ duration: 0.3 }}
                   />
                 ))}
               </div>
 
+              {/* Progress bar — brand color */}
               <motion.div
-                className="absolute top-0 left-0 h-0.5 bg-gradient-to-r from-blue-400 to-purple-500 rounded-full"
+                className="absolute top-0 left-0 h-0.5 rounded-full bg-accent"
                 key={currentIndex}
                 initial={{ width: '0%' }}
                 animate={{ width: '100%' }}
@@ -213,7 +187,7 @@ const LatestHero: React.FC = memo(() => {
           )}
         </div>
       ) : (
-        <div className="relative w-full h-full rounded-2xl overflow-hidden bg-gray-100 flex items-center justify-center">
+        <div className="relative w-full h-full rounded-2xl overflow-hidden bg-raised flex items-center justify-center">
           <img
             src={latestNews?.Value as string}
             alt="Latest News"
@@ -223,17 +197,20 @@ const LatestHero: React.FC = memo(() => {
         </div>
       )}
 
-      <motion.div
-        className="absolute inset-0 bg-gradient-to-tr from-purple-500/20 to-blue-500/20
-          pointer-events-none mix-blend-overlay rounded-2xl"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: [0, 0.2, 0] }}
-        transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
+      {/* Engineering grid overlay */}
+      <div
+        className="absolute inset-0 pointer-events-none rounded-2xl z-[1]"
+        style={{
+          backgroundImage:
+            'linear-gradient(rgba(56,189,248,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(56,189,248,0.03) 1px, transparent 1px)',
+          backgroundSize: '40px 40px',
+        }}
       />
 
+      {/* Accent glow blob — brand aligned */}
       <motion.div
-        className="absolute -top-10 -right-10 w-40 h-40 bg-blue-400/10 rounded-full blur-3xl"
-        animate={{ x: [0, 20, 0], y: [0, 20, 0], rotate: [0, 15, 0] }}
+        className="absolute -top-10 -right-10 w-40 h-40 bg-accent/8 rounded-full blur-3xl pointer-events-none"
+        animate={{ x: [0, 20, 0], y: [0, 20, 0] }}
         transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
       />
     </div>

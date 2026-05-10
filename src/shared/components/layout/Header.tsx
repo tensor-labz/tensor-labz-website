@@ -19,12 +19,11 @@ const Header: React.FC<{ className?: string }> = memo(({ className = '' }) => {
       initial={{ opacity: 0, y: -12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, ease: 'easeOut' }}
-      style={{ backgroundColor: 'var(--header-bg)' }}
-      className={`fixed top-0 left-0 w-full z-50 border-b backdrop-blur-md
+      className={`fixed top-0 left-0 w-full z-50 border-b backdrop-blur-md bg-canvas
         transition-[border-color,box-shadow] duration-300
         ${
           isScrolled
-            ? 'border-[var(--border)] shadow-lg shadow-black/10 dark:shadow-black/40'
+            ? 'border-rim shadow-lg shadow-black/10 dark:shadow-black/40'
             : 'border-transparent'
         } ${className}`}
     >
@@ -52,8 +51,8 @@ const Header: React.FC<{ className?: string }> = memo(({ className = '' }) => {
             onClick={toggleTheme}
             aria-label="Toggle theme"
             className="w-8 h-8 flex items-center justify-center rounded
-              text-[var(--text-muted)] hover:text-[var(--accent)]
-              bg-[var(--bg-raised)] border border-[var(--border)]
+              text-muted hover:text-accent
+              bg-raised border border-rim
               transition-colors duration-200 text-base shrink-0"
           >
             {theme === 'dark' ? <ReactIcon name="RiSunLine" size={16} /> : <ReactIcon name="RiMoonLine" size={16} />}

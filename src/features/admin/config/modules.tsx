@@ -19,7 +19,8 @@ export interface FieldConfig {
     | 'multiinput'
     | 'richtext'
     | 'radio'
-    | 'select';
+    | 'select'
+    | 'covermedia';  // combined cover_image_type dropdown + url/upload input
   placeholder?: string;
   required?: boolean;
   span?: 'full' | 'half';
@@ -201,6 +202,99 @@ export const MODULES: ModuleConfig[] = [
         required: true,
         span: 'full',
         placeholder: 'contact@example.com',
+      },
+    ],
+  },
+  {
+    id: 'blogs',
+    label: 'Blog Posts',
+    icon: 'FaNewspaper',
+    imageField: 'cover_image',
+    titleField: 'title',
+    descriptionField: 'description',
+    tableColumns: ['status', 'tags'],
+    fields: [
+      { key: 'cover_image', label: 'Cover Media', type: 'covermedia', span: 'full' },
+      { key: 'title', label: 'Title', type: 'text', required: true, span: 'half' },
+      { key: 'slug', label: 'Slug', type: 'text', required: true, span: 'half', placeholder: 'my-blog-post' },
+      {
+        key: 'status',
+        label: 'Status',
+        type: 'radio',
+        span: 'half',
+        options: ['draft', 'published', 'hidden'],
+      },
+      { key: 'tags', label: 'Tags (comma separated)', type: 'tags', span: 'half' },
+      { key: 'description', label: 'Meta Description (internal)', type: 'textarea', span: 'full' },
+      { key: 'meta_title', label: 'SEO Title (optional override)', type: 'text', span: 'full' },
+      { key: 'content', label: 'Full Content', type: 'richtext', span: 'full' },
+    ],
+  },
+  {
+    id: 'blog_social_links',
+    label: 'Blog Social Links',
+    icon: 'FaShareAlt',
+    titleField: 'platform',
+    descriptionField: 'url',
+    tableColumns: ['blog_id'],
+    fields: [
+      {
+        key: 'blog_id',
+        label: 'Blog Post',
+        type: 'select',
+        required: true,
+        span: 'full',
+        relation: { table: 'blogs', labelField: 'title', valueField: 'id' },
+      },
+      {
+        key: 'platform',
+        label: 'Platform',
+        type: 'text',
+        required: true,
+        span: 'half',
+        placeholder: 'twitter / linkedin / facebook / instagram / youtube',
+      },
+      {
+        key: 'url',
+        label: 'URL',
+        type: 'url',
+        required: true,
+        span: 'half',
+        placeholder: 'https://...',
+      },
+    ],
+  },
+  {
+    id: 'blog_additional_media',
+    label: 'Blog Media',
+    icon: 'FaPhotoVideo',
+    titleField: 'url',
+    descriptionField: 'type',
+    tableColumns: ['blog_id', 'type'],
+    fields: [
+      {
+        key: 'blog_id',
+        label: 'Blog Post',
+        type: 'select',
+        required: true,
+        span: 'full',
+        relation: { table: 'blogs', labelField: 'title', valueField: 'id' },
+      },
+      {
+        key: 'type',
+        label: 'Media Type',
+        type: 'radio',
+        required: true,
+        span: 'half',
+        options: ['image', 'video', 'youtube', 'drive_image', 'drive_video'],
+      },
+      {
+        key: 'url',
+        label: 'URL',
+        type: 'url',
+        required: true,
+        span: 'half',
+        placeholder: 'https://...',
       },
     ],
   },

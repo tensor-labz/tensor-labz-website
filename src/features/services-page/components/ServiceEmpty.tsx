@@ -22,7 +22,7 @@ const ServiceEmpty: React.FC = memo(() => {
             animate={{ rotate: 360 }}
             transition={{ duration: 8, repeat: Infinity, ease: 'linear' }}
           >
-            <ReactIcon name="BsRobot" size={48} style={{ color: 'var(--accent)' }} />
+            <ReactIcon name="BsRobot" size={48} className="text-accent" />
           </motion.div>
         </div>
       </motion.div>
@@ -35,13 +35,13 @@ const ServiceEmpty: React.FC = memo(() => {
       >
         <h3
           className="text-2xl font-bold"
-          style={{ color: 'var(--text-primary)' }}
+          className="text-fg"
         >
           No Projects Available
         </h3>
         <p
           className="text-base leading-relaxed"
-          style={{ color: 'var(--text-muted)' }}
+          className="text-muted"
         >
           We&apos;re crafting something extraordinary for you
         </p>

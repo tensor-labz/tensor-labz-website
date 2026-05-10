@@ -91,7 +91,7 @@ const Login = () => {
           >
             Admin Portal
           </h1>
-          <p className="text-sm mt-1" style={{ color: 'var(--text-muted)' }}>
+          <p className="text-sm mt-1" className="text-muted">
             Sign in to manage your content
           </p>
         </div>
@@ -111,7 +111,7 @@ const Login = () => {
               <label
                 htmlFor="email"
                 className="block text-sm font-medium mb-2"
-                style={{ color: 'var(--text-muted)' }}
+                className="text-muted"
               >
                 Email address
               </label>
@@ -119,7 +119,7 @@ const Login = () => {
                 <ReactIcon
                   name="FaEnvelope"
                   className="absolute left-3 top-1/2 -translate-y-1/2 text-sm"
-                  style={{ color: 'var(--text-muted)' }}
+                  className="text-muted"
                 />
                 <input
                   id="email"
@@ -144,7 +144,7 @@ const Login = () => {
               <label
                 htmlFor="password"
                 className="block text-sm font-medium mb-2"
-                style={{ color: 'var(--text-muted)' }}
+                className="text-muted"
               >
                 Password
               </label>
@@ -152,7 +152,7 @@ const Login = () => {
                 <ReactIcon
                   name="FaLock"
                   className="absolute left-3 top-1/2 -translate-y-1/2 text-sm"
-                  style={{ color: 'var(--text-muted)' }}
+                  className="text-muted"
                 />
                 <input
                   id="password"
@@ -173,7 +173,7 @@ const Login = () => {
                   type="button"
                   onClick={() => setShowPassword((v) => !v)}
                   className="absolute right-3 top-1/2 -translate-y-1/2"
-                  style={{ color: 'var(--text-muted)' }}
+                  className="text-muted"
                   aria-label={showPassword ? 'Hide password' : 'Show password'}
                 >
                   {showPassword ? (
