@@ -2,64 +2,57 @@ import { useRef, useEffect, memo } from 'react';
 import * as THREE from 'three';
 import { useAppSelector } from '../../../app/hooks';
 import { selectHeroSlides, selectCurrentIndex } from '../../../store/heroSlice';
+import type { HeroSlide } from '../../../services/heroService';
 
 /*
   BoxGeometry material slots: [+X, -X, +Y, -Y, +Z, -Z]
-  We cycle through 4 Y-axis faces so the cube only ever spins horizontally.
+  We use only the 4 Y-axis faces so the cube rotates horizontally.
 
-  slide 0 → front (+Z, slot 4) → rotY =  0
-  slide 1 → right (+X, slot 0) → rotY = -π/2
-  slide 2 → back  (-Z, slot 5) → rotY =  π
-  slide 3 → left  (-X, slot 1) → rotY =  π/2
+  slide 0 → +Z front (slot 4) → rotY =  0
+  slide 1 → +X right (slot 0) → rotY = -π/2
+  slide 2 → -Z back  (slot 5) → rotY =  π
+  slide 3 → -X left  (slot 1) → rotY =  π/2
 */
-const FACE_SLOT  = [4, 0, 5, 1];
-const FACE_ROTY  = [0, -Math.PI / 2, Math.PI, Math.PI / 2];
+const FACE_SLOT = [4, 0, 5, 1];
+const FACE_ROTY = [0, -Math.PI / 2, Math.PI, Math.PI / 2];
 
-function placeholderMaterial(color = 0x0f172a) {
-  return new THREE.MeshStandardMaterial({ color, metalness: 0.4, roughness: 0.55 });
+function applySlides(slides: HeroSlide[], mats: THREE.MeshStandardMaterial[]) {
+  const loader = new THREE.TextureLoader();
+  slides.slice(0, 4).forEach((slide, i) => {
+    if (!slide.img) return;
+    loader.load(slide.img, (tex) => {
+      tex.colorSpace = THREE.SRGBColorSpace;
+      const slot             = FACE_SLOT[i];
+      mats[slot].map         = tex;
+      mats[slot].color.set(0xffffff);
+      mats[slot].roughness   = 0.2;
+      mats[slot].metalness   = 0.05;
+      mats[slot].needsUpdate = true;
+    });
+  });
 }
 
 const HeroImageSlider: React.FC = memo(() => {
-  const mountRef   = useRef<HTMLDivElement>(null);
-  const cubeRef    = useRef<THREE.Mesh | null>(null);
-  const edgesRef   = useRef<THREE.LineSegments | null>(null);
-  const cornersRef = useRef<THREE.Group | null>(null);
-  const targetQ    = useRef(new THREE.Quaternion());
-  const currentQ   = useRef(new THREE.Quaternion());
+  const mountRef    = useRef<HTMLDivElement>(null);
+  const materialsRef = useRef<THREE.MeshStandardMaterial[]>([]);
+  const targetQ     = useRef(new THREE.Quaternion());
+  const currentQ    = useRef(new THREE.Quaternion());
 
   const slides       = useAppSelector(selectHeroSlides);
   const currentIndex = useAppSelector(selectCurrentIndex);
 
-  /* ── sync target quaternion on slide change ── */
+  /* keep a live ref so the scene effect can read the latest slides */
+  const slidesRef = useRef(slides);
+  slidesRef.current = slides;
+
+  /* ── target rotation follows currentIndex ── */
   useEffect(() => {
     targetQ.current.setFromEuler(
       new THREE.Euler(0, FACE_ROTY[currentIndex % 4], 0),
     );
   }, [currentIndex]);
 
-  /* ── load / refresh textures when slides arrive ── */
-  useEffect(() => {
-    const cube = cubeRef.current;
-    if (!cube || !slides.length) return;
-
-    const loader = new THREE.TextureLoader();
-    const mats   = cube.material as THREE.MeshStandardMaterial[];
-
-    slides.slice(0, 4).forEach((slide, i) => {
-      if (!slide.img) return;
-      loader.load(slide.img, (tex) => {
-        tex.colorSpace     = THREE.SRGBColorSpace;
-        const slot         = FACE_SLOT[i];
-        mats[slot].map     = tex;
-        mats[slot].color.set(0xffffff);
-        mats[slot].roughness  = 0.2;
-        mats[slot].metalness  = 0.05;
-        mats[slot].needsUpdate = true;
-      });
-    });
-  }, [slides]);
-
-  /* ── Three.js scene (once) ── */
+  /* ── Three.js scene (once on mount) ── */
   useEffect(() => {
     const el = mountRef.current;
     if (!el) return;
@@ -77,43 +70,48 @@ const HeroImageSlider: React.FC = memo(() => {
 
     /* lights */
     scene.add(new THREE.AmbientLight(0x1e293b, 2.5));
-
     const key = new THREE.DirectionalLight(0x38bdf8, 4);
     key.position.set(4, 6, 5);
     scene.add(key);
-
     const fill = new THREE.PointLight(0x818cf8, 3, 22);
     fill.position.set(-5, -3, 3);
     scene.add(fill);
-
     const rim = new THREE.DirectionalLight(0xe0f2fe, 1.2);
     rim.position.set(-3, 2, -5);
     scene.add(rim);
 
     /* cube */
-    const materials = Array.from({ length: 6 }, (_, i) =>
-      placeholderMaterial([0x0f172a, 0x0f172a, 0x0c1525, 0x0c1525, 0x132038, 0x0f172a][i]),
-    );
+    const darkFace = (hex: number) =>
+      new THREE.MeshStandardMaterial({ color: hex, metalness: 0.4, roughness: 0.55 });
+
+    const materials: THREE.MeshStandardMaterial[] = [
+      darkFace(0x0f172a), // +X
+      darkFace(0x0f172a), // -X
+      darkFace(0x0c1525), // +Y  top
+      darkFace(0x0c1525), // -Y  bottom
+      darkFace(0x132038), // +Z  front  ← slide 0
+      darkFace(0x0f172a), // -Z  back
+    ];
+    materialsRef.current = materials;
+
     const cube = new THREE.Mesh(new THREE.BoxGeometry(2.8, 2.8, 2.8), materials);
     scene.add(cube);
-    cubeRef.current = cube;
+
+    /* apply slides that are already in the store */
+    if (slidesRef.current.length) applySlides(slidesRef.current, materials);
 
     /* glowing edges */
     const edgesMat = new THREE.LineBasicMaterial({
-      color: 0x38bdf8,
-      transparent: true,
-      opacity: 0.5,
-      blending: THREE.AdditiveBlending,
-      depthWrite: false,
+      color: 0x38bdf8, transparent: true, opacity: 0.5,
+      blending: THREE.AdditiveBlending, depthWrite: false,
     });
     const edges = new THREE.LineSegments(
       new THREE.EdgesGeometry(new THREE.BoxGeometry(2.85, 2.85, 2.85)),
       edgesMat,
     );
     scene.add(edges);
-    edgesRef.current = edges;
 
-    /* glowing corner dots */
+    /* corner glow dots */
     const h = 1.43;
     const verts: [number, number, number][] = [
       [ h,  h,  h], [-h,  h,  h], [ h, -h,  h], [-h, -h,  h],
@@ -130,7 +128,6 @@ const HeroImageSlider: React.FC = memo(() => {
       corners.add(dot);
     });
     scene.add(corners);
-    cornersRef.current = corners;
 
     /* background particles */
     const pPos = new Float32Array(100 * 3);
@@ -155,19 +152,16 @@ const HeroImageSlider: React.FC = memo(() => {
       raf = requestAnimationFrame(animate);
       const t = clock.getElapsedTime();
 
-      /* smooth face rotation */
       currentQ.current.slerp(targetQ.current, 0.04);
       cube.setRotationFromQuaternion(currentQ.current);
       edges.setRotationFromQuaternion(currentQ.current);
       corners.setRotationFromQuaternion(currentQ.current);
 
-      /* gentle float */
-      const floatY = Math.sin(t * 0.55) * 0.09;
-      cube.position.y    = floatY;
-      edges.position.y   = floatY;
-      corners.position.y = floatY;
+      const floatY        = Math.sin(t * 0.55) * 0.09;
+      cube.position.y     = floatY;
+      edges.position.y    = floatY;
+      corners.position.y  = floatY;
 
-      /* edge pulse */
       edgesMat.opacity = 0.38 + Math.sin(t * 1.6) * 0.14;
 
       renderer.render(scene, camera);
@@ -176,8 +170,7 @@ const HeroImageSlider: React.FC = memo(() => {
 
     /* resize */
     const ro = new ResizeObserver(() => {
-      const nw = el.clientWidth;
-      const nh = el.clientHeight;
+      const nw = el.clientWidth, nh = el.clientHeight;
       camera.aspect = nw / nh;
       camera.updateProjectionMatrix();
       renderer.setSize(nw, nh);
@@ -191,7 +184,13 @@ const HeroImageSlider: React.FC = memo(() => {
       renderer.dispose();
       if (el.contains(renderer.domElement)) el.removeChild(renderer.domElement);
     };
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  /* ── reload textures if slides arrive/change after mount ── */
+  useEffect(() => {
+    if (!materialsRef.current.length || !slides.length) return;
+    applySlides(slides, materialsRef.current);
+  }, [slides]);
 
   return <div ref={mountRef} className="w-full h-full" />;
 });
