@@ -8,7 +8,7 @@ import { MODULES, type FieldConfig } from '../config/modules';
 import Breadcrumbs from '../../../shared/components/ui/Breadcrumbs';
 import { supabase } from '../../../lib/supabase';
 import { uploadImage, moduleFolder } from '../../../lib/imageUpload';
-import { detectCoverType, toYouTubeEmbed } from '../../../services/blogService';
+import { detectCoverType, toYouTubeEmbed } from '../../../services/postService';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import {
   fetchRecord,

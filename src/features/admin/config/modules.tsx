@@ -206,8 +206,8 @@ export const MODULES: ModuleConfig[] = [
     ],
   },
   {
-    id: 'blogs',
-    label: 'Blog Posts',
+    id: 'posts',
+    label: 'Posts',
     icon: 'FaNewspaper',
     imageField: 'cover_image',
     titleField: 'title',
@@ -216,7 +216,7 @@ export const MODULES: ModuleConfig[] = [
     fields: [
       { key: 'cover_image', label: 'Cover Media', type: 'covermedia', span: 'full' },
       { key: 'title', label: 'Title', type: 'text', required: true, span: 'half' },
-      { key: 'slug', label: 'Slug', type: 'text', required: true, span: 'half', placeholder: 'my-blog-post' },
+      { key: 'slug', label: 'Slug', type: 'text', required: true, span: 'half', placeholder: 'my-post' },
       {
         key: 'status',
         label: 'Status',
@@ -231,20 +231,20 @@ export const MODULES: ModuleConfig[] = [
     ],
   },
   {
-    id: 'blog_social_links',
-    label: 'Blog Social Links',
+    id: 'post_social_links',
+    label: 'Post Social Links',
     icon: 'FaShareAlt',
     titleField: 'platform',
     descriptionField: 'url',
-    tableColumns: ['blog_id'],
+    tableColumns: ['post_id'],
     fields: [
       {
-        key: 'blog_id',
-        label: 'Blog Post',
+        key: 'post_id',
+        label: 'Post',
         type: 'select',
         required: true,
         span: 'full',
-        relation: { table: 'blogs', labelField: 'title', valueField: 'id' },
+        relation: { table: 'posts', labelField: 'title', valueField: 'id' },
       },
       {
         key: 'platform',
@@ -265,20 +265,20 @@ export const MODULES: ModuleConfig[] = [
     ],
   },
   {
-    id: 'blog_additional_media',
-    label: 'Blog Media',
+    id: 'post_additional_media',
+    label: 'Post Media',
     icon: 'FaPhotoVideo',
     titleField: 'url',
     descriptionField: 'type',
-    tableColumns: ['blog_id', 'type'],
+    tableColumns: ['post_id', 'type'],
     fields: [
       {
-        key: 'blog_id',
-        label: 'Blog Post',
+        key: 'post_id',
+        label: 'Post',
         type: 'select',
         required: true,
         span: 'full',
-        relation: { table: 'blogs', labelField: 'title', valueField: 'id' },
+        relation: { table: 'posts', labelField: 'title', valueField: 'id' },
       },
       {
         key: 'type',

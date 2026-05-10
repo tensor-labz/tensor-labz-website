@@ -1,14 +1,14 @@
 import React, { memo, useState, useMemo } from 'react';
 import { motion } from 'motion/react';
 import Page from '../components/resuable/Page';
-import BlogCard from '../features/blog/components/BlogCard';
+import PostCard from '../features/posts/components/PostCard';
 import ReactIcon from '../shared/components/ui/ReactIcon';
-import { useBlogListController } from '../features/blog/hooks/useBlogListController';
+import { usePostListController } from '../features/posts/hooks/usePostListController';
 import { EASE_EXPO, VIEWPORT } from '../lib/motion';
 
 const PAGE_SIZE = 20;
 
-const BlogSkeleton = () => (
+const PostSkeleton = () => (
   <div className="rounded-xl overflow-hidden border border-rim bg-surface animate-pulse flex flex-col md:flex-row">
     <div className="aspect-video md:aspect-auto md:w-[44%] md:shrink-0 bg-raised" />
     <div className="flex-1 p-5 md:p-8 space-y-4">
@@ -21,30 +21,30 @@ const BlogSkeleton = () => (
   </div>
 );
 
-const Blog: React.FC = memo(() => {
-  const { blogs, isLoading } = useBlogListController();
+const Posts: React.FC = memo(() => {
+  const { posts, isLoading } = usePostListController();
   const [activeTag, setActiveTag] = useState<string | null>(null);
   const [query, setQuery] = useState('');
   const [page, setPage] = useState(1);
 
   const allTags = useMemo(() => {
     const set = new Set<string>();
-    blogs.forEach((b) => b.tags.forEach((t) => set.add(t)));
+    posts.forEach((p) => p.tags.forEach((t) => set.add(t)));
     return Array.from(set);
-  }, [blogs]);
+  }, [posts]);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
-    return blogs.filter((b) => {
-      const matchesTag = !activeTag || b.tags.includes(activeTag);
+    return posts.filter((p) => {
+      const matchesTag = !activeTag || p.tags.includes(activeTag);
       const matchesQuery =
         !q ||
-        b.title.toLowerCase().includes(q) ||
-        (b.description ?? '').toLowerCase().includes(q) ||
-        b.tags.some((t) => t.toLowerCase().includes(q));
+        p.title.toLowerCase().includes(q) ||
+        (p.description ?? '').toLowerCase().includes(q) ||
+        p.tags.some((t) => t.toLowerCase().includes(q));
       return matchesTag && matchesQuery;
     });
-  }, [blogs, activeTag, query]);
+  }, [posts, activeTag, query]);
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   const safePage = Math.min(page, totalPages);
@@ -61,7 +61,7 @@ const Blog: React.FC = memo(() => {
   };
 
   return (
-    <Page HeadProps={{ title: 'Blog' }}>
+    <Page HeadProps={{ title: 'Posts' }}>
       {/* ── Hero ── */}
       <section className="pt-32 pb-10 px-6 lg:px-16 text-center">
         <motion.p
@@ -70,7 +70,7 @@ const Blog: React.FC = memo(() => {
           transition={{ duration: 0.5 }}
           className="text-[10px] font-mono tracking-[0.3em] uppercase text-accent mb-4"
         >
-          ◈ Tensor Labz // Blog
+          ◈ Tensor Labz // Posts
         </motion.p>
         <motion.h1
           initial={{ opacity: 0, y: -16 }}
@@ -114,7 +114,7 @@ const Blog: React.FC = memo(() => {
             type="text"
             value={query}
             onChange={handleQuery}
-            placeholder="Search articles…"
+            placeholder="Search posts…"
             className="w-full pl-9 pr-10 py-2.5 rounded-lg border border-rim bg-surface text-fg text-sm
               placeholder:text-muted/40 placeholder:font-mono
               focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/20
@@ -160,11 +160,11 @@ const Blog: React.FC = memo(() => {
         )}
       </motion.div>
 
-      {/* ── Articles ── */}
+      {/* ── Posts ── */}
       <section className="px-6 lg:px-16 pb-16 max-w-7xl mx-auto">
         {isLoading ? (
           <div className="flex flex-col gap-6">
-            {Array.from({ length: 3 }).map((_, i) => <BlogSkeleton key={i} />)}
+            {Array.from({ length: 3 }).map((_, i) => <PostSkeleton key={i} />)}
           </div>
         ) : filtered.length === 0 ? (
           <motion.div
@@ -174,20 +174,20 @@ const Blog: React.FC = memo(() => {
             className="text-center py-24"
           >
             <p className="text-[10px] font-mono tracking-widest uppercase text-accent mb-3">◈ No Results</p>
-            <p className="text-muted text-sm">No articles match your search. Try different keywords.</p>
+            <p className="text-muted text-sm">No posts match your search. Try different keywords.</p>
           </motion.div>
         ) : (
           <div className="flex flex-col gap-6">
-            {paginated.map((blog, i) => (
-              <BlogCard
-                key={blog.id}
-                slug={blog.slug}
-                title={blog.title}
-                description={blog.description}
-                cover_image={blog.cover_image}
-                cover_media_type={blog.cover_media_type}
-                tags={blog.tags}
-                created_at={blog.created_at}
+            {paginated.map((post, i) => (
+              <PostCard
+                key={post.id}
+                slug={post.slug}
+                title={post.title}
+                description={post.description}
+                cover_image={post.cover_image}
+                cover_media_type={post.cover_media_type}
+                tags={post.tags}
+                created_at={post.created_at}
                 reverse={i % 2 !== 0}
               />
             ))}
@@ -197,7 +197,6 @@ const Blog: React.FC = memo(() => {
         {/* ── Pagination ── */}
         {!isLoading && totalPages > 1 && (
           <div className="flex items-center justify-center gap-2 mt-12">
-            {/* Prev */}
             <button
               onClick={() => setPage((p) => Math.max(1, p - 1))}
               disabled={safePage === 1}
@@ -208,7 +207,6 @@ const Blog: React.FC = memo(() => {
               <ReactIcon name="FiChevronLeft" size={15} />
             </button>
 
-            {/* Page numbers */}
             {Array.from({ length: totalPages }, (_, i) => i + 1).map((n) => {
               const isActive = n === safePage;
               const isNear = Math.abs(n - safePage) <= 1 || n === 1 || n === totalPages;
@@ -233,7 +231,6 @@ const Blog: React.FC = memo(() => {
               );
             })}
 
-            {/* Next */}
             <button
               onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
               disabled={safePage === totalPages}
@@ -246,10 +243,9 @@ const Blog: React.FC = memo(() => {
           </div>
         )}
 
-        {/* Result count */}
         {!isLoading && filtered.length > 0 && (
           <p className="text-center text-[10px] font-mono text-muted/40 mt-4">
-            {filtered.length} article{filtered.length !== 1 ? 's' : ''} · page {safePage} of {totalPages}
+            {filtered.length} post{filtered.length !== 1 ? 's' : ''} · page {safePage} of {totalPages}
           </p>
         )}
       </section>
@@ -257,5 +253,5 @@ const Blog: React.FC = memo(() => {
   );
 });
 
-Blog.displayName = 'Blog';
-export default Blog;
+Posts.displayName = 'Posts';
+export default Posts;
