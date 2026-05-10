@@ -178,7 +178,7 @@ const HeroSection: React.FC = memo(() => {
           >
             {stats.map(({ value, label, icon, loading }) =>
               loading ? (
-                <div key={label} className="flex items-center gap-2">
+                <div key={icon} className="flex items-center gap-2">
                   <motion.div
                     className="w-3 h-3 rounded-full bg-accent"
                     animate={{ scale: [1, 1.4, 1], opacity: [1, 0.5, 1] }}
@@ -190,7 +190,7 @@ const HeroSection: React.FC = memo(() => {
                   />
                 </div>
               ) : (
-                <div key={label} className="flex items-center gap-2.5">
+                <div key={icon} className="flex items-center gap-2.5">
                   <ReactIcon
                     name={icon}
                     className="text-xl shrink-0 text-accent"
