@@ -10,7 +10,6 @@ import {
   staggerItem,
   fadeIn,
   EASE_EXPO,
-  VIEWPORT,
 } from '../lib/motion';
 
 const Globe = lazy(() => import('../features/contact/components/Globe'));

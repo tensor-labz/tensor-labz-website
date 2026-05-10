@@ -932,7 +932,8 @@ const FormBuilderLinks = memo(() => {
               color: 'var(--text-primary)',
             }}
           >
-            <m.icon
+            <ReactIcon
+              name={m.icon}
               size={15}
               style={{ color: 'var(--accent)', flexShrink: 0 }}
             />

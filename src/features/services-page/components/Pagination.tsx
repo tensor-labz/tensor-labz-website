@@ -66,8 +66,7 @@ const Pagination = memo(({ totalItems, itemsPerPage }: PaginationProps) => {
       page < 0 ? (
         <span
           key={`ellipsis-${index}`}
-          className="px-2"
-          className="text-muted"
+          className="px-2 text-muted"
         >
           …
         </span>

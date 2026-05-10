@@ -91,7 +91,7 @@ const Login = () => {
           >
             Admin Portal
           </h1>
-          <p className="text-sm mt-1" className="text-muted">
+          <p className="text-sm mt-1 text-muted">
             Sign in to manage your content
           </p>
         </div>
@@ -110,16 +110,14 @@ const Login = () => {
             <div>
               <label
                 htmlFor="email"
-                className="block text-sm font-medium mb-2"
-                className="text-muted"
+                className="block text-sm font-medium mb-2 text-muted"
               >
                 Email address
               </label>
               <div className="relative">
                 <ReactIcon
                   name="FaEnvelope"
-                  className="absolute left-3 top-1/2 -translate-y-1/2 text-sm"
-                  className="text-muted"
+                  className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-muted"
                 />
                 <input
                   id="email"
@@ -143,16 +141,14 @@ const Login = () => {
             <div>
               <label
                 htmlFor="password"
-                className="block text-sm font-medium mb-2"
-                className="text-muted"
+                className="block text-sm font-medium mb-2 text-muted"
               >
                 Password
               </label>
               <div className="relative">
                 <ReactIcon
                   name="FaLock"
-                  className="absolute left-3 top-1/2 -translate-y-1/2 text-sm"
-                  className="text-muted"
+                  className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-muted"
                 />
                 <input
                   id="password"
@@ -172,8 +168,7 @@ const Login = () => {
                 <button
                   type="button"
                   onClick={() => setShowPassword((v) => !v)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2"
-                  className="text-muted"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted"
                   aria-label={showPassword ? 'Hide password' : 'Show password'}
                 >
                   {showPassword ? (

@@ -1285,6 +1285,7 @@ const MediaItemForm = ({
    Page Content Tab
 ════════════════════════════════════════════════════════ */
 interface PageContentDraft {
+  [key: string]: string;
   'services.label': string;
   'services.title': string;
   'services.description': string;
