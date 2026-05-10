@@ -217,8 +217,8 @@ export const ImageField = ({
           onChange={(e) => setMode(e.target.value as 'upload' | 'url')}
           className="flex-1 px-3 py-1.5 rounded-lg text-xs font-medium appearance-none cursor-pointer"
           style={{
-            backgroundColor: 'var(--glass-bg-raised)',
-            border: '1px solid var(--glass-border)',
+            backgroundColor: 'var(--bg-surface)',
+            border: '1px solid var(--input-border)',
             color: 'var(--text-primary)',
             outline: 'none',
           }}
@@ -833,11 +833,11 @@ const MultiInputField = ({
 
 /* ── Static select (options array) ── */
 const selectStyle = {
-  backgroundColor: '#fff',
+  backgroundColor: 'var(--bg-surface)',
   border: '1px solid var(--input-border)',
-  color: '#111',
+  color: 'var(--text-primary)',
   outline: 'none',
-  backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23888'/%3E%3C/svg%3E")`,
+  backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23aaa'/%3E%3C/svg%3E")`,
   backgroundRepeat: 'no-repeat',
   backgroundPosition: 'right 10px center',
   paddingRight: '2rem',
@@ -918,16 +918,122 @@ const RelationSelect = ({
   );
 };
 
+/* ── Combined cover media field (type dropdown + url/upload) ── */
+const COVER_TYPES = [
+  { value: 'image',       label: 'Image',        icon: 'FaImage' },
+  { value: 'video',       label: 'Video (direct)', icon: 'FaVideo' },
+  { value: 'youtube',     label: 'YouTube',       icon: 'FaYoutube' },
+  { value: 'drive_image', label: 'Drive Image',   icon: 'FaGoogleDrive' },
+  { value: 'drive_video', label: 'Drive Video',   icon: 'FaGoogleDrive' },
+] as const;
+
+const CoverMediaField = ({
+  urlValue,
+  typeValue,
+  onChangeMultiple,
+  folder,
+}: {
+  urlValue: unknown;
+  typeValue: unknown;
+  onChangeMultiple: (changes: Record<string, unknown>) => void;
+  folder: string;
+}) => {
+  const currentType = (typeValue as string) || 'image';
+  const isUploadType = currentType === 'image';
+
+  const inputStyle = {
+    backgroundColor: 'var(--input-bg)',
+    border: '1px solid var(--input-border)',
+    color: 'var(--text-primary)',
+    outline: 'none',
+  };
+
+  return (
+    <div className="space-y-3">
+      {/* Type dropdown */}
+      <div className="flex items-center gap-2">
+        <label className="text-xs font-medium shrink-0" style={{ color: 'var(--text-muted)' }}>
+          Type
+        </label>
+        <select
+          value={currentType}
+          onChange={(e) => onChangeMultiple({ cover_image_type: e.target.value, cover_image: '' })}
+          className="flex-1 px-3 py-1.5 rounded-lg text-sm appearance-none cursor-pointer"
+          style={{ ...inputStyle, backgroundColor: 'var(--bg-surface)' }}
+        >
+          {COVER_TYPES.map((t) => (
+            <option key={t.value} value={t.value}>{t.label}</option>
+          ))}
+        </select>
+      </div>
+
+      {/* S3 uploader for image type */}
+      {isUploadType && (
+        <ImageField
+          value={urlValue}
+          onChange={(v) => onChangeMultiple({ cover_image: v })}
+          folder={folder}
+        />
+      )}
+
+      {/* URL input for all non-image types */}
+      {!isUploadType && (
+        <div className="space-y-2">
+          <div className="flex items-center gap-2">
+            <ReactIcon name="FaLink" size={12} style={{ color: 'var(--text-muted)', flexShrink: 0 }} />
+            <input
+              type="url"
+              value={String(urlValue ?? '')}
+              onChange={(e) => onChangeMultiple({ cover_image: e.target.value })}
+              placeholder={
+                currentType === 'youtube'     ? 'https://youtube.com/watch?v=... or youtu.be/...' :
+                currentType === 'drive_video' ? 'https://drive.google.com/file/d/FILE_ID/preview' :
+                currentType === 'drive_image' ? 'https://drive.google.com/uc?id=FILE_ID' :
+                'https://example.com/video.mp4'
+              }
+              className="flex-1 px-3 py-2.5 rounded-lg text-sm"
+              style={inputStyle}
+            />
+          </div>
+          {/* Live preview */}
+          {String(urlValue ?? '') && (
+            <div
+              className="rounded-xl overflow-hidden"
+              style={{ aspectRatio: '16/9', maxHeight: 220, backgroundColor: 'var(--glass-bg-raised)' }}
+            >
+              {(() => {
+                const url = String(urlValue ?? '');
+                const type = detectCoverType(url);
+                if (type === 'youtube')
+                  return <iframe src={toYouTubeEmbed(url)} title="preview" className="w-full h-full" allowFullScreen />;
+                if (type === 'drive_video')
+                  return <iframe src={url} title="preview" className="w-full h-full" allow="autoplay" allowFullScreen />;
+                if (type === 'video')
+                  return <video src={url} controls className="w-full h-full object-contain bg-black" />;
+                return <img src={url} alt="preview" className="w-full h-full object-cover" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />;
+              })()}
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+};
+
 /* ── Individual field renderer ── */
 const Field = ({
   field,
   value,
   onChange,
+  onChangeMultiple,
+  typeValue,
   folder,
 }: {
   field: FieldConfig;
   value: unknown;
   onChange: (v: unknown) => void;
+  onChangeMultiple?: (changes: Record<string, unknown>) => void;
+  typeValue?: unknown;
   folder: string;
 }) => {
   const str = String(value ?? '');
@@ -1107,6 +1213,16 @@ const Field = ({
     );
   }
 
+  if (field.type === 'covermedia' && onChangeMultiple)
+    return (
+      <CoverMediaField
+        urlValue={value}
+        typeValue={typeValue}
+        onChangeMultiple={onChangeMultiple}
+        folder={folder}
+      />
+    );
+
   return (
     <input
       type="text"
@@ -1196,6 +1312,11 @@ const AdminCrudForm = memo(() => {
         const raw = lowerData[f.key.toLowerCase()];
         acc[f.key] =
           raw !== undefined && raw !== null ? raw : defaultForType(f.type);
+        if (f.type === 'covermedia') {
+          const typeRaw = lowerData['cover_image_type'];
+          acc['cover_image_type'] =
+            typeRaw !== undefined && typeRaw !== null ? typeRaw : 'image';
+        }
         return acc;
       }, {})
     );
@@ -1363,6 +1484,14 @@ const AdminCrudForm = memo(() => {
                           String(values.slug ?? '')
                         )}
                         onChange={(val) => handleChange(field.key, val)}
+                        onChangeMultiple={(changes) =>
+                          setValues((prev) => ({ ...prev, ...changes }))
+                        }
+                        typeValue={
+                          field.type === 'covermedia'
+                            ? values['cover_image_type']
+                            : undefined
+                        }
                       />
                     </div>
                   ))}
