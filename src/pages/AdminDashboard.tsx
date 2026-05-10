@@ -15,13 +15,16 @@ import AdminUsers from '../features/admin/components/AdminUsers';
 import AdminBilling from '../features/admin/components/AdminBilling';
 import AdminSettings from '../features/admin/components/AdminSettings';
 import HeaderHelmet from '../base/Head';
-import data from '../data/data';
+import { useCompanyInfo, resolveLogo } from '../shared/hooks/useCompanyInfo';
+import logo from '../assets/images/logo.png';
 
 const AdminDashboard = memo(() => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const user = useAppSelector(selectAuthUser);
   const { theme, toggleTheme } = useTheme();
+  const info = useCompanyInfo();
+  const logoSrc = resolveLogo(info, theme, logo);
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const handleSignOut = async () => {
@@ -61,11 +64,11 @@ const AdminDashboard = memo(() => {
             <ReactIcon name="FaBars" size={13} />
           </motion.button>
 
-          {data?.layout?.logo && (
+          {logoSrc && (
             <Link to="/">
               <img
-                src={data.layout.logo}
-                alt="Tensor Labz"
+                src={logoSrc}
+                alt={info.name}
                 className="h-8 object-contain"
               />
             </Link>
