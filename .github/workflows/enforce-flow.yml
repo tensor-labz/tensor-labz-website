@@ -1,0 +1,28 @@
+name: Enforce Branch Flow
+
+on:
+  pull_request:
+    branches: [main, staging]
+
+jobs:
+  check-source:
+    name: Branch flow check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Enforce dev → staging → main
+        run: |
+          TARGET="${{ github.base_ref }}"
+          SOURCE="${{ github.head_ref }}"
+
+          if [ "$TARGET" = "main" ] && [ "$SOURCE" != "staging" ]; then
+            echo "❌  PRs to main must come from staging (got: $SOURCE)."
+            echo "    Merge dev → staging first, then open a staging → main PR."
+            exit 1
+          fi
+
+          if [ "$TARGET" = "staging" ] && [ "$SOURCE" != "dev" ]; then
+            echo "❌  PRs to staging must come from dev (got: $SOURCE)."
+            exit 1
+          fi
+
+          echo "✅  Branch flow OK: $SOURCE → $TARGET"
