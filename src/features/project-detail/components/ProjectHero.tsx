@@ -103,8 +103,8 @@ const ProjectHero: React.FC<ProjectHeroProps> = ({
         <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between">
           <div className="flex-1 lg:pr-8">
             <h1
-              className="text-3xl md:text-4xl font-bold mb-4 flex items-center gap-3 text-white"
-              style={{ ...fade(0.1), fontFamily: '"Syne", sans-serif' }}
+              className="text-3xl md:text-4xl font-bold mb-4 flex items-center gap-3 text-white font-display"
+              style={fade(0.1)}
             >
               {title}
               {is_top && (

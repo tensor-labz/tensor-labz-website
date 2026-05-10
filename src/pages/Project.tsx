@@ -34,7 +34,7 @@ const ProjectPage = () => {
   if (!project) return <ProjectNotFound />;
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: 'transparent' }}>
+    <div className="min-h-screen bg-transparent">
       <HeaderHelmet title={project.title} />
 
       <ProjectHero
@@ -76,8 +76,7 @@ const ProjectPage = () => {
               />
             ) : (
               <motion.p
-                className="max-w-none mb-10 text-xl"
-                className="text-fg"
+                className="max-w-none mb-10 text-xl text-fg"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3, duration: 0.5 }}
@@ -93,10 +92,7 @@ const ProjectPage = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.5, duration: 0.5 }}
               >
-                <h2
-                  className="text-2xl font-bold mb-4"
-                  className="text-fg"
-                >
+                <h2 className="text-2xl font-bold mb-4 text-fg">
                   Demo
                 </h2>
                 <iframe
@@ -118,10 +114,7 @@ const ProjectPage = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4, duration: 0.5 }}
               >
-                <h2
-                  className="text-2xl font-bold mb-4"
-                  className="text-fg"
-                >
+                <h2 className="text-2xl font-bold mb-4 text-fg">
                   Project Gallery
                 </h2>
                 {sampleImages.length > 0 ? (
@@ -156,10 +149,7 @@ const ProjectPage = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4, duration: 0.5 }}
               >
-                <h2
-                  className="text-2xl font-bold mb-4"
-                  className="text-fg"
-                >
+                <h2 className="text-2xl font-bold mb-4 text-fg">
                   Project Gallery
                 </h2>
                 {sampleImages.length > 0 ? (
@@ -183,22 +173,17 @@ const ProjectPage = () => {
                       <div className="flex justify-between items-center mt-4">
                         <button
                           onClick={prevImage}
-                          className="rounded-full w-10 h-10 flex items-center justify-center shadow-md transition-colors text-white"
-                          style={{ backgroundColor: 'var(--accent)' }}
+                          className="rounded-full w-10 h-10 flex items-center justify-center shadow-md transition-colors text-white bg-accent"
                           aria-label="Previous image"
                         >
                           ←
                         </button>
-                        <span
-                          className="font-medium text-sm"
-                          className="text-muted"
-                        >
+                        <span className="font-medium text-sm text-muted">
                           {currentImageIndex + 1} / {sampleImages.length}
                         </span>
                         <button
                           onClick={nextImage}
-                          className="rounded-full w-10 h-10 flex items-center justify-center shadow-md transition-colors text-white"
-                          style={{ backgroundColor: 'var(--accent)' }}
+                          className="rounded-full w-10 h-10 flex items-center justify-center shadow-md transition-colors text-white bg-accent"
                           aria-label="Next image"
                         >
                           →

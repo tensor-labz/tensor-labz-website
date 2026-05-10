@@ -171,8 +171,7 @@ const AboutUs: React.FC = memo(() => {
                 >
                   <Card>
                     <div
-                      className="w-12 h-12 rounded-xl flex items-center justify-center mb-6"
-                      style={{ backgroundColor: 'var(--accent-soft)' }}
+                      className="w-12 h-12 rounded-xl flex items-center justify-center mb-6 bg-accent-soft"
                     >
                       <ReactIcon name="FaLightbulb" size={20} className="text-accent" />
                     </div>
@@ -194,8 +193,7 @@ const AboutUs: React.FC = memo(() => {
                 >
                   <Card>
                     <div
-                      className="w-12 h-12 rounded-xl flex items-center justify-center mb-6"
-                      style={{ backgroundColor: 'var(--accent-soft)' }}
+                      className="w-12 h-12 rounded-xl flex items-center justify-center mb-6 bg-accent-soft"
                     >
                       <ReactIcon name="FaRocket" size={20} className="text-accent" />
                     </div>
@@ -245,8 +243,7 @@ const AboutUs: React.FC = memo(() => {
                 <ReactIcon
                   name="FaQuoteLeft"
                   size={32}
-                  className="text-accent mb-6 block"
-                  style={{ opacity: 0.45 }}
+                  className="text-accent mb-6 block opacity-[0.45]"
                 />
                 <p className="text-lg md:text-xl leading-relaxed font-medium italic mb-6 text-fg">
                   &ldquo;

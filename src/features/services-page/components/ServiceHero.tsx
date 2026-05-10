@@ -33,7 +33,7 @@ const ServiceHero: FC = memo(() => {
       </motion.span>
 
       <AnimatePresence mode="wait">
-        <motion.h1
+        <motion.h2
           key={activeSlug}
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
@@ -42,7 +42,7 @@ const ServiceHero: FC = memo(() => {
           className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 text-fg font-display"
         >
           {(selectedService as { service_name: string }).service_name}
-        </motion.h1>
+        </motion.h2>
       </AnimatePresence>
 
       <motion.div
