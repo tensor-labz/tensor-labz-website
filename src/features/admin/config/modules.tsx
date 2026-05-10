@@ -40,31 +40,6 @@ export interface ModuleConfig {
 
 export const MODULES: ModuleConfig[] = [
   {
-    id: 'hero',
-    label: 'Hero Slides',
-    icon: 'FaImages',
-    imageField: 'img',
-    titleField: 'title',
-    descriptionField: 'subtitle',
-    fields: [
-      {
-        key: 'img',
-        label: 'Image',
-        type: 'image',
-        required: true,
-        span: 'full',
-      },
-      {
-        key: 'title',
-        label: 'Title',
-        type: 'text',
-        required: true,
-        span: 'full',
-      },
-      { key: 'subtitle', label: 'Subtitle', type: 'text', span: 'full' },
-    ],
-  },
-  {
     id: 'services',
     label: 'Services',
     icon: 'FaCogs',

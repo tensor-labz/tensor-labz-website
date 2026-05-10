@@ -57,11 +57,9 @@ const COMPANY_DEFAULT: CompanyInfo = {
   mission: '',
 };
 
-/* ════════════════════════════════════════════════════════
-   Tab definitions — add more here as Site Control grows
-════════════════════════════════════════════════════════ */
 const TABS = [
   { id: 'company', label: 'Company Info', icon: 'FaBuilding' },
+  { id: 'page', label: 'Page Control', icon: 'FaLayerGroup' },
 ] as const;
 
 type TabId = (typeof TABS)[number]['id'];
@@ -768,6 +766,513 @@ const CompanyInfoTab = ({
 };
 
 /* ════════════════════════════════════════════════════════
+   Hero Slides tab
+════════════════════════════════════════════════════════ */
+interface HeroRow {
+  id?: number;
+  title: string;
+  subtitle: string;
+  img: string;
+  cta_label: string;
+  cta_link: string;
+  sort_order: number;
+}
+
+const HERO_DEFAULT: HeroRow = {
+  title: '',
+  subtitle: '',
+  img: '',
+  cta_label: '',
+  cta_link: '',
+  sort_order: 0,
+};
+
+const HeroSlidesTab = () => {
+  const [rows, setRows] = useState<HeroRow[]>([]);
+  const [editId, setEditId] = useState<number | 'new' | null>(null);
+  const [draft, setDraft] = useState<HeroRow>(HERO_DEFAULT);
+  const [loading, setLoading] = useState(true);
+
+  const refresh = useCallback(async () => {
+    const { data } = await supabase
+      .from('hero')
+      .select('*')
+      .order('sort_order', { ascending: true });
+    setRows((data as HeroRow[]) ?? []);
+    setLoading(false);
+  }, []);
+
+  useEffect(() => {
+    refresh();
+  }, [refresh]);
+
+  const save = async () => {
+    const payload = {
+      title: draft.title,
+      subtitle: draft.subtitle,
+      img: draft.img,
+      cta_label: draft.cta_label,
+      cta_link: draft.cta_link,
+      sort_order: draft.sort_order,
+    };
+    if (editId === 'new') {
+      await supabase.from('hero').insert(payload);
+    } else {
+      await supabase.from('hero').update(payload).eq('id', editId);
+    }
+    setEditId(null);
+    refresh();
+  };
+
+  const startEdit = (row: HeroRow) => {
+    setEditId(row.id!);
+    setDraft({ ...row });
+  };
+
+  const startNew = () => {
+    setEditId('new');
+    setDraft(HERO_DEFAULT);
+  };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-32">
+        <p className="text-sm" style={{ color: 'var(--text-muted)' }}>Loading…</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="max-w-3xl mx-auto px-4 sm:px-6 py-6 space-y-4">
+      <div className="flex items-center justify-between">
+        <SectionDivider
+          title="Hero Slides"
+          subtitle="Slides shown in the home page hero carousel."
+        />
+        <button
+          type="button"
+          disabled={editId !== null}
+          onClick={startNew}
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium shrink-0"
+          style={{
+            backgroundColor: 'var(--glass-bg-raised)',
+            border: '1px solid var(--glass-border)',
+            color: 'var(--text-muted)',
+            opacity: editId !== null ? 0.5 : 1,
+          }}
+        >
+          <ReactIcon name="FaPlus" size={10} /> Add Slide
+        </button>
+      </div>
+
+      <div className="space-y-3">
+        {editId === 'new' && (
+          <HeroSlideForm
+            draft={draft}
+            onChange={setDraft}
+            onSave={save}
+            onCancel={() => setEditId(null)}
+          />
+        )}
+
+        {rows.length === 0 && editId !== 'new' && (
+          <p
+            className="text-xs py-8 text-center rounded-xl"
+            style={{
+              color: 'var(--text-muted)',
+              backgroundColor: 'var(--glass-bg)',
+              border: '1px solid var(--glass-border)',
+            }}
+          >
+            No hero slides yet — click Add Slide.
+          </p>
+        )}
+
+        {rows.map((row) =>
+          editId === row.id ? (
+            <HeroSlideForm
+              key={row.id}
+              draft={draft}
+              onChange={setDraft}
+              onSave={save}
+              onCancel={() => setEditId(null)}
+            />
+          ) : (
+            <div
+              key={row.id}
+              className="flex items-center gap-3 px-4 py-3 rounded-xl"
+              style={{
+                backgroundColor: 'var(--glass-bg)',
+                border: '1px solid var(--glass-border)',
+              }}
+            >
+              {row.img && (
+                <img
+                  src={row.img}
+                  alt={row.title}
+                  className="w-14 h-10 object-cover rounded-lg shrink-0"
+                  onError={(e) => {
+                    (e.currentTarget as HTMLImageElement).style.display = 'none';
+                  }}
+                />
+              )}
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium truncate" style={{ color: 'var(--text-primary)' }}>
+                  {row.title || '(No title)'}
+                </p>
+                {row.subtitle && (
+                  <p className="text-xs truncate mt-0.5" style={{ color: 'var(--text-muted)' }}>
+                    {row.subtitle}
+                  </p>
+                )}
+              </div>
+              <span className="text-xs px-2 py-0.5 rounded-md shrink-0" style={{ color: 'var(--text-muted)', backgroundColor: 'var(--glass-bg-raised)' }}>
+                #{row.sort_order}
+              </span>
+              <div className="flex gap-1.5 shrink-0">
+                <IconBtn onClick={() => startEdit(row)} icon="FaEdit" title="Edit" />
+                <IconBtn
+                  onClick={async () => {
+                    await supabase.from('hero').delete().eq('id', row.id!);
+                    refresh();
+                  }}
+                  icon="FaTrash"
+                  title="Delete"
+                  danger
+                />
+              </div>
+            </div>
+          )
+        )}
+      </div>
+    </div>
+  );
+};
+
+const HeroSlideForm = ({
+  draft,
+  onChange,
+  onSave,
+  onCancel,
+}: {
+  draft: HeroRow;
+  onChange: (d: HeroRow) => void;
+  onSave: () => void;
+  onCancel: () => void;
+}) => {
+  const set = (key: keyof HeroRow) => (v: string | number) =>
+    onChange({ ...draft, [key]: v });
+
+  return (
+    <div
+      className="flex flex-col gap-3 px-4 py-4 rounded-xl"
+      style={{
+        backgroundColor: 'var(--glass-bg-raised)',
+        border: '1px solid var(--accent)',
+      }}
+    >
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <Field label="Title" value={draft.title} onChange={set('title')} placeholder="Main heading" />
+        <Field label="Subtitle" value={draft.subtitle} onChange={set('subtitle')} placeholder="Short supporting text" />
+        <Field label="CTA Label" value={draft.cta_label} onChange={set('cta_label')} placeholder="e.g. Learn More" />
+        <Field label="CTA Link" value={draft.cta_link} onChange={set('cta_link')} placeholder="/services/all" />
+        <Field
+          label="Sort Order"
+          value={String(draft.sort_order)}
+          onChange={(v) => set('sort_order')(Number(v))}
+          type="number"
+          placeholder="0"
+        />
+      </div>
+      <div className="flex flex-col gap-1.5">
+        <label className="text-xs font-medium" style={{ color: 'var(--text-muted)' }}>
+          Slide Image
+        </label>
+        <ImageField
+          value={draft.img}
+          onChange={(v) => set('img')(String(v ?? ''))}
+          folder="Home/Hero"
+        />
+      </div>
+      <div className="flex gap-2 justify-end">
+        <SaveRowBtn onClick={onSave} />
+        <IconBtn onClick={onCancel} icon="FaTimes" />
+      </div>
+    </div>
+  );
+};
+
+/* ════════════════════════════════════════════════════════
+   About Media tab
+════════════════════════════════════════════════════════ */
+interface MediaRow {
+  id?: number;
+  type: 'image' | 'video';
+  url: string;
+  title: string;
+  sort_order: number;
+}
+
+const MEDIA_DEFAULT: MediaRow = {
+  type: 'image',
+  url: '',
+  title: '',
+  sort_order: 0,
+};
+
+const AboutMediaTab = () => {
+  const [rows, setRows] = useState<MediaRow[]>([]);
+  const [editId, setEditId] = useState<number | 'new' | null>(null);
+  const [draft, setDraft] = useState<MediaRow>(MEDIA_DEFAULT);
+  const [loading, setLoading] = useState(true);
+
+  const refresh = useCallback(async () => {
+    const { data } = await supabase
+      .from('about_media')
+      .select('*')
+      .order('sort_order', { ascending: true });
+    setRows((data as MediaRow[]) ?? []);
+    setLoading(false);
+  }, []);
+
+  useEffect(() => {
+    refresh();
+  }, [refresh]);
+
+  const save = async () => {
+    const payload = {
+      type: draft.type,
+      url: draft.url,
+      title: draft.title,
+      sort_order: draft.sort_order,
+    };
+    if (editId === 'new') {
+      await supabase.from('about_media').insert(payload);
+    } else {
+      await supabase.from('about_media').update(payload).eq('id', editId);
+    }
+    setEditId(null);
+    refresh();
+  };
+
+  const startEdit = (row: MediaRow) => {
+    setEditId(row.id!);
+    setDraft({ ...row });
+  };
+
+  const startNew = () => {
+    setEditId('new');
+    setDraft(MEDIA_DEFAULT);
+  };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-32">
+        <p className="text-sm" style={{ color: 'var(--text-muted)' }}>Loading…</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="max-w-3xl mx-auto px-4 sm:px-6 py-6 space-y-4">
+      <div className="flex items-center justify-between">
+        <SectionDivider
+          title="About Media Gallery"
+          subtitle="Images and videos displayed in the About Us page gallery."
+        />
+        <button
+          type="button"
+          disabled={editId !== null}
+          onClick={startNew}
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium shrink-0"
+          style={{
+            backgroundColor: 'var(--glass-bg-raised)',
+            border: '1px solid var(--glass-border)',
+            color: 'var(--text-muted)',
+            opacity: editId !== null ? 0.5 : 1,
+          }}
+        >
+          <ReactIcon name="FaPlus" size={10} /> Add Item
+        </button>
+      </div>
+
+      <div className="space-y-3">
+        {editId === 'new' && (
+          <MediaItemForm
+            draft={draft}
+            onChange={setDraft}
+            onSave={save}
+            onCancel={() => setEditId(null)}
+          />
+        )}
+
+        {rows.length === 0 && editId !== 'new' && (
+          <p
+            className="text-xs py-8 text-center rounded-xl"
+            style={{
+              color: 'var(--text-muted)',
+              backgroundColor: 'var(--glass-bg)',
+              border: '1px solid var(--glass-border)',
+            }}
+          >
+            No media items yet — click Add Item.
+          </p>
+        )}
+
+        {rows.map((row) =>
+          editId === row.id ? (
+            <MediaItemForm
+              key={row.id}
+              draft={draft}
+              onChange={setDraft}
+              onSave={save}
+              onCancel={() => setEditId(null)}
+            />
+          ) : (
+            <div
+              key={row.id}
+              className="flex items-center gap-3 px-4 py-3 rounded-xl"
+              style={{
+                backgroundColor: 'var(--glass-bg)',
+                border: '1px solid var(--glass-border)',
+              }}
+            >
+              <div
+                className="w-10 h-10 rounded-lg shrink-0 flex items-center justify-center"
+                style={{ backgroundColor: 'var(--glass-bg-raised)' }}
+              >
+                <ReactIcon
+                  name={row.type === 'video' ? 'FaYoutube' : 'FaImage'}
+                  size={16}
+                  style={{ color: row.type === 'video' ? '#ef4444' : 'var(--accent)' }}
+                />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium truncate" style={{ color: 'var(--text-primary)' }}>
+                  {row.title || '(No title)'}
+                </p>
+                <p className="text-xs truncate mt-0.5" style={{ color: 'var(--text-muted)' }}>
+                  {row.url}
+                </p>
+              </div>
+              <span
+                className="text-xs px-2 py-0.5 rounded-md shrink-0 font-medium"
+                style={{
+                  backgroundColor: row.type === 'video' ? 'rgba(239,68,68,0.1)' : 'var(--accent-soft)',
+                  color: row.type === 'video' ? '#ef4444' : 'var(--accent)',
+                }}
+              >
+                {row.type}
+              </span>
+              <span className="text-xs px-2 py-0.5 rounded-md shrink-0" style={{ color: 'var(--text-muted)', backgroundColor: 'var(--glass-bg-raised)' }}>
+                #{row.sort_order}
+              </span>
+              <div className="flex gap-1.5 shrink-0">
+                <IconBtn onClick={() => startEdit(row)} icon="FaEdit" title="Edit" />
+                <IconBtn
+                  onClick={async () => {
+                    await supabase.from('about_media').delete().eq('id', row.id!);
+                    refresh();
+                  }}
+                  icon="FaTrash"
+                  title="Delete"
+                  danger
+                />
+              </div>
+            </div>
+          )
+        )}
+      </div>
+    </div>
+  );
+};
+
+const MediaItemForm = ({
+  draft,
+  onChange,
+  onSave,
+  onCancel,
+}: {
+  draft: MediaRow;
+  onChange: (d: MediaRow) => void;
+  onSave: () => void;
+  onCancel: () => void;
+}) => {
+  const set = (key: keyof MediaRow) => (v: string | number) =>
+    onChange({ ...draft, [key]: v });
+
+  return (
+    <div
+      className="flex flex-col gap-3 px-4 py-4 rounded-xl"
+      style={{
+        backgroundColor: 'var(--glass-bg-raised)',
+        border: '1px solid var(--accent)',
+      }}
+    >
+      {/* Type toggle */}
+      <div className="flex gap-2">
+        {(['image', 'video'] as const).map((t) => (
+          <button
+            key={t}
+            type="button"
+            onClick={() => onChange({ ...draft, type: t, url: '' })}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold capitalize transition-colors"
+            style={
+              draft.type === t
+                ? { backgroundColor: 'var(--accent)', color: '#fff' }
+                : {
+                    backgroundColor: 'var(--glass-bg)',
+                    border: '1px solid var(--glass-border)',
+                    color: 'var(--text-muted)',
+                  }
+            }
+          >
+            <ReactIcon name={t === 'video' ? 'FaYoutube' : 'FaImage'} size={11} />
+            {t}
+          </button>
+        ))}
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <Field label="Title" value={draft.title} onChange={set('title')} placeholder="Caption shown below media" />
+        <Field
+          label="Sort Order"
+          value={String(draft.sort_order)}
+          onChange={(v) => set('sort_order')(Number(v))}
+          type="number"
+          placeholder="0"
+        />
+      </div>
+
+      {draft.type === 'video' ? (
+        <Field
+          label="YouTube Embed URL"
+          value={draft.url}
+          onChange={set('url')}
+          placeholder="https://www.youtube.com/embed/VIDEO_ID"
+        />
+      ) : (
+        <div className="flex flex-col gap-1.5">
+          <label className="text-xs font-medium" style={{ color: 'var(--text-muted)' }}>
+            Image
+          </label>
+          <ImageField
+            value={draft.url}
+            onChange={(v) => set('url')(String(v ?? ''))}
+            folder="about"
+          />
+        </div>
+      )}
+
+      <div className="flex gap-2 justify-end">
+        <SaveRowBtn onClick={onSave} />
+        <IconBtn onClick={onCancel} icon="FaTimes" />
+      </div>
+    </div>
+  );
+};
+
+/* ════════════════════════════════════════════════════════
    AdminSiteControl — main shell
 ════════════════════════════════════════════════════════ */
 const AdminSiteControl = memo(() => {
@@ -830,22 +1335,24 @@ const AdminSiteControl = memo(() => {
         >
           Site Control
         </h2>
-        <button
-          type="button"
-          onClick={handleSave}
-          disabled={saving || loading}
-          className="flex items-center gap-1.5 px-3.5 py-2 sm:px-4 sm:py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all"
-          style={{
-            backgroundColor: saved
-              ? 'var(--success, #22c55e)'
-              : 'var(--accent)',
-            color: '#fff',
-            opacity: saving || loading ? 0.6 : 1,
-          }}
-        >
-          {saved ? <ReactIcon name="FaCheck" size={11} /> : <ReactIcon name="FaSave" size={11} />}
-          {saved ? 'Saved!' : saving ? 'Saving…' : 'Save'}
-        </button>
+        {activeTab === 'company' && (
+          <button
+            type="button"
+            onClick={handleSave}
+            disabled={saving || loading}
+            className="flex items-center gap-1.5 px-3.5 py-2 sm:px-4 sm:py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all"
+            style={{
+              backgroundColor: saved
+                ? 'var(--success, #22c55e)'
+                : 'var(--accent)',
+              color: '#fff',
+              opacity: saving || loading ? 0.6 : 1,
+            }}
+          >
+            {saved ? <ReactIcon name="FaCheck" size={11} /> : <ReactIcon name="FaSave" size={11} />}
+            {saved ? 'Saved!' : saving ? 'Saving…' : 'Save'}
+          </button>
+        )}
       </div>
 
       {/* ── Tab bar ── */}
@@ -875,16 +1382,27 @@ const AdminSiteControl = memo(() => {
 
       {/* ── Content ── */}
       <div className="flex-1 min-h-0 overflow-y-auto">
-        {loading ? (
+        {loading && activeTab === 'company' ? (
           <div className="flex items-center justify-center h-32">
             <p className="text-sm" style={{ color: 'var(--text-muted)' }}>
               Loading…
             </p>
           </div>
         ) : (
-          activeTab === 'company' && (
-            <CompanyInfoTab data={company} onChange={setCompany} />
-          )
+          <>
+            {activeTab === 'company' && (
+              <CompanyInfoTab data={company} onChange={setCompany} />
+            )}
+            {activeTab === 'page' && (
+              <>
+                <HeroSlidesTab />
+                <div className="max-w-3xl mx-auto px-4 sm:px-6">
+                  <div style={{ borderTop: '1px solid var(--glass-border)' }} />
+                </div>
+                <AboutMediaTab />
+              </>
+            )}
+          </>
         )}
       </div>
     </div>
