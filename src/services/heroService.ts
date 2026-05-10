@@ -16,7 +16,7 @@ export const fetchHeroSlides = async (
   const { data, error } = await supabase
     .from('hero')
     .select('*')
-    .order('sort_order', { ascending: true })
+    .order('id')
     .abortSignal(signal!);
   if (error) throw new Error(error.message);
   return (data ?? []) as HeroSlide[];
