@@ -17,7 +17,7 @@ export interface ReactIconProps {
   fallback?: ComponentType<Omit<ReactIconProps, 'name' | 'fallback'>>;
 }
 
-type IconModule = Record<string, ComponentType<object>>;
+type IconModule = { [key: string]: ComponentType<object> | unknown };
 type LibLoader = () => Promise<IconModule>;
 
 /* ── Library registry ───────────────────────────────────────────────────────

@@ -2,10 +2,10 @@ import React, { memo } from 'react';
 import { motion } from 'motion/react';
 import { useNavigate } from 'react-router-dom';
 import ReactIcon from '../../../shared/components/ui/ReactIcon';
-import type { Blog, CoverMediaType } from '../../../services/blogService';
+import type { Post, CoverMediaType } from '../../../services/postService';
 import { EASE_EXPO } from '../../../lib/motion';
 
-type Props = Pick<Blog, 'slug' | 'title' | 'description' | 'cover_image' | 'cover_media_type' | 'tags' | 'created_at'> & {
+type Props = Pick<Post, 'slug' | 'title' | 'description' | 'cover_image' | 'cover_media_type' | 'tags' | 'created_at'> & {
   reverse?: boolean;
 };
 
@@ -68,7 +68,7 @@ const CoverPreview = ({ url, type, title }: { url: string; type: CoverMediaType;
   );
 };
 
-const BlogCard: React.FC<Props> = memo(({ slug, title, description, cover_image, cover_media_type, tags, created_at, reverse = false }) => {
+const PostCard: React.FC<Props> = memo(({ slug, title, description, cover_image, cover_media_type, tags, created_at, reverse = false }) => {
   const navigate = useNavigate();
   const date = created_at
     ? new Date(created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })
@@ -80,7 +80,7 @@ const BlogCard: React.FC<Props> = memo(({ slug, title, description, cover_image,
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-40px' }}
       transition={{ duration: 0.55, ease: EASE_EXPO }}
-      onClick={() => navigate(`/blog/${slug}`)}
+      onClick={() => navigate(`/posts/${slug}`)}
       className={`group relative flex flex-col overflow-hidden rounded-xl
         bg-surface border border-rim cursor-pointer
         hover:border-accent/40 hover:shadow-[0_8px_40px_-8px_rgba(56,189,248,0.12)]
@@ -195,5 +195,5 @@ const BlogCard: React.FC<Props> = memo(({ slug, title, description, cover_image,
   );
 });
 
-BlogCard.displayName = 'BlogCard';
-export default BlogCard;
+PostCard.displayName = 'PostCard';
+export default PostCard;

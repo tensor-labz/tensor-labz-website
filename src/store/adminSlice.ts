@@ -139,9 +139,9 @@ export const deleteRecord = createAsyncThunk(
 export const fetchRelationOptions = createAsyncThunk(
   'admin/fetchRelationOptions',
   async ({ table, labelField, valueField = 'id' }: { table: string; labelField: string; valueField?: string }) => {
-    const { data, error } = await supabase.from(table).select(`id, ${labelField}`).order(labelField);
+    const { data, error } = await supabase.from(table).select(`${valueField}, ${labelField}`).order(labelField);
     if (error) throw new Error(error.message);
-    return (data ?? []) as Array<Record<string, unknown>>;
+    return (data ?? []) as unknown as Array<Record<string, unknown>>;
   }
 );
 

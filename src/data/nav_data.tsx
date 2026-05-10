@@ -11,8 +11,8 @@ const navData = [
     icon: <ReactIcon name="FaScrewdriverWrench" size={16} />,
   },
   {
-    nav: 'Blog',
-    to: '/blog',
+    nav: 'Posts',
+    to: '/posts',
     icon: <ReactIcon name="FaNewspaper" size={16} />,
   },
   {

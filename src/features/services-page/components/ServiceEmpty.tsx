@@ -34,14 +34,12 @@ const ServiceEmpty: React.FC = memo(() => {
         transition={{ duration: 0.6, delay: 0.2, ease: 'easeOut' }}
       >
         <h3
-          className="text-2xl font-bold"
-          className="text-fg"
+          className="text-2xl font-bold text-fg"
         >
           No Projects Available
         </h3>
         <p
-          className="text-base leading-relaxed"
-          className="text-muted"
+          className="text-base leading-relaxed text-muted"
         >
           We&apos;re crafting something extraordinary for you
         </p>

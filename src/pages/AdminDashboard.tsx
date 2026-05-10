@@ -31,8 +31,7 @@ const AdminDashboard = memo(() => {
 
   return (
     <div
-      className="h-screen overflow-hidden flex flex-col"
-      className="text-fg"
+      className="h-screen overflow-hidden flex flex-col text-fg"
     >
       <HeaderHelmet title="Admin Dashboard" />
 
@@ -75,8 +74,7 @@ const AdminDashboard = memo(() => {
 
         <div className="flex items-center gap-2.5">
           <span
-            className="text-xs hidden sm:block"
-            className="text-muted"
+            className="text-xs hidden sm:block text-muted"
           >
             {user?.email}
           </span>

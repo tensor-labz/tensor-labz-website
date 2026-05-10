@@ -4,8 +4,8 @@ import Home from '../pages/Home';
 import { Route, Routes, Navigate } from 'react-router-dom';
 import Services from '../pages/Services';
 import Project from '../pages/Project';
-import Blog from '../pages/Blog';
-import BlogDetail from '../pages/BlogDetail';
+import Posts from '../pages/Posts';
+import PostDetail from '../pages/PostDetail';
 import Login from '../pages/Login';
 import AdminDashboard from '../pages/AdminDashboard';
 import ProtectedRoute from '../components/ProtectedRoute';
@@ -22,8 +22,8 @@ export default function AppRoutes() {
       />
       <Route path="/services/:slug" element={<Services />} />
       <Route path="/project/:slug" element={<Project />} />
-      <Route path="/blog" element={<Blog />} />
-      <Route path="/blog/:slug" element={<BlogDetail />} />
+      <Route path="/posts" element={<Posts />} />
+      <Route path="/posts/:slug" element={<PostDetail />} />
       <Route path="/login" element={<Login />} />
       <Route
         path="/admin/*"
