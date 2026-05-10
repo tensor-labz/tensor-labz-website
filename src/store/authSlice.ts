@@ -1,4 +1,8 @@
-import { createSlice, createAsyncThunk, type PayloadAction } from '@reduxjs/toolkit';
+import {
+  createSlice,
+  createAsyncThunk,
+  type PayloadAction,
+} from '@reduxjs/toolkit';
 import { supabase } from '../lib/supabase';
 import type { RootState } from '../app/store';
 import type { User } from '@supabase/supabase-js';
@@ -35,7 +39,10 @@ function toAuthUser(user: User): AuthUser {
 export const signIn = createAsyncThunk(
   'auth/signIn',
   async ({ email, password }: { email: string; password: string }) => {
-    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
     if (error) throw new Error(error.message);
     return toAuthUser(data.user);
   }
@@ -59,13 +66,17 @@ export const sendPasswordReset = createAsyncThunk(
 export const updateCurrentUserProfile = createAsyncThunk(
   'auth/updateCurrentUserProfile',
   async (patch: { full_name?: string; avatar_url?: string }) => {
-    const { data: { user }, error } = await supabase.auth.updateUser({ data: patch });
+    const {
+      data: { user },
+      error,
+    } = await supabase.auth.updateUser({ data: patch });
     if (error || !user) throw new Error(error?.message ?? 'Update failed');
 
     // Mirror into profiles table so other parts of the app stay in sync
     const profilePatch: Record<string, unknown> = {};
     if (patch.full_name !== undefined) profilePatch.name = patch.full_name;
-    if (patch.avatar_url !== undefined) profilePatch.avatar_url = patch.avatar_url;
+    if (patch.avatar_url !== undefined)
+      profilePatch.avatar_url = patch.avatar_url;
     if (Object.keys(profilePatch).length) {
       await supabase.from('profiles').update(profilePatch).eq('id', user.id);
     }
@@ -131,9 +142,12 @@ export default authSlice.reducer;
 
 /* ── Selectors ───────────────────────────────────────────────────────────── */
 
-export const selectAuthUser        = (state: RootState) => state.auth.user;
-export const selectAuthStatus      = (state: RootState) => state.auth.status;
-export const selectAuthError       = (state: RootState) => state.auth.error;
-export const selectAuthInitialized = (state: RootState) => state.auth.initialized;
-export const selectIsAuthenticated = (state: RootState) => state.auth.user !== null;
-export const selectCurrentUid      = (state: RootState) => state.auth.user?.uid ?? null;
+export const selectAuthUser = (state: RootState) => state.auth.user;
+export const selectAuthStatus = (state: RootState) => state.auth.status;
+export const selectAuthError = (state: RootState) => state.auth.error;
+export const selectAuthInitialized = (state: RootState) =>
+  state.auth.initialized;
+export const selectIsAuthenticated = (state: RootState) =>
+  state.auth.user !== null;
+export const selectCurrentUid = (state: RootState) =>
+  state.auth.user?.uid ?? null;

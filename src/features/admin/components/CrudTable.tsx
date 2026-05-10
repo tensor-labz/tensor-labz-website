@@ -318,7 +318,8 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
   /* Fetch rows via Redux */
   useEffect(() => {
     setSearch('');
-    if (status === 'idle') dispatch(fetchRecords({ moduleId, tableId: mod?.table }));
+    if (status === 'idle')
+      dispatch(fetchRecords({ moduleId, tableId: mod?.table }));
   }, [moduleId, status, dispatch]);
 
   /* Dispatch fetchRelationOptions for any select+relation fields */
@@ -654,7 +655,11 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
           />
           {search && (
             <button onClick={() => setSearch('')} className="flex-shrink-0">
-              <ReactIcon name="FiX" size={13} style={{ color: 'var(--text-muted)' }} />
+              <ReactIcon
+                name="FiX"
+                size={13}
+                style={{ color: 'var(--text-muted)' }}
+              />
             </button>
           )}
         </div>

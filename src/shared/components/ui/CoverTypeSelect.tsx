@@ -1,9 +1,9 @@
 export const COVER_TYPES = [
-  { value: 'image',       label: 'Image',         icon: 'FaImage' },
-  { value: 'video',       label: 'Video (direct)', icon: 'FaVideo' },
-  { value: 'youtube',     label: 'YouTube',        icon: 'FaYoutube' },
-  { value: 'drive_image', label: 'Drive Image',    icon: 'FaGoogleDrive' },
-  { value: 'drive_video', label: 'Drive Video',    icon: 'FaGoogleDrive' },
+  { value: 'image', label: 'Image', icon: 'FaImage' },
+  { value: 'video', label: 'Video (direct)', icon: 'FaVideo' },
+  { value: 'youtube', label: 'YouTube', icon: 'FaYoutube' },
+  { value: 'drive_image', label: 'Drive Image', icon: 'FaGoogleDrive' },
+  { value: 'drive_video', label: 'Drive Video', icon: 'FaGoogleDrive' },
 ] as const;
 
 export type CoverTypeValue = (typeof COVER_TYPES)[number]['value'];
@@ -31,7 +31,9 @@ const CoverTypeSelect = ({
     }}
   >
     {COVER_TYPES.map((t) => (
-      <option key={t.value} value={t.value}>{t.label}</option>
+      <option key={t.value} value={t.value}>
+        {t.label}
+      </option>
     ))}
   </select>
 );

@@ -1,8 +1,8 @@
 export const SOCIAL_PLATFORMS = [
-  { value: 'linkedin',  label: 'LinkedIn',  icon: 'FaLinkedin' },
-  { value: 'tiktok',    label: 'TikTok',    icon: 'FaTiktok' },
-  { value: 'youtube',   label: 'YouTube',   icon: 'FaYoutube' },
-  { value: 'facebook',  label: 'Facebook',  icon: 'FaFacebook' },
+  { value: 'linkedin', label: 'LinkedIn', icon: 'FaLinkedin' },
+  { value: 'tiktok', label: 'TikTok', icon: 'FaTiktok' },
+  { value: 'youtube', label: 'YouTube', icon: 'FaYoutube' },
+  { value: 'facebook', label: 'Facebook', icon: 'FaFacebook' },
   { value: 'instagram', label: 'Instagram', icon: 'FaInstagram' },
 ] as const;
 
@@ -31,7 +31,9 @@ const SocialPlatformSelect = ({
     }}
   >
     {SOCIAL_PLATFORMS.map((p) => (
-      <option key={p.value} value={p.value}>{p.label}</option>
+      <option key={p.value} value={p.value}>
+        {p.label}
+      </option>
     ))}
   </select>
 );

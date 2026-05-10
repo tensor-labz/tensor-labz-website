@@ -61,10 +61,23 @@ export const fetchRecords = createAsyncThunk(
 
 export const fetchRecord = createAsyncThunk(
   'admin/fetchRecord',
-  async ({ moduleId, id, tableId }: { moduleId: string; id: number | string; tableId?: string }) => {
-    if (!id || (typeof id === 'number' && isNaN(id))) throw new Error('Invalid record id');
+  async ({
+    moduleId,
+    id,
+    tableId,
+  }: {
+    moduleId: string;
+    id: number | string;
+    tableId?: string;
+  }) => {
+    if (!id || (typeof id === 'number' && isNaN(id)))
+      throw new Error('Invalid record id');
     const tid = tableId ?? moduleId;
-    const { data, error } = await supabase.from(tid).select('*').eq('id', id).single();
+    const { data, error } = await supabase
+      .from(tid)
+      .select('*')
+      .eq('id', id)
+      .single();
     if (error) throw new Error(error.message);
     return { moduleId, record: data as AdminRecord };
   }
@@ -72,9 +85,21 @@ export const fetchRecord = createAsyncThunk(
 
 export const createRecord = createAsyncThunk(
   'admin/createRecord',
-  async ({ moduleId, data, tableId }: { moduleId: string; data: Record<string, unknown>; tableId?: string }) => {
+  async ({
+    moduleId,
+    data,
+    tableId,
+  }: {
+    moduleId: string;
+    data: Record<string, unknown>;
+    tableId?: string;
+  }) => {
     const tid = tableId ?? moduleId;
-    const { data: result, error } = await supabase.from(tid).insert(data).select().single();
+    const { data: result, error } = await supabase
+      .from(tid)
+      .insert(data)
+      .select()
+      .single();
     if (error) throw new Error(error.message);
     return { moduleId, record: result as AdminRecord };
   }
@@ -82,9 +107,24 @@ export const createRecord = createAsyncThunk(
 
 export const updateRecord = createAsyncThunk(
   'admin/updateRecord',
-  async ({ moduleId, id, data, tableId }: { moduleId: string; id: number | string; data: Record<string, unknown>; tableId?: string }) => {
+  async ({
+    moduleId,
+    id,
+    data,
+    tableId,
+  }: {
+    moduleId: string;
+    id: number | string;
+    data: Record<string, unknown>;
+    tableId?: string;
+  }) => {
     const tid = tableId ?? moduleId;
-    const { data: result, error } = await supabase.from(tid).update(data).eq('id', id).select().single();
+    const { data: result, error } = await supabase
+      .from(tid)
+      .update(data)
+      .eq('id', id)
+      .select()
+      .single();
     if (error) throw new Error(error.message);
     return { moduleId, record: result as AdminRecord };
   }
@@ -92,7 +132,17 @@ export const updateRecord = createAsyncThunk(
 
 export const deleteRecord = createAsyncThunk(
   'admin/deleteRecord',
-  async ({ moduleId, id, imageKeys, tableId }: { moduleId: string; id: number | string; imageKeys?: string[]; tableId?: string }) => {
+  async ({
+    moduleId,
+    id,
+    imageKeys,
+    tableId,
+  }: {
+    moduleId: string;
+    id: number | string;
+    imageKeys?: string[];
+    tableId?: string;
+  }) => {
     if (imageKeys?.length) {
       const { deleteImages } = await import('../lib/imageUpload');
       await deleteImages(imageKeys).catch(() => {});
@@ -106,8 +156,19 @@ export const deleteRecord = createAsyncThunk(
 
 export const fetchRelationOptions = createAsyncThunk(
   'admin/fetchRelationOptions',
-  async ({ table, labelField, valueField = 'id' }: { table: string; labelField: string; valueField?: string }) => {
-    const { data, error } = await supabase.from(table).select(`${valueField}, ${labelField}`).order(labelField);
+  async ({
+    table,
+    labelField,
+    valueField = 'id',
+  }: {
+    table: string;
+    labelField: string;
+    valueField?: string;
+  }) => {
+    const { data, error } = await supabase
+      .from(table)
+      .select(`${valueField}, ${labelField}`)
+      .order(labelField);
     if (error) throw new Error(error.message);
     return (data ?? []) as unknown as Array<Record<string, unknown>>;
   }

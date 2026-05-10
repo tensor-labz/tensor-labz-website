@@ -13,8 +13,8 @@ export interface SubFieldConfig {
 }
 
 export interface SubRecordConfig {
-  table: string;       // Supabase table name (e.g. 'post_social_links')
-  foreignKey: string;  // FK column that points back to the parent (e.g. 'post_id')
+  table: string; // Supabase table name (e.g. 'post_social_links')
+  foreignKey: string; // FK column that points back to the parent (e.g. 'post_id')
   subFields: SubFieldConfig[];
 }
 
@@ -37,8 +37,8 @@ export interface FieldConfig {
     | 'checkbox'
     | 'tags'
     | 'multiinput'
-    | 'structuredlist'  // local array of objects stored as JSONB
-    | 'subrecords'      // related table rows edited inline, saved via FK
+    | 'structuredlist' // local array of objects stored as JSONB
+    | 'subrecords' // related table rows edited inline, saved via FK
     | 'richtext'
     | 'radio'
     | 'select'
@@ -51,14 +51,14 @@ export interface FieldConfig {
   span?: 'full' | 'half';
   options?: string[];
   relation?: RelationConfig;
-  subFields?: SubFieldConfig[];      // used by structuredlist
+  subFields?: SubFieldConfig[]; // used by structuredlist
   subRecordConfig?: SubRecordConfig; // used by subrecords
-  storage?: 'supabase';              // upload via Supabase Storage instead of S3/Lambda
+  storage?: 'supabase'; // upload via Supabase Storage instead of S3/Lambda
 }
 
 export interface ModuleConfig {
   id: string;
-  table?: string;  // Supabase table name — defaults to id when not set
+  table?: string; // Supabase table name — defaults to id when not set
   label: string;
   icon: string;
   imageField?: string;
@@ -66,7 +66,7 @@ export interface ModuleConfig {
   descriptionField?: string;
   tableColumns?: string[]; // extra column keys shown in CrudTable beyond title+description
   fields: FieldConfig[];
-  tabs?: TabConfig[];  // when set, form renders with tabs instead of flat grid
+  tabs?: TabConfig[]; // when set, form renders with tabs instead of flat grid
 }
 
 /** Returns all fields across tabs (or flat fields for non-tabbed modules). */
@@ -86,22 +86,69 @@ export const MODULES: ModuleConfig[] = [
     descriptionField: 'email',
     tableColumns: ['role', 'status'],
     fields: [
-      { key: 'avatar_url', label: 'Avatar', type: 'image', span: 'full', storage: 'supabase' },
-      { key: 'name',   label: 'Full Name', type: 'text', required: true, span: 'half' },
-      { key: 'email',  label: 'Email',     type: 'text', required: true, span: 'half' },
-      { key: 'phone',  label: 'Phone',     type: 'text', span: 'half', placeholder: '+1 555 000 0000' },
-      { key: 'location', label: 'Location', type: 'text', span: 'half', placeholder: 'City, Country' },
-      { key: 'website', label: 'Website', type: 'url', span: 'half', placeholder: 'https://...' },
       {
-        key: 'role', label: 'Role', type: 'select', span: 'half',
+        key: 'avatar_url',
+        label: 'Avatar',
+        type: 'image',
+        span: 'full',
+        storage: 'supabase',
+      },
+      {
+        key: 'name',
+        label: 'Full Name',
+        type: 'text',
+        required: true,
+        span: 'half',
+      },
+      {
+        key: 'email',
+        label: 'Email',
+        type: 'text',
+        required: true,
+        span: 'half',
+      },
+      {
+        key: 'phone',
+        label: 'Phone',
+        type: 'text',
+        span: 'half',
+        placeholder: '+1 555 000 0000',
+      },
+      {
+        key: 'location',
+        label: 'Location',
+        type: 'text',
+        span: 'half',
+        placeholder: 'City, Country',
+      },
+      {
+        key: 'website',
+        label: 'Website',
+        type: 'url',
+        span: 'half',
+        placeholder: 'https://...',
+      },
+      {
+        key: 'role',
+        label: 'Role',
+        type: 'select',
+        span: 'half',
         options: ['Super Admin', 'Admin', 'Editor', 'Viewer'],
       },
       {
-        key: 'status', label: 'Status', type: 'select', span: 'half',
+        key: 'status',
+        label: 'Status',
+        type: 'select',
+        span: 'half',
         options: ['Active', 'Inactive', 'Suspended'],
       },
       { key: 'bio', label: 'Bio', type: 'textarea', span: 'full' },
-      { key: 'reset_password', label: 'Password Reset', type: 'resetpassword', span: 'full' },
+      {
+        key: 'reset_password',
+        label: 'Password Reset',
+        type: 'resetpassword',
+        span: 'full',
+      },
     ],
   },
   {
@@ -293,9 +340,27 @@ export const MODULES: ModuleConfig[] = [
     descriptionField: 'description',
     tableColumns: ['sort_order', 'status', 'tags'],
     fields: [
-      { key: 'cover_image', label: 'Cover Media', type: 'covermedia', span: 'full' },
-      { key: 'title', label: 'Title', type: 'text', required: true, span: 'half' },
-      { key: 'slug', label: 'Slug', type: 'text', required: true, span: 'half', placeholder: 'my-post' },
+      {
+        key: 'cover_image',
+        label: 'Cover Media',
+        type: 'covermedia',
+        span: 'full',
+      },
+      {
+        key: 'title',
+        label: 'Title',
+        type: 'text',
+        required: true,
+        span: 'half',
+      },
+      {
+        key: 'slug',
+        label: 'Slug',
+        type: 'text',
+        required: true,
+        span: 'half',
+        placeholder: 'my-post',
+      },
       {
         key: 'status',
         label: 'Status',
@@ -310,9 +375,24 @@ export const MODULES: ModuleConfig[] = [
         span: 'half',
         placeholder: '0',
       },
-      { key: 'tags', label: 'Tags (comma separated)', type: 'tags', span: 'half' },
-      { key: 'description', label: 'Meta Description (internal)', type: 'textarea', span: 'full' },
-      { key: 'meta_title', label: 'SEO Title (optional override)', type: 'text', span: 'full' },
+      {
+        key: 'tags',
+        label: 'Tags (comma separated)',
+        type: 'tags',
+        span: 'half',
+      },
+      {
+        key: 'description',
+        label: 'Meta Description (internal)',
+        type: 'textarea',
+        span: 'full',
+      },
+      {
+        key: 'meta_title',
+        label: 'SEO Title (optional override)',
+        type: 'text',
+        span: 'full',
+      },
       { key: 'content', label: 'Full Content', type: 'richtext', span: 'full' },
       {
         key: 'social_links',
@@ -324,7 +404,12 @@ export const MODULES: ModuleConfig[] = [
           foreignKey: 'post_id',
           subFields: [
             { key: 'platform', label: 'Platform', type: 'socialplatform' },
-            { key: 'url', label: 'URL', type: 'url', placeholder: 'https://...' },
+            {
+              key: 'url',
+              label: 'URL',
+              type: 'url',
+              placeholder: 'https://...',
+            },
           ],
         },
       },
@@ -338,7 +423,12 @@ export const MODULES: ModuleConfig[] = [
           foreignKey: 'post_id',
           subFields: [
             { key: 'type', label: 'Type', type: 'covertype' },
-            { key: 'url', label: 'URL', type: 'url', placeholder: 'https://...' },
+            {
+              key: 'url',
+              label: 'URL',
+              type: 'url',
+              placeholder: 'https://...',
+            },
           ],
         },
       },
@@ -382,43 +472,113 @@ export const MODULES: ModuleConfig[] = [
         label: 'Overview',
         icon: 'FaInfoCircle',
         fields: [
-          { key: 'name',        label: 'Order Name',          type: 'text',   required: true, span: 'full' },
           {
-            key: 'customer_id', label: 'Customer', type: 'select', span: 'half',
-            relation: { table: 'customers', labelField: 'firstname', valueField: 'id' },
+            key: 'name',
+            label: 'Order Name',
+            type: 'text',
+            required: true,
+            span: 'full',
           },
           {
-            key: 'project_id',  label: 'Linked Project (optional)', type: 'select', span: 'half',
-            relation: { table: 'projects', labelField: 'title', valueField: 'id' },
+            key: 'customer_id',
+            label: 'Customer',
+            type: 'select',
+            span: 'half',
+            relation: {
+              table: 'customers',
+              labelField: 'firstname',
+              valueField: 'id',
+            },
           },
           {
-            key: 'service_id',  label: 'Service Basis (optional)', type: 'select', span: 'half',
-            relation: { table: 'services', labelField: 'title', valueField: 'id' },
+            key: 'project_id',
+            label: 'Linked Project (optional)',
+            type: 'select',
+            span: 'half',
+            relation: {
+              table: 'projects',
+              labelField: 'title',
+              valueField: 'id',
+            },
           },
           {
-            key: 'status', label: 'Status', type: 'select', span: 'half',
-            options: ['todo', 'in_process', 'review', 'pending', 'complete', 'delivered'],
+            key: 'service_id',
+            label: 'Service Basis (optional)',
+            type: 'select',
+            span: 'half',
+            relation: {
+              table: 'services',
+              labelField: 'title',
+              valueField: 'id',
+            },
           },
-          { key: 'due_date',    label: 'Due Date',     type: 'date', span: 'half' },
-          { key: 'deliver_at',  label: 'Delivered At', type: 'date', span: 'half' },
+          {
+            key: 'status',
+            label: 'Status',
+            type: 'select',
+            span: 'half',
+            options: [
+              'todo',
+              'in_process',
+              'review',
+              'pending',
+              'complete',
+              'delivered',
+            ],
+          },
+          { key: 'due_date', label: 'Due Date', type: 'date', span: 'half' },
+          {
+            key: 'deliver_at',
+            label: 'Delivered At',
+            type: 'date',
+            span: 'half',
+          },
         ],
       },
       {
         label: 'Requirements',
         icon: 'FaFileAlt',
         fields: [
-          { key: 'description',  label: 'Summary',      type: 'textarea', span: 'full' },
-          { key: 'requirement',  label: 'Requirements', type: 'richtext', span: 'full' },
+          {
+            key: 'description',
+            label: 'Summary',
+            type: 'textarea',
+            span: 'full',
+          },
+          {
+            key: 'requirement',
+            label: 'Requirements',
+            type: 'richtext',
+            span: 'full',
+          },
         ],
       },
       {
         label: 'Financials',
         icon: 'FaDollarSign',
         fields: [
-          { key: 'quotation_value', label: 'Quotation',   type: 'number', span: 'half', placeholder: '0.00' },
-          { key: 'discount',        label: 'Discount',    type: 'number', span: 'half', placeholder: '0.00' },
-          { key: 'final_value',     label: 'Final Value', type: 'number', span: 'half', placeholder: '0.00' },
-          { key: 'notes',           label: 'Notes',       type: 'textarea', span: 'full' },
+          {
+            key: 'quotation_value',
+            label: 'Quotation',
+            type: 'number',
+            span: 'half',
+            placeholder: '0.00',
+          },
+          {
+            key: 'discount',
+            label: 'Discount',
+            type: 'number',
+            span: 'half',
+            placeholder: '0.00',
+          },
+          {
+            key: 'final_value',
+            label: 'Final Value',
+            type: 'number',
+            span: 'half',
+            placeholder: '0.00',
+          },
+          { key: 'notes', label: 'Notes', type: 'textarea', span: 'full' },
         ],
       },
       {
@@ -435,10 +595,24 @@ export const MODULES: ModuleConfig[] = [
               foreignKey: 'order_id',
               subFields: [
                 {
-                  key: 'status', label: 'Status', type: 'radio',
-                  options: ['todo', 'in_process', 'review', 'pending', 'complete', 'delivered'],
+                  key: 'status',
+                  label: 'Status',
+                  type: 'radio',
+                  options: [
+                    'todo',
+                    'in_process',
+                    'review',
+                    'pending',
+                    'complete',
+                    'delivered',
+                  ],
                 },
-                { key: 'note', label: 'Note', type: 'text', placeholder: 'What changed?' },
+                {
+                  key: 'note',
+                  label: 'Note',
+                  type: 'text',
+                  placeholder: 'What changed?',
+                },
               ],
             },
           },
@@ -454,14 +628,45 @@ export const MODULES: ModuleConfig[] = [
     descriptionField: 'email',
     tableColumns: ['mobile_num1', 'occupation'],
     fields: [
-      { key: 'firstname',   label: 'First Name',    type: 'text', required: true, span: 'half' },
-      { key: 'lastname',    label: 'Last Name',     type: 'text', required: true, span: 'half' },
-      { key: 'email',       label: 'Email',         type: 'text', span: 'half', placeholder: 'customer@example.com' },
-      { key: 'mobile_num1', label: 'Mobile 1',      type: 'text', required: true, span: 'half', placeholder: '+1 555 000 0000' },
-      { key: 'mobile_num2', label: 'Mobile 2',      type: 'text', span: 'half', placeholder: '+1 555 000 0001' },
-      { key: 'occupation',  label: 'Occupation',    type: 'text', span: 'half' },
-      { key: 'work_place',  label: 'Work Place',    type: 'text', span: 'half' },
-      { key: 'address',     label: 'Address',       type: 'textarea', span: 'full' },
+      {
+        key: 'firstname',
+        label: 'First Name',
+        type: 'text',
+        required: true,
+        span: 'half',
+      },
+      {
+        key: 'lastname',
+        label: 'Last Name',
+        type: 'text',
+        required: true,
+        span: 'half',
+      },
+      {
+        key: 'email',
+        label: 'Email',
+        type: 'text',
+        span: 'half',
+        placeholder: 'customer@example.com',
+      },
+      {
+        key: 'mobile_num1',
+        label: 'Mobile 1',
+        type: 'text',
+        required: true,
+        span: 'half',
+        placeholder: '+1 555 000 0000',
+      },
+      {
+        key: 'mobile_num2',
+        label: 'Mobile 2',
+        type: 'text',
+        span: 'half',
+        placeholder: '+1 555 000 0001',
+      },
+      { key: 'occupation', label: 'Occupation', type: 'text', span: 'half' },
+      { key: 'work_place', label: 'Work Place', type: 'text', span: 'half' },
+      { key: 'address', label: 'Address', type: 'textarea', span: 'full' },
     ],
   },
 ];

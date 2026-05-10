@@ -2,7 +2,10 @@ import { supabase } from './supabase';
 
 const AVATAR_BUCKET = 'avatars';
 
-export async function uploadAvatar(file: File, userId: string): Promise<string> {
+export async function uploadAvatar(
+  file: File,
+  userId: string
+): Promise<string> {
   const ext = file.name.split('.').pop() ?? 'jpg';
   const path = `${userId}/${Date.now()}.${ext}`;
 

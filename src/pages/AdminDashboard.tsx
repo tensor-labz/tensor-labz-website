@@ -32,9 +32,7 @@ const AdminDashboard = memo(() => {
   };
 
   return (
-    <div
-      className="h-screen overflow-hidden flex flex-col text-fg"
-    >
+    <div className="h-screen overflow-hidden flex flex-col text-fg">
       <HeaderHelmet title="Admin Dashboard" />
 
       {/* ── Top bar ── */}
@@ -75,9 +73,7 @@ const AdminDashboard = memo(() => {
         </div>
 
         <div className="flex items-center gap-2.5">
-          <span
-            className="text-xs hidden sm:block text-muted"
-          >
+          <span className="text-xs hidden sm:block text-muted">
             {user?.displayName || user?.email}
           </span>
 
@@ -92,7 +88,11 @@ const AdminDashboard = memo(() => {
               color: 'var(--text-muted)',
             }}
           >
-            {theme === 'dark' ? <ReactIcon name="RiSunLine" size={16} /> : <ReactIcon name="RiMoonLine" size={16} />}
+            {theme === 'dark' ? (
+              <ReactIcon name="RiSunLine" size={16} />
+            ) : (
+              <ReactIcon name="RiMoonLine" size={16} />
+            )}
           </motion.button>
 
           <motion.button

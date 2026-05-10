@@ -105,7 +105,9 @@ const AdminSidebar = memo(({ open, onClose }: AdminSidebarProps) => {
         icon="FaGlobe"
         label="Site Control"
       />
-      {MODULES.filter((mod) => !SITE_CONTROL_IDS.has(mod.id) && !MANAGEMENT_IDS.has(mod.id)).map((mod) => {
+      {MODULES.filter(
+        (mod) => !SITE_CONTROL_IDS.has(mod.id) && !MANAGEMENT_IDS.has(mod.id)
+      ).map((mod) => {
         const isActive =
           !isOverview &&
           !isUsers &&
