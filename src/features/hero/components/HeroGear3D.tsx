@@ -1,57 +1,95 @@
 import { useRef, useEffect, memo } from 'react';
 import * as THREE from 'three';
 
-function buildGearShape(teeth: number, innerR: number, outerR: number): THREE.Shape {
-  const shape = new THREE.Shape();
-  const step = (Math.PI * 2) / teeth;
-
-  for (let i = 0; i < teeth; i++) {
-    const base = i * step;
-    const r0 = [Math.cos(base) * innerR, Math.sin(base) * innerR] as const;
-    const t0 = [Math.cos(base + step * 0.22) * outerR, Math.sin(base + step * 0.22) * outerR] as const;
-    const t1 = [Math.cos(base + step * 0.44) * outerR, Math.sin(base + step * 0.44) * outerR] as const;
-    const r1 = [Math.cos(base + step * 0.66) * innerR, Math.sin(base + step * 0.66) * innerR] as const;
-
-    if (i === 0) shape.moveTo(r0[0], r0[1]);
-    else shape.lineTo(r0[0], r0[1]);
-
-    shape.lineTo(t0[0], t0[1]);
-    shape.lineTo(t1[0], t1[1]);
-    shape.lineTo(r1[0], r1[1]);
-  }
-  shape.closePath();
-
-  const hole = new THREE.Path();
-  hole.absarc(0, 0, innerR * 0.38, 0, Math.PI * 2, true);
-  shape.holes.push(hole);
-
-  return shape;
+/* ─── helpers ─────────────────────────────────────────── */
+function makeGlowSphere(radius: number, opacity: number, color: number): THREE.Mesh {
+  const geo = new THREE.SphereGeometry(radius, 32, 32);
+  const mat = new THREE.MeshBasicMaterial({
+    color,
+    transparent: true,
+    opacity,
+    blending: THREE.AdditiveBlending,
+    depthWrite: false,
+    side: THREE.BackSide,
+  });
+  return new THREE.Mesh(geo, mat);
 }
 
-const EXTRUDE_SETTINGS: THREE.ExtrudeGeometryOptions = {
-  depth: 0.3,
-  bevelEnabled: true,
-  bevelThickness: 0.05,
-  bevelSize: 0.05,
-  bevelSegments: 3,
-};
-
-interface GearDef {
-  teeth: number;
-  innerR: number;
-  outerR: number;
-  color: number;
-  pos: [number, number, number];
+interface OrbitRing {
+  inclineGroup: THREE.Group;
+  spinGroup: THREE.Group;
   speed: number;
 }
 
-const GEAR_DEFS: GearDef[] = [
-  { teeth: 18, innerR: 1.3,  outerR: 1.75, color: 0x1e3a5f, pos: [0,     0,    0],    speed:  0.22 },
-  { teeth: 12, innerR: 0.85, outerR: 1.15, color: 0x0f2235, pos: [2.8,   1.7, -0.4],  speed: -0.33 },
-  { teeth:  9, innerR: 0.65, outerR: 0.88, color: 0x162d45, pos: [-2.2, -1.9, -0.2],  speed:  0.44 },
-  { teeth:  6, innerR: 0.44, outerR: 0.60, color: 0x0f2235, pos: [-2.9,  1.1, -0.3],  speed: -0.66 },
-];
+function makeOrbitRing(
+  radius: number,
+  color: number,
+  inclination: number,
+  speed: number,
+  particleCount = 220,
+  orbCount = 4,
+): OrbitRing {
+  const inclineGroup = new THREE.Group();
+  inclineGroup.rotation.x = inclination;
 
+  const spinGroup = new THREE.Group();
+  inclineGroup.add(spinGroup);
+
+  /* ring path (thin torus) */
+  const torus = new THREE.Mesh(
+    new THREE.TorusGeometry(radius, 0.007, 8, 128),
+    new THREE.MeshBasicMaterial({
+      color,
+      transparent: true,
+      opacity: 0.18,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false,
+    }),
+  );
+  spinGroup.add(torus);
+
+  /* distributed particles along ring */
+  const pPos = new Float32Array(particleCount * 3);
+  for (let i = 0; i < particleCount; i++) {
+    const a = (i / particleCount) * Math.PI * 2;
+    pPos[i * 3]     = Math.cos(a) * radius;
+    pPos[i * 3 + 1] = Math.sin(a) * radius;
+    pPos[i * 3 + 2] = (Math.random() - 0.5) * 0.04;
+  }
+  const pGeo = new THREE.BufferGeometry();
+  pGeo.setAttribute('position', new THREE.BufferAttribute(pPos, 3));
+  spinGroup.add(new THREE.Points(pGeo, new THREE.PointsMaterial({
+    color,
+    size: 0.045,
+    transparent: true,
+    opacity: 0.55,
+    blending: THREE.AdditiveBlending,
+    depthWrite: false,
+  })));
+
+  /* bright orb spheres orbiting on top */
+  for (let i = 0; i < orbCount; i++) {
+    const pivot = new THREE.Group();
+    pivot.rotation.z = (i / orbCount) * Math.PI * 2;
+    const orb = new THREE.Mesh(
+      new THREE.SphereGeometry(0.07, 12, 12),
+      new THREE.MeshBasicMaterial({
+        color,
+        transparent: true,
+        opacity: 0.9,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false,
+      }),
+    );
+    orb.position.set(radius, 0, 0);
+    pivot.add(orb);
+    spinGroup.add(pivot);
+  }
+
+  return { inclineGroup, spinGroup, speed };
+}
+
+/* ─── component ───────────────────────────────────────── */
 const HeroGear3D: React.FC = memo(() => {
   const mountRef = useRef<HTMLDivElement>(null);
 
@@ -59,63 +97,80 @@ const HeroGear3D: React.FC = memo(() => {
     const el = mountRef.current;
     if (!el) return;
 
-    /* ── Renderer ── */
+    /* renderer */
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.setSize(el.clientWidth, el.clientHeight);
     el.appendChild(renderer.domElement);
 
-    /* ── Scene / Camera ── */
+    /* scene / camera */
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(40, el.clientWidth / el.clientHeight, 0.1, 100);
-    camera.position.set(0, 0, 8);
+    const camera = new THREE.PerspectiveCamera(45, el.clientWidth / el.clientHeight, 0.1, 100);
+    camera.position.set(0, 0, 7);
 
-    /* ── Lights ── */
-    scene.add(new THREE.AmbientLight(0xffffff, 0.5));
+    /* master group — slow drift rotation */
+    const root = new THREE.Group();
+    scene.add(root);
 
-    const key = new THREE.DirectionalLight(0x38bdf8, 4);
-    key.position.set(5, 7, 6);
-    scene.add(key);
+    /* ── CORE ── */
+    const core = new THREE.Mesh(
+      new THREE.SphereGeometry(0.42, 64, 64),
+      new THREE.MeshStandardMaterial({
+        color: 0x38bdf8,
+        emissive: new THREE.Color(0x0ea5e9),
+        emissiveIntensity: 2.2,
+        metalness: 0.1,
+        roughness: 0.3,
+      }),
+    );
+    root.add(core);
 
-    const fill = new THREE.PointLight(0x6366f1, 3, 25);
-    fill.position.set(-5, -3, 4);
-    scene.add(fill);
+    /* glow halos around core */
+    root.add(makeGlowSphere(0.55, 0.55, 0x38bdf8));
+    root.add(makeGlowSphere(0.80, 0.22, 0x0ea5e9));
+    root.add(makeGlowSphere(1.15, 0.09, 0x7dd3fc));
+    root.add(makeGlowSphere(1.60, 0.04, 0x38bdf8));
 
-    const rim = new THREE.PointLight(0x0ea5e9, 2, 20);
-    rim.position.set(0, -6, 2);
-    scene.add(rim);
+    /* ── ORBITAL RINGS ── */
+    const rings: OrbitRing[] = [
+      makeOrbitRing(2.0, 0x38bdf8, 0,                    0.30, 240, 5),
+      makeOrbitRing(2.5, 0x818cf8, Math.PI * 0.38,       -0.20, 280, 4),
+      makeOrbitRing(1.6, 0x67e8f9, Math.PI * -0.22,       0.45, 180, 3),
+    ];
+    rings.forEach(r => root.add(r.inclineGroup));
 
-    /* ── Gears ── */
-    const gears: { mesh: THREE.Mesh; speed: number }[] = [];
+    /* ── LIGHTS ── */
+    const coreLight = new THREE.PointLight(0x38bdf8, 6, 12);
+    root.add(coreLight);
 
-    GEAR_DEFS.forEach(({ teeth, innerR, outerR, color, pos, speed }) => {
-      const geo = new THREE.ExtrudeGeometry(buildGearShape(teeth, innerR, outerR), EXTRUDE_SETTINGS);
-      geo.center();
-      const mat = new THREE.MeshStandardMaterial({
-        color,
-        metalness: 0.9,
-        roughness: 0.15,
-        emissive: new THREE.Color(color).multiplyScalar(0.25),
-      });
-      const mesh = new THREE.Mesh(geo, mat);
-      mesh.position.set(...pos);
-      scene.add(mesh);
-      gears.push({ mesh, speed });
-    });
+    scene.add(new THREE.AmbientLight(0x1e293b, 1.5));
 
-    /* ── Particles ── */
-    const ptCount = 80;
-    const ptPositions = new Float32Array(ptCount * 3);
-    for (let i = 0; i < ptCount; i++) {
-      ptPositions[i * 3]     = (Math.random() - 0.5) * 12;
-      ptPositions[i * 3 + 1] = (Math.random() - 0.5) * 12;
-      ptPositions[i * 3 + 2] = (Math.random() - 0.5) * 5 - 2;
+    const fillLight = new THREE.PointLight(0x818cf8, 2, 30);
+    fillLight.position.set(-6, 4, 5);
+    scene.add(fillLight);
+
+    /* ── BACKGROUND STARS ── */
+    const starPos = new Float32Array(400 * 3);
+    for (let i = 0; i < 400; i++) {
+      const theta = Math.random() * Math.PI * 2;
+      const phi   = Math.acos(2 * Math.random() - 1);
+      const r     = 8 + Math.random() * 6;
+      starPos[i * 3]     = r * Math.sin(phi) * Math.cos(theta);
+      starPos[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
+      starPos[i * 3 + 2] = r * Math.cos(phi);
     }
-    const ptGeo = new THREE.BufferGeometry();
-    ptGeo.setAttribute('position', new THREE.BufferAttribute(ptPositions, 3));
-    scene.add(new THREE.Points(ptGeo, new THREE.PointsMaterial({ color: 0x38bdf8, size: 0.05, transparent: true, opacity: 0.5 })));
+    const starGeo = new THREE.BufferGeometry();
+    starGeo.setAttribute('position', new THREE.BufferAttribute(starPos, 3));
+    scene.add(new THREE.Points(starGeo, new THREE.PointsMaterial({
+      color: 0xbae6fd,
+      size: 0.04,
+      transparent: true,
+      opacity: 0.6,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false,
+    })));
 
-    /* ── Animation loop ── */
+    /* ── ANIMATION ── */
     const clock = new THREE.Clock();
     let raf: number;
 
@@ -123,17 +178,22 @@ const HeroGear3D: React.FC = memo(() => {
       raf = requestAnimationFrame(animate);
       const t = clock.getElapsedTime();
 
-      gears.forEach(({ mesh, speed }) => {
-        mesh.rotation.z = t * speed;
-        mesh.rotation.x = Math.sin(t * 0.18) * 0.1;
-        mesh.rotation.y = Math.cos(t * 0.13) * 0.07;
-      });
+      /* slow root drift */
+      root.rotation.y = t * 0.08;
+      root.rotation.x = Math.sin(t * 0.12) * 0.15;
+
+      /* core pulse */
+      const pulse = 1 + Math.sin(t * 1.8) * 0.06;
+      core.scale.setScalar(pulse);
+
+      /* ring spins */
+      rings.forEach(r => { r.spinGroup.rotation.z += r.speed * 0.005; });
 
       renderer.render(scene, camera);
     };
     animate();
 
-    /* ── Resize ── */
+    /* ── RESIZE ── */
     const ro = new ResizeObserver(() => {
       const nw = el.clientWidth;
       const nh = el.clientHeight;
