@@ -14,8 +14,8 @@ const ServiceHero: FC = memo(() => {
   const selectedService = useMemo(() => {
     return (
       services.find((s) => s.slug === activeSlug) ?? {
-        service_name: get('services.title', 'Insights'),
-        description: get('services.description', 'Stay updated with our latest insights and articles.'),
+        service_name: get('services.title'),
+        description: get('services.description'),
       }
     );
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -29,7 +29,7 @@ const ServiceHero: FC = memo(() => {
         transition={{ duration: 0.5 }}
         className="text-[10px] font-semibold tracking-[0.3em] uppercase block mb-4 text-accent"
       >
-        {get('services.hero_label', 'Insights & Services')}
+        {get('services.hero_label')}
       </motion.span>
 
       <AnimatePresence mode="wait">

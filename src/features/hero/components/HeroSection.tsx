@@ -48,19 +48,19 @@ const HeroSection: React.FC = memo(() => {
   const stats = [
     {
       value: `${projects.length}+`,
-      label: get('hero.stat_projects', 'Projects'),
+      label: get('hero.stat_projects'),
       icon: 'FaCube',
       loading: projectsStatus === 'idle' || projectsStatus === 'loading',
     },
     {
       value: `${services.length}+`,
-      label: get('hero.stat_services', 'Services'),
+      label: get('hero.stat_services'),
       icon: 'FaRobot',
       loading: servicesStatus === 'idle' || servicesStatus === 'loading',
     },
     {
       value: `${new Date().getFullYear() - 2023}+`,
-      label: get('hero.stat_years', 'Years'),
+      label: get('hero.stat_years'),
       icon: 'FaBolt',
       loading: false,
     },

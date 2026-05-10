@@ -205,7 +205,7 @@ const ContactUs: React.FC = memo(() => {
                 animate="visible"
                 className="text-[10px] font-semibold tracking-[0.35em] uppercase block mb-4 text-accent"
               >
-                {get('contact.hero_label', 'Get In Touch')}
+                {get('contact.hero_label')}
               </motion.span>
 
               <motion.h1
