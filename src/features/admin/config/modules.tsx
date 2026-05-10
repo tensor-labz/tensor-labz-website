@@ -227,8 +227,8 @@ export const MODULES: ModuleConfig[] = [
       { key: 'description', label: 'Meta Description (internal)', type: 'textarea', span: 'full' },
       { key: 'meta_title', label: 'SEO Title (optional override)', type: 'text', span: 'full' },
       { key: 'content', label: 'Full Content', type: 'richtext', span: 'full' },
-      { key: 'media_images', label: 'Media Gallery Images', type: 'images', span: 'full' },
-      { key: 'media_video', label: 'Media Video URL (embed)', type: 'url', span: 'full', placeholder: 'https://youtube.com/embed/...' },
+      { key: 'additional_images', label: 'Additional Images (gallery)', type: 'images', span: 'full' },
+      { key: 'additional_videos', label: 'Additional Video URLs (comma separated)', type: 'tags', span: 'full' },
     ],
   },
   {

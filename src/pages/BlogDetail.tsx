@@ -6,6 +6,7 @@ import Page from '../components/resuable/Page';
 import ReactIcon from '../shared/components/ui/ReactIcon';
 import BlogMediaSection from '../features/blog/components/BlogMediaSection';
 import { useBlogDetailController } from '../features/blog/hooks/useBlogDetailController';
+import { toYouTubeEmbed } from '../services/blogService';
 import { EASE_EXPO } from '../lib/motion';
 
 /* Platform → react-icon name mapping (same pattern as Footer) */
@@ -71,7 +72,7 @@ const BlogDetail: React.FC = memo(() => {
 
       {/* ── Hero ── */}
       <div className="relative min-h-[45vh] flex items-end overflow-hidden bg-raised">
-        {blog.cover_image && (
+        {blog.cover_image && blog.cover_media_type === 'image' && (
           <motion.img
             src={blog.cover_image}
             alt={blog.title}
@@ -79,6 +80,25 @@ const BlogDetail: React.FC = memo(() => {
             initial={{ scale: 1.05, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 0.8, ease: EASE_EXPO }}
+          />
+        )}
+        {blog.cover_image && blog.cover_media_type === 'youtube' && (
+          <iframe
+            src={toYouTubeEmbed(blog.cover_image)}
+            title={blog.title}
+            className="absolute inset-0 w-full h-full"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          />
+        )}
+        {blog.cover_image && blog.cover_media_type === 'video' && (
+          <video
+            src={blog.cover_image}
+            autoPlay
+            muted
+            loop
+            playsInline
+            className="absolute inset-0 w-full h-full object-cover"
           />
         )}
         {/* Gradient overlay */}
@@ -168,8 +188,8 @@ const BlogDetail: React.FC = memo(() => {
           />
         )}
 
-        {/* Media section — images / video after content */}
-        <BlogMediaSection images={blog.media_images} videoUrl={blog.media_video} />
+        {/* Media section — images / videos after content */}
+        <BlogMediaSection images={blog.additional_images} videos={blog.additional_videos} />
 
         {/* Social share footer */}
         {socialLinks.length > 0 && (

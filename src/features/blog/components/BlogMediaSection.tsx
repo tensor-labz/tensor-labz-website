@@ -2,34 +2,54 @@ import React, { memo, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import ReactIcon from '../../../shared/components/ui/ReactIcon';
 import { EASE_EXPO } from '../../../lib/motion';
+import { detectCoverType, toYouTubeEmbed } from '../../../services/blogService';
 
 interface Props {
   images: string[];
-  videoUrl?: string;
+  videos: string[];
 }
 
-const BlogMediaSection: React.FC<Props> = memo(({ images, videoUrl }) => {
+const BlogMediaSection: React.FC<Props> = memo(({ images, videos }) => {
   const [activeIndex, setActiveIndex] = useState(0);
   const hasImages = images.length > 0;
-  const hasVideo = !!videoUrl;
+  const hasVideos = videos.length > 0;
 
-  if (!hasImages && !hasVideo) return null;
+  if (!hasImages && !hasVideos) return null;
 
   return (
     <section className="mt-12 pt-8 border-t border-rim">
-      <p className="text-[10px] font-mono tracking-[0.25em] uppercase text-accent mb-4">
+      <p className="text-[10px] font-mono tracking-[0.25em] uppercase text-accent mb-6">
         ◈ Media Gallery
       </p>
 
-      {/* Video player (takes priority if present) */}
-      {hasVideo && (
-        <div className="rounded-xl overflow-hidden border border-accent/20 mb-6 aspect-video">
-          <iframe
-            src={videoUrl}
-            title="Blog video"
-            className="w-full h-full"
-            allowFullScreen
-          />
+      {/* Video players */}
+      {hasVideos && (
+        <div className="space-y-4 mb-6">
+          {videos.map((url, i) => {
+            const type = detectCoverType(url);
+            return (
+              <div
+                key={i}
+                className="rounded-xl overflow-hidden border border-accent/20 aspect-video"
+              >
+                {type === 'youtube' ? (
+                  <iframe
+                    src={toYouTubeEmbed(url)}
+                    title={`Video ${i + 1}`}
+                    className="w-full h-full"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  />
+                ) : (
+                  <video
+                    src={url}
+                    controls
+                    className="w-full h-full object-contain bg-black"
+                  />
+                )}
+              </div>
+            );
+          })}
         </div>
       )}
 

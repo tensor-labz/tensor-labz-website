@@ -6,21 +6,41 @@ export interface BlogSocialLink {
   url: string;
 }
 
+export type CoverMediaType = 'youtube' | 'video' | 'image';
+
 export interface Blog {
   id: number;
   title: string;
   slug: string;
-  cover_image?: string;
-  description?: string;   // internal / meta description
-  meta_title?: string;    // SEO title override
-  content?: string;       // rich text HTML
+  cover_image?: string;          // URL — image, direct video, or YouTube URL
+  cover_media_type: CoverMediaType;
+  description?: string;          // internal / meta description
+  meta_title?: string;           // SEO title override
+  content?: string;              // rich text HTML
   tags: string[];
   status: 'draft' | 'published' | 'hidden';
   social_links: BlogSocialLink[];
-  media_images: string[];
-  media_video?: string;
+  additional_images: string[];   // gallery images shown after content
+  additional_videos: string[];   // video URLs (YouTube or direct) shown after content
   created_at: string;
   updated_at: string;
+}
+
+/* ── Media type detection ── */
+export function detectCoverType(url?: string): CoverMediaType {
+  if (!url) return 'image';
+  if (url.includes('youtube.com') || url.includes('youtu.be')) return 'youtube';
+  if (/\.(mp4|webm|ogg|mov)(\?|$)/i.test(url)) return 'video';
+  return 'image';
+}
+
+/* Convert any YouTube URL to embed URL */
+export function toYouTubeEmbed(url: string): string {
+  const short = url.match(/youtu\.be\/([^?&]+)/);
+  if (short) return `https://www.youtube.com/embed/${short[1]}`;
+  const watch = url.match(/[?&]v=([^&]+)/);
+  if (watch) return `https://www.youtube.com/embed/${watch[1]}`;
+  return url; // already embed or unknown
 }
 
 /* Parse comma-separated string OR JSON array OR PostgreSQL array → string[] */
@@ -28,11 +48,11 @@ function parseArray(val: unknown): string[] {
   if (!val) return [];
   if (Array.isArray(val)) return val as string[];
   if (typeof val === 'string') {
-    const trimmed = val.trim();
-    if (trimmed.startsWith('[')) {
-      try { return JSON.parse(trimmed) as string[]; } catch { /* fall through */ }
+    const t = val.trim();
+    if (t.startsWith('[')) {
+      try { return JSON.parse(t) as string[]; } catch { /* fall through */ }
     }
-    return trimmed.split(',').map((s) => s.trim()).filter(Boolean);
+    return t.split(',').map((s) => s.trim()).filter(Boolean);
   }
   return [];
 }
@@ -47,19 +67,22 @@ function rowToBlog(row: Record<string, unknown>): Blog {
       }))
     : [];
 
+  const cover_image = (row.cover_image as string) || undefined;
+
   return {
     id: row.id as number,
     title: (row.title as string) ?? '',
     slug: (row.slug as string) ?? '',
-    cover_image: (row.cover_image as string) || undefined,
+    cover_image,
+    cover_media_type: detectCoverType(cover_image),
     description: (row.description as string) || undefined,
     meta_title: (row.meta_title as string) || undefined,
     content: (row.content as string) || undefined,
     tags: parseArray(row.tags),
     status: (row.status as Blog['status']) ?? 'draft',
     social_links,
-    media_images: parseArray(row.media_images),
-    media_video: (row.media_video as string) || undefined,
+    additional_images: parseArray(row.additional_images),
+    additional_videos: parseArray(row.additional_videos),
     created_at: (row.created_at as string) ?? '',
     updated_at: (row.updated_at as string) ?? '',
   };
