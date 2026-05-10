@@ -3,7 +3,6 @@ import { useSearchParams } from 'react-router-dom';
 import ReactIcon from '../../../shared/components/ui/ReactIcon';
 import { supabase } from '../../../lib/supabase';
 import { ImageField } from './AdminCrudForm';
-import { AnimatePresence, motion } from 'motion/react';
 
 function deriveLink(contact: string, value: string): string {
   const t = contact.toLowerCase();
@@ -58,13 +57,9 @@ const COMPANY_DEFAULT: CompanyInfo = {
   mission: '',
 };
 
-/* ════════════════════════════════════════════════════════
-   Tab definitions — add more here as Site Control grows
-════════════════════════════════════════════════════════ */
 const TABS = [
   { id: 'company', label: 'Company Info', icon: 'FaBuilding' },
-  { id: 'hero', label: 'Hero Slides', icon: 'FaHome' },
-  { id: 'media', label: 'About Media', icon: 'FaImages' },
+  { id: 'page', label: 'Page Control', icon: 'FaLayerGroup' },
 ] as const;
 
 type TabId = (typeof TABS)[number]['id'];
@@ -1398,8 +1393,15 @@ const AdminSiteControl = memo(() => {
             {activeTab === 'company' && (
               <CompanyInfoTab data={company} onChange={setCompany} />
             )}
-            {activeTab === 'hero' && <HeroSlidesTab />}
-            {activeTab === 'media' && <AboutMediaTab />}
+            {activeTab === 'page' && (
+              <>
+                <HeroSlidesTab />
+                <div className="max-w-3xl mx-auto px-4 sm:px-6">
+                  <div style={{ borderTop: '1px solid var(--glass-border)' }} />
+                </div>
+                <AboutMediaTab />
+              </>
+            )}
           </>
         )}
       </div>
