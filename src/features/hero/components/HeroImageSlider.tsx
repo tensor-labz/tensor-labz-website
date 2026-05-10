@@ -1,56 +1,56 @@
 import { useRef, useEffect, memo } from 'react';
 import * as THREE from 'three';
+import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
 import { useAppSelector } from '../../../app/hooks';
 import { selectHeroSlides, selectCurrentIndex } from '../../../store/heroSlice';
 import type { HeroSlide } from '../../../services/heroService';
 
 /*
   BoxGeometry material slots: [+X, -X, +Y, -Y, +Z, -Z]
-  We use only the 4 Y-axis faces so the cube rotates horizontally.
 
-  slide 0 → +Z front (slot 4) → rotY =  0
-  slide 1 → +X right (slot 0) → rotY = -π/2
-  slide 2 → -Z back  (slot 5) → rotY =  π
-  slide 3 → -X left  (slot 1) → rotY =  π/2
+  slide 0 → +Z front (slot 4)
+  slide 1 → +X right (slot 0)
+  slide 2 → -Z back  (slot 5)
+  slide 3 → -X left  (slot 1)
+
+  Cube always rotates -π/2 per slide step so it never reverses direction.
 */
 const FACE_SLOT = [4, 0, 5, 1];
-const FACE_ROTY = [0, -Math.PI / 2, Math.PI, Math.PI / 2];
+const STEP      = -Math.PI / 2; // clockwise (viewed from above) per slide
 
-/* Rasterise any image (including SVG) via an offscreen canvas so WebGL
-   always receives valid pixel data regardless of source format. */
-function loadAsCanvasTexture(url: string): Promise<THREE.CanvasTexture> {
-  return new Promise((resolve, reject) => {
-    const img = new Image();
-    img.crossOrigin = 'anonymous';
-    img.onload = () => {
-      const w = img.naturalWidth  || 512;
-      const h = img.naturalHeight || 512;
-      const canvas = document.createElement('canvas');
-      canvas.width  = w;
-      canvas.height = h;
-      canvas.getContext('2d')!.drawImage(img, 0, 0, w, h);
-      const tex = new THREE.CanvasTexture(canvas);
-      tex.colorSpace = THREE.SRGBColorSpace;
-      resolve(tex);
-    };
-    img.onerror = reject;
-    img.src = url;
-  });
-}
-
+/* Draw image onto a 1024² canvas (cover-fit) → emissiveMap on MeshStandardMaterial.
+   emissiveMap is unaffected by scene lighting so the image renders at full brightness. */
 function applySlides(slides: HeroSlide[], mats: THREE.MeshStandardMaterial[]) {
   slides.slice(0, 4).forEach((slide, i) => {
     if (!slide.img) return;
-    loadAsCanvasTexture(slide.img)
-      .then((tex) => {
-        const slot             = FACE_SLOT[i];
-        mats[slot].map         = tex;
-        mats[slot].color.set(0xffffff);
-        mats[slot].roughness   = 0.2;
-        mats[slot].metalness   = 0.05;
-        mats[slot].needsUpdate = true;
-      })
-      .catch((err) => console.error('[HeroImageSlider] failed:', slide.img, err));
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.loading    = 'eager';
+    img.onload = () => {
+      const S = 1024;
+      const canvas  = document.createElement('canvas');
+      canvas.width  = S;
+      canvas.height = S;
+      const ctx   = canvas.getContext('2d')!;
+      const scale = Math.max(S / img.naturalWidth, S / img.naturalHeight);
+      const dw    = img.naturalWidth  * scale;
+      const dh    = img.naturalHeight * scale;
+      ctx.drawImage(img, (S - dw) / 2, (S - dh) / 2, dw, dh);
+
+      const tex      = new THREE.CanvasTexture(canvas);
+      tex.colorSpace = THREE.SRGBColorSpace;
+
+      const mat        = mats[FACE_SLOT[i]];
+      mat.map          = null;
+      mat.color.set(0x000000);   // no diffuse contribution
+      mat.emissiveMap  = tex;
+      mat.emissive.set(0xffffff);
+      mat.roughness    = 1.0;
+      mat.metalness    = 0.0;
+      mat.needsUpdate  = true;
+    };
+    img.onerror = (err) => console.error('[HeroImageSlider]', slide.img, err);
+    img.src = slide.img;
   });
 }
 
@@ -59,19 +59,24 @@ const HeroImageSlider: React.FC = memo(() => {
   const materialsRef = useRef<THREE.MeshStandardMaterial[]>([]);
   const targetQ     = useRef(new THREE.Quaternion());
   const currentQ    = useRef(new THREE.Quaternion());
+  const prevIndex   = useRef(0);
 
   const slides       = useAppSelector(selectHeroSlides);
   const currentIndex = useAppSelector(selectCurrentIndex);
 
-  /* keep a live ref so the scene effect can read the latest slides */
   const slidesRef = useRef(slides);
   slidesRef.current = slides;
 
-  /* ── target rotation follows currentIndex ── */
+  /* ── delta rotation — always spins in the same direction, never reverses ── */
   useEffect(() => {
-    targetQ.current.setFromEuler(
-      new THREE.Euler(0, FACE_ROTY[currentIndex % 4], 0),
+    const steps = currentIndex - prevIndex.current;
+    prevIndex.current = currentIndex;
+    if (steps === 0) return;
+    const dq = new THREE.Quaternion().setFromAxisAngle(
+      new THREE.Vector3(0, 1, 0),
+      steps * STEP,
     );
+    targetQ.current.premultiply(dq);
   }, [currentIndex]);
 
   /* ── Three.js scene (once on mount) ── */
@@ -79,87 +84,70 @@ const HeroImageSlider: React.FC = memo(() => {
     const el = mountRef.current;
     if (!el) return;
 
-    /* renderer */
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.setSize(el.clientWidth, el.clientHeight);
     el.appendChild(renderer.domElement);
 
-    /* scene / camera */
     const scene  = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(42, el.clientWidth / el.clientHeight, 0.1, 100);
     camera.position.set(0, 0, 5.5);
 
-    /* lights */
-    scene.add(new THREE.AmbientLight(0x1e293b, 2.5));
-    const key = new THREE.DirectionalLight(0x38bdf8, 4);
+    /* minimal lighting — image faces are emissive (light-independent) */
+    scene.add(new THREE.AmbientLight(0xffffff, 0.12));
+    const key = new THREE.DirectionalLight(0x7dd3fc, 0.5);
     key.position.set(4, 6, 5);
     scene.add(key);
-    const fill = new THREE.PointLight(0x818cf8, 3, 22);
-    fill.position.set(-5, -3, 3);
-    scene.add(fill);
-    const rim = new THREE.DirectionalLight(0xe0f2fe, 1.2);
-    rim.position.set(-3, 2, -5);
-    scene.add(rim);
 
     /* cube */
-    const darkFace = (hex: number) =>
-      new THREE.MeshStandardMaterial({ color: hex, metalness: 0.4, roughness: 0.55 });
+    const makeDark = (hex: number) =>
+      new THREE.MeshStandardMaterial({ color: hex, metalness: 0.15, roughness: 0.85 });
 
     const materials: THREE.MeshStandardMaterial[] = [
-      darkFace(0x0f172a), // +X
-      darkFace(0x0f172a), // -X
-      darkFace(0x0c1525), // +Y  top
-      darkFace(0x0c1525), // -Y  bottom
-      darkFace(0x132038), // +Z  front  ← slide 0
-      darkFace(0x0f172a), // -Z  back
+      makeDark(0x0d1b2a), // +X
+      makeDark(0x0d1b2a), // -X
+      makeDark(0x091422), // +Y top
+      makeDark(0x091422), // -Y bottom
+      makeDark(0x0d1b2a), // +Z front
+      makeDark(0x0d1b2a), // -Z back
     ];
     materialsRef.current = materials;
 
     const cube = new THREE.Mesh(new THREE.BoxGeometry(2.8, 2.8, 2.8), materials);
     scene.add(cube);
 
-    /* apply slides that are already in the store */
     if (slidesRef.current.length) applySlides(slidesRef.current, materials);
 
-    /* glowing edges */
+    /* rounded wireframe overlay */
+    const wireMesh = new THREE.Mesh(
+      new RoundedBoxGeometry(2.82, 2.82, 2.82, 4, 0.22),
+      new THREE.MeshBasicMaterial({
+        color: 0x38bdf8, wireframe: true,
+        transparent: true, opacity: 0.07, depthWrite: false,
+      }),
+    );
+    scene.add(wireMesh);
+
+    /* glowing rounded edge silhouette */
     const edgesMat = new THREE.LineBasicMaterial({
-      color: 0x38bdf8, transparent: true, opacity: 0.5,
+      color: 0x38bdf8, transparent: true, opacity: 0.75,
       blending: THREE.AdditiveBlending, depthWrite: false,
     });
     const edges = new THREE.LineSegments(
-      new THREE.EdgesGeometry(new THREE.BoxGeometry(2.85, 2.85, 2.85)),
+      new THREE.EdgesGeometry(new RoundedBoxGeometry(2.88, 2.88, 2.88, 4, 0.22), 15),
       edgesMat,
     );
     scene.add(edges);
 
-    /* corner glow dots */
-    const h = 1.43;
-    const verts: [number, number, number][] = [
-      [ h,  h,  h], [-h,  h,  h], [ h, -h,  h], [-h, -h,  h],
-      [ h,  h, -h], [-h,  h, -h], [ h, -h, -h], [-h, -h, -h],
-    ];
-    const dotMat = new THREE.MeshBasicMaterial({
-      color: 0x38bdf8, transparent: true, opacity: 0.75,
-      blending: THREE.AdditiveBlending, depthWrite: false,
-    });
-    const corners = new THREE.Group();
-    verts.forEach(([x, y, z]) => {
-      const dot = new THREE.Mesh(new THREE.SphereGeometry(0.055, 8, 8), dotMat);
-      dot.position.set(x, y, z);
-      corners.add(dot);
-    });
-    scene.add(corners);
-
     /* background particles */
-    const pPos = new Float32Array(100 * 3);
+    const ptPos = new Float32Array(100 * 3);
     for (let i = 0; i < 100; i++) {
-      pPos[i * 3]     = (Math.random() - 0.5) * 14;
-      pPos[i * 3 + 1] = (Math.random() - 0.5) * 14;
-      pPos[i * 3 + 2] = (Math.random() - 0.5) * 6 - 3;
+      ptPos[i * 3]     = (Math.random() - 0.5) * 14;
+      ptPos[i * 3 + 1] = (Math.random() - 0.5) * 14;
+      ptPos[i * 3 + 2] = (Math.random() - 0.5) * 6 - 3;
     }
     const pGeo = new THREE.BufferGeometry();
-    pGeo.setAttribute('position', new THREE.BufferAttribute(pPos, 3));
+    pGeo.setAttribute('position', new THREE.BufferAttribute(ptPos, 3));
     scene.add(new THREE.Points(pGeo, new THREE.PointsMaterial({
       color: 0x7dd3fc, size: 0.04,
       transparent: true, opacity: 0.4,
@@ -167,31 +155,29 @@ const HeroImageSlider: React.FC = memo(() => {
     })));
 
     /* animation */
-    const timer = new THREE.Timer();
+    const clock = new THREE.Clock();
     let raf: number;
 
     const animate = () => {
       raf = requestAnimationFrame(animate);
-      timer.update();
-      const t = timer.getElapsed();
+      const t = clock.getElapsedTime();
 
-      currentQ.current.slerp(targetQ.current, 0.04);
+      currentQ.current.slerp(targetQ.current, 0.05);
       cube.setRotationFromQuaternion(currentQ.current);
+      wireMesh.setRotationFromQuaternion(currentQ.current);
       edges.setRotationFromQuaternion(currentQ.current);
-      corners.setRotationFromQuaternion(currentQ.current);
 
       const floatY        = Math.sin(t * 0.55) * 0.09;
       cube.position.y     = floatY;
+      wireMesh.position.y = floatY;
       edges.position.y    = floatY;
-      corners.position.y  = floatY;
 
-      edgesMat.opacity = 0.38 + Math.sin(t * 1.6) * 0.14;
+      edgesMat.opacity = 0.6 + Math.sin(t * 1.6) * 0.18;
 
       renderer.render(scene, camera);
     };
     animate();
 
-    /* resize */
     const ro = new ResizeObserver(() => {
       const nw = el.clientWidth, nh = el.clientHeight;
       camera.aspect = nw / nh;
@@ -209,7 +195,7 @@ const HeroImageSlider: React.FC = memo(() => {
     };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  /* ── reload textures if slides arrive/change after mount ── */
+  /* ── reload textures when slides arrive after mount ── */
   useEffect(() => {
     if (!materialsRef.current.length || !slides.length) return;
     applySlides(slides, materialsRef.current);
