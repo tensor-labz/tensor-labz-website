@@ -59,9 +59,11 @@ const LatestProductSection: React.FC = memo(() => {
   return (
     <Section className="min-h-screen lg:container flex flex-col items-center justify-center py-10 sm:py-20 md:py-18 lg:py-24">
       <div className="px-4 text-center mb-4 mt-6">
-        <h1 className="sm:text-4xl text-xl sm:font-bold font-semibold text-fg font-display">
+        <p className="text-xs font-semibold tracking-widest uppercase text-accent mb-3">Featured Work</p>
+        <h2 className="sm:text-4xl text-xl sm:font-bold font-semibold text-fg font-display">
           Our Latest Top Insights
-        </h1>
+        </h2>
+        <p className="text-muted text-base mt-2">A selection of our top projects and innovations.</p>
       </div>
 
       <motion.div
@@ -116,14 +118,14 @@ const LatestProductSection: React.FC = memo(() => {
                 <ReactIcon
                   name="FiChevronLeft"
                   size={32}
-                  className="text-muted font-bold hover:text-sky-500 transition-colors"
+                  className="text-muted font-bold hover:text-accent transition-colors"
                 />
               </div>
               <div className="absolute top-1/2 -translate-y-1/2 -right-10 p-2 cursor-pointer" onClick={handleNext}>
                 <ReactIcon
                   name="FiChevronRight"
                   size={32}
-                  className="text-muted font-bold hover:text-sky-500 transition-colors"
+                  className="text-muted font-bold hover:text-accent transition-colors"
                 />
               </div>
 

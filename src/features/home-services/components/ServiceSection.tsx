@@ -11,14 +11,17 @@ const ServiceSection: React.FC = memo(() => {
   return (
     <Section className="md:px-14 px-0">
       <div className="px-4 text-center mb-4 mt-6">
-        <h1
+        <p className="text-xs font-semibold tracking-widest uppercase text-accent mb-3">
+          What We Do
+        </p>
+        <h2
           className="sm:text-4xl text-xl sm:font-bold font-semibold text-fg font-display"
         >
           What We Offer
-        </h1>
-        <h3 className="sm:text-lg text-base text-muted">
+        </h2>
+        <p className="sm:text-lg text-base text-muted">
           Innovative solutions tailored to your digital transformation needs.
-        </h3>
+        </p>
       </div>
 
       <motion.div
@@ -26,7 +29,7 @@ const ServiceSection: React.FC = memo(() => {
         initial="hidden"
         whileInView="visible"
         viewport={VIEWPORT}
-        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:px-0 px-2 mx-6"
+        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:px-0 px-4"
       >
         {!isLoading &&
           services.map((serv, index) => (

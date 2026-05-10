@@ -18,13 +18,14 @@ import {
 import { selectCurrentSlide } from '../../../store/heroSlice';
 import { useCompanyInfo } from '../../../shared/hooks/useCompanyInfo';
 import ReactIcon from '../../../shared/components/ui/ReactIcon';
+import { EASE_EXPO } from '../../../lib/motion';
 
 const textVariants = {
   hidden: { opacity: 0, y: 24 },
   visible: (i: number) => ({
     opacity: 1,
     y: 0,
-    transition: { duration: 0.7, delay: i * 0.14, ease: [0.22, 1, 0.36, 1] },
+    transition: { duration: 0.7, delay: i * 0.14, ease: EASE_EXPO },
   }),
 };
 
@@ -66,9 +67,8 @@ const HeroSection: React.FC = memo(() => {
   return (
     <Section
       ref={ref}
-      className="relative min-h-screen flex items-center
+      className="relative min-h-screen flex items-center bg-canvas
         pt-20 pb-12 sm:pt-24 sm:pb-16 lg:pt-36 lg:pb-24 px-6 md:px-8 lg:px-12"
-      style={{ backgroundColor: 'var(--bg-base)' }}
     >
       <div
         className="absolute inset-0 z-0 pointer-events-none"
@@ -116,11 +116,7 @@ const HeroSection: React.FC = memo(() => {
             variants={textVariants}
             initial="hidden"
             animate={inView ? 'visible' : 'hidden'}
-            className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold leading-[1.2] tracking-tight mb-4"
-            style={{
-              color: 'var(--text-primary)',
-              fontFamily: '"Syne", sans-serif',
-            }}
+            className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold leading-[1.2] tracking-tight mb-4 text-fg font-display"
           >
             {tagline}
           </motion.h1>
@@ -129,8 +125,7 @@ const HeroSection: React.FC = memo(() => {
             initial={{ width: 0 }}
             animate={inView ? { width: '3.5rem' } : { width: 0 }}
             transition={{ delay: 0.8, duration: 0.6, ease: 'easeOut' }}
-            className="h-1 rounded-full mb-6 mx-auto lg:mx-0"
-            style={{ backgroundColor: 'var(--accent)' }}
+            className="h-1 rounded-full mb-6 mx-auto lg:mx-0 bg-accent"
           />
 
           <motion.div
@@ -153,8 +148,7 @@ const HeroSection: React.FC = memo(() => {
             >
               <Link
                 to={slide.cta_link}
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all"
-                style={{ backgroundColor: 'var(--accent)', color: '#fff' }}
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all bg-accent text-white"
               >
                 {slide.cta_label}
                 <ReactIcon name="FiArrowRight" size={15} />
@@ -173,8 +167,7 @@ const HeroSection: React.FC = memo(() => {
               loading ? (
                 <div key={label} className="flex items-center gap-2">
                   <motion.div
-                    className="w-3 h-3 rounded-full"
-                    style={{ backgroundColor: 'var(--accent)' }}
+                    className="w-3 h-3 rounded-full bg-accent"
                     animate={{ scale: [1, 1.4, 1], opacity: [1, 0.5, 1] }}
                     transition={{
                       duration: 1,
@@ -187,22 +180,16 @@ const HeroSection: React.FC = memo(() => {
                 <div key={label} className="flex items-center gap-2.5">
                   <ReactIcon
                     name={icon}
-                    className="text-xl shrink-0"
-                    style={{ color: 'var(--accent)' }}
+                    className="text-xl shrink-0 text-accent"
                   />
                   <div>
                     <div
-                      className="text-xl font-bold leading-none"
-                      style={{
-                        color: 'var(--text-primary)',
-                        fontFamily: '"Syne", sans-serif',
-                      }}
+                      className="text-xl font-bold leading-none text-fg font-display"
                     >
                       {value}
                     </div>
                     <div
-                      className="text-xs mt-0.5"
-                      style={{ color: 'var(--text-muted)' }}
+                      className="text-xs mt-0.5 text-muted"
                     >
                       {label}
                     </div>
