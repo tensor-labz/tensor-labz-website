@@ -1,5 +1,11 @@
 import { supabase } from '../lib/supabase';
 
+export interface BlogSocialLink {
+  id: number;
+  platform: string;
+  url: string;
+}
+
 export interface Blog {
   id: number;
   title: string;
@@ -10,13 +16,9 @@ export interface Blog {
   content?: string;       // rich text HTML
   tags: string[];
   status: 'draft' | 'published' | 'hidden';
-  twitter_url?: string;
-  linkedin_url?: string;
-  facebook_url?: string;
-  instagram_url?: string;
-  youtube_url?: string;
-  media_images: string[]; // gallery images after content
-  media_video?: string;   // optional video after content
+  social_links: BlogSocialLink[];
+  media_images: string[];
+  media_video?: string;
   created_at: string;
   updated_at: string;
 }
@@ -36,6 +38,15 @@ function parseArray(val: unknown): string[] {
 }
 
 function rowToBlog(row: Record<string, unknown>): Blog {
+  const rawLinks = row.blog_social_links;
+  const social_links: BlogSocialLink[] = Array.isArray(rawLinks)
+    ? (rawLinks as Record<string, unknown>[]).map((l) => ({
+        id: l.id as number,
+        platform: (l.platform as string) ?? '',
+        url: (l.url as string) ?? '',
+      }))
+    : [];
+
   return {
     id: row.id as number,
     title: (row.title as string) ?? '',
@@ -46,11 +57,7 @@ function rowToBlog(row: Record<string, unknown>): Blog {
     content: (row.content as string) || undefined,
     tags: parseArray(row.tags),
     status: (row.status as Blog['status']) ?? 'draft',
-    twitter_url: (row.twitter_url as string) || undefined,
-    linkedin_url: (row.linkedin_url as string) || undefined,
-    facebook_url: (row.facebook_url as string) || undefined,
-    instagram_url: (row.instagram_url as string) || undefined,
-    youtube_url: (row.youtube_url as string) || undefined,
+    social_links,
     media_images: parseArray(row.media_images),
     media_video: (row.media_video as string) || undefined,
     created_at: (row.created_at as string) ?? '',
@@ -58,21 +65,26 @@ function rowToBlog(row: Record<string, unknown>): Blog {
   };
 }
 
+const BLOG_SELECT = `
+  *,
+  blog_social_links ( id, platform, url )
+`;
+
 export async function fetchPublishedBlogs(): Promise<Blog[]> {
   const { data, error } = await supabase
     .from('blogs')
-    .select('*')
+    .select(BLOG_SELECT)
     .eq('status', 'published')
     .order('created_at', { ascending: false });
 
   if (error) throw new Error(error.message);
-  return (data ?? []).map(rowToBlog);
+  return (data ?? []).map((row) => rowToBlog(row as Record<string, unknown>));
 }
 
 export async function fetchBlogBySlug(slug: string): Promise<Blog | null> {
   const { data, error } = await supabase
     .from('blogs')
-    .select('*')
+    .select(BLOG_SELECT)
     .eq('slug', slug)
     .eq('status', 'published')
     .single();

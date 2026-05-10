@@ -26,23 +26,6 @@ function socialIcon(platform: string): string {
   return match?.[1] ?? 'FaGlobe';
 }
 
-/* Collect social links from the flat column structure */
-function getSocialLinks(blog: {
-  twitter_url?: string;
-  linkedin_url?: string;
-  facebook_url?: string;
-  instagram_url?: string;
-  youtube_url?: string;
-}): { platform: string; url: string }[] {
-  return [
-    { platform: 'twitter', url: blog.twitter_url ?? '' },
-    { platform: 'linkedin', url: blog.linkedin_url ?? '' },
-    { platform: 'facebook', url: blog.facebook_url ?? '' },
-    { platform: 'instagram', url: blog.instagram_url ?? '' },
-    { platform: 'youtube', url: blog.youtube_url ?? '' },
-  ].filter((s) => !!s.url);
-}
-
 const BlogDetail: React.FC = memo(() => {
   const { blog, isLoading, notFound } = useBlogDetailController();
 
@@ -78,7 +61,7 @@ const BlogDetail: React.FC = memo(() => {
     );
   }
 
-  const socialLinks = getSocialLinks(blog);
+  const socialLinks = blog.social_links;
   const date = blog.created_at
     ? new Date(blog.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
     : '';
