@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import Section from '../../../shared/components/ui/Section';
 import ReactIcon from '../../../shared/components/ui/ReactIcon';
 import { useLatestProjectsController } from '../hooks/useLatestProjectsController';
+import { useSiteSettings } from '../../../shared/hooks/useSiteSettings';
 import { EASE_EXPO, VIEWPORT } from '../../../lib/motion';
 import type { ProjectItem } from '../../../shared/types/project';
 
@@ -221,6 +222,7 @@ MobileSlider.displayName = 'MobileSlider';
 ───────────────────────────────────────────── */
 const LatestProductSection: React.FC = memo(() => {
   const { topProjects } = useLatestProjectsController();
+  const { get } = useSiteSettings();
   const row2 = useMemo(() => [...topProjects].reverse(), [topProjects]);
   const ready = topProjects.length > 0;
 
@@ -234,9 +236,15 @@ const LatestProductSection: React.FC = memo(() => {
         transition={{ duration: 0.6, ease: EASE_EXPO }}
         className="text-center mb-10 px-6 lg:px-16"
       >
-        <p className="text-[10px] font-mono tracking-[0.3em] uppercase text-accent mb-3">◈ Featured Work</p>
-        <h2 className="text-2xl sm:text-4xl font-bold font-display text-fg">Our Latest Projects</h2>
-        <p className="text-muted text-base mt-2">Selected engineering projects and innovations.</p>
+        <p className="text-[10px] font-mono tracking-[0.3em] uppercase text-accent mb-3">
+          {get('projects.label', '◈ Featured Work')}
+        </p>
+        <h2 className="text-2xl sm:text-4xl font-bold font-display text-fg">
+          {get('projects.title', 'Our Latest Projects')}
+        </h2>
+        <p className="text-muted text-base mt-2">
+          {get('projects.description', 'Selected engineering projects and innovations.')}
+        </p>
       </motion.div>
 
       {/* ── Mobile: single-card slider ── */}

@@ -3,24 +3,26 @@ import { motion } from 'motion/react';
 import Section from '../../../shared/components/ui/Section';
 import ServiceCard from './ServiceCard';
 import { useHomeServicesController } from '../hooks/useHomeServicesController';
+import { useSiteSettings } from '../../../shared/hooks/useSiteSettings';
 import { staggerContainer, staggerItem, VIEWPORT } from '../../../lib/motion';
 
 const ServiceSection: React.FC = memo(() => {
   const { services, isLoading } = useHomeServicesController();
+  const { get } = useSiteSettings();
 
   return (
     <Section className="md:px-14 px-0">
       <div className="px-4 text-center mb-4 mt-6">
         <p className="text-[10px] font-mono tracking-[0.3em] uppercase text-accent mb-3">
-          ◈ What We Do
+          {get('services.label', '◈ What We Do')}
         </p>
         <h2
           className="sm:text-4xl text-xl sm:font-bold font-semibold text-fg font-display"
         >
-          What We Offer
+          {get('services.title', 'What We Offer')}
         </h2>
         <p className="sm:text-lg text-base text-muted">
-          Innovative solutions tailored to your digital transformation needs.
+          {get('services.description', 'Innovative solutions tailored to your digital transformation needs.')}
         </p>
       </div>
 

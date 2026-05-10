@@ -8,6 +8,7 @@ import authReducer from '../store/authSlice';
 import adminReducer from '../store/adminSlice';
 import companyInfoReducer from '../store/companyInfoSlice';
 import postReducer from '../store/postSlice';
+import siteSettingsReducer from '../store/siteSettingsSlice';
 
 export const store = configureStore({
   reducer: {
@@ -20,6 +21,7 @@ export const store = configureStore({
     admin: adminReducer,
     companyInfo: companyInfoReducer,
     posts: postReducer,
+    siteSettings: siteSettingsReducer,
   },
 });
 

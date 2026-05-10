@@ -10,6 +10,12 @@ import {
   fetchRecords,
   selectModuleRecords,
 } from '../../../store/adminSlice';
+import {
+  loadSiteSettings,
+  saveMultipleSiteSettings,
+  selectSiteSettings,
+  selectSiteSettingsStatus,
+} from '../../../store/siteSettingsSlice';
 
 function deriveLink(contact: string, value: string): string {
   const t = contact.toLowerCase();
@@ -1276,6 +1282,172 @@ const MediaItemForm = ({
 };
 
 /* ════════════════════════════════════════════════════════
+   Page Content Tab
+════════════════════════════════════════════════════════ */
+interface PageContentDraft {
+  'services.label': string;
+  'services.title': string;
+  'services.description': string;
+  'projects.label': string;
+  'projects.title': string;
+  'projects.description': string;
+  'posts.label': string;
+  'posts.title': string;
+  'posts.description': string;
+  'posts.page_size': string;
+}
+
+const PAGE_CONTENT_DEFAULTS: PageContentDraft = {
+  'services.label': '◈ What We Do',
+  'services.title': 'What We Offer',
+  'services.description': 'Innovative solutions tailored to your digital transformation needs.',
+  'projects.label': '◈ Featured Work',
+  'projects.title': 'Our Latest Projects',
+  'projects.description': 'Selected engineering projects and innovations.',
+  'posts.label': '◈ Tensor Labz // Posts',
+  'posts.title': 'Insights & Updates',
+  'posts.description': 'Engineering articles, project deep-dives, and technical insights from the Tensor Labz team.',
+  'posts.page_size': '20',
+};
+
+const PageContentTab = () => {
+  const dispatch = useAppDispatch();
+  const settings = useAppSelector(selectSiteSettings);
+  const status = useAppSelector(selectSiteSettingsStatus);
+  const [draft, setDraft] = useState<PageContentDraft>(PAGE_CONTENT_DEFAULTS);
+  const [saving, setSaving] = useState(false);
+  const [saved, setSaved] = useState(false);
+
+  useEffect(() => {
+    if (status === 'idle') dispatch(loadSiteSettings());
+  }, [status, dispatch]);
+
+  useEffect(() => {
+    if (status === 'succeeded') {
+      setDraft((prev) => {
+        const next = { ...prev };
+        (Object.keys(PAGE_CONTENT_DEFAULTS) as (keyof PageContentDraft)[]).forEach((k) => {
+          if (settings[k] !== undefined) next[k] = settings[k];
+        });
+        return next;
+      });
+    }
+  }, [status, settings]);
+
+  const set = (key: keyof PageContentDraft) => (v: string) =>
+    setDraft((d) => ({ ...d, [key]: v }));
+
+  const handleSave = async () => {
+    setSaving(true);
+    await dispatch(saveMultipleSiteSettings(draft));
+    setSaving(false);
+    setSaved(true);
+    setTimeout(() => setSaved(false), 2500);
+  };
+
+  if (status === 'loading' || status === 'idle') {
+    return (
+      <div className="flex items-center justify-center h-32">
+        <p className="text-sm" style={{ color: 'var(--text-muted)' }}>Loading…</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="max-w-3xl mx-auto px-4 sm:px-6 py-6 space-y-8">
+      {/* Save button */}
+      <div className="flex items-center justify-between">
+        <SectionDivider
+          title="Page Content"
+          subtitle="Edit visible titles and descriptions on public pages."
+        />
+        <button
+          type="button"
+          onClick={handleSave}
+          disabled={saving}
+          className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all"
+          style={{
+            backgroundColor: saved ? 'var(--success, #22c55e)' : 'var(--accent)',
+            color: '#fff',
+            opacity: saving ? 0.6 : 1,
+          }}
+        >
+          <ReactIcon name={saved ? 'FaCheck' : 'FaSave'} size={10} />
+          {saved ? 'Saved!' : saving ? 'Saving…' : 'Save'}
+        </button>
+      </div>
+
+      {/* Services section */}
+      <div
+        className="rounded-xl p-4 space-y-3"
+        style={{ backgroundColor: 'var(--glass-bg)', border: '1px solid var(--glass-border)' }}
+      >
+        <p className="text-xs font-semibold uppercase tracking-widest" style={{ color: 'var(--text-muted)' }}>
+          Services Section
+        </p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <Field label="Accent Label" value={draft['services.label']} onChange={set('services.label')} placeholder="◈ What We Do" />
+          <Field label="Heading" value={draft['services.title']} onChange={set('services.title')} placeholder="What We Offer" />
+        </div>
+        <Field label="Description" value={draft['services.description']} onChange={set('services.description')} placeholder="Short tagline shown below the heading" multiline />
+      </div>
+
+      {/* Projects section */}
+      <div
+        className="rounded-xl p-4 space-y-3"
+        style={{ backgroundColor: 'var(--glass-bg)', border: '1px solid var(--glass-border)' }}
+      >
+        <p className="text-xs font-semibold uppercase tracking-widest" style={{ color: 'var(--text-muted)' }}>
+          Latest Projects Section
+        </p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <Field label="Accent Label" value={draft['projects.label']} onChange={set('projects.label')} placeholder="◈ Featured Work" />
+          <Field label="Heading" value={draft['projects.title']} onChange={set('projects.title')} placeholder="Our Latest Projects" />
+        </div>
+        <Field label="Description" value={draft['projects.description']} onChange={set('projects.description')} placeholder="Short tagline shown below the heading" multiline />
+      </div>
+
+      {/* Posts page */}
+      <div
+        className="rounded-xl p-4 space-y-3"
+        style={{ backgroundColor: 'var(--glass-bg)', border: '1px solid var(--glass-border)' }}
+      >
+        <p className="text-xs font-semibold uppercase tracking-widest" style={{ color: 'var(--text-muted)' }}>
+          Posts Page
+        </p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <Field label="Accent Label" value={draft['posts.label']} onChange={set('posts.label')} placeholder="◈ Tensor Labz // Posts" />
+          <Field label="Page Title" value={draft['posts.title']} onChange={set('posts.title')} placeholder="Insights & Updates" />
+        </div>
+        <Field label="Description" value={draft['posts.description']} onChange={set('posts.description')} placeholder="Shown below the page title" multiline />
+      </div>
+
+      {/* Posts pagination */}
+      <div
+        className="rounded-xl p-4 space-y-3"
+        style={{ backgroundColor: 'var(--glass-bg)', border: '1px solid var(--glass-border)' }}
+      >
+        <p className="text-xs font-semibold uppercase tracking-widest" style={{ color: 'var(--text-muted)' }}>
+          Posts Pagination
+        </p>
+        <div className="max-w-xs">
+          <Field
+            label="Posts per page"
+            value={draft['posts.page_size']}
+            onChange={set('posts.page_size')}
+            type="number"
+            placeholder="20"
+          />
+        </div>
+        <p className="text-xs" style={{ color: 'var(--text-muted)' }}>
+          Number of posts shown per page on the Posts listing page.
+        </p>
+      </div>
+    </div>
+  );
+};
+
+/* ════════════════════════════════════════════════════════
    AdminSiteControl — main shell
 ════════════════════════════════════════════════════════ */
 const AdminSiteControl = memo(() => {
@@ -1402,6 +1574,10 @@ const AdminSiteControl = memo(() => {
                   <div style={{ borderTop: '1px solid var(--glass-border)' }} />
                 </div>
                 <AboutMediaTab />
+                <div className="max-w-3xl mx-auto px-4 sm:px-6">
+                  <div style={{ borderTop: '1px solid var(--glass-border)' }} />
+                </div>
+                <PageContentTab />
               </>
             )}
           </>

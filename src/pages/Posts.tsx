@@ -4,9 +4,8 @@ import Page from '../components/resuable/Page';
 import PostCard from '../features/posts/components/PostCard';
 import ReactIcon from '../shared/components/ui/ReactIcon';
 import { usePostListController } from '../features/posts/hooks/usePostListController';
+import { useSiteSettings } from '../shared/hooks/useSiteSettings';
 import { EASE_EXPO, VIEWPORT } from '../lib/motion';
-
-const PAGE_SIZE = 20;
 
 const PostSkeleton = () => (
   <div className="rounded-xl overflow-hidden border border-rim bg-surface animate-pulse flex flex-col md:flex-row">
@@ -23,6 +22,8 @@ const PostSkeleton = () => (
 
 const Posts: React.FC = memo(() => {
   const { posts, isLoading } = usePostListController();
+  const { get } = useSiteSettings();
+  const PAGE_SIZE = Math.max(1, parseInt(get('posts.page_size', '20'), 10));
   const [query, setQuery] = useState('');
   const [page, setPage] = useState(1);
 
@@ -55,7 +56,7 @@ const Posts: React.FC = memo(() => {
           transition={{ duration: 0.5 }}
           className="text-[10px] font-mono tracking-[0.3em] uppercase text-accent mb-4"
         >
-          ◈ Tensor Labz // Posts
+          {get('posts.label', '◈ Tensor Labz // Posts')}
         </motion.p>
         <motion.h1
           initial={{ opacity: 0, y: -16 }}
@@ -63,7 +64,7 @@ const Posts: React.FC = memo(() => {
           transition={{ duration: 0.6, delay: 0.1, ease: EASE_EXPO }}
           className="text-3xl sm:text-5xl font-bold font-display text-fg mb-3"
         >
-          Insights &amp; Updates
+          {get('posts.title', 'Insights & Updates')}
         </motion.h1>
         <motion.div
           initial={{ width: 0 }}
@@ -77,7 +78,7 @@ const Posts: React.FC = memo(() => {
           transition={{ duration: 0.6, delay: 0.3 }}
           className="text-muted text-base max-w-xl mx-auto"
         >
-          Engineering articles, project deep-dives, and technical insights from the Tensor Labz team.
+          {get('posts.description', 'Engineering articles, project deep-dives, and technical insights from the Tensor Labz team.')}
         </motion.p>
       </section>
 
