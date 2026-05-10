@@ -16,25 +16,41 @@ import type { HeroSlide } from '../../../services/heroService';
 const FACE_SLOT = [4, 0, 5, 1];
 const FACE_ROTY = [0, -Math.PI / 2, Math.PI, Math.PI / 2];
 
+/* Rasterise any image (including SVG) via an offscreen canvas so WebGL
+   always receives valid pixel data regardless of source format. */
+function loadAsCanvasTexture(url: string): Promise<THREE.CanvasTexture> {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = () => {
+      const w = img.naturalWidth  || 512;
+      const h = img.naturalHeight || 512;
+      const canvas = document.createElement('canvas');
+      canvas.width  = w;
+      canvas.height = h;
+      canvas.getContext('2d')!.drawImage(img, 0, 0, w, h);
+      const tex = new THREE.CanvasTexture(canvas);
+      tex.colorSpace = THREE.SRGBColorSpace;
+      resolve(tex);
+    };
+    img.onerror = reject;
+    img.src = url;
+  });
+}
+
 function applySlides(slides: HeroSlide[], mats: THREE.MeshStandardMaterial[]) {
-  const loader = new THREE.TextureLoader();
-  loader.crossOrigin = 'anonymous';
   slides.slice(0, 4).forEach((slide, i) => {
     if (!slide.img) return;
-    loader.load(
-      slide.img,
-      (tex) => {
-        tex.colorSpace         = THREE.SRGBColorSpace;
+    loadAsCanvasTexture(slide.img)
+      .then((tex) => {
         const slot             = FACE_SLOT[i];
         mats[slot].map         = tex;
         mats[slot].color.set(0xffffff);
         mats[slot].roughness   = 0.2;
         mats[slot].metalness   = 0.05;
         mats[slot].needsUpdate = true;
-      },
-      undefined,
-      (err) => console.error('[HeroImageSlider] texture load failed:', slide.img, err),
-    );
+      })
+      .catch((err) => console.error('[HeroImageSlider] failed:', slide.img, err));
   });
 }
 
@@ -151,12 +167,13 @@ const HeroImageSlider: React.FC = memo(() => {
     })));
 
     /* animation */
-    const clock = new THREE.Clock();
+    const timer = new THREE.Timer();
     let raf: number;
 
     const animate = () => {
       raf = requestAnimationFrame(animate);
-      const t = clock.getElapsedTime();
+      timer.update();
+      const t = timer.getElapsed();
 
       currentQ.current.slerp(targetQ.current, 0.04);
       cube.setRotationFromQuaternion(currentQ.current);
