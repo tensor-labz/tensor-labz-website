@@ -115,6 +115,7 @@ export async function fetchPublishedPosts(): Promise<Post[]> {
     .from('posts')
     .select(POST_SELECT)
     .eq('status', 'published')
+    .order('sort_order', { ascending: true })
     .order('created_at', { ascending: false });
 
   if (error) throw new Error(error.message);

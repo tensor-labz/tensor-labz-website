@@ -20,6 +20,7 @@ export interface FieldConfig {
     | 'richtext'
     | 'radio'
     | 'select'
+    | 'number'
     | 'covermedia';  // combined cover_image_type dropdown + url/upload input
   placeholder?: string;
   required?: boolean;
@@ -47,6 +48,7 @@ export const MODULES: ModuleConfig[] = [
     imageField: 'imageURL',
     titleField: 'title',
     descriptionField: 'description',
+    tableColumns: ['sort_order'],
     fields: [
       { key: 'imageURL', label: 'Image', type: 'image', span: 'full' },
       {
@@ -77,6 +79,13 @@ export const MODULES: ModuleConfig[] = [
         type: 'toggle',
         span: 'half',
       },
+      {
+        key: 'sort_order',
+        label: 'Sort Order',
+        type: 'number',
+        span: 'half',
+        placeholder: '0',
+      },
     ],
   },
   {
@@ -86,7 +95,7 @@ export const MODULES: ModuleConfig[] = [
     imageField: 'imageURL',
     titleField: 'title',
     descriptionField: 'description',
-    tableColumns: ['service_id'],
+    tableColumns: ['sort_order', 'service_id'],
     fields: [
       { key: 'imageURL', label: 'Image', type: 'image', span: 'full' },
       {
@@ -110,6 +119,13 @@ export const MODULES: ModuleConfig[] = [
         type: 'select',
         span: 'half',
         relation: { table: 'services', labelField: 'title', valueField: 'id' },
+      },
+      {
+        key: 'sort_order',
+        label: 'Sort Order',
+        type: 'number',
+        span: 'half',
+        placeholder: '0',
       },
       {
         key: 'tags',
@@ -212,7 +228,7 @@ export const MODULES: ModuleConfig[] = [
     imageField: 'cover_image',
     titleField: 'title',
     descriptionField: 'description',
-    tableColumns: ['status', 'tags'],
+    tableColumns: ['sort_order', 'status', 'tags'],
     fields: [
       { key: 'cover_image', label: 'Cover Media', type: 'covermedia', span: 'full' },
       { key: 'title', label: 'Title', type: 'text', required: true, span: 'half' },
@@ -223,6 +239,13 @@ export const MODULES: ModuleConfig[] = [
         type: 'radio',
         span: 'half',
         options: ['draft', 'published', 'hidden'],
+      },
+      {
+        key: 'sort_order',
+        label: 'Sort Order',
+        type: 'number',
+        span: 'half',
+        placeholder: '0',
       },
       { key: 'tags', label: 'Tags (comma separated)', type: 'tags', span: 'half' },
       { key: 'description', label: 'Meta Description (internal)', type: 'textarea', span: 'full' },

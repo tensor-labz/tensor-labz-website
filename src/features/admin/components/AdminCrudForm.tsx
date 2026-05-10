@@ -25,6 +25,7 @@ import {
 function defaultForType(type: FieldConfig['type']): unknown {
   if (type === 'images' || type === 'multiinput') return [];
   if (type === 'toggle' || type === 'checkbox') return false;
+  if (type === 'number') return 0;
   return '';
 }
 
@@ -1207,6 +1208,20 @@ const Field = ({
         value={str}
         onChange={(e) => onChange(e.target.value)}
         placeholder={field.placeholder ?? 'https://...'}
+        className="w-full px-3 py-2.5 rounded-lg text-sm"
+        style={inputStyle}
+      />
+    );
+  }
+
+  if (field.type === 'number') {
+    return (
+      <input
+        type="number"
+        value={value === '' || value === undefined ? '' : String(value)}
+        onChange={(e) => onChange(e.target.value === '' ? 0 : Number(e.target.value))}
+        placeholder={field.placeholder ?? '0'}
+        min={0}
         className="w-full px-3 py-2.5 rounded-lg text-sm"
         style={inputStyle}
       />
