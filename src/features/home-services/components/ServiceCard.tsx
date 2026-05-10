@@ -98,24 +98,23 @@ const ServiceCard: React.FC<ServiceCardProps> = memo(
           </p>
         </div>
 
-        {/* Hover reveal — technical spec style */}
+        {/* Hover reveal — dark overlay so text is always readable */}
         <div
           className="hidden absolute bottom-0 left-0 w-full px-4 py-3 sm:px-5
             sm:flex flex-col justify-center overflow-hidden
             h-0 group-hover:h-[48%] transition-all duration-500 ease-in-out z-20
-            border-t border-accent/20 bg-raised/90 backdrop-blur-sm"
+            border-t border-accent/30 bg-slate-900/95"
         >
-          {/* Monospace label */}
           <p
             className="text-[9px] font-mono tracking-widest uppercase text-accent
               opacity-0 group-hover:opacity-100
               translate-y-2 group-hover:translate-y-0
-              transition-all duration-500 ease-in-out mb-1"
+              transition-all duration-500 ease-in-out mb-1.5"
           >
             // Description
           </p>
           <p
-            className="text-muted text-xs sm:text-sm leading-relaxed
+            className="text-slate-200 text-xs sm:text-sm leading-relaxed
               opacity-0 group-hover:opacity-100
               translate-y-3 group-hover:translate-y-0
               transition-all duration-500 delay-75 ease-in-out"
