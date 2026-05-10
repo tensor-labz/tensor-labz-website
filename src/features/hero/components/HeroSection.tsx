@@ -149,28 +149,9 @@ const HeroSection: React.FC = memo(() => {
             <HeroKeyPoint />
           </motion.div>
 
-          {/* Domain chips — always visible, communicates brand instantly */}
-          <motion.div
-            custom={3}
-            variants={textVariants}
-            initial="hidden"
-            animate={inView ? 'visible' : 'hidden'}
-            className="flex flex-wrap justify-center lg:justify-start gap-2 mb-5"
-          >
-            {['Mechatronics', '3D CAD', 'PCB Design', 'Embedded Systems'].map((chip) => (
-              <span
-                key={chip}
-                className="px-2.5 py-1 rounded border border-accent/25 bg-accent/5
-                  text-accent text-[10px] font-mono tracking-wider uppercase"
-              >
-                {chip}
-              </span>
-            ))}
-          </motion.div>
-
           {slide?.cta_label && slide?.cta_link && (
             <motion.div
-              custom={4}
+              custom={3}
               variants={textVariants}
               initial="hidden"
               animate={inView ? 'visible' : 'hidden'}
@@ -187,7 +168,7 @@ const HeroSection: React.FC = memo(() => {
           )}
 
           <motion.div
-            custom={5}
+            custom={4}
             variants={textVariants}
             initial="hidden"
             animate={inView ? 'visible' : 'hidden'}

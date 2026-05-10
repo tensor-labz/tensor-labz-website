@@ -1,6 +1,6 @@
 import { supabase } from '../lib/supabase';
 
-export interface BlogSocialLink {
+export interface PostSocialLink {
   id: number;
   platform: string;
   url: string;
@@ -8,14 +8,14 @@ export interface BlogSocialLink {
 
 export type CoverMediaType = 'image' | 'video' | 'youtube' | 'drive_image' | 'drive_video';
 
-export interface BlogAdditionalMedia {
+export interface PostAdditionalMedia {
   id: number;
-  blog_id: number;
+  post_id: number;
   url: string;
   type: CoverMediaType;
 }
 
-export interface Blog {
+export interface Post {
   id: number;
   title: string;
   slug: string;
@@ -26,8 +26,8 @@ export interface Blog {
   content?: string;
   tags: string[];
   status: 'draft' | 'published' | 'hidden';
-  social_links: BlogSocialLink[];
-  additional_media: BlogAdditionalMedia[];
+  social_links: PostSocialLink[];
+  additional_media: PostAdditionalMedia[];
   created_at: string;
   updated_at: string;
 }
@@ -64,9 +64,9 @@ function parseArray(val: unknown): string[] {
   return [];
 }
 
-function rowToBlog(row: Record<string, unknown>): Blog {
-  const rawLinks = row.blog_social_links;
-  const social_links: BlogSocialLink[] = Array.isArray(rawLinks)
+function rowToPost(row: Record<string, unknown>): Post {
+  const rawLinks = row.post_social_links;
+  const social_links: PostSocialLink[] = Array.isArray(rawLinks)
     ? (rawLinks as Record<string, unknown>[]).map((l) => ({
         id: l.id as number,
         platform: (l.platform as string) ?? '',
@@ -74,11 +74,11 @@ function rowToBlog(row: Record<string, unknown>): Blog {
       }))
     : [];
 
-  const rawMedia = row.blog_additional_media;
-  const additional_media: BlogAdditionalMedia[] = Array.isArray(rawMedia)
+  const rawMedia = row.post_additional_media;
+  const additional_media: PostAdditionalMedia[] = Array.isArray(rawMedia)
     ? (rawMedia as Record<string, unknown>[]).map((m) => ({
         id: m.id as number,
-        blog_id: m.blog_id as number,
+        post_id: m.post_id as number,
         url: (m.url as string) ?? '',
         type: (m.type as CoverMediaType) ?? 'image',
       }))
@@ -96,7 +96,7 @@ function rowToBlog(row: Record<string, unknown>): Blog {
     meta_title: (row.meta_title as string) || undefined,
     content: (row.content as string) || undefined,
     tags: parseArray(row.tags),
-    status: (row.status as Blog['status']) ?? 'draft',
+    status: (row.status as Post['status']) ?? 'draft',
     social_links,
     additional_media,
     created_at: (row.created_at as string) ?? '',
@@ -104,31 +104,32 @@ function rowToBlog(row: Record<string, unknown>): Blog {
   };
 }
 
-const BLOG_SELECT = `
+const POST_SELECT = `
   *,
-  blog_social_links ( id, platform, url ),
-  blog_additional_media ( id, blog_id, url, type )
+  post_social_links ( id, platform, url ),
+  post_additional_media ( id, post_id, url, type )
 `;
 
-export async function fetchPublishedBlogs(): Promise<Blog[]> {
+export async function fetchPublishedPosts(): Promise<Post[]> {
   const { data, error } = await supabase
-    .from('blogs')
-    .select(BLOG_SELECT)
+    .from('posts')
+    .select(POST_SELECT)
     .eq('status', 'published')
+    .order('sort_order', { ascending: true })
     .order('created_at', { ascending: false });
 
   if (error) throw new Error(error.message);
-  return (data ?? []).map((row) => rowToBlog(row as Record<string, unknown>));
+  return (data ?? []).map((row) => rowToPost(row as Record<string, unknown>));
 }
 
-export async function fetchBlogBySlug(slug: string): Promise<Blog | null> {
+export async function fetchPostBySlug(slug: string): Promise<Post | null> {
   const { data, error } = await supabase
-    .from('blogs')
-    .select(BLOG_SELECT)
+    .from('posts')
+    .select(POST_SELECT)
     .eq('slug', slug)
     .eq('status', 'published')
     .single();
 
   if (error) return null;
-  return data ? rowToBlog(data as Record<string, unknown>) : null;
+  return data ? rowToPost(data as Record<string, unknown>) : null;
 }

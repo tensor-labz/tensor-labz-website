@@ -2,16 +2,16 @@ import React, { memo, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import ReactIcon from '../../../shared/components/ui/ReactIcon';
 import { EASE_EXPO } from '../../../lib/motion';
-import { toYouTubeEmbed, BlogAdditionalMedia } from '../../../services/blogService';
+import { toYouTubeEmbed, PostAdditionalMedia } from '../../../services/postService';
 
 interface Props {
-  media: BlogAdditionalMedia[];
+  media: PostAdditionalMedia[];
 }
 
-const isImage = (type: BlogAdditionalMedia['type']) =>
+const isImage = (type: PostAdditionalMedia['type']) =>
   type === 'image' || type === 'drive_image';
 
-const BlogMediaSection: React.FC<Props> = memo(({ media }) => {
+const PostMediaSection: React.FC<Props> = memo(({ media }) => {
   const [activeIndex, setActiveIndex] = useState(0);
 
   const images = media.filter((m) => isImage(m.type));
@@ -140,5 +140,5 @@ const BlogMediaSection: React.FC<Props> = memo(({ media }) => {
   );
 });
 
-BlogMediaSection.displayName = 'BlogMediaSection';
-export default BlogMediaSection;
+PostMediaSection.displayName = 'PostMediaSection';
+export default PostMediaSection;

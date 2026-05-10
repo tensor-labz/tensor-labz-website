@@ -7,7 +7,8 @@ export const fetchServices = async (
   const { data, error } = await supabase
     .from('services')
     .select('*')
-    .order('id')
+    .order('sort_order', { ascending: true })
+    .order('id', { ascending: true })
     .abortSignal(signal!);
   if (error) throw new Error(error.message);
   return (data ?? []).map((row) => ({
