@@ -31,6 +31,7 @@ interface AdminState {
   modules: Record<string, ModuleState>;
   counts: Record<string, number>;
   countsStatus: LoadStatus;
+  relationOptions: Record<string, Array<Record<string, unknown>>>;
 }
 
 /* ── Entity adapter ─────────────────────────────────────────────────────── */
@@ -135,6 +136,15 @@ export const deleteRecord = createAsyncThunk(
   }
 );
 
+export const fetchRelationOptions = createAsyncThunk(
+  'admin/fetchRelationOptions',
+  async ({ table, labelField, valueField = 'id' }: { table: string; labelField: string; valueField?: string }) => {
+    const { data, error } = await supabase.from(table).select(`id, ${labelField}`).order(labelField);
+    if (error) throw new Error(error.message);
+    return (data ?? []) as Array<Record<string, unknown>>;
+  }
+);
+
 export const fetchModuleCounts = createAsyncThunk(
   'admin/fetchModuleCounts',
   async (moduleIds: string[]) => {
@@ -179,6 +189,7 @@ const adminSlice = createSlice({
     modules: {},
     counts: {},
     countsStatus: 'idle',
+    relationOptions: {},
   } as AdminState,
   reducers: {
     resetModuleStatus(state, action: PayloadAction<string>) {
@@ -287,6 +298,11 @@ const adminSlice = createSlice({
       })
       .addCase(fetchModuleCounts.rejected, (state) => {
         state.countsStatus = 'failed';
+      })
+
+      /* fetchRelationOptions */
+      .addCase(fetchRelationOptions.fulfilled, (state, { meta, payload }) => {
+        state.relationOptions[meta.arg.table] = payload;
       });
   },
 });
@@ -332,5 +348,15 @@ export const selectCurrentRecordError =
 export const selectModuleCounts = (state: RootState) => state.admin.counts;
 export const selectCountsStatus = (state: RootState) =>
   state.admin.countsStatus;
+
+export const selectRelationOptions =
+  (table: string) =>
+  (state: RootState): Array<Record<string, unknown>> =>
+    state.admin.relationOptions[table] ?? [];
+
+export const selectAllRelationOptions = (
+  state: RootState
+): Record<string, Array<Record<string, unknown>>> =>
+  state.admin.relationOptions;
 
 export default adminSlice.reducer;

@@ -1,8 +1,15 @@
-import { memo, useState, useEffect, useCallback } from 'react';
+import React, { memo, useState, useEffect, useCallback, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import ReactIcon from '../../../shared/components/ui/ReactIcon';
-import { supabase } from '../../../lib/supabase';
 import { ImageField } from './AdminCrudForm';
+import { useAppDispatch, useAppSelector } from '../../../app/hooks';
+import {
+  createRecord,
+  updateRecord,
+  deleteRecord,
+  fetchRecords,
+  selectModuleRecords,
+} from '../../../store/adminSlice';
 
 function deriveLink(contact: string, value: string): string {
   const t = contact.toLowerCase();
@@ -187,11 +194,15 @@ const CompanyInfoTab = ({
   data: CompanyInfo;
   onChange: (u: CompanyInfo) => void;
 }) => {
+  const dispatch = useAppDispatch();
   const set = (key: keyof CompanyInfo) => (v: string) =>
     onChange({ ...data, [key]: v });
 
   /* ── Contact CRUD ── */
-  const [contactRows, setContactRows] = useState<ContactRow[]>([]);
+  const selectContactRows = useMemo(() => selectModuleRecords('contact'), []);
+  const contactRecords = useAppSelector(selectContactRows);
+  const contactRows = contactRecords as unknown as ContactRow[];
+
   const [contactEdit, setContactEdit] = useState<number | 'new' | null>(null);
   const [contactDraft, setContactDraft] = useState<ContactRow>({
     contact: '',
@@ -200,13 +211,9 @@ const CompanyInfoTab = ({
     link: '',
   });
 
-  const refreshContact = useCallback(async () => {
-    const { data: rows } = await supabase
-      .from('contact')
-      .select('*')
-      .order('id');
-    setContactRows((rows as ContactRow[]) ?? []);
-  }, []);
+  const refreshContact = useCallback(() => {
+    dispatch(fetchRecords('contact'));
+  }, [dispatch]);
 
   useEffect(() => {
     refreshContact();
@@ -222,29 +229,28 @@ const CompanyInfoTab = ({
       link: resolvedLink || null,
     };
     if (contactEdit === 'new') {
-      await supabase.from('contact').insert(payload);
+      await dispatch(createRecord({ moduleId: 'contact', data: payload }));
     } else {
-      await supabase.from('contact').update(payload).eq('id', contactEdit);
+      await dispatch(updateRecord({ moduleId: 'contact', id: contactEdit as number, data: payload }));
     }
     setContactEdit(null);
-    refreshContact();
+    dispatch(fetchRecords('contact'));
   };
 
   /* ── Social CRUD ── */
-  const [socialRows, setSocialRows] = useState<SocialRow[]>([]);
+  const selectSocialRows = useMemo(() => selectModuleRecords('social'), []);
+  const socialRecords = useAppSelector(selectSocialRows);
+  const socialRows = socialRecords as unknown as SocialRow[];
+
   const [socialEdit, setSocialEdit] = useState<number | 'new' | null>(null);
   const [socialDraft, setSocialDraft] = useState<SocialRow>({
     social_media: '',
     value: '',
   });
 
-  const refreshSocial = useCallback(async () => {
-    const { data: rows } = await supabase
-      .from('social')
-      .select('*')
-      .order('id');
-    setSocialRows((rows as SocialRow[]) ?? []);
-  }, []);
+  const refreshSocial = useCallback(() => {
+    dispatch(fetchRecords('social'));
+  }, [dispatch]);
 
   useEffect(() => {
     refreshSocial();
@@ -252,21 +258,18 @@ const CompanyInfoTab = ({
 
   const saveSocial = async () => {
     if (socialEdit === 'new') {
-      await supabase.from('social').insert({
+      await dispatch(createRecord({ moduleId: 'social', data: {
         social_media: socialDraft.social_media,
         value: socialDraft.value,
-      });
+      }}));
     } else {
-      await supabase
-        .from('social')
-        .update({
-          social_media: socialDraft.social_media,
-          value: socialDraft.value,
-        })
-        .eq('id', socialEdit);
+      await dispatch(updateRecord({ moduleId: 'social', id: socialEdit as number, data: {
+        social_media: socialDraft.social_media,
+        value: socialDraft.value,
+      }}));
     }
     setSocialEdit(null);
-    refreshSocial();
+    dispatch(fetchRecords('social'));
   };
 
   return (
@@ -550,8 +553,8 @@ const CompanyInfoTab = ({
                   />
                   <IconBtn
                     onClick={async () => {
-                      await supabase.from('contact').delete().eq('id', row.id!);
-                      refreshContact();
+                      await dispatch(deleteRecord({ moduleId: 'contact', id: row.id! }));
+                      dispatch(fetchRecords('contact'));
                     }}
                     icon="FaTrash"
                     title="Delete"
@@ -713,8 +716,8 @@ const CompanyInfoTab = ({
                   />
                   <IconBtn
                     onClick={async () => {
-                      await supabase.from('social').delete().eq('id', row.id!);
-                      refreshSocial();
+                      await dispatch(deleteRecord({ moduleId: 'social', id: row.id! }));
+                      dispatch(fetchRecords('social'));
                     }}
                     icon="FaTrash"
                     title="Delete"
@@ -788,22 +791,22 @@ const HERO_DEFAULT: HeroRow = {
 };
 
 const HeroSlidesTab = () => {
-  const [rows, setRows] = useState<HeroRow[]>([]);
+  const dispatch = useAppDispatch();
+  const selectHeroRows = useMemo(() => selectModuleRecords('hero'), []);
+  const heroRecords = useAppSelector(selectHeroRows);
+  const rows = heroRecords as unknown as HeroRow[];
+
   const [editId, setEditId] = useState<number | 'new' | null>(null);
   const [draft, setDraft] = useState<HeroRow>(HERO_DEFAULT);
   const [loading, setLoading] = useState(true);
 
-  const refresh = useCallback(async () => {
-    const { data } = await supabase
-      .from('hero')
-      .select('*')
-      .order('sort_order', { ascending: true });
-    setRows((data as HeroRow[]) ?? []);
-    setLoading(false);
-  }, []);
+  const refresh = useCallback(() => {
+    dispatch(fetchRecords('hero'));
+  }, [dispatch]);
 
   useEffect(() => {
     refresh();
+    setLoading(false);
   }, [refresh]);
 
   const save = async () => {
@@ -816,12 +819,12 @@ const HeroSlidesTab = () => {
       sort_order: draft.sort_order,
     };
     if (editId === 'new') {
-      await supabase.from('hero').insert(payload);
+      await dispatch(createRecord({ moduleId: 'hero', data: payload }));
     } else {
-      await supabase.from('hero').update(payload).eq('id', editId);
+      await dispatch(updateRecord({ moduleId: 'hero', id: editId as number, data: payload }));
     }
     setEditId(null);
-    refresh();
+    dispatch(fetchRecords('hero'));
   };
 
   const startEdit = (row: HeroRow) => {
@@ -933,8 +936,8 @@ const HeroSlidesTab = () => {
                 <IconBtn onClick={() => startEdit(row)} icon="FaEdit" title="Edit" />
                 <IconBtn
                   onClick={async () => {
-                    await supabase.from('hero').delete().eq('id', row.id!);
-                    refresh();
+                    await dispatch(deleteRecord({ moduleId: 'hero', id: row.id! }));
+                    dispatch(fetchRecords('hero'));
                   }}
                   icon="FaTrash"
                   title="Delete"
@@ -1021,22 +1024,22 @@ const MEDIA_DEFAULT: MediaRow = {
 };
 
 const AboutMediaTab = () => {
-  const [rows, setRows] = useState<MediaRow[]>([]);
+  const dispatch = useAppDispatch();
+  const selectMediaRows = useMemo(() => selectModuleRecords('about_media'), []);
+  const mediaRecords = useAppSelector(selectMediaRows);
+  const rows = mediaRecords as unknown as MediaRow[];
+
   const [editId, setEditId] = useState<number | 'new' | null>(null);
   const [draft, setDraft] = useState<MediaRow>(MEDIA_DEFAULT);
   const [loading, setLoading] = useState(true);
 
-  const refresh = useCallback(async () => {
-    const { data } = await supabase
-      .from('about_media')
-      .select('*')
-      .order('sort_order', { ascending: true });
-    setRows((data as MediaRow[]) ?? []);
-    setLoading(false);
-  }, []);
+  const refresh = useCallback(() => {
+    dispatch(fetchRecords('about_media'));
+  }, [dispatch]);
 
   useEffect(() => {
     refresh();
+    setLoading(false);
   }, [refresh]);
 
   const save = async () => {
@@ -1047,12 +1050,12 @@ const AboutMediaTab = () => {
       sort_order: draft.sort_order,
     };
     if (editId === 'new') {
-      await supabase.from('about_media').insert(payload);
+      await dispatch(createRecord({ moduleId: 'about_media', data: payload }));
     } else {
-      await supabase.from('about_media').update(payload).eq('id', editId);
+      await dispatch(updateRecord({ moduleId: 'about_media', id: editId as number, data: payload }));
     }
     setEditId(null);
-    refresh();
+    dispatch(fetchRecords('about_media'));
   };
 
   const startEdit = (row: MediaRow) => {
@@ -1171,8 +1174,8 @@ const AboutMediaTab = () => {
                 <IconBtn onClick={() => startEdit(row)} icon="FaEdit" title="Edit" />
                 <IconBtn
                   onClick={async () => {
-                    await supabase.from('about_media').delete().eq('id', row.id!);
-                    refresh();
+                    await dispatch(deleteRecord({ moduleId: 'about_media', id: row.id! }));
+                    dispatch(fetchRecords('about_media'));
                   }}
                   icon="FaTrash"
                   title="Delete"
@@ -1276,6 +1279,7 @@ const MediaItemForm = ({
    AdminSiteControl — main shell
 ════════════════════════════════════════════════════════ */
 const AdminSiteControl = memo(() => {
+  const dispatch = useAppDispatch();
   const [searchParams, setSearchParams] = useSearchParams();
   const activeTab = (searchParams.get('tab') ?? 'company') as TabId;
 
@@ -1284,36 +1288,34 @@ const AdminSiteControl = memo(() => {
   const [saved, setSaved] = useState(false);
   const [loading, setLoading] = useState(true);
 
+  const selectCompanyRecords = useMemo(() => selectModuleRecords('company_info'), []);
+  const companyRecords = useAppSelector(selectCompanyRecords);
+
   useEffect(() => {
-    supabase
-      .from('company_info')
-      .select('*')
-      .maybeSingle()
-      .then(({ data: row, error }) => {
-        if (error)
-          console.error('[SiteControl] company_info fetch error:', error);
-        if (row) {
-          setCompany({
-            name: row.name ?? '',
-            tagline: row.tagline ?? '',
-            description: row.description ?? '',
-            logo_url: row.logo_url ?? '',
-            logo_url_dark: row.logo_url_dark ?? '',
-            available_hours: row.available_hours ?? '',
-            who_we_are: row.who_we_are ?? '',
-            vision: row.vision ?? '',
-            mission: row.mission ?? '',
-          });
-        }
-        setLoading(false);
+    dispatch(fetchRecords('company_info'));
+  }, [dispatch]);
+
+  useEffect(() => {
+    const row = companyRecords[0] as Record<string, unknown> | undefined;
+    if (row) {
+      setCompany({
+        name: (row.name as string) ?? '',
+        tagline: (row.tagline as string) ?? '',
+        description: (row.description as string) ?? '',
+        logo_url: (row.logo_url as string) ?? '',
+        logo_url_dark: (row.logo_url_dark as string) ?? '',
+        available_hours: (row.available_hours as string) ?? '',
+        who_we_are: (row.who_we_are as string) ?? '',
+        vision: (row.vision as string) ?? '',
+        mission: (row.mission as string) ?? '',
       });
-  }, []);
+    }
+    setLoading(false);
+  }, [companyRecords]);
 
   const handleSave = async () => {
     setSaving(true);
-    await supabase
-      .from('company_info')
-      .upsert({ id: 1, ...company }, { onConflict: 'id' });
+    await dispatch(updateRecord({ moduleId: 'company_info', id: 1, data: { id: 1, ...company } }));
     setSaving(false);
     setSaved(true);
     setTimeout(() => setSaved(false), 2500);
