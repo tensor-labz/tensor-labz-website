@@ -18,17 +18,23 @@ const FACE_ROTY = [0, -Math.PI / 2, Math.PI, Math.PI / 2];
 
 function applySlides(slides: HeroSlide[], mats: THREE.MeshStandardMaterial[]) {
   const loader = new THREE.TextureLoader();
+  loader.crossOrigin = 'anonymous';
   slides.slice(0, 4).forEach((slide, i) => {
     if (!slide.img) return;
-    loader.load(slide.img, (tex) => {
-      tex.colorSpace = THREE.SRGBColorSpace;
-      const slot             = FACE_SLOT[i];
-      mats[slot].map         = tex;
-      mats[slot].color.set(0xffffff);
-      mats[slot].roughness   = 0.2;
-      mats[slot].metalness   = 0.05;
-      mats[slot].needsUpdate = true;
-    });
+    loader.load(
+      slide.img,
+      (tex) => {
+        tex.colorSpace         = THREE.SRGBColorSpace;
+        const slot             = FACE_SLOT[i];
+        mats[slot].map         = tex;
+        mats[slot].color.set(0xffffff);
+        mats[slot].roughness   = 0.2;
+        mats[slot].metalness   = 0.05;
+        mats[slot].needsUpdate = true;
+      },
+      undefined,
+      (err) => console.error('[HeroImageSlider] texture load failed:', slide.img, err),
+    );
   });
 }
 
