@@ -1,7 +1,7 @@
 import { memo } from 'react';
 import { motion } from 'motion/react';
 import { Link } from 'react-router-dom';
-import ReactIcon from '../../ui/ReactIcon';
+import ReactIcon from '../ui/ReactIcon';
 import logo from '../../../assets/images/logo.png';
 import { useAppSelector } from '../../../app/hooks';
 import {
