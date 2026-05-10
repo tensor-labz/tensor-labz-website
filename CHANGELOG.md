@@ -7,6 +7,38 @@ All notable changes to the Tensor Labs website are documented here.
 ## [Unreleased]
 
 ---
+## [v1.10.0] — 2026-05-10
+
+### Added
+
+- add domains field to CompanyInfo — dynamic capability chips on About page
+- make site name and description dynamic in meta/OG/Twitter tags
+- add home link to login page logo and back-to-site footer link
+- make logo and company name dynamic from Supabase in Login and AdminDashboard
+
+### Bug Fixes
+
+- resolve CI failures — domains field and ThemeContext import
+- use icon as stat key in HeroSection to avoid duplicate empty-string keys
+
+### Refactor
+
+- remove all hardcoded fallbacks — empty string if not set in Supabase
+- replace all hardcoded page content with site_settings dynamic keys
+
+### Chore
+
+- remove 57 dead files — old layout, Page components, contexts, firebase, unused features
+
+### Other
+
+- Merge pull request #30 from tensor-labz/staging
+- Merge branch 'staging' of github.com:tensor-labz/tensor-labz-website into staging
+- Merge pull request #29 from tensor-labz/dev
+
+
+
+---
 ## [v1.9.0] — 2026-05-10
 
 ### Added
