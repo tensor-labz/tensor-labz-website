@@ -6,13 +6,14 @@ import { useBlogListController } from '../features/blog/hooks/useBlogListControl
 import { EASE_EXPO, VIEWPORT } from '../lib/motion';
 
 const BlogSkeleton = () => (
-  <div className="rounded-xl overflow-hidden border border-rim bg-surface animate-pulse">
-    <div className="aspect-video bg-raised" />
-    <div className="p-4 space-y-3">
-      <div className="h-2 bg-raised rounded w-1/3" />
-      <div className="h-4 bg-raised rounded w-3/4" />
+  <div className="rounded-xl overflow-hidden border border-rim bg-surface animate-pulse flex flex-col md:flex-row">
+    <div className="aspect-video md:aspect-auto md:w-[44%] md:shrink-0 bg-raised" />
+    <div className="flex-1 p-5 md:p-8 space-y-4">
+      <div className="h-2 bg-raised rounded w-1/4" />
+      <div className="h-5 bg-raised rounded w-3/4" />
       <div className="h-3 bg-raised rounded w-full" />
       <div className="h-3 bg-raised rounded w-2/3" />
+      <div className="h-3 bg-raised rounded w-1/2" />
     </div>
   </div>
 );
@@ -106,8 +107,8 @@ const Blog: React.FC = memo(() => {
       {/* ── Grid ── */}
       <section className="px-6 lg:px-16 pb-24 max-w-7xl mx-auto">
         {isLoading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {Array.from({ length: 6 }).map((_, i) => <BlogSkeleton key={i} />)}
+          <div className="flex flex-col gap-6">
+            {Array.from({ length: 3 }).map((_, i) => <BlogSkeleton key={i} />)}
           </div>
         ) : filtered.length === 0 ? (
           <motion.div
@@ -120,7 +121,7 @@ const Blog: React.FC = memo(() => {
             <p className="text-muted text-sm">No published articles yet. Check back soon.</p>
           </motion.div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="flex flex-col gap-6">
             {filtered.map((blog) => (
               <BlogCard
                 key={blog.id}

@@ -9,7 +9,9 @@ type Props = Pick<Blog, 'slug' | 'title' | 'description' | 'cover_image' | 'tags
 
 const BlogCard: React.FC<Props> = memo(({ slug, title, description, cover_image, tags, created_at }) => {
   const navigate = useNavigate();
-  const date = created_at ? new Date(created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) : '';
+  const date = created_at
+    ? new Date(created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })
+    : '';
 
   return (
     <motion.article
@@ -18,26 +20,26 @@ const BlogCard: React.FC<Props> = memo(({ slug, title, description, cover_image,
       viewport={{ once: true, margin: '-40px' }}
       transition={{ duration: 0.55, ease: EASE_EXPO }}
       onClick={() => navigate(`/blog/${slug}`)}
-      className="group relative flex flex-col rounded-xl overflow-hidden
+      className="group relative flex flex-col md:flex-row rounded-xl overflow-hidden
         bg-surface border border-rim cursor-pointer
-        hover:border-accent/40 hover:shadow-[0_8px_32px_-8px_rgba(56,189,248,0.12)]
+        hover:border-accent/40 hover:shadow-[0_8px_40px_-8px_rgba(56,189,248,0.12)]
         transition-all duration-300"
     >
-      {/* Cover image */}
-      <div className="relative aspect-video overflow-hidden bg-raised">
+      {/* ── Cover image ── */}
+      <div className="relative aspect-video md:aspect-auto md:w-[44%] md:shrink-0 overflow-hidden bg-raised">
         {cover_image ? (
           <img
             src={cover_image}
             alt={title}
-            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center">
-            <ReactIcon name="FaNewspaper" size={32} className="text-muted/30" />
+            <ReactIcon name="FaNewspaper" size={40} className="text-muted/20" />
           </div>
         )}
 
-        {/* Engineering grid on hover */}
+        {/* Engineering grid overlay */}
         <div
           className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500"
           style={{
@@ -47,16 +49,24 @@ const BlogCard: React.FC<Props> = memo(({ slug, title, description, cover_image,
           }}
         />
 
-        {/* Gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+        {/* Gradient — fades into content on desktop, bottom fade on mobile */}
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/50 via-transparent to-transparent md:bg-gradient-to-r md:from-transparent md:to-slate-950/30 transition-opacity duration-300" />
+
+        {/* Type badge — desktop only */}
+        <div className="hidden md:flex absolute top-4 left-4 items-center gap-1.5
+          px-2 py-0.5 rounded border border-accent/40 bg-black/60 backdrop-blur-sm">
+          <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
+          <span className="text-[9px] font-mono tracking-widest uppercase text-accent">Article</span>
+        </div>
       </div>
 
-      {/* Content */}
-      <div className="flex flex-col flex-1 p-4 gap-3">
+      {/* ── Content ── */}
+      <div className="flex flex-col flex-1 p-5 md:p-8 gap-3 md:gap-4 md:justify-center">
+
         {/* Tags */}
         {tags.length > 0 && (
           <div className="flex flex-wrap gap-1.5">
-            {tags.slice(0, 3).map((tag) => (
+            {tags.slice(0, 4).map((tag) => (
               <span
                 key={tag}
                 className="px-2 py-0.5 rounded text-[10px] font-mono tracking-wider uppercase
@@ -65,30 +75,39 @@ const BlogCard: React.FC<Props> = memo(({ slug, title, description, cover_image,
                 {tag}
               </span>
             ))}
-            {tags.length > 3 && (
-              <span className="text-[10px] font-mono text-muted/60 self-center">+{tags.length - 3}</span>
+            {tags.length > 4 && (
+              <span className="text-[10px] font-mono text-muted/50 self-center">+{tags.length - 4}</span>
             )}
           </div>
         )}
 
         {/* Title */}
-        <h2 className="text-base sm:text-lg font-bold font-display text-fg leading-snug group-hover:text-accent transition-colors duration-200 line-clamp-2">
+        <h2 className="text-base sm:text-lg md:text-xl lg:text-2xl font-bold font-display text-fg leading-snug
+          group-hover:text-accent transition-colors duration-200 line-clamp-2 md:line-clamp-3">
           {title}
         </h2>
 
-        {/* Description excerpt */}
+        {/* Description */}
         {description && (
-          <p className="text-sm text-muted leading-relaxed line-clamp-2 flex-1">
+          <p className="text-sm md:text-[15px] text-muted leading-relaxed line-clamp-2 md:line-clamp-3">
             {description}
           </p>
         )}
 
+        {/* Separator — desktop only */}
+        <div className="hidden md:block h-px bg-gradient-to-r from-accent/20 via-rim to-transparent" />
+
         {/* Footer */}
-        <div className="flex items-center justify-between pt-2 border-t border-rim mt-auto">
-          <span className="text-[10px] font-mono text-muted/60">{date}</span>
-          <span className="flex items-center gap-1 text-[11px] font-mono text-accent/80 group-hover:text-accent transition-colors">
+        <div className="flex items-center justify-between pt-2 md:pt-0 border-t border-rim md:border-0 mt-auto md:mt-0">
+          <span className="text-[10px] font-mono text-muted/50">{date}</span>
+          <span className="flex items-center gap-1.5 text-[11px] font-mono text-accent/70
+            group-hover:text-accent transition-colors duration-200">
             Read Article
-            <ReactIcon name="FiArrowRight" size={11} className="group-hover:translate-x-0.5 transition-transform" />
+            <ReactIcon
+              name="FiArrowRight"
+              size={12}
+              className="group-hover:translate-x-1 transition-transform duration-200"
+            />
           </span>
         </div>
       </div>
