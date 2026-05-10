@@ -59,11 +59,11 @@ const LatestProductSection: React.FC = memo(() => {
   return (
     <Section className="min-h-screen lg:container flex flex-col items-center justify-center py-10 sm:py-20 md:py-18 lg:py-24">
       <div className="px-4 text-center mb-4 mt-6">
-        <p className="text-xs font-semibold tracking-widest uppercase text-accent mb-3">Featured Work</p>
+        <p className="text-[10px] font-mono tracking-[0.3em] uppercase text-accent mb-3">◈ Featured Work</p>
         <h2 className="sm:text-4xl text-xl sm:font-bold font-semibold text-fg font-display">
-          Our Latest Top Insights
+          Our Latest Projects
         </h2>
-        <p className="text-muted text-base mt-2">A selection of our top projects and innovations.</p>
+        <p className="text-muted text-base mt-2">Selected engineering projects and innovations.</p>
       </div>
 
       <motion.div
@@ -76,7 +76,7 @@ const LatestProductSection: React.FC = memo(() => {
         {/* LEFT HERO */}
         <motion.div
           className="w-10/12 mx-auto lg:w-2/5 max-w-full relative rounded-2xl overflow-hidden
-            shadow-[0_10px_25px_-5px_rgba(0,0,0,0.15)] md:px-0 border border-rim bg-surface"
+            shadow-[0_10px_40px_-8px_rgba(56,189,248,0.08)] md:px-0 border border-accent/20 bg-surface"
           variants={sectionVariants}
         >
           <LatestHero />

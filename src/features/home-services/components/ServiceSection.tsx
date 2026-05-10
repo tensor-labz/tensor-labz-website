@@ -11,8 +11,8 @@ const ServiceSection: React.FC = memo(() => {
   return (
     <Section className="md:px-14 px-0">
       <div className="px-4 text-center mb-4 mt-6">
-        <p className="text-xs font-semibold tracking-widest uppercase text-accent mb-3">
-          What We Do
+        <p className="text-[10px] font-mono tracking-[0.3em] uppercase text-accent mb-3">
+          ◈ What We Do
         </p>
         <h2
           className="sm:text-4xl text-xl sm:font-bold font-semibold text-fg font-display"
