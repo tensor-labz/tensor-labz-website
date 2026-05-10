@@ -163,39 +163,37 @@ export const ImageField = ({
     [onChange, folder, value]
   );
 
-  const tabBtn = (
-    label: string,
-    tab: 'upload' | 'url',
-    icon: React.ReactNode
-  ) => (
-    <button
-      type="button"
-      onClick={() => setMode(tab)}
-      className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors"
-      style={
-        mode === tab
-          ? { backgroundColor: 'var(--accent)', color: '#fff' }
-          : {
-              backgroundColor: 'var(--glass-bg-raised)',
-              color: 'var(--text-muted)',
-              border: '1px solid var(--glass-border)',
-            }
-      }
-    >
-      {icon}
-      {label}
-    </button>
-  );
+  /* Detect if the URL is a non-image media type */
+  const isMediaUrl = (url: string) =>
+    url.includes('youtube.com') ||
+    url.includes('youtu.be') ||
+    url.includes('drive.google.com') ||
+    /\.(mp4|webm|ogg|mov)(\?|$)/i.test(url);
 
   return (
     <div className="space-y-3">
-      {/* Tab bar — always visible */}
+      {/* ── Input mode dropdown ── */}
       <div className="flex items-center gap-2">
-        {tabBtn('Upload File', 'upload', <ReactIcon name="FaCloudUploadAlt" size={11} />)}
-        {tabBtn('S3 / URL', 'url', <ReactIcon name="FaLink" size={10} />)}
+        <label className="text-xs font-medium shrink-0" style={{ color: 'var(--text-muted)' }}>
+          Input via
+        </label>
+        <select
+          value={mode}
+          onChange={(e) => setMode(e.target.value as 'upload' | 'url')}
+          className="flex-1 px-3 py-1.5 rounded-lg text-xs font-medium appearance-none cursor-pointer"
+          style={{
+            backgroundColor: 'var(--glass-bg-raised)',
+            border: '1px solid var(--glass-border)',
+            color: 'var(--text-primary)',
+            outline: 'none',
+          }}
+        >
+          <option value="upload">S3 Upload (file)</option>
+          <option value="url">Direct URL (YouTube / video / Drive / image)</option>
+        </select>
       </div>
 
-      {/* Prominent full-width preview card — shown whenever a preview exists */}
+      {/* ── Preview card ── */}
       {preview && (
         <div
           className="relative w-full rounded-xl overflow-hidden"
@@ -205,14 +203,25 @@ export const ImageField = ({
             backgroundColor: 'var(--glass-bg-raised)',
           }}
         >
-          <img
-            src={preview}
-            alt="preview"
-            className="w-full h-full object-cover"
-            onError={() => {
-              if (!uploading) setPreview('');
-            }}
-          />
+          {isMediaUrl(preview) ? (
+            /* Non-image URL: show a URL badge instead of broken <img> */
+            <div
+              className="w-full h-full flex flex-col items-center justify-center gap-2 px-4"
+              style={{ backgroundColor: 'var(--glass-bg-raised)' }}
+            >
+              <ReactIcon name="FaLink" size={22} style={{ color: 'var(--accent)', opacity: 0.7 }} />
+              <p className="text-xs text-center break-all font-mono" style={{ color: 'var(--text-muted)' }}>
+                {preview}
+              </p>
+            </div>
+          ) : (
+            <img
+              src={preview}
+              alt="preview"
+              className="w-full h-full object-cover"
+              onError={() => { if (!uploading) setPreview(''); }}
+            />
+          )}
 
           {/* Upload progress overlay */}
           {uploading && (
@@ -223,14 +232,9 @@ export const ImageField = ({
               <p className="text-sm font-semibold" style={{ color: '#fff' }}>
                 {progress}%
               </p>
-              {/* Progress bar */}
               <div
                 className="rounded-full overflow-hidden"
-                style={{
-                  width: '60%',
-                  height: 6,
-                  backgroundColor: 'rgba(255,255,255,0.25)',
-                }}
+                style={{ width: '60%', height: 6, backgroundColor: 'rgba(255,255,255,0.25)' }}
               >
                 <div
                   style={{
@@ -244,7 +248,7 @@ export const ImageField = ({
             </div>
           )}
 
-          {/* Remove / filename strip — only when not uploading */}
+          {/* Remove button */}
           {!uploading && (
             <>
               <button
@@ -260,15 +264,14 @@ export const ImageField = ({
               >
                 <ReactIcon name="FaTimes" size={11} />
               </button>
-              <div
-                className="absolute bottom-0 left-0 right-0 px-3 py-1.5 text-xs truncate"
-                style={{
-                  backgroundColor: 'rgba(0,0,0,0.45)',
-                  color: 'rgba(255,255,255,0.85)',
-                }}
-              >
-                {fileName || preview}
-              </div>
+              {!isMediaUrl(preview) && (
+                <div
+                  className="absolute bottom-0 left-0 right-0 px-3 py-1.5 text-xs truncate"
+                  style={{ backgroundColor: 'rgba(0,0,0,0.45)', color: 'rgba(255,255,255,0.85)' }}
+                >
+                  {fileName || preview}
+                </div>
+              )}
             </>
           )}
         </div>
@@ -372,11 +375,7 @@ export const ImageField = ({
       {mode === 'url' && (
         <div className="space-y-2">
           <div className="flex items-center gap-2">
-            <ReactIcon
-              name="FaLink"
-              size={12}
-              style={{ color: 'var(--text-muted)', flexShrink: 0 }}
-            />
+            <ReactIcon name="FaLink" size={12} style={{ color: 'var(--text-muted)', flexShrink: 0 }} />
             <input
               type="url"
               value={preview}
@@ -384,13 +383,13 @@ export const ImageField = ({
                 setPreview(e.target.value);
                 onChange(e.target.value);
               }}
-              placeholder="https://..."
+              placeholder="https://youtube.com/... · drive.google.com/... · s3.amazonaws.com/..."
               className="flex-1 px-3 py-2.5 rounded-lg text-sm"
               style={inputStyle}
             />
           </div>
           <p className="text-xs" style={{ color: 'var(--text-muted)' }}>
-            Paste any public image URL.
+            Accepts image URLs, YouTube links, direct video URLs, or Google Drive links.
           </p>
         </div>
       )}
