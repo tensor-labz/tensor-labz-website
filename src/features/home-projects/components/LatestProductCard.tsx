@@ -23,11 +23,7 @@ const LatestProductCard: React.FC<LatestProductCardProps> = memo((project) => {
     <Card
       animation={customAnimation}
       className="relative flex flex-col md:flex-row w-full md:max-w-2xl rounded-xl shadow-md
-        overflow-hidden md:h-[300px] cursor-pointer transition-all duration-300"
-      style={{
-        backgroundColor: 'var(--bg-surface)',
-        border: '1px solid var(--border)',
-      }}
+        overflow-hidden md:h-[300px] cursor-pointer transition-all duration-300 bg-surface border border-glass-rim"
       onClick={() => navigate(`/project/${project.slug}`)}
     >
       {/* IMAGE */}
@@ -40,7 +36,7 @@ const LatestProductCard: React.FC<LatestProductCardProps> = memo((project) => {
 
         {/* Overlay on md+ */}
         <div className="hidden md:flex absolute inset-0 flex-col justify-end bg-gradient-to-t from-black/55 to-transparent p-6">
-          <h5 className="text-white text-2xl font-bold mb-2">
+          <h5 className="text-white text-2xl font-bold font-display mb-2">
             {project.title}
           </h5>
           <ReactIcon name="FiArrowRight" size={24} className="text-white" />
@@ -49,13 +45,10 @@ const LatestProductCard: React.FC<LatestProductCardProps> = memo((project) => {
 
       {/* Mobile content */}
       <div className="flex flex-col p-4 md:hidden">
-        <h5
-          className="mb-2 text-xl font-bold"
-          style={{ color: 'var(--text-primary)' }}
-        >
+        <h5 className="mb-2 text-xl font-bold font-display text-fg">
           {project.title}
         </h5>
-        <p className="text-sm" style={{ color: 'var(--text-muted)' }}>
+        <p className="text-sm text-muted">
           {project.description}
         </p>
       </div>

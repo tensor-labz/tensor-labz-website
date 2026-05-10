@@ -77,7 +77,7 @@ const ProjectPage = () => {
             ) : (
               <motion.p
                 className="max-w-none mb-10 text-xl"
-                style={{ color: 'var(--text-primary)' }}
+                className="text-fg"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3, duration: 0.5 }}
@@ -95,7 +95,7 @@ const ProjectPage = () => {
               >
                 <h2
                   className="text-2xl font-bold mb-4"
-                  style={{ color: 'var(--text-primary)' }}
+                  className="text-fg"
                 >
                   Demo
                 </h2>
@@ -120,7 +120,7 @@ const ProjectPage = () => {
               >
                 <h2
                   className="text-2xl font-bold mb-4"
-                  style={{ color: 'var(--text-primary)' }}
+                  className="text-fg"
                 >
                   Project Gallery
                 </h2>
@@ -142,7 +142,7 @@ const ProjectPage = () => {
                     ))}
                   </div>
                 ) : (
-                  <p style={{ color: 'var(--text-muted)' }}>
+                  <p className="text-muted">
                     No gallery images available.
                   </p>
                 )}
@@ -158,7 +158,7 @@ const ProjectPage = () => {
               >
                 <h2
                   className="text-2xl font-bold mb-4"
-                  style={{ color: 'var(--text-primary)' }}
+                  className="text-fg"
                 >
                   Project Gallery
                 </h2>
@@ -191,7 +191,7 @@ const ProjectPage = () => {
                         </button>
                         <span
                           className="font-medium text-sm"
-                          style={{ color: 'var(--text-muted)' }}
+                          className="text-muted"
                         >
                           {currentImageIndex + 1} / {sampleImages.length}
                         </span>
@@ -207,7 +207,7 @@ const ProjectPage = () => {
                     )}
                   </div>
                 ) : (
-                  <p style={{ color: 'var(--text-muted)' }}>
+                  <p className="text-muted">
                     No gallery images available.
                   </p>
                 )}

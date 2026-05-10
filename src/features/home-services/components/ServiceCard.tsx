@@ -63,13 +63,13 @@ const ServiceCard: React.FC<ServiceCardProps> = memo(
         <div className="relative sm:w-full w-3/5 flex flex-col justify-center text-center px-2 z-10">
           <h3
             className="md:text-2xl sm:text-xl text-lg font-bold mb-1"
-            style={{ color: 'var(--text-primary)' }}
+            className="text-fg"
           >
             {service_name}
           </h3>
           <p
             className="text-sm sm:text-base sm:hidden block"
-            style={{ color: 'var(--text-muted)' }}
+            className="text-muted"
           >
             {description}
           </p>

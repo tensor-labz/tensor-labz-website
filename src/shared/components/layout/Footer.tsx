@@ -75,11 +75,7 @@ const Footer = () => {
 
   return (
     <footer
-      style={{
-        backgroundColor: 'var(--footer-bg)',
-        borderColor: 'rgba(148,163,184,0.12)',
-      }}
-      className="text-slate-400 border-t"
+      className="text-muted border-t border-rim/20"
     >
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -102,7 +98,7 @@ const Footer = () => {
                 }}
               />
             </Link>
-            <p className="text-sm leading-relaxed text-slate-500 max-w-xs text-center sm:text-left">
+            <p className="text-sm leading-relaxed text-muted max-w-xs text-center sm:text-left">
               {info.description}
             </p>
             <div className="flex items-center justify-center sm:justify-start gap-3 pt-1 flex-wrap">
@@ -115,8 +111,8 @@ const Footer = () => {
                     rel="noopener noreferrer"
                     aria-label={platform}
                     className="w-8 h-8 flex items-center justify-center rounded
-                      bg-white/5 text-slate-500 hover:bg-sky-500/20 hover:text-sky-400
-                      transition-all duration-200 text-sm border border-white/5 hover:border-sky-500/30"
+                      bg-glass-bg text-muted hover:bg-glass-hover hover:text-accent
+                      transition-all duration-200 text-sm border border-glass-rim hover:border-accent/30"
                   >
                     <ReactIcon name={socialIconName(platform)} size={14} />
                   </a>
@@ -127,7 +123,7 @@ const Footer = () => {
 
           {/* Services */}
           <div className="flex flex-col items-center sm:items-start gap-4">
-            <h4 className="text-xs font-semibold tracking-widest uppercase text-slate-300">
+            <h4 className="text-xs font-semibold font-display tracking-widest uppercase text-fg">
               Services
             </h4>
             <ul className="flex flex-col items-center sm:items-start gap-2.5">
@@ -142,7 +138,7 @@ const Footer = () => {
                     <li key={s.link}>
                       <Link
                         to={s.link}
-                        className="text-sm text-slate-500 hover:text-sky-400 transition-colors duration-200"
+                        className="text-sm text-muted hover:text-accent transition-colors duration-200"
                       >
                         {s.title}
                       </Link>
@@ -153,7 +149,7 @@ const Footer = () => {
 
           {/* Company */}
           <div className="flex flex-col items-center sm:items-start gap-4">
-            <h4 className="text-xs font-semibold tracking-widest uppercase text-slate-300">
+            <h4 className="text-xs font-semibold font-display tracking-widest uppercase text-fg">
               Company
             </h4>
             <ul className="flex flex-col items-center sm:items-start gap-2.5">
@@ -161,7 +157,7 @@ const Footer = () => {
                 <li key={link}>
                   <Link
                     to={link}
-                    className="text-sm text-slate-500 hover:text-sky-400 transition-colors duration-200"
+                    className="text-sm text-muted hover:text-accent transition-colors duration-200"
                   >
                     {title}
                   </Link>
@@ -172,7 +168,7 @@ const Footer = () => {
 
           {/* Contact */}
           <div className="flex flex-col items-center sm:items-start gap-4">
-            <h4 className="text-xs font-semibold tracking-widest uppercase text-slate-300">
+            <h4 className="text-xs font-semibold font-display tracking-widest uppercase text-fg">
               Contact
             </h4>
             <ul className="flex flex-col items-center sm:items-start gap-3">
@@ -186,17 +182,17 @@ const Footer = () => {
                     <ReactIcon
                       name={contactIconName(row.type)}
                       size={13}
-                      className="text-slate-600 mt-0.5 shrink-0"
+                      className="text-muted mt-0.5 shrink-0"
                     />
                     {href ? (
                       <a
                         href={href}
-                        className="text-sm text-slate-500 hover:text-sky-400 transition-colors duration-200 leading-snug"
+                        className="text-sm text-muted hover:text-accent transition-colors duration-200 leading-snug"
                       >
                         {row.value}
                       </a>
                     ) : (
-                      <span className="text-sm text-slate-500 leading-snug">
+                      <span className="text-sm text-muted leading-snug">
                         {row.value}
                       </span>
                     )}
@@ -208,9 +204,9 @@ const Footer = () => {
                   <ReactIcon
                     name="FaClock"
                     size={13}
-                    className="text-slate-600 mt-0.5 shrink-0"
+                    className="text-muted mt-0.5 shrink-0"
                   />
-                  <span className="text-sm text-slate-500 leading-snug">
+                  <span className="text-sm text-muted leading-snug">
                     {info.available_hours}
                   </span>
                 </li>
@@ -219,8 +215,8 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="mt-16 pt-6 border-t border-white/5 flex justify-center">
-          <p className="text-xs text-slate-600 text-center">
+        <div className="mt-16 pt-6 border-t border-glass-rim flex justify-center">
+          <p className="text-xs text-muted text-center">
             &copy; {new Date().getFullYear()} {info.name}. All rights reserved.
           </p>
         </div>
