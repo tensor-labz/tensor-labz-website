@@ -23,37 +23,22 @@ const PostSkeleton = () => (
 
 const Posts: React.FC = memo(() => {
   const { posts, isLoading } = usePostListController();
-  const [activeTag, setActiveTag] = useState<string | null>(null);
   const [query, setQuery] = useState('');
   const [page, setPage] = useState(1);
 
-  const allTags = useMemo(() => {
-    const set = new Set<string>();
-    posts.forEach((p) => p.tags.forEach((t) => set.add(t)));
-    return Array.from(set);
-  }, [posts]);
-
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
-    return posts.filter((p) => {
-      const matchesTag = !activeTag || p.tags.includes(activeTag);
-      const matchesQuery =
-        !q ||
-        p.title.toLowerCase().includes(q) ||
-        (p.description ?? '').toLowerCase().includes(q) ||
-        p.tags.some((t) => t.toLowerCase().includes(q));
-      return matchesTag && matchesQuery;
-    });
-  }, [posts, activeTag, query]);
+    return posts.filter((p) =>
+      !q ||
+      p.title.toLowerCase().includes(q) ||
+      (p.description ?? '').toLowerCase().includes(q) ||
+      p.tags.some((t) => t.toLowerCase().includes(q))
+    );
+  }, [posts, query]);
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   const safePage = Math.min(page, totalPages);
   const paginated = filtered.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE);
-
-  const handleTag = (tag: string | null) => {
-    setActiveTag(tag);
-    setPage(1);
-  };
 
   const handleQuery = (e: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value);
@@ -130,34 +115,6 @@ const Posts: React.FC = memo(() => {
           )}
         </div>
 
-        {/* Tag pills */}
-        {allTags.length > 0 && (
-          <div className="flex flex-wrap gap-2 justify-center">
-            <button
-              onClick={() => handleTag(null)}
-              className={`px-3 py-1 rounded border text-[11px] font-mono tracking-wider uppercase transition-all duration-200
-                ${!activeTag
-                  ? 'border-accent bg-accent/10 text-accent'
-                  : 'border-rim text-muted hover:border-accent/40 hover:text-accent/80'
-                }`}
-            >
-              All
-            </button>
-            {allTags.map((tag) => (
-              <button
-                key={tag}
-                onClick={() => handleTag(tag === activeTag ? null : tag)}
-                className={`px-3 py-1 rounded border text-[11px] font-mono tracking-wider uppercase transition-all duration-200
-                  ${activeTag === tag
-                    ? 'border-accent bg-accent/10 text-accent'
-                    : 'border-rim text-muted hover:border-accent/40 hover:text-accent/80'
-                  }`}
-              >
-                {tag}
-              </button>
-            ))}
-          </div>
-        )}
       </motion.div>
 
       {/* ── Posts ── */}
