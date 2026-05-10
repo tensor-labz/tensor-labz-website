@@ -26,7 +26,12 @@ const GridNode = ({ x, y, delay }: { x: number; y: number; delay: number }) => (
       transform: 'translate(-50%, -50%)',
     }}
     animate={{ opacity: [0.15, 0.9, 0.15], scale: [0.7, 1.6, 0.7] }}
-    transition={{ duration: 3 + delay, repeat: Infinity, ease: 'easeInOut', delay }}
+    transition={{
+      duration: 3 + delay,
+      repeat: Infinity,
+      ease: 'easeInOut',
+      delay,
+    }}
   />
 );
 
@@ -40,7 +45,12 @@ const ScanLine = () => (
       opacity: 0.35,
     }}
     animate={{ top: ['0%', '100%'] }}
-    transition={{ duration: 5, repeat: Infinity, ease: 'linear', repeatDelay: 1.5 }}
+    transition={{
+      duration: 5,
+      repeat: Infinity,
+      ease: 'linear',
+      repeatDelay: 1.5,
+    }}
   />
 );
 
@@ -75,13 +85,19 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [focusedField, setFocusedField] = useState<string | null>(null);
 
-  const from = (location.state as { from?: Location })?.from?.pathname ?? '/admin';
+  const from =
+    (location.state as { from?: Location })?.from?.pathname ?? '/admin';
 
   useEffect(() => {
     if (isAuthenticated) navigate(from, { replace: true });
   }, [isAuthenticated, navigate, from]);
 
-  useEffect(() => () => { dispatch(clearError()); }, [dispatch]);
+  useEffect(
+    () => () => {
+      dispatch(clearError());
+    },
+    [dispatch]
+  );
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
@@ -95,7 +111,8 @@ const Login = () => {
 
   const errorMsg = !error
     ? null
-    : error.includes('Invalid login credentials') || error.includes('invalid_credentials')
+    : error.includes('Invalid login credentials') ||
+        error.includes('invalid_credentials')
       ? 'Invalid credentials — access denied.'
       : error.includes('Email not confirmed')
         ? 'Email unconfirmed. Check your inbox.'
@@ -104,11 +121,16 @@ const Login = () => {
           : 'Authentication failed. Try again.';
 
   const nodes = [
-    { x: 18, y: 22, delay: 0 },   { x: 52, y: 12, delay: 0.9 },
-    { x: 78, y: 30, delay: 1.5 }, { x: 28, y: 52, delay: 0.4 },
-    { x: 68, y: 62, delay: 2.1 }, { x: 88, y: 78, delay: 1.2 },
-    { x: 12, y: 78, delay: 1.8 }, { x: 42, y: 88, delay: 0.6 },
-    { x: 60, y: 45, delay: 2.6 }, { x: 35, y: 35, delay: 1.1 },
+    { x: 18, y: 22, delay: 0 },
+    { x: 52, y: 12, delay: 0.9 },
+    { x: 78, y: 30, delay: 1.5 },
+    { x: 28, y: 52, delay: 0.4 },
+    { x: 68, y: 62, delay: 2.1 },
+    { x: 88, y: 78, delay: 1.2 },
+    { x: 12, y: 78, delay: 1.8 },
+    { x: 42, y: 88, delay: 0.6 },
+    { x: 60, y: 45, delay: 2.6 },
+    { x: 35, y: 35, delay: 1.1 },
   ];
 
   const inputStyle = (field: string) => ({
@@ -123,7 +145,10 @@ const Login = () => {
   });
 
   return (
-    <div className="min-h-screen flex" style={{ backgroundColor: 'var(--bg-base)' }}>
+    <div
+      className="min-h-screen flex"
+      style={{ backgroundColor: 'var(--bg-base)' }}
+    >
       <HeaderHelmet title="Admin Login" />
 
       {/* Theme toggle */}
@@ -138,9 +163,11 @@ const Login = () => {
           color: 'var(--text-muted)',
         }}
       >
-        {theme === 'dark'
-          ? <ReactIcon name="RiSunLine" size={16} />
-          : <ReactIcon name="RiMoonLine" size={16} />}
+        {theme === 'dark' ? (
+          <ReactIcon name="RiSunLine" size={16} />
+        ) : (
+          <ReactIcon name="RiMoonLine" size={16} />
+        )}
       </motion.button>
 
       {/* ══════════════════════════════════════════
@@ -181,14 +208,37 @@ const Login = () => {
           className="absolute inset-0 w-full h-full pointer-events-none"
           style={{ opacity: 0.05 }}
         >
-          <line x1="0" y1="100%" x2="100%" y2="0" stroke="var(--accent)" strokeWidth="1" />
-          <line x1="0" y1="75%" x2="75%" y2="0" stroke="var(--accent)" strokeWidth="0.5" />
-          <line x1="25%" y1="100%" x2="100%" y2="25%" stroke="var(--accent)" strokeWidth="0.5" />
+          <line
+            x1="0"
+            y1="100%"
+            x2="100%"
+            y2="0"
+            stroke="var(--accent)"
+            strokeWidth="1"
+          />
+          <line
+            x1="0"
+            y1="75%"
+            x2="75%"
+            y2="0"
+            stroke="var(--accent)"
+            strokeWidth="0.5"
+          />
+          <line
+            x1="25%"
+            y1="100%"
+            x2="100%"
+            y2="25%"
+            stroke="var(--accent)"
+            strokeWidth="0.5"
+          />
         </svg>
 
         <ScanLine />
 
-        {nodes.map((n, i) => <GridNode key={i} {...n} />)}
+        {nodes.map((n, i) => (
+          <GridNode key={i} {...n} />
+        ))}
 
         {/* Coordinate markers */}
         {[
@@ -216,7 +266,11 @@ const Login = () => {
                 className="h-14 mx-auto mb-8 object-contain"
                 initial={{ opacity: 0, scale: 0.88 }}
                 animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.45, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+                transition={{
+                  delay: 0.45,
+                  duration: 0.7,
+                  ease: [0.22, 1, 0.36, 1],
+                }}
               />
             </Link>
           )}
@@ -224,7 +278,11 @@ const Login = () => {
           <motion.div
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.55, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+            transition={{
+              delay: 0.55,
+              duration: 0.7,
+              ease: [0.22, 1, 0.36, 1],
+            }}
           >
             <p
               className="text-[9px] font-mono tracking-[0.4em] uppercase mb-4"
@@ -236,14 +294,16 @@ const Login = () => {
               className="text-3xl xl:text-4xl font-bold leading-snug mb-4 font-display"
               style={{ color: 'var(--text-primary)' }}
             >
-              {info.name}<br />
+              {info.name}
+              <br />
               <span style={{ color: 'var(--accent)' }}>Admin</span> Portal
             </h2>
             <p
               className="text-xs font-mono leading-relaxed max-w-[260px] mx-auto"
               style={{ color: 'var(--text-muted)' }}
             >
-              Authorized personnel only.<br />
+              Authorized personnel only.
+              <br />
               All sessions are monitored and logged.
             </p>
           </motion.div>
@@ -266,7 +326,11 @@ const Login = () => {
                     className="w-1.5 h-1.5 rounded-full"
                     style={{ backgroundColor: 'var(--accent)' }}
                     animate={{ opacity: [1, 0.2, 1] }}
-                    transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+                    transition={{
+                      duration: 2,
+                      repeat: Infinity,
+                      ease: 'easeInOut',
+                    }}
                   />
                   <span
                     className="text-[9px] font-mono font-semibold"
@@ -332,7 +396,11 @@ const Login = () => {
             <motion.h1
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.45, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+              transition={{
+                delay: 0.45,
+                duration: 0.6,
+                ease: [0.22, 1, 0.36, 1],
+              }}
               className="text-3xl font-bold font-display"
               style={{ color: 'var(--text-primary)' }}
             >
@@ -373,7 +441,9 @@ const Login = () => {
                   className="flex items-center gap-2 text-[10px] font-mono tracking-widest uppercase mb-2"
                   style={{ color: 'var(--text-muted)' }}
                 >
-                  <span style={{ color: 'var(--accent)', fontWeight: 700 }}>01</span>
+                  <span style={{ color: 'var(--accent)', fontWeight: 700 }}>
+                    01
+                  </span>
                   Identifier
                 </label>
                 <div className="relative">
@@ -382,7 +452,10 @@ const Login = () => {
                     size={12}
                     className="absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none"
                     style={{
-                      color: focusedField === 'email' ? 'var(--accent)' : 'var(--text-muted)',
+                      color:
+                        focusedField === 'email'
+                          ? 'var(--accent)'
+                          : 'var(--text-muted)',
                       transition: 'color 0.2s',
                     }}
                   />
@@ -409,7 +482,9 @@ const Login = () => {
                   className="flex items-center gap-2 text-[10px] font-mono tracking-widest uppercase mb-2"
                   style={{ color: 'var(--text-muted)' }}
                 >
-                  <span style={{ color: 'var(--accent)', fontWeight: 700 }}>02</span>
+                  <span style={{ color: 'var(--accent)', fontWeight: 700 }}>
+                    02
+                  </span>
                   Passkey
                 </label>
                 <div className="relative">
@@ -418,7 +493,10 @@ const Login = () => {
                     size={12}
                     className="absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none"
                     style={{
-                      color: focusedField === 'password' ? 'var(--accent)' : 'var(--text-muted)',
+                      color:
+                        focusedField === 'password'
+                          ? 'var(--accent)'
+                          : 'var(--text-muted)',
                       transition: 'color 0.2s',
                     }}
                   />
@@ -440,9 +518,14 @@ const Login = () => {
                     onClick={() => setShowPassword((v) => !v)}
                     className="absolute right-3 top-1/2 -translate-y-1/2 transition-colors duration-200"
                     style={{ color: 'var(--text-muted)' }}
-                    aria-label={showPassword ? 'Hide password' : 'Show password'}
+                    aria-label={
+                      showPassword ? 'Hide password' : 'Show password'
+                    }
                   >
-                    <ReactIcon name={showPassword ? 'FaEyeSlash' : 'FaEye'} size={13} />
+                    <ReactIcon
+                      name={showPassword ? 'FaEyeSlash' : 'FaEye'}
+                      size={13}
+                    />
                   </button>
                 </div>
               </div>
@@ -492,7 +575,11 @@ const Login = () => {
                       <motion.span
                         className="w-3.5 h-3.5 rounded-full border-2 border-white/30 border-t-white inline-block"
                         animate={{ rotate: 360 }}
-                        transition={{ duration: 0.75, repeat: Infinity, ease: 'linear' }}
+                        transition={{
+                          duration: 0.75,
+                          repeat: Infinity,
+                          ease: 'linear',
+                        }}
                       />
                       AUTHENTICATING…
                     </>
@@ -521,7 +608,8 @@ const Login = () => {
               className="text-center text-[9px] font-mono select-none"
               style={{ color: 'var(--text-muted)', opacity: 0.35 }}
             >
-              {info.name.toUpperCase()} // SECURE ADMIN ACCESS // {new Date().getFullYear()}
+              {info.name.toUpperCase()} {'// SECURE ADMIN ACCESS //'}{' '}
+              {new Date().getFullYear()}
             </p>
           </div>
         </motion.div>

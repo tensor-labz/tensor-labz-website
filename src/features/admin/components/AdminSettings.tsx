@@ -28,13 +28,55 @@ interface Section {
 }
 
 const SECTIONS: Section[] = [
-  { id: 'general', label: 'General', icon: 'FaGlobe', color: '#38bdf8', bg: 'rgba(56,189,248,0.1)' },
-  { id: 'appearance', label: 'Appearance', icon: 'FaPalette', color: '#a78bfa', bg: 'rgba(167,139,250,0.1)' },
-  { id: 'integrations', label: 'Integrations', icon: 'FaPlug', color: '#34d399', bg: 'rgba(52,211,153,0.1)' },
-  { id: 'security', label: 'Security', icon: 'FaShieldAlt', color: '#fb923c', bg: 'rgba(251,146,60,0.1)' },
-  { id: 'pages', label: 'Pages', icon: 'FaColumns', color: '#818cf8', bg: 'rgba(129,140,248,0.1)' },
-  { id: 'tables', label: 'Tables', icon: 'FaTable', color: '#f472b6', bg: 'rgba(244,114,182,0.1)' },
-  { id: 'forms', label: 'Forms', icon: 'FaListAlt', color: '#fb923c', bg: 'rgba(251,146,60,0.1)' },
+  {
+    id: 'general',
+    label: 'General',
+    icon: 'FaGlobe',
+    color: '#38bdf8',
+    bg: 'rgba(56,189,248,0.1)',
+  },
+  {
+    id: 'appearance',
+    label: 'Appearance',
+    icon: 'FaPalette',
+    color: '#a78bfa',
+    bg: 'rgba(167,139,250,0.1)',
+  },
+  {
+    id: 'integrations',
+    label: 'Integrations',
+    icon: 'FaPlug',
+    color: '#34d399',
+    bg: 'rgba(52,211,153,0.1)',
+  },
+  {
+    id: 'security',
+    label: 'Security',
+    icon: 'FaShieldAlt',
+    color: '#fb923c',
+    bg: 'rgba(251,146,60,0.1)',
+  },
+  {
+    id: 'pages',
+    label: 'Pages',
+    icon: 'FaColumns',
+    color: '#818cf8',
+    bg: 'rgba(129,140,248,0.1)',
+  },
+  {
+    id: 'tables',
+    label: 'Tables',
+    icon: 'FaTable',
+    color: '#f472b6',
+    bg: 'rgba(244,114,182,0.1)',
+  },
+  {
+    id: 'forms',
+    label: 'Forms',
+    icon: 'FaListAlt',
+    color: '#fb923c',
+    bg: 'rgba(251,146,60,0.1)',
+  },
 ];
 
 /* ── Shared input ── */
@@ -82,7 +124,11 @@ const Input = ({
             className="absolute right-3 top-1/2 -translate-y-1/2"
             style={{ color: 'var(--text-muted)' }}
           >
-            {show ? <ReactIcon name="FaEyeSlash" size={13} /> : <ReactIcon name="FaEye" size={13} />}
+            {show ? (
+              <ReactIcon name="FaEyeSlash" size={13} />
+            ) : (
+              <ReactIcon name="FaEye" size={13} />
+            )}
           </button>
         )}
       </div>
@@ -136,7 +182,11 @@ const MaskedField = ({
           className="absolute right-3 top-1/2 -translate-y-1/2"
           style={{ color: 'var(--text-muted)' }}
         >
-          {reveal ? <ReactIcon name="FaEyeSlash" size={13} /> : <ReactIcon name="FaEye" size={13} />}
+          {reveal ? (
+            <ReactIcon name="FaEyeSlash" size={13} />
+          ) : (
+            <ReactIcon name="FaEye" size={13} />
+          )}
         </button>
       </div>
       {hint && (
@@ -475,7 +525,11 @@ const PageConfigSection = memo(() => {
                 }
                 title={visible ? 'Hide component' : 'Show component'}
               >
-                {visible ? <ReactIcon name="FaEye" size={11} /> : <ReactIcon name="FaEyeSlash" size={11} />}
+                {visible ? (
+                  <ReactIcon name="FaEye" size={11} />
+                ) : (
+                  <ReactIcon name="FaEyeSlash" size={11} />
+                )}
               </button>
             </motion.div>
           );
@@ -503,7 +557,8 @@ const PageConfigSection = memo(() => {
             </>
           ) : (
             <>
-              <ReactIcon name="FaSave" size={11} /> {saving ? 'Saving…' : 'Save Changes'}
+              <ReactIcon name="FaSave" size={11} />{' '}
+              {saving ? 'Saving…' : 'Save Changes'}
             </>
           )}
         </motion.button>
@@ -638,7 +693,11 @@ const ColRow = memo(
             }
             title="Advanced options"
           >
-            {expanded ? <ReactIcon name="FaChevronUp" size={9} /> : <ReactIcon name="FaChevronDown" size={9} />}
+            {expanded ? (
+              <ReactIcon name="FaChevronUp" size={9} />
+            ) : (
+              <ReactIcon name="FaChevronDown" size={9} />
+            )}
           </button>
         </div>
 
@@ -881,7 +940,8 @@ const TableColumnsSection = memo(() => {
             </>
           ) : (
             <>
-              <ReactIcon name="FaSave" size={11} /> {saving ? 'Saving…' : 'Save Changes'}
+              <ReactIcon name="FaSave" size={11} />{' '}
+              {saving ? 'Saving…' : 'Save Changes'}
             </>
           )}
         </motion.button>

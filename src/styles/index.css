@@ -5,7 +5,7 @@
 :root {
   /* light mode defaults */
   --bg-base: #f8fafc; /* slate-50  */
-  --grid-dot: rgba(100, 116, 139, 0.10); /* slate-500 @ 10% */
+  --grid-dot: rgba(100, 116, 139, 0.1); /* slate-500 @ 10% */
   --bg-surface: #ffffff; /* white     */
   --bg-raised: #f1f5f9; /* slate-100 */
   --text-primary: #0f172a; /* slate-900 */
@@ -154,7 +154,6 @@ body {
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
-
 
 .project-content h4 {
   font-size: 1.5rem;

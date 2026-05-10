@@ -79,7 +79,10 @@ const LatestHero: React.FC = memo(() => {
 
   const getImageClasses = (aspectRatio: number): string => {
     const containerRatio = 16 / 9;
-    if (aspectRatio > containerRatio * 1.2 || aspectRatio < containerRatio * 0.8) {
+    if (
+      aspectRatio > containerRatio * 1.2 ||
+      aspectRatio < containerRatio * 0.8
+    ) {
       return 'w-full h-full object-contain object-center';
     }
     return 'w-full h-full object-cover object-center';
@@ -128,7 +131,9 @@ const LatestHero: React.FC = memo(() => {
                 <img
                   src={images[currentIndex]}
                   alt={`Slide ${currentIndex + 1}`}
-                  className={getImageClasses(imageAspectRatios[currentIndex] ?? 1)}
+                  className={getImageClasses(
+                    imageAspectRatios[currentIndex] ?? 1
+                  )}
                   style={{ maxWidth: '100%', maxHeight: '100%' }}
                 />
               </motion.div>
@@ -145,8 +150,18 @@ const LatestHero: React.FC = memo(() => {
                 whileHover={{ scale: 1.15 }}
                 whileTap={{ scale: 0.9 }}
               >
-                <motion.svg className="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
+                <motion.svg
+                  className="w-4 h-4 md:w-5 md:h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2.5}
+                    d="M15 19l-7-7 7-7"
+                  />
                 </motion.svg>
               </motion.button>
 
@@ -158,8 +173,18 @@ const LatestHero: React.FC = memo(() => {
                 whileHover={{ scale: 1.15 }}
                 whileTap={{ scale: 0.9 }}
               >
-                <motion.svg className="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
+                <motion.svg
+                  className="w-4 h-4 md:w-5 md:h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2.5}
+                    d="M9 5l7 7-7 7"
+                  />
                 </motion.svg>
               </motion.button>
 
@@ -169,7 +194,10 @@ const LatestHero: React.FC = memo(() => {
                     key={index}
                     onClick={() => setCurrentIndex(index)}
                     className="h-1 rounded-full bg-accent transition-all"
-                    animate={{ width: index === currentIndex ? 20 : 6, opacity: index === currentIndex ? 1 : 0.4 }}
+                    animate={{
+                      width: index === currentIndex ? 20 : 6,
+                      opacity: index === currentIndex ? 1 : 0.4,
+                    }}
                     transition={{ duration: 0.3 }}
                   />
                 ))}

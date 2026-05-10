@@ -66,9 +66,7 @@ const AboutUs: React.FC = memo(() => {
       {/* ══════════════════════════════════════════════════
           HERO  — Three.js particle constellation background
       ══════════════════════════════════════════════════ */}
-      <section
-        className="relative flex items-center justify-center px-6 lg:px-16 text-center overflow-hidden pt-32 pb-16 lg:pt-36 lg:pb-20"
-      >
+      <section className="relative flex items-center justify-center px-6 lg:px-16 text-center overflow-hidden pt-32 pb-16 lg:pt-36 lg:pb-20">
         {/* Particle background */}
         <div className="absolute inset-0 z-0">
           <Suspense fallback={null}>
@@ -128,14 +126,18 @@ const AboutUs: React.FC = memo(() => {
               transition={{ duration: 0.6, delay: 0.5, ease: EASE_EXPO }}
               className="flex flex-wrap justify-center gap-2 mt-6"
             >
-              {info.domains.split(',').map((chip) => chip.trim()).filter(Boolean).map((chip) => (
-                <span
-                  key={chip}
-                  className="px-3 py-1 rounded border border-accent/30 bg-accent/5 text-accent text-[11px] font-mono tracking-wider uppercase"
-                >
-                  {chip}
-                </span>
-              ))}
+              {info.domains
+                .split(',')
+                .map((chip) => chip.trim())
+                .filter(Boolean)
+                .map((chip) => (
+                  <span
+                    key={chip}
+                    className="px-3 py-1 rounded border border-accent/30 bg-accent/5 text-accent text-[11px] font-mono tracking-wider uppercase"
+                  >
+                    {chip}
+                  </span>
+                ))}
             </motion.div>
           )}
 
@@ -149,14 +151,22 @@ const AboutUs: React.FC = memo(() => {
             >
               {info.vision && (
                 <div className="rounded-xl border border-glass-rim bg-glass-raised backdrop-blur-sm px-4 py-3">
-                  <p className="text-[9px] font-mono tracking-widest uppercase text-accent mb-1">◈ Vision</p>
-                  <p className="text-xs text-muted leading-relaxed line-clamp-3">{info.vision}</p>
+                  <p className="text-[9px] font-mono tracking-widest uppercase text-accent mb-1">
+                    ◈ Vision
+                  </p>
+                  <p className="text-xs text-muted leading-relaxed line-clamp-3">
+                    {info.vision}
+                  </p>
                 </div>
               )}
               {info.mission && (
                 <div className="rounded-xl border border-glass-rim bg-glass-raised backdrop-blur-sm px-4 py-3">
-                  <p className="text-[9px] font-mono tracking-widest uppercase text-accent mb-1">◈ Mission</p>
-                  <p className="text-xs text-muted leading-relaxed line-clamp-3">{info.mission}</p>
+                  <p className="text-[9px] font-mono tracking-widest uppercase text-accent mb-1">
+                    ◈ Mission
+                  </p>
+                  <p className="text-xs text-muted leading-relaxed line-clamp-3">
+                    {info.mission}
+                  </p>
                 </div>
               )}
             </motion.div>
@@ -211,10 +221,12 @@ const AboutUs: React.FC = memo(() => {
                   viewport={VIEWPORT}
                 >
                   <Card>
-                    <div
-                      className="w-12 h-12 rounded-xl flex items-center justify-center mb-6 bg-accent-soft"
-                    >
-                      <ReactIcon name="FaLightbulb" size={20} className="text-accent" />
+                    <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-6 bg-accent-soft">
+                      <ReactIcon
+                        name="FaLightbulb"
+                        size={20}
+                        className="text-accent"
+                      />
                     </div>
                     <h3 className="text-xl font-bold mb-4 text-fg font-display">
                       {get('about.our_vision')}
@@ -233,10 +245,12 @@ const AboutUs: React.FC = memo(() => {
                   viewport={VIEWPORT}
                 >
                   <Card>
-                    <div
-                      className="w-12 h-12 rounded-xl flex items-center justify-center mb-6 bg-accent-soft"
-                    >
-                      <ReactIcon name="FaRocket" size={20} className="text-accent" />
+                    <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-6 bg-accent-soft">
+                      <ReactIcon
+                        name="FaRocket"
+                        size={20}
+                        className="text-accent"
+                      />
                     </div>
                     <h3 className="text-xl font-bold mb-4 text-fg font-display">
                       {get('about.our_mission')}
@@ -269,9 +283,7 @@ const AboutUs: React.FC = memo(() => {
                 {get('about.story_title')}
               </h2>
               <Rule />
-              <p className="text-base leading-relaxed text-muted">
-                {whoWeAre}
-              </p>
+              <p className="text-base leading-relaxed text-muted">{whoWeAre}</p>
             </motion.div>
 
             <motion.div

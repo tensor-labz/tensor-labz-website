@@ -29,17 +29,21 @@ const Posts: React.FC = memo(() => {
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
-    return posts.filter((p) =>
-      !q ||
-      p.title.toLowerCase().includes(q) ||
-      (p.description ?? '').toLowerCase().includes(q) ||
-      p.tags.some((t) => t.toLowerCase().includes(q))
+    return posts.filter(
+      (p) =>
+        !q ||
+        p.title.toLowerCase().includes(q) ||
+        (p.description ?? '').toLowerCase().includes(q) ||
+        p.tags.some((t) => t.toLowerCase().includes(q))
     );
   }, [posts, query]);
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   const safePage = Math.min(page, totalPages);
-  const paginated = filtered.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE);
+  const paginated = filtered.slice(
+    (safePage - 1) * PAGE_SIZE,
+    safePage * PAGE_SIZE
+  );
 
   const handleQuery = (e: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value);
@@ -108,21 +112,25 @@ const Posts: React.FC = memo(() => {
           />
           {query && (
             <button
-              onClick={() => { setQuery(''); setPage(1); }}
+              onClick={() => {
+                setQuery('');
+                setPage(1);
+              }}
               className="absolute right-3 top-1/2 -translate-y-1/2 text-muted/50 hover:text-accent transition-colors"
             >
               <ReactIcon name="FiX" size={13} />
             </button>
           )}
         </div>
-
       </motion.div>
 
       {/* ── Posts ── */}
       <section className="px-6 lg:px-16 pb-16 max-w-7xl mx-auto">
         {isLoading ? (
           <div className="flex flex-col gap-6">
-            {Array.from({ length: 3 }).map((_, i) => <PostSkeleton key={i} />)}
+            {Array.from({ length: 3 }).map((_, i) => (
+              <PostSkeleton key={i} />
+            ))}
           </div>
         ) : filtered.length === 0 ? (
           <motion.div
@@ -131,8 +139,12 @@ const Posts: React.FC = memo(() => {
             viewport={VIEWPORT}
             className="text-center py-24"
           >
-            <p className="text-[10px] font-mono tracking-widest uppercase text-accent mb-3">◈ No Results</p>
-            <p className="text-muted text-sm">No posts match your search. Try different keywords.</p>
+            <p className="text-[10px] font-mono tracking-widest uppercase text-accent mb-3">
+              ◈ No Results
+            </p>
+            <p className="text-muted text-sm">
+              No posts match your search. Try different keywords.
+            </p>
           </motion.div>
         ) : (
           <div className="flex flex-col gap-6">
@@ -167,10 +179,18 @@ const Posts: React.FC = memo(() => {
 
             {Array.from({ length: totalPages }, (_, i) => i + 1).map((n) => {
               const isActive = n === safePage;
-              const isNear = Math.abs(n - safePage) <= 1 || n === 1 || n === totalPages;
+              const isNear =
+                Math.abs(n - safePage) <= 1 || n === 1 || n === totalPages;
               if (!isNear) {
                 if (n === safePage - 2 || n === safePage + 2)
-                  return <span key={n} className="text-muted/40 text-sm font-mono px-1">…</span>;
+                  return (
+                    <span
+                      key={n}
+                      className="text-muted/40 text-sm font-mono px-1"
+                    >
+                      …
+                    </span>
+                  );
                 return null;
               }
               return (
@@ -179,9 +199,10 @@ const Posts: React.FC = memo(() => {
                   onClick={() => setPage(n)}
                   className={`w-9 h-9 flex items-center justify-center rounded-lg border text-sm font-mono
                     transition-all duration-200
-                    ${isActive
-                      ? 'border-accent bg-accent/10 text-accent'
-                      : 'border-rim text-muted hover:border-accent/40 hover:text-accent/80'
+                    ${
+                      isActive
+                        ? 'border-accent bg-accent/10 text-accent'
+                        : 'border-rim text-muted hover:border-accent/40 hover:text-accent/80'
                     }`}
                 >
                   {n}
@@ -203,7 +224,8 @@ const Posts: React.FC = memo(() => {
 
         {!isLoading && filtered.length > 0 && (
           <p className="text-center text-[10px] font-mono text-muted/40 mt-4">
-            {filtered.length} post{filtered.length !== 1 ? 's' : ''} · page {safePage} of {totalPages}
+            {filtered.length} post{filtered.length !== 1 ? 's' : ''} · page{' '}
+            {safePage} of {totalPages}
           </p>
         )}
       </section>

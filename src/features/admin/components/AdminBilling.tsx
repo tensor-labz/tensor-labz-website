@@ -508,7 +508,11 @@ const AdminBilling = memo(() => {
           />
         </div>
         <div className="flex items-center gap-2">
-          <ReactIcon name="FaFilter" size={11} style={{ color: 'var(--text-muted)' }} />
+          <ReactIcon
+            name="FaFilter"
+            size={11}
+            style={{ color: 'var(--text-muted)' }}
+          />
           {(['All', 'Starter', 'Pro', 'Enterprise'] as const).map((p) => (
             <button
               key={p}

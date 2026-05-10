@@ -55,7 +55,11 @@ const Header: React.FC<{ className?: string }> = memo(({ className = '' }) => {
               bg-raised border border-rim
               transition-colors duration-200 text-base shrink-0"
           >
-            {theme === 'dark' ? <ReactIcon name="RiSunLine" size={16} /> : <ReactIcon name="RiMoonLine" size={16} />}
+            {theme === 'dark' ? (
+              <ReactIcon name="RiSunLine" size={16} />
+            ) : (
+              <ReactIcon name="RiMoonLine" size={16} />
+            )}
           </motion.button>
           <MobileNavigation />
         </div>

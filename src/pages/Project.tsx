@@ -92,9 +92,7 @@ const ProjectPage = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.5, duration: 0.5 }}
               >
-                <h2 className="text-2xl font-bold mb-4 text-fg">
-                  Demo
-                </h2>
+                <h2 className="text-2xl font-bold mb-4 text-fg">Demo</h2>
                 <iframe
                   src={project.vedio_demo}
                   title="YouTube Demo"
@@ -135,9 +133,7 @@ const ProjectPage = () => {
                     ))}
                   </div>
                 ) : (
-                  <p className="text-muted">
-                    No gallery images available.
-                  </p>
+                  <p className="text-muted">No gallery images available.</p>
                 )}
               </motion.div>
             </div>
@@ -192,9 +188,7 @@ const ProjectPage = () => {
                     )}
                   </div>
                 ) : (
-                  <p className="text-muted">
-                    No gallery images available.
-                  </p>
+                  <p className="text-muted">No gallery images available.</p>
                 )}
               </motion.div>
             </div>

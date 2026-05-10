@@ -93,9 +93,7 @@ const ServiceCard: React.FC<ServiceCardProps> = memo(
             {service_name}
           </h3>
           {/* Mobile inline description */}
-          <p className="text-sm sm:hidden block text-muted">
-            {description}
-          </p>
+          <p className="text-sm sm:hidden block text-muted">{description}</p>
         </div>
 
         {/* Hover reveal — dark overlay so text is always readable */}
@@ -111,7 +109,7 @@ const ServiceCard: React.FC<ServiceCardProps> = memo(
               translate-y-2 group-hover:translate-y-0
               transition-all duration-500 ease-in-out mb-1.5"
           >
-            // Description
+            {'// Description'}
           </p>
           <p
             className="text-slate-200 text-xs sm:text-sm leading-relaxed

@@ -51,7 +51,9 @@ const siteSettingsSlice = createSlice({
   },
 });
 
-export const selectSiteSettings = (state: RootState) => state.siteSettings.settings;
-export const selectSiteSettingsStatus = (state: RootState) => state.siteSettings.status;
+export const selectSiteSettings = (state: RootState) =>
+  state.siteSettings.settings;
+export const selectSiteSettingsStatus = (state: RootState) =>
+  state.siteSettings.status;
 
 export default siteSettingsSlice.reducer;

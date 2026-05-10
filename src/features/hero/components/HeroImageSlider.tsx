@@ -16,7 +16,7 @@ import type { HeroSlide } from '../../../services/heroService';
   Cube always rotates -π/2 per slide step so it never reverses direction.
 */
 const FACE_SLOT = [4, 0, 5, 1];
-const STEP      = -Math.PI / 2; // clockwise (viewed from above) per slide
+const STEP = -Math.PI / 2; // clockwise (viewed from above) per slide
 
 /* Draw image onto a 1024² canvas (cover-fit) → emissiveMap on MeshStandardMaterial.
    emissiveMap is unaffected by scene lighting so the image renders at full brightness. */
@@ -25,29 +25,29 @@ function applySlides(slides: HeroSlide[], mats: THREE.MeshStandardMaterial[]) {
     if (!slide.img) return;
     const img = new Image();
     img.crossOrigin = 'anonymous';
-    img.loading    = 'eager';
+    img.loading = 'eager';
     img.onload = () => {
       const S = 1024;
-      const canvas  = document.createElement('canvas');
-      canvas.width  = S;
+      const canvas = document.createElement('canvas');
+      canvas.width = S;
       canvas.height = S;
-      const ctx   = canvas.getContext('2d')!;
+      const ctx = canvas.getContext('2d')!;
       const scale = Math.max(S / img.naturalWidth, S / img.naturalHeight);
-      const dw    = img.naturalWidth  * scale;
-      const dh    = img.naturalHeight * scale;
+      const dw = img.naturalWidth * scale;
+      const dh = img.naturalHeight * scale;
       ctx.drawImage(img, (S - dw) / 2, (S - dh) / 2, dw, dh);
 
-      const tex      = new THREE.CanvasTexture(canvas);
+      const tex = new THREE.CanvasTexture(canvas);
       tex.colorSpace = THREE.SRGBColorSpace;
 
-      const mat        = mats[FACE_SLOT[i]];
-      mat.map          = null;
-      mat.color.set(0x000000);   // no diffuse contribution
-      mat.emissiveMap  = tex;
+      const mat = mats[FACE_SLOT[i]];
+      mat.map = null;
+      mat.color.set(0x000000); // no diffuse contribution
+      mat.emissiveMap = tex;
       mat.emissive.set(0xffffff);
-      mat.roughness    = 1.0;
-      mat.metalness    = 0.0;
-      mat.needsUpdate  = true;
+      mat.roughness = 1.0;
+      mat.metalness = 0.0;
+      mat.needsUpdate = true;
     };
     img.onerror = (err) => console.error('[HeroImageSlider]', slide.img, err);
     img.src = slide.img;
@@ -55,13 +55,13 @@ function applySlides(slides: HeroSlide[], mats: THREE.MeshStandardMaterial[]) {
 }
 
 const HeroImageSlider: React.FC = memo(() => {
-  const mountRef    = useRef<HTMLDivElement>(null);
+  const mountRef = useRef<HTMLDivElement>(null);
   const materialsRef = useRef<THREE.MeshStandardMaterial[]>([]);
-  const targetQ     = useRef(new THREE.Quaternion());
-  const currentQ    = useRef(new THREE.Quaternion());
-  const prevIndex   = useRef(0);
+  const targetQ = useRef(new THREE.Quaternion());
+  const currentQ = useRef(new THREE.Quaternion());
+  const prevIndex = useRef(0);
 
-  const slides       = useAppSelector(selectHeroSlides);
+  const slides = useAppSelector(selectHeroSlides);
   const currentIndex = useAppSelector(selectCurrentIndex);
 
   const slidesRef = useRef(slides);
@@ -74,7 +74,7 @@ const HeroImageSlider: React.FC = memo(() => {
     if (steps === 0) return;
     const dq = new THREE.Quaternion().setFromAxisAngle(
       new THREE.Vector3(0, 1, 0),
-      steps * STEP,
+      steps * STEP
     );
     targetQ.current.premultiply(dq);
   }, [currentIndex]);
@@ -89,8 +89,13 @@ const HeroImageSlider: React.FC = memo(() => {
     renderer.setSize(el.clientWidth, el.clientHeight);
     el.appendChild(renderer.domElement);
 
-    const scene  = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(42, el.clientWidth / el.clientHeight, 0.1, 100);
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(
+      42,
+      el.clientWidth / el.clientHeight,
+      0.1,
+      100
+    );
     camera.position.set(0, 0, 5.5);
 
     /* minimal lighting — image faces are emissive (light-independent) */
@@ -101,7 +106,11 @@ const HeroImageSlider: React.FC = memo(() => {
 
     /* cube */
     const makeDark = (hex: number) =>
-      new THREE.MeshStandardMaterial({ color: hex, metalness: 0.15, roughness: 0.85 });
+      new THREE.MeshStandardMaterial({
+        color: hex,
+        metalness: 0.15,
+        roughness: 0.85,
+      });
 
     const materials: THREE.MeshStandardMaterial[] = [
       makeDark(0x0d1b2a), // +X
@@ -113,7 +122,10 @@ const HeroImageSlider: React.FC = memo(() => {
     ];
     materialsRef.current = materials;
 
-    const cube = new THREE.Mesh(new THREE.BoxGeometry(2.8, 2.8, 2.8), materials);
+    const cube = new THREE.Mesh(
+      new THREE.BoxGeometry(2.8, 2.8, 2.8),
+      materials
+    );
     scene.add(cube);
 
     if (slidesRef.current.length) applySlides(slidesRef.current, materials);
@@ -122,37 +134,54 @@ const HeroImageSlider: React.FC = memo(() => {
     const wireMesh = new THREE.Mesh(
       new RoundedBoxGeometry(2.82, 2.82, 2.82, 4, 0.22),
       new THREE.MeshBasicMaterial({
-        color: 0x38bdf8, wireframe: true,
-        transparent: true, opacity: 0.07, depthWrite: false,
-      }),
+        color: 0x38bdf8,
+        wireframe: true,
+        transparent: true,
+        opacity: 0.07,
+        depthWrite: false,
+      })
     );
     scene.add(wireMesh);
 
     /* glowing rounded edge silhouette */
     const edgesMat = new THREE.LineBasicMaterial({
-      color: 0x38bdf8, transparent: true, opacity: 0.75,
-      blending: THREE.AdditiveBlending, depthWrite: false,
+      color: 0x38bdf8,
+      transparent: true,
+      opacity: 0.75,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false,
     });
     const edges = new THREE.LineSegments(
-      new THREE.EdgesGeometry(new RoundedBoxGeometry(2.88, 2.88, 2.88, 4, 0.22), 15),
-      edgesMat,
+      new THREE.EdgesGeometry(
+        new RoundedBoxGeometry(2.88, 2.88, 2.88, 4, 0.22),
+        15
+      ),
+      edgesMat
     );
     scene.add(edges);
 
     /* background particles */
     const ptPos = new Float32Array(100 * 3);
     for (let i = 0; i < 100; i++) {
-      ptPos[i * 3]     = (Math.random() - 0.5) * 14;
+      ptPos[i * 3] = (Math.random() - 0.5) * 14;
       ptPos[i * 3 + 1] = (Math.random() - 0.5) * 14;
       ptPos[i * 3 + 2] = (Math.random() - 0.5) * 6 - 3;
     }
     const pGeo = new THREE.BufferGeometry();
     pGeo.setAttribute('position', new THREE.BufferAttribute(ptPos, 3));
-    scene.add(new THREE.Points(pGeo, new THREE.PointsMaterial({
-      color: 0x7dd3fc, size: 0.04,
-      transparent: true, opacity: 0.4,
-      blending: THREE.AdditiveBlending, depthWrite: false,
-    })));
+    scene.add(
+      new THREE.Points(
+        pGeo,
+        new THREE.PointsMaterial({
+          color: 0x7dd3fc,
+          size: 0.04,
+          transparent: true,
+          opacity: 0.4,
+          blending: THREE.AdditiveBlending,
+          depthWrite: false,
+        })
+      )
+    );
 
     /* animation */
     const clock = new THREE.Clock();
@@ -167,10 +196,10 @@ const HeroImageSlider: React.FC = memo(() => {
       wireMesh.setRotationFromQuaternion(currentQ.current);
       edges.setRotationFromQuaternion(currentQ.current);
 
-      const floatY        = Math.sin(t * 0.55) * 0.09;
-      cube.position.y     = floatY;
+      const floatY = Math.sin(t * 0.55) * 0.09;
+      cube.position.y = floatY;
       wireMesh.position.y = floatY;
-      edges.position.y    = floatY;
+      edges.position.y = floatY;
 
       edgesMat.opacity = 0.6 + Math.sin(t * 1.6) * 0.18;
 
@@ -179,7 +208,8 @@ const HeroImageSlider: React.FC = memo(() => {
     animate();
 
     const ro = new ResizeObserver(() => {
-      const nw = el.clientWidth, nh = el.clientHeight;
+      const nw = el.clientWidth,
+        nh = el.clientHeight;
       camera.aspect = nw / nh;
       camera.updateProjectionMatrix();
       renderer.setSize(nw, nh);
@@ -189,7 +219,7 @@ const HeroImageSlider: React.FC = memo(() => {
     return () => {
       cancelAnimationFrame(raf);
       ro.disconnect();
-      materials.forEach(m => m.dispose());
+      materials.forEach((m) => m.dispose());
       renderer.dispose();
       if (el.contains(renderer.domElement)) el.removeChild(renderer.domElement);
     };

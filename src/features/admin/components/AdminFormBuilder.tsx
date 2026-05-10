@@ -24,17 +24,53 @@ interface FieldDraft {
 
 const TYPES: { value: FieldType; label: string; icon: React.ReactNode }[] = [
   { value: 'text', label: 'Text', icon: <ReactIcon name="FaFont" size={11} /> },
-  { value: 'textarea', label: 'Textarea', icon: <ReactIcon name="FaAlignLeft" size={11} /> },
-  { value: 'richtext', label: 'Rich Text', icon: <ReactIcon name="FaCode" size={11} /> },
+  {
+    value: 'textarea',
+    label: 'Textarea',
+    icon: <ReactIcon name="FaAlignLeft" size={11} />,
+  },
+  {
+    value: 'richtext',
+    label: 'Rich Text',
+    icon: <ReactIcon name="FaCode" size={11} />,
+  },
   { value: 'url', label: 'URL', icon: <ReactIcon name="FaLink" size={11} /> },
-  { value: 'image', label: 'Image', icon: <ReactIcon name="FaImage" size={11} /> },
-  { value: 'images', label: 'Multi-Image', icon: <ReactIcon name="FaImages" size={11} /> },
-  { value: 'toggle', label: 'Toggle', icon: <ReactIcon name="FaToggleOn" size={11} /> },
-  { value: 'checkbox', label: 'Checkbox', icon: <ReactIcon name="FaCheckSquare" size={11} /> },
+  {
+    value: 'image',
+    label: 'Image',
+    icon: <ReactIcon name="FaImage" size={11} />,
+  },
+  {
+    value: 'images',
+    label: 'Multi-Image',
+    icon: <ReactIcon name="FaImages" size={11} />,
+  },
+  {
+    value: 'toggle',
+    label: 'Toggle',
+    icon: <ReactIcon name="FaToggleOn" size={11} />,
+  },
+  {
+    value: 'checkbox',
+    label: 'Checkbox',
+    icon: <ReactIcon name="FaCheckSquare" size={11} />,
+  },
   { value: 'tags', label: 'Tags', icon: <ReactIcon name="FaTags" size={11} /> },
-  { value: 'multiinput', label: 'Multi-Input', icon: <ReactIcon name="FaList" size={11} /> },
-  { value: 'radio', label: 'Radio', icon: <ReactIcon name="FaDotCircle" size={11} /> },
-  { value: 'select', label: 'Select', icon: <ReactIcon name="FaCaretDown" size={11} /> },
+  {
+    value: 'multiinput',
+    label: 'Multi-Input',
+    icon: <ReactIcon name="FaList" size={11} />,
+  },
+  {
+    value: 'radio',
+    label: 'Radio',
+    icon: <ReactIcon name="FaDotCircle" size={11} />,
+  },
+  {
+    value: 'select',
+    label: 'Select',
+    icon: <ReactIcon name="FaCaretDown" size={11} />,
+  },
 ];
 
 const typeIcon = (t: FieldType) => TYPES.find((x) => x.value === t)?.icon;
@@ -445,7 +481,11 @@ const AdminFormBuilder = memo(() => {
               color: '#fff',
             }}
           >
-            {saved ? <ReactIcon name="FaCheck" size={12} /> : <ReactIcon name="FaSave" size={12} />}
+            {saved ? (
+              <ReactIcon name="FaCheck" size={12} />
+            ) : (
+              <ReactIcon name="FaSave" size={12} />
+            )}
             <span>{saved ? 'Saved!' : saving ? 'Saving…' : 'Save'}</span>
           </motion.button>
         </div>

@@ -34,42 +34,100 @@ const CircuitTraces = () => (
     preserveAspectRatio="xMidYMid slice"
     xmlns="http://www.w3.org/2000/svg"
   >
-    <path d="M -20 90 L 110 90 L 110 170 L 260 170" stroke="rgba(56,189,248,0.12)" strokeWidth="1.5" fill="none" />
+    <path
+      d="M -20 90 L 110 90 L 110 170 L 260 170"
+      stroke="rgba(56,189,248,0.12)"
+      strokeWidth="1.5"
+      fill="none"
+    />
     <circle r="3" fill="rgba(56,189,248,0.8)">
-      <animateMotion dur="4s" repeatCount="indefinite"
-        path="M -20 90 L 110 90 L 110 170 L 260 170" />
+      <animateMotion
+        dur="4s"
+        repeatCount="indefinite"
+        path="M -20 90 L 110 90 L 110 170 L 260 170"
+      />
     </circle>
 
-    <path d="M -20 430 L 70 430 L 70 350 L 190 350 L 190 290" stroke="rgba(56,189,248,0.09)" strokeWidth="1" fill="none" />
+    <path
+      d="M -20 430 L 70 430 L 70 350 L 190 350 L 190 290"
+      stroke="rgba(56,189,248,0.09)"
+      strokeWidth="1"
+      fill="none"
+    />
     <circle r="2.5" fill="rgba(56,189,248,0.6)">
-      <animateMotion dur="5.5s" repeatCount="indefinite" begin="1.2s"
-        path="M -20 430 L 70 430 L 70 350 L 190 350 L 190 290" />
+      <animateMotion
+        dur="5.5s"
+        repeatCount="indefinite"
+        begin="1.2s"
+        path="M -20 430 L 70 430 L 70 350 L 190 350 L 190 290"
+      />
     </circle>
 
-    <path d="M 1220 100 L 1090 100 L 1090 180 L 980 180" stroke="rgba(56,189,248,0.09)" strokeWidth="1" fill="none" />
+    <path
+      d="M 1220 100 L 1090 100 L 1090 180 L 980 180"
+      stroke="rgba(56,189,248,0.09)"
+      strokeWidth="1"
+      fill="none"
+    />
     <circle r="2.5" fill="rgba(56,189,248,0.6)">
-      <animateMotion dur="4.8s" repeatCount="indefinite" begin="0.6s"
-        path="M 1220 100 L 1090 100 L 1090 180 L 980 180" />
+      <animateMotion
+        dur="4.8s"
+        repeatCount="indefinite"
+        begin="0.6s"
+        path="M 1220 100 L 1090 100 L 1090 180 L 980 180"
+      />
     </circle>
 
-    <path d="M 1220 420 L 1120 420 L 1120 340 L 1010 340" stroke="rgba(56,189,248,0.07)" strokeWidth="1" fill="none" />
+    <path
+      d="M 1220 420 L 1120 420 L 1120 340 L 1010 340"
+      stroke="rgba(56,189,248,0.07)"
+      strokeWidth="1"
+      fill="none"
+    />
     <circle r="2" fill="rgba(56,189,248,0.45)">
-      <animateMotion dur="6s" repeatCount="indefinite" begin="2s"
-        path="M 1220 420 L 1120 420 L 1120 340 L 1010 340" />
+      <animateMotion
+        dur="6s"
+        repeatCount="indefinite"
+        begin="2s"
+        path="M 1220 420 L 1120 420 L 1120 340 L 1010 340"
+      />
     </circle>
 
-    <path d="M 300 280 L 420 280 L 420 240 L 520 240" stroke="rgba(56,189,248,0.06)" strokeWidth="1" fill="none" />
+    <path
+      d="M 300 280 L 420 280 L 420 240 L 520 240"
+      stroke="rgba(56,189,248,0.06)"
+      strokeWidth="1"
+      fill="none"
+    />
     <circle r="1.5" fill="rgba(56,189,248,0.35)">
-      <animateMotion dur="3.5s" repeatCount="indefinite" begin="0.8s"
-        path="M 300 280 L 420 280 L 420 240 L 520 240" />
+      <animateMotion
+        dur="3.5s"
+        repeatCount="indefinite"
+        begin="0.8s"
+        path="M 300 280 L 420 280 L 420 240 L 520 240"
+      />
     </circle>
 
     {[
-      [110, 90], [110, 170], [70, 350], [190, 350],
-      [1090, 100], [1090, 180], [1120, 340], [420, 280], [420, 240],
+      [110, 90],
+      [110, 170],
+      [70, 350],
+      [190, 350],
+      [1090, 100],
+      [1090, 180],
+      [1120, 340],
+      [420, 280],
+      [420, 240],
     ].map(([cx, cy], i) => (
       <g key={i}>
-        <circle cx={cx} cy={cy} r="3.5" fill="none" stroke="rgba(56,189,248,0.20)" strokeWidth="1" />
+        <circle
+          cx={cx}
+          cy={cy}
+          r="3.5"
+          fill="none"
+          stroke="rgba(56,189,248,0.20)"
+          strokeWidth="1"
+        />
         <circle cx={cx} cy={cy} r="1.5" fill="rgba(56,189,248,0.35)" />
       </g>
     ))}
@@ -89,7 +147,9 @@ const PostDetail: React.FC = memo(() => {
               animate={{ rotate: 360 }}
               transition={{ duration: 0.9, repeat: Infinity, ease: 'linear' }}
             />
-            <p className="text-[10px] font-mono tracking-widest uppercase text-accent/60">Loading post…</p>
+            <p className="text-[10px] font-mono tracking-widest uppercase text-accent/60">
+              Loading post…
+            </p>
           </div>
         </div>
       </Page>
@@ -100,10 +160,19 @@ const PostDetail: React.FC = memo(() => {
     return (
       <Page HeadProps={{ title: '404 — Post Not Found' }}>
         <div className="min-h-screen flex flex-col items-center justify-center gap-4 px-6 text-center">
-          <p className="text-[10px] font-mono tracking-widest uppercase text-accent">◈ 404</p>
-          <h1 className="text-3xl font-bold font-display text-fg">Post not found</h1>
-          <p className="text-muted text-sm">This post may have been removed or is not yet published.</p>
-          <Link to="/posts" className="mt-4 inline-flex items-center gap-2 text-sm text-accent hover:underline font-mono">
+          <p className="text-[10px] font-mono tracking-widest uppercase text-accent">
+            ◈ 404
+          </p>
+          <h1 className="text-3xl font-bold font-display text-fg">
+            Post not found
+          </h1>
+          <p className="text-muted text-sm">
+            This post may have been removed or is not yet published.
+          </p>
+          <Link
+            to="/posts"
+            className="mt-4 inline-flex items-center gap-2 text-sm text-accent hover:underline font-mono"
+          >
             <ReactIcon name="FiArrowLeft" size={14} /> Back to Posts
           </Link>
         </div>
@@ -113,12 +182,15 @@ const PostDetail: React.FC = memo(() => {
 
   const socialLinks = post.social_links;
   const date = post.created_at
-    ? new Date(post.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+    ? new Date(post.created_at).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      })
     : '';
 
   return (
     <Page HeadProps={{ title: post.meta_title || post.title }}>
-
       {/* ── Hero ── */}
       <div className="relative bg-slate-950 overflow-hidden pt-24 pb-14 lg:pt-32 lg:pb-20">
         <CircuitTraces />
@@ -126,7 +198,8 @@ const PostDetail: React.FC = memo(() => {
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
-            backgroundImage: 'radial-gradient(rgba(56,189,248,0.06) 1px, transparent 1px)',
+            backgroundImage:
+              'radial-gradient(rgba(56,189,248,0.06) 1px, transparent 1px)',
             backgroundSize: '24px 24px',
           }}
         />
@@ -135,7 +208,6 @@ const PostDetail: React.FC = memo(() => {
 
         <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
-
             {/* ── Left: metadata ── */}
             <motion.div
               initial={{ opacity: 0, x: -28 }}
@@ -249,11 +321,15 @@ const PostDetail: React.FC = memo(() => {
                       {post.cover_media_type === 'video' && (
                         <video
                           src={post.cover_image}
-                          autoPlay muted loop playsInline
+                          autoPlay
+                          muted
+                          loop
+                          playsInline
                           className="w-full h-full object-cover"
                         />
                       )}
-                      {(post.cover_media_type === 'image' || post.cover_media_type === 'drive_image') && (
+                      {(post.cover_media_type === 'image' ||
+                        post.cover_media_type === 'drive_image') && (
                         <img
                           src={post.cover_image}
                           alt={post.title}
@@ -273,12 +349,19 @@ const PostDetail: React.FC = memo(() => {
                       <motion.div
                         className="absolute left-0 right-0 h-px bg-gradient-to-r from-transparent via-accent/60 to-transparent pointer-events-none"
                         animate={{ top: ['0%', '100%'] }}
-                        transition={{ duration: 3.5, repeat: Infinity, ease: 'linear', repeatDelay: 2.5 }}
+                        transition={{
+                          duration: 3.5,
+                          repeat: Infinity,
+                          ease: 'linear',
+                          repeatDelay: 2.5,
+                        }}
                       />
                     </div>
 
                     <div className="flex items-center justify-between px-3 py-1.5 border-t border-accent/10 bg-slate-950/50">
-                      <span className="text-[9px] font-mono text-slate-600">● LIVE</span>
+                      <span className="text-[9px] font-mono text-slate-600">
+                        ● LIVE
+                      </span>
                       <div className="flex items-center gap-2">
                         {[...Array(5)].map((_, i) => (
                           <div
@@ -308,21 +391,27 @@ const PostDetail: React.FC = memo(() => {
                   </div>
                 </div>
               ) : (
-                <div className="aspect-[16/10] rounded-xl border border-accent/20 bg-slate-900/50
-                  flex flex-col items-center justify-center gap-3">
-                  <ReactIcon name="FaNewspaper" size={48} className="text-accent/15" />
-                  <span className="text-[10px] font-mono text-slate-600 tracking-widest">NO MEDIA</span>
+                <div
+                  className="aspect-[16/10] rounded-xl border border-accent/20 bg-slate-900/50
+                  flex flex-col items-center justify-center gap-3"
+                >
+                  <ReactIcon
+                    name="FaNewspaper"
+                    size={48}
+                    className="text-accent/15"
+                  />
+                  <span className="text-[10px] font-mono text-slate-600 tracking-widest">
+                    NO MEDIA
+                  </span>
                 </div>
               )}
             </motion.div>
-
           </div>
         </div>
       </div>
 
       {/* ── Post content ── */}
       <main className="max-w-4xl mx-auto px-6 lg:px-8 py-14">
-
         {post.description && (
           <motion.div
             initial={{ opacity: 0, x: -12 }}
@@ -330,7 +419,9 @@ const PostDetail: React.FC = memo(() => {
             transition={{ delay: 0.2, ease: EASE_EXPO }}
             className="border-l-2 border-accent pl-4 mb-10 py-1"
           >
-            <p className="text-muted text-sm leading-relaxed italic">{post.description}</p>
+            <p className="text-muted text-sm leading-relaxed italic">
+              {post.description}
+            </p>
           </motion.div>
         )}
 
@@ -340,7 +431,9 @@ const PostDetail: React.FC = memo(() => {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3, ease: EASE_EXPO }}
-            dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post.content) }}
+            dangerouslySetInnerHTML={{
+              __html: DOMPurify.sanitize(post.content),
+            }}
           />
         )}
 
@@ -348,7 +441,9 @@ const PostDetail: React.FC = memo(() => {
 
         {socialLinks.length > 0 && (
           <div className="mt-12 pt-6 border-t border-rim flex items-center gap-3 flex-wrap">
-            <span className="text-[10px] font-mono tracking-widest uppercase text-muted">◈ Share</span>
+            <span className="text-[10px] font-mono tracking-widest uppercase text-muted">
+              ◈ Share
+            </span>
             {socialLinks.map(({ platform, url }) => (
               <a
                 key={platform}

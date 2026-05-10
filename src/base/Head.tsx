@@ -27,7 +27,10 @@ export default function HeaderHelment({
       <meta name="theme-color" content="#1245de" />
       {/* Open Graph */}
       <meta name="og:title" content={og?.title ?? siteName} />
-      <meta name="og:description" content={og?.description ?? siteDescription} />
+      <meta
+        name="og:description"
+        content={og?.description ?? siteDescription}
+      />
       <meta name="og:image" content={og?.image ?? logo} />
       <meta name="og:type" content="website" />
       <meta name="og:url" content={window.location.href} />
@@ -39,7 +42,10 @@ export default function HeaderHelment({
       <meta name="twitter:site" content={siteName} />
       <meta name="twitter:creator" content={appData.author} />
       <meta name="twitter:title" content={og?.title ?? siteName} />
-      <meta name="twitter:description" content={og?.description ?? siteDescription} />
+      <meta
+        name="twitter:description"
+        content={og?.description ?? siteDescription}
+      />
       <meta name="twitter:image" content={og?.image ?? logo} />
       <meta name="twitter:image:alt" content={og?.title ?? siteName} />
       <meta name="twitter:image:width" content="1200" />

@@ -12,7 +12,9 @@ export async function fetchSiteSettings(): Promise<SiteSettings> {
   );
 }
 
-export async function upsertSiteSettings(settings: SiteSettings): Promise<void> {
+export async function upsertSiteSettings(
+  settings: SiteSettings
+): Promise<void> {
   const rows = Object.entries(settings).map(([key, value]) => ({ key, value }));
   const { error } = await supabase
     .from('site_settings')

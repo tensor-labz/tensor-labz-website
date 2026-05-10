@@ -26,7 +26,12 @@ import ReactIcon from '../../../shared/components/ui/ReactIcon';
 const MODULE_META = [
   { id: 'hero', name: 'Hero', icon: 'FaImages', color: '#38bdf8' },
   { id: 'services', name: 'Services', icon: 'FaCogs', color: '#818cf8' },
-  { id: 'projects', name: 'Projects', icon: 'FaProjectDiagram', color: '#34d399' },
+  {
+    id: 'projects',
+    name: 'Projects',
+    icon: 'FaProjectDiagram',
+    color: '#34d399',
+  },
   { id: 'about', name: 'About', icon: 'FaInfoCircle', color: '#fb923c' },
   { id: 'contact', name: 'Contact', icon: 'FaEnvelope', color: '#f472b6' },
   { id: 'social', name: 'Social', icon: 'FaAddressBook', color: '#a78bfa' },
@@ -338,7 +343,11 @@ const AdminOverview = memo(() => {
                   className="w-7 h-7 flex items-center justify-center rounded-lg shrink-0"
                   style={{ backgroundColor: s.bg, color: s.color }}
                 >
-                  {s.up ? <ReactIcon name="FaArrowUp" size={11} /> : <ReactIcon name="FaArrowDown" size={11} />}
+                  {s.up ? (
+                    <ReactIcon name="FaArrowUp" size={11} />
+                  ) : (
+                    <ReactIcon name="FaArrowDown" size={11} />
+                  )}
                 </span>
               </div>
               <p

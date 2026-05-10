@@ -18,7 +18,7 @@ const ServiceHero: FC = memo(() => {
         description: get('services.description'),
       }
     );
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [services, activeSlug]);
 
   return (
