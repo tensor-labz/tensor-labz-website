@@ -11,7 +11,6 @@ import AdminDataTable from '../features/admin/components/AdminDataTable';
 import AdminCrudForm from '../features/admin/components/AdminCrudForm';
 import AdminFormBuilder from '../features/admin/components/AdminFormBuilder';
 import AdminSiteControl from '../features/admin/components/AdminSiteControl';
-import AdminUsers from '../features/admin/components/AdminUsers';
 import AdminBilling from '../features/admin/components/AdminBilling';
 import AdminSettings from '../features/admin/components/AdminSettings';
 import HeaderHelmet from '../base/Head';
@@ -79,7 +78,7 @@ const AdminDashboard = memo(() => {
           <span
             className="text-xs hidden sm:block text-muted"
           >
-            {user?.email}
+            {user?.displayName || user?.email}
           </span>
 
           <motion.button
@@ -123,7 +122,6 @@ const AdminDashboard = memo(() => {
         <main className="flex-1 min-h-0 overflow-y-auto lg:ml-56">
           <Routes>
             <Route index element={<AdminOverview />} />
-            <Route path="users" element={<AdminUsers />} />
             <Route path="billing" element={<AdminBilling />} />
             <Route path="settings" element={<AdminSettings />} />
             <Route path="site-control" element={<AdminSiteControl />} />

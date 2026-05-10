@@ -1,4 +1,5 @@
 import { supabase } from '../lib/supabase';
+import { type CoverTypeValue } from '../shared/components/ui/CoverTypeSelect';
 
 export interface PostSocialLink {
   id: number;
@@ -6,7 +7,7 @@ export interface PostSocialLink {
   url: string;
 }
 
-export type CoverMediaType = 'image' | 'video' | 'youtube' | 'drive_image' | 'drive_video';
+export type CoverMediaType = CoverTypeValue;
 
 export interface PostAdditionalMedia {
   id: number;

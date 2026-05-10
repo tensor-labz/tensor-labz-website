@@ -11,7 +11,7 @@ import type { RootState } from '../app/store';
 
 /* ── Types ─────────────────────────────────────────────────────────────── */
 
-export type AdminRecord = Record<string, unknown> & { id: number };
+export type AdminRecord = Record<string, unknown> & { id: number | string };
 
 type LoadStatus = 'idle' | 'loading' | 'succeeded' | 'failed';
 
@@ -21,7 +21,7 @@ interface CurrentState {
   error: string | null;
 }
 
-interface ModuleState extends EntityState<AdminRecord, number> {
+interface ModuleState extends EntityState<AdminRecord, number | string> {
   status: LoadStatus;
   error: string | null;
   current: CurrentState;
@@ -36,7 +36,7 @@ interface AdminState {
 
 /* ── Entity adapter ─────────────────────────────────────────────────────── */
 
-const recordAdapter = createEntityAdapter<AdminRecord, number>({
+const recordAdapter = createEntityAdapter<AdminRecord, number | string>({
   selectId: (entity) => entity.id,
 });
 
@@ -51,11 +51,9 @@ const initialModuleState = (): ModuleState => ({
 
 export const fetchRecords = createAsyncThunk(
   'admin/fetchRecords',
-  async (moduleId: string) => {
-    const { data, error } = await supabase
-      .from(moduleId)
-      .select('*')
-      .order('id');
+  async ({ moduleId, tableId }: { moduleId: string; tableId?: string }) => {
+    const tid = tableId ?? moduleId;
+    const { data, error } = await supabase.from(tid).select('*').order('id');
     if (error) throw new Error(error.message);
     return { moduleId, records: (data ?? []) as AdminRecord[] };
   }
@@ -63,12 +61,10 @@ export const fetchRecords = createAsyncThunk(
 
 export const fetchRecord = createAsyncThunk(
   'admin/fetchRecord',
-  async ({ moduleId, id }: { moduleId: string; id: number }) => {
-    const { data, error } = await supabase
-      .from(moduleId)
-      .select('*')
-      .eq('id', id)
-      .single();
+  async ({ moduleId, id, tableId }: { moduleId: string; id: number | string; tableId?: string }) => {
+    if (!id || (typeof id === 'number' && isNaN(id))) throw new Error('Invalid record id');
+    const tid = tableId ?? moduleId;
+    const { data, error } = await supabase.from(tid).select('*').eq('id', id).single();
     if (error) throw new Error(error.message);
     return { moduleId, record: data as AdminRecord };
   }
@@ -76,18 +72,9 @@ export const fetchRecord = createAsyncThunk(
 
 export const createRecord = createAsyncThunk(
   'admin/createRecord',
-  async ({
-    moduleId,
-    data,
-  }: {
-    moduleId: string;
-    data: Record<string, unknown>;
-  }) => {
-    const { data: result, error } = await supabase
-      .from(moduleId)
-      .insert(data)
-      .select()
-      .single();
+  async ({ moduleId, data, tableId }: { moduleId: string; data: Record<string, unknown>; tableId?: string }) => {
+    const tid = tableId ?? moduleId;
+    const { data: result, error } = await supabase.from(tid).insert(data).select().single();
     if (error) throw new Error(error.message);
     return { moduleId, record: result as AdminRecord };
   }
@@ -95,21 +82,9 @@ export const createRecord = createAsyncThunk(
 
 export const updateRecord = createAsyncThunk(
   'admin/updateRecord',
-  async ({
-    moduleId,
-    id,
-    data,
-  }: {
-    moduleId: string;
-    id: number;
-    data: Record<string, unknown>;
-  }) => {
-    const { data: result, error } = await supabase
-      .from(moduleId)
-      .update(data)
-      .eq('id', id)
-      .select()
-      .single();
+  async ({ moduleId, id, data, tableId }: { moduleId: string; id: number | string; data: Record<string, unknown>; tableId?: string }) => {
+    const tid = tableId ?? moduleId;
+    const { data: result, error } = await supabase.from(tid).update(data).eq('id', id).select().single();
     if (error) throw new Error(error.message);
     return { moduleId, record: result as AdminRecord };
   }
@@ -117,20 +92,13 @@ export const updateRecord = createAsyncThunk(
 
 export const deleteRecord = createAsyncThunk(
   'admin/deleteRecord',
-  async ({
-    moduleId,
-    id,
-    imageKeys,
-  }: {
-    moduleId: string;
-    id: number;
-    imageKeys?: string[];
-  }) => {
+  async ({ moduleId, id, imageKeys, tableId }: { moduleId: string; id: number | string; imageKeys?: string[]; tableId?: string }) => {
     if (imageKeys?.length) {
       const { deleteImages } = await import('../lib/imageUpload');
       await deleteImages(imageKeys).catch(() => {});
     }
-    const { error } = await supabase.from(moduleId).delete().eq('id', id);
+    const tid = tableId ?? moduleId;
+    const { error } = await supabase.from(tid).delete().eq('id', id);
     if (error) throw new Error(error.message);
     return { moduleId, id };
   }
@@ -213,17 +181,20 @@ const adminSlice = createSlice({
     builder
       /* fetchRecords */
       .addCase(fetchRecords.pending, (state, { meta }) => {
-        ensureModule(state, meta.arg);
-        state.modules[meta.arg].status = 'loading';
-        state.modules[meta.arg].error = null;
+        const mid = meta.arg.moduleId;
+        ensureModule(state, mid);
+        state.modules[mid].status = 'loading';
+        state.modules[mid].error = null;
       })
       .addCase(fetchRecords.fulfilled, (state, { payload }) => {
+        ensureModule(state, payload.moduleId);
         recordAdapter.setAll(state.modules[payload.moduleId], payload.records);
         state.modules[payload.moduleId].status = 'succeeded';
       })
       .addCase(fetchRecords.rejected, (state, { meta, error }) => {
-        state.modules[meta.arg].status = 'failed';
-        state.modules[meta.arg].error = error.message ?? 'Fetch failed';
+        const mid = meta.arg.moduleId;
+        state.modules[mid].status = 'failed';
+        state.modules[mid].error = error.message ?? 'Fetch failed';
       })
 
       /* fetchRecord */

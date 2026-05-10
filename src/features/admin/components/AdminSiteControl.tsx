@@ -220,7 +220,7 @@ const CompanyInfoTab = ({
   });
 
   const refreshContact = useCallback(() => {
-    dispatch(fetchRecords('contact'));
+    dispatch(fetchRecords({ moduleId: 'contact' }));
   }, [dispatch]);
 
   useEffect(() => {
@@ -242,7 +242,7 @@ const CompanyInfoTab = ({
       await dispatch(updateRecord({ moduleId: 'contact', id: contactEdit as number, data: payload }));
     }
     setContactEdit(null);
-    dispatch(fetchRecords('contact'));
+    dispatch(fetchRecords({ moduleId: 'contact' }));
   };
 
   /* ── Social CRUD ── */
@@ -257,7 +257,7 @@ const CompanyInfoTab = ({
   });
 
   const refreshSocial = useCallback(() => {
-    dispatch(fetchRecords('social'));
+    dispatch(fetchRecords({ moduleId: 'social' }));
   }, [dispatch]);
 
   useEffect(() => {
@@ -277,7 +277,7 @@ const CompanyInfoTab = ({
       }}));
     }
     setSocialEdit(null);
-    dispatch(fetchRecords('social'));
+    dispatch(fetchRecords({ moduleId: 'social' }));
   };
 
   return (
@@ -573,7 +573,7 @@ const CompanyInfoTab = ({
                   <IconBtn
                     onClick={async () => {
                       await dispatch(deleteRecord({ moduleId: 'contact', id: row.id! }));
-                      dispatch(fetchRecords('contact'));
+                      dispatch(fetchRecords({ moduleId: 'contact' }));
                     }}
                     icon="FaTrash"
                     title="Delete"
@@ -736,7 +736,7 @@ const CompanyInfoTab = ({
                   <IconBtn
                     onClick={async () => {
                       await dispatch(deleteRecord({ moduleId: 'social', id: row.id! }));
-                      dispatch(fetchRecords('social'));
+                      dispatch(fetchRecords({ moduleId: 'social' }));
                     }}
                     icon="FaTrash"
                     title="Delete"
@@ -820,7 +820,7 @@ const HeroSlidesTab = () => {
   const [loading, setLoading] = useState(true);
 
   const refresh = useCallback(() => {
-    dispatch(fetchRecords('hero'));
+    dispatch(fetchRecords({ moduleId: 'hero' }));
   }, [dispatch]);
 
   useEffect(() => {
@@ -843,7 +843,7 @@ const HeroSlidesTab = () => {
       await dispatch(updateRecord({ moduleId: 'hero', id: editId as number, data: payload }));
     }
     setEditId(null);
-    dispatch(fetchRecords('hero'));
+    dispatch(fetchRecords({ moduleId: 'hero' }));
   };
 
   const startEdit = (row: HeroRow) => {
@@ -956,7 +956,7 @@ const HeroSlidesTab = () => {
                 <IconBtn
                   onClick={async () => {
                     await dispatch(deleteRecord({ moduleId: 'hero', id: row.id! }));
-                    dispatch(fetchRecords('hero'));
+                    dispatch(fetchRecords({ moduleId: 'hero' }));
                   }}
                   icon="FaTrash"
                   title="Delete"
@@ -1053,7 +1053,7 @@ const AboutMediaTab = () => {
   const [loading, setLoading] = useState(true);
 
   const refresh = useCallback(() => {
-    dispatch(fetchRecords('about_media'));
+    dispatch(fetchRecords({ moduleId: 'about_media' }));
   }, [dispatch]);
 
   useEffect(() => {
@@ -1074,7 +1074,7 @@ const AboutMediaTab = () => {
       await dispatch(updateRecord({ moduleId: 'about_media', id: editId as number, data: payload }));
     }
     setEditId(null);
-    dispatch(fetchRecords('about_media'));
+    dispatch(fetchRecords({ moduleId: 'about_media' }));
   };
 
   const startEdit = (row: MediaRow) => {
@@ -1194,7 +1194,7 @@ const AboutMediaTab = () => {
                 <IconBtn
                   onClick={async () => {
                     await dispatch(deleteRecord({ moduleId: 'about_media', id: row.id! }));
-                    dispatch(fetchRecords('about_media'));
+                    dispatch(fetchRecords({ moduleId: 'about_media' }));
                   }}
                   icon="FaTrash"
                   title="Delete"
@@ -1561,7 +1561,7 @@ const AdminSiteControl = memo(() => {
   const companyRecords = useAppSelector(selectCompanyRecords);
 
   useEffect(() => {
-    dispatch(fetchRecords('company_info'));
+    dispatch(fetchRecords({ moduleId: 'company_info' }));
   }, [dispatch]);
 
   useEffect(() => {

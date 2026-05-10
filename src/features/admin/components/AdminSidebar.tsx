@@ -7,6 +7,9 @@ import { MODULES } from '../config/modules';
 /* Modules consolidated into Site Control — hidden from the main sidebar */
 const SITE_CONTROL_IDS = new Set(['contact', 'social', 'about']);
 
+/* Modules shown under Management section instead of the Modules list */
+const MANAGEMENT_IDS = new Set(['users', 'customers', 'orders']);
+
 interface AdminSidebarProps {
   open: boolean;
   onClose: () => void;
@@ -22,6 +25,8 @@ const AdminSidebar = memo(({ open, onClose }: AdminSidebarProps) => {
   const isOverview =
     location.pathname === '/admin' || location.pathname === '/admin/';
   const isUsers = location.pathname.startsWith('/admin/users');
+  const isCustomers = location.pathname.startsWith('/admin/customers');
+  const isOrders = location.pathname.startsWith('/admin/orders');
   const isBilling = location.pathname.startsWith('/admin/billing');
   const isSettings = location.pathname.startsWith('/admin/settings');
   const isSiteControl =
@@ -100,10 +105,11 @@ const AdminSidebar = memo(({ open, onClose }: AdminSidebarProps) => {
         icon="FaGlobe"
         label="Site Control"
       />
-      {MODULES.filter((mod) => !SITE_CONTROL_IDS.has(mod.id)).map((mod) => {
+      {MODULES.filter((mod) => !SITE_CONTROL_IDS.has(mod.id) && !MANAGEMENT_IDS.has(mod.id)).map((mod) => {
         const isActive =
           !isOverview &&
           !isUsers &&
+          !isCustomers &&
           !isBilling &&
           !isSettings &&
           !isSiteControl &&
@@ -135,6 +141,18 @@ const AdminSidebar = memo(({ open, onClose }: AdminSidebarProps) => {
         onClick={() => handleNav('/admin/users')}
         icon="FaUsers"
         label="Users"
+      />
+      <NavBtn
+        isActive={isCustomers}
+        onClick={() => handleNav('/admin/customers')}
+        icon="FaAddressCard"
+        label="Customers"
+      />
+      <NavBtn
+        isActive={isOrders}
+        onClick={() => handleNav('/admin/orders')}
+        icon="FaClipboardList"
+        label="Orders"
       />
       <NavBtn
         isActive={isBilling}
