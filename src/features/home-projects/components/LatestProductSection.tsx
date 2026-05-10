@@ -237,13 +237,13 @@ const LatestProductSection: React.FC = memo(() => {
         className="text-center mb-10 px-6 lg:px-16"
       >
         <p className="text-[10px] font-mono tracking-[0.3em] uppercase text-accent mb-3">
-          {get('projects.label', '◈ Featured Work')}
+          {get('projects.label')}
         </p>
         <h2 className="text-2xl sm:text-4xl font-bold font-display text-fg">
-          {get('projects.title', 'Our Latest Projects')}
+          {get('projects.title')}
         </h2>
         <p className="text-muted text-base mt-2">
-          {get('projects.description', 'Selected engineering projects and innovations.')}
+          {get('projects.description')}
         </p>
       </motion.div>
 

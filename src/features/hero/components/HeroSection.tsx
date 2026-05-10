@@ -17,6 +17,7 @@ import {
 } from '../../../store/servicesSlice';
 import { selectCurrentSlide } from '../../../store/heroSlice';
 import { useCompanyInfo } from '../../../shared/hooks/useCompanyInfo';
+import { useSiteSettings } from '../../../shared/hooks/useSiteSettings';
 import ReactIcon from '../../../shared/components/ui/ReactIcon';
 import { EASE_EXPO } from '../../../lib/motion';
 
@@ -37,6 +38,7 @@ const HeroSection: React.FC = memo(() => {
 
   const slide = useAppSelector(selectCurrentSlide);
   const { tagline } = useCompanyInfo();
+  const { get } = useSiteSettings();
 
   const projects = useAppSelector(selectAllProjects);
   const projectsStatus = useAppSelector(selectProjectsStatus);
@@ -46,19 +48,19 @@ const HeroSection: React.FC = memo(() => {
   const stats = [
     {
       value: `${projects.length}+`,
-      label: 'Projects',
+      label: get('hero.stat_projects'),
       icon: 'FaCube',
       loading: projectsStatus === 'idle' || projectsStatus === 'loading',
     },
     {
       value: `${services.length}+`,
-      label: 'Services',
+      label: get('hero.stat_services'),
       icon: 'FaRobot',
       loading: servicesStatus === 'idle' || servicesStatus === 'loading',
     },
     {
       value: `${new Date().getFullYear() - 2023}+`,
-      label: 'Years',
+      label: get('hero.stat_years'),
       icon: 'FaBolt',
       loading: false,
     },
@@ -176,7 +178,7 @@ const HeroSection: React.FC = memo(() => {
           >
             {stats.map(({ value, label, icon, loading }) =>
               loading ? (
-                <div key={label} className="flex items-center gap-2">
+                <div key={icon} className="flex items-center gap-2">
                   <motion.div
                     className="w-3 h-3 rounded-full bg-accent"
                     animate={{ scale: [1, 1.4, 1], opacity: [1, 0.5, 1] }}
@@ -188,7 +190,7 @@ const HeroSection: React.FC = memo(() => {
                   />
                 </div>
               ) : (
-                <div key={label} className="flex items-center gap-2.5">
+                <div key={icon} className="flex items-center gap-2.5">
                   <ReactIcon
                     name={icon}
                     className="text-xl shrink-0 text-accent"

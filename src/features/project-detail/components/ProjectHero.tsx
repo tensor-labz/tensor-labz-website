@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { useAppSelector } from '../../../app/hooks';
 import { selectServices } from '../../../store/servicesSlice';
 import ReactIcon from '../../../shared/components/ui/ReactIcon';
-import data from '../../../data/data';
+
 import { EASE_EXPO } from '../../../lib/motion';
 
 interface ProjectHeroProps {
@@ -74,11 +74,6 @@ const ProjectHero: React.FC<ProjectHeroProps> = ({
         animate={{ opacity: 1 }}
         transition={{ duration: 0.7 }}
       >
-        <img
-          src={data?.project?.hero?.bg?.sm}
-          alt="Hero Background"
-          className="w-full h-full object-cover"
-        />
         <div className="absolute inset-0 bg-gradient-to-b from-slate-950/30 via-slate-900/50 to-slate-950/70" />
       </motion.div>
 

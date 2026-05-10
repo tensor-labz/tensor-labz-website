@@ -56,7 +56,7 @@ const Posts: React.FC = memo(() => {
           transition={{ duration: 0.5 }}
           className="text-[10px] font-mono tracking-[0.3em] uppercase text-accent mb-4"
         >
-          {get('posts.label', '◈ Tensor Labz // Posts')}
+          {get('posts.label')}
         </motion.p>
         <motion.h1
           initial={{ opacity: 0, y: -16 }}
@@ -64,7 +64,7 @@ const Posts: React.FC = memo(() => {
           transition={{ duration: 0.6, delay: 0.1, ease: EASE_EXPO }}
           className="text-3xl sm:text-5xl font-bold font-display text-fg mb-3"
         >
-          {get('posts.title', 'Insights & Updates')}
+          {get('posts.title')}
         </motion.h1>
         <motion.div
           initial={{ width: 0 }}
@@ -78,7 +78,7 @@ const Posts: React.FC = memo(() => {
           transition={{ duration: 0.6, delay: 0.3 }}
           className="text-muted text-base max-w-xl mx-auto"
         >
-          {get('posts.description', 'Engineering articles, project deep-dives, and technical insights from the Tensor Labz team.')}
+          {get('posts.description')}
         </motion.p>
       </section>
 

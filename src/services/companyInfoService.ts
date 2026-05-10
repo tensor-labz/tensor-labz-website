@@ -22,42 +22,24 @@ export interface CompanyInfo {
   who_we_are: string;
   vision: string;
   mission: string;
+  domains: string; // comma-separated capability tags e.g. "Mechatronics,PCB Design"
   contact_rows: ContactRow[];
   social_links: SocialLink[];
 }
 
 export const DEFAULTS: CompanyInfo = {
-  name: 'Tensor Labs',
-  tagline: 'Creating Sustainable Impact Through Technology',
-  description:
-    'Empowering creators and problem-solvers through research, innovation, and practical application.',
+  name: '',
+  tagline: '',
+  description: '',
   logo_url: '',
   logo_url_dark: '',
-  available_hours: 'Mon – Fri: 8:00 AM – 6:00 PM',
+  available_hours: '',
   who_we_are: '',
   vision: '',
   mission: '',
-  contact_rows: [
-    { type: 'address', title: 'Address', value: 'Jaffna, Sri Lanka' },
-    { type: 'email', title: 'Email', value: 'tensoragri@gmail.com' },
-    { type: 'phone', title: 'Phone', value: '+94 070-595-1199' },
-    {
-      type: 'hours',
-      title: 'Available Hours',
-      value: 'Mon – Fri: 8:00 AM – 6:00 PM',
-    },
-  ],
-  social_links: [
-    { platform: 'WhatsApp', url: 'https://wa.me/+94705359369' },
-    { platform: 'Facebook', url: 'https://www.facebook.com/tensorlabs.tech' },
-    {
-      platform: 'LinkedIn',
-      url: 'https://www.linkedin.com/company/tensoragri',
-    },
-    { platform: 'Instagram', url: 'https://www.instagram.com/tensorlabs.tech' },
-    { platform: 'TikTok', url: 'https://www.tiktok.com/@tensoragri' },
-    { platform: 'YouTube', url: 'https://www.youtube.com/@TENSORAGRI' },
-  ],
+  domains: '',
+  contact_rows: [],
+  social_links: [],
 };
 
 export async function fetchCompanyInfo(signal?: AbortSignal): Promise<CompanyInfo> {
@@ -106,6 +88,7 @@ export async function fetchCompanyInfo(signal?: AbortSignal): Promise<CompanyInf
     who_we_are: (ci?.who_we_are as string) || DEFAULTS.who_we_are,
     vision: (ci?.vision as string) || DEFAULTS.vision,
     mission: (ci?.mission as string) || DEFAULTS.mission,
+    domains: (ci?.domains as string) || DEFAULTS.domains,
     contact_rows: contactRows,
     social_links: socialLinks,
   };

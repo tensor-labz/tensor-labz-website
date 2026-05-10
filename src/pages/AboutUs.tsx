@@ -4,6 +4,7 @@ import ReactIcon from '../shared/components/ui/ReactIcon';
 import Page from '../components/resuable/Page';
 import { useAboutController } from '../features/about/hooks/useAboutController';
 import { useCompanyInfo } from '../shared/hooks/useCompanyInfo';
+import { useSiteSettings } from '../shared/hooks/useSiteSettings';
 import MediaGallery from '../features/about/components/MediaGallery';
 import { fadeUp, VIEWPORT, EASE_EXPO } from '../lib/motion';
 
@@ -54,11 +55,10 @@ const SkeletonCard = () => (
 const AboutUs: React.FC = memo(() => {
   const { aboutData, isLoading } = useAboutController();
   const info = useCompanyInfo();
+  const { get } = useSiteSettings();
 
-  const companyName = info.name || 'About Us';
-  const description =
-    info.description ||
-    'Empowering creators and problem-solvers through research, innovation, and practical application.';
+  const companyName = info.name;
+  const description = info.description;
   const whoWeAre = info.who_we_are || '';
 
   return (
@@ -92,7 +92,7 @@ const AboutUs: React.FC = memo(() => {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.05 }}
           >
-            <Label>Who We Are</Label>
+            <Label>{get('about.hero_label')}</Label>
           </motion.div>
 
           <motion.h1
@@ -121,21 +121,23 @@ const AboutUs: React.FC = memo(() => {
           </motion.p>
 
           {/* Domain capability chips */}
-          <motion.div
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.5, ease: EASE_EXPO }}
-            className="flex flex-wrap justify-center gap-2 mt-6"
-          >
-            {['Mechatronics', '3D CAD Modeling', 'PCB Design', 'Embedded Systems'].map((chip) => (
-              <span
-                key={chip}
-                className="px-3 py-1 rounded border border-accent/30 bg-accent/5 text-accent text-[11px] font-mono tracking-wider uppercase"
-              >
-                {chip}
-              </span>
-            ))}
-          </motion.div>
+          {info.domains && (
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.5, ease: EASE_EXPO }}
+              className="flex flex-wrap justify-center gap-2 mt-6"
+            >
+              {info.domains.split(',').map((chip) => chip.trim()).filter(Boolean).map((chip) => (
+                <span
+                  key={chip}
+                  className="px-3 py-1 rounded border border-accent/30 bg-accent/5 text-accent text-[11px] font-mono tracking-wider uppercase"
+                >
+                  {chip}
+                </span>
+              ))}
+            </motion.div>
+          )}
 
           {/* Mission / Vision inline preview */}
           {(info.vision || info.mission) && (
@@ -193,9 +195,9 @@ const AboutUs: React.FC = memo(() => {
               viewport={VIEWPORT}
               className="text-center mb-12"
             >
-              <Label>What Drives Us</Label>
+              <Label>{get('about.vision_label')}</Label>
               <h2 className="text-3xl md:text-4xl font-bold text-fg font-display">
-                Vision &amp; Mission
+                {get('about.vision_title')}
               </h2>
               <Rule center />
             </motion.div>
@@ -215,7 +217,7 @@ const AboutUs: React.FC = memo(() => {
                       <ReactIcon name="FaLightbulb" size={20} className="text-accent" />
                     </div>
                     <h3 className="text-xl font-bold mb-4 text-fg font-display">
-                      Our Vision
+                      {get('about.our_vision')}
                     </h3>
                     <p className="text-sm leading-relaxed text-muted">
                       {info.vision}
@@ -237,7 +239,7 @@ const AboutUs: React.FC = memo(() => {
                       <ReactIcon name="FaRocket" size={20} className="text-accent" />
                     </div>
                     <h3 className="text-xl font-bold mb-4 text-fg font-display">
-                      Our Mission
+                      {get('about.our_mission')}
                     </h3>
                     <p className="text-sm leading-relaxed text-muted">
                       {info.mission}
@@ -262,9 +264,9 @@ const AboutUs: React.FC = memo(() => {
               whileInView="visible"
               viewport={VIEWPORT}
             >
-              <Label>Our Story</Label>
+              <Label>{get('about.story_label')}</Label>
               <h2 className="text-3xl md:text-4xl font-bold leading-tight mb-2 text-fg font-display">
-                Building a Better Tomorrow
+                {get('about.story_title')}
               </h2>
               <Rule />
               <p className="text-base leading-relaxed text-muted">
@@ -286,8 +288,7 @@ const AboutUs: React.FC = memo(() => {
                 />
                 <p className="text-lg md:text-xl leading-relaxed font-medium italic mb-6 text-fg">
                   &ldquo;
-                  {info.tagline ||
-                    'Creating Sustainable Impact Through Technology'}
+                  {info.tagline}
                   &rdquo;
                 </p>
                 <div className="h-px mb-4 border-t border-glass-rim" />
@@ -312,9 +313,9 @@ const AboutUs: React.FC = memo(() => {
             viewport={VIEWPORT}
             className="text-center mb-12"
           >
-            <Label>In Focus</Label>
+            <Label>{get('about.media_label')}</Label>
             <h2 className="text-3xl md:text-4xl font-bold text-fg font-display">
-              Our Work &amp; Story
+              {get('about.media_title')}
             </h2>
             <Rule center />
           </motion.div>
@@ -344,9 +345,9 @@ const AboutUs: React.FC = memo(() => {
               viewport={VIEWPORT}
               className="text-center mb-12"
             >
-              <Label>Key Facts</Label>
+              <Label>{get('about.facts_label')}</Label>
               <h2 className="text-3xl md:text-4xl font-bold text-fg font-display">
-                By the Numbers
+                {get('about.facts_title')}
               </h2>
               <Rule center />
             </motion.div>

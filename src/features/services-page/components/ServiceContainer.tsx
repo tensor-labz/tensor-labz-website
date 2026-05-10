@@ -5,11 +5,12 @@ import ProjectCard from './ProjectCard';
 import ServiceEmpty from './ServiceEmpty';
 import ServiceLoading from './ServiceLoading';
 import { useServicesPageController } from '../hooks/useServicesPageController';
-import data from '../../../data/data';
+import { useSiteSettings } from '../../../shared/hooks/useSiteSettings';
 
 function ServiceContainer() {
   const { filteredProjects, totalItems, isLoading, itemsPerPage } =
     useServicesPageController();
+  const { get } = useSiteSettings();
 
   if (isLoading) return <ServiceLoading />;
 
@@ -28,7 +29,7 @@ function ServiceContainer() {
             fontFamily: '"Syne", sans-serif',
           }}
         >
-          {data?.insight?.title ?? 'Our Services'}
+          {get('services.title')}
         </h2>
         <div
           className="flex-1 h-px"
