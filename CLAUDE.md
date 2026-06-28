@@ -46,6 +46,20 @@ src/app/hooks.ts                    ← useAppSelector / useAppDispatch
 - Navigation must use `useNavigate` from `react-router-dom`, never `window.location.href`.
 - Use `useAppSelector` / `useAppDispatch` typed hooks — never raw `useSelector` / `useDispatch`.
 
+### Shared content components
+
+The posts and services list pages are built from ONE reusable, data-driven set in `src/shared/components/` — do **not** reintroduce per-page card/list/pagination/hero components:
+
+- `layout/ContentHeader` — sticky page header (eyebrow, title, description, optional search, accent glow); publishes its height as the `--page-header-h` CSS var so a sidebar can sit below it. Also used by the project detail page (`ProjectHero`).
+- `ui/ContentCard` — content card with normalized props `{ id, title, imgUrl, tags, description, link, created_at }` (+ `reverse`). Uniform desktop height (`md:h-56`) with the image filling via `object-cover`.
+- `ui/ContentList` — vertical list of `ContentCard`s with `loadingState` / `emptyState` slots.
+- `ui/ContentPagination` — controlled prev/next + numbered paging (`page`, `totalPages`, `onPageChange`, optional `summary`).
+- `ui/ContentPage` — composes `ContentHeader` + optional `sidebar` + `ContentList` + `ContentPagination`; pages just map data into it.
+
+`src/pages/Posts.tsx` and `src/pages/Services.tsx` are thin wrappers over `ContentPage`. The **services page** derives its active service from the URL `:slug` (source of truth — loads the correct list immediately on entry/refresh/back-forward), searches via `?q`, paginates via `?page`, and renders `ServiceFilterDrawer` through `ContentPage`'s `sidebar` slot. Route is `/services` (all) and `/services/:slug` (one) — no `/services/all` redirect.
+
+> `src/features/home-services/components/ServiceCard.tsx` is the **home page** service-category card and is separate from the content components above.
+
 ---
 
 ## Admin Dashboard
@@ -369,15 +383,16 @@ Key field names returned by the API (do not rename in TypeScript interfaces):
 ### Branch strategy
 
 ```
-dev  →  staging  →  main
-         ↓              ↓
-      Firebase      AWS Amplify
-      (staging)     (production)
+feature/fix branch  →  staging  →  main
+                          ↓            ↓
+                       Firebase     AWS Amplify
+                       (staging)    (production)
 ```
 
-- All dev work happens on `dev`.
-- Merge `dev` → `staging` to deploy to Firebase Hosting for QA/UAT.
+- Branch off `staging` for any work (`fix/*`, `feat/*`, `style/*`, `refactor/*`), then open a PR into `staging`.
+- `staging` deploys to Firebase Hosting for QA/UAT.
 - Merge `staging` → `main` to release on AWS Amplify (production). Amplify triggers automatically — do not deploy manually.
+- Enforced by `.github/workflows/enforce-flow.yml`: any branch may PR into `staging`, but `main` accepts PRs **only** from `staging`. (The earlier `dev → staging` funnel was dropped.)
 
 ---
 

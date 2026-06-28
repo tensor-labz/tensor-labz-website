@@ -15,9 +15,11 @@ Built with React 18, TypeScript, Vite, and Tailwind CSS.
 | Styling    | Tailwind CSS 3                      |
 | Animations | Motion (motion/react)               |
 | Routing    | React Router v7                     |
+| State      | Redux Toolkit                       |
 | Icons      | React Icons                         |
 | SEO        | React Helmet                        |
-| Data       | Google Sheets API (via Apps Script) |
+| Data       | Supabase (Postgres + Auth); Google Sheets (legacy CMS) |
+| Images     | AWS S3 via Lambda (pre-signed URLs) |
 
 ---
 
@@ -36,15 +38,19 @@ npm install
 
 ### Environment variables
 
-Copy the example env file and fill in your Google Sheets script URL:
+Copy the example env file and fill in your values:
 
 ```bash
 cp .env.example .env
 ```
 
-| Variable         | Description                                              |
-| ---------------- | -------------------------------------------------------- |
-| `VITE_SHEET_URL` | Google Apps Script web app URL (ends with `?sheetName=`) |
+| Variable                                          | Description                                  |
+| ------------------------------------------------- | -------------------------------------------- |
+| `VITE_SUPABASE_URL` / `VITE_SUPABASE_ANON_KEY`    | Supabase project URL + public anon key       |
+| `VITE_FIREBASE_*`                                 | Firebase web config (staging hosting/analytics) |
+| `VITE_IMAGE_LAMBDA_URL`                           | Image-upload Lambda API Gateway base URL     |
+| `VITE_S3_BUCKET` / `VITE_S3_REGION` / `VITE_CDN_URL` | S3 bucket / region / CDN for stored images |
+| `VITE_SHEET_URL`                                  | Google Apps Script CMS URL (optional — Latest news only) |
 
 ### Run locally
 
@@ -70,35 +76,41 @@ npm run preview
 
 ```
 src/
-├── pages/              # Route-level page components
-├── components/
-│   ├── layout/         # Header, Footer, NavBar, MobileNavigation
-│   ├── Page/           # Page-specific sections (Home, Service, Project, etc.)
-│   ├── resuable/       # Shared wrapper components (Page, Section)
-│   └── PlaceHolders/   # Loading states and ErrorBoundary
-├── contexts/
-│   ├── Api/            # Data contexts (AppContext, ServiceApiContext, etc.)
-│   ├── DeviceContext   # Responsive breakpoint detection
-│   ├── HeroContext     # Hero slider state
-│   └── ServiceContext  # Active service tab state
-├── data/               # Static config (nav, services, app meta)
-├── base/               # Custom hooks, TypeScript types, utilities
-├── routes/             # AppRoutes component
-├── styles/             # Global CSS
-└── assets/             # Images organized by page
+├── app/                # configureStore, AppProviders, typed hooks
+├── pages/              # Route-level pages (Home, Services, Posts, Project, Login, Admin…)
+├── features/{name}/    # Feature-colocated: components/ (pure UI) + hooks/ (controllers)
+├── shared/
+│   ├── components/ui/     # Reusable UI — ContentPage, ContentCard, ContentList,
+│   │                      #   ContentPagination, ReactIcon, Card, Section…
+│   ├── components/layout/ # Header, Footer, NavBar, MobileNavigation, ContentHeader
+│   ├── hooks/             # useTheme, useDevice, useSiteSettings…
+│   └── types/ utils/      # shared types and helpers
+├── store/              # Redux slices (createSlice + createAsyncThunk)
+├── services/           # Data-fetch layer (Supabase / Sheets)
+├── lib/                # supabase client, motion presets, helpers
+├── components/         # resuable Page wrapper, ProtectedRoute, placeholders
+├── routes/             # AppRoutes
+├── data/               # Static config (nav, etc.)
+├── styles/             # Global CSS + Tailwind layers
+└── assets/             # Images
 ```
 
 ---
 
 ## Pages
 
-| Route             | Page                     |
-| ----------------- | ------------------------ |
-| `/`               | Home                     |
-| `/about-us`       | About Us                 |
-| `/contact-us`     | Contact Us               |
-| `/services/:slug` | Services (dynamic)       |
-| `/project/:slug`  | Project detail (dynamic) |
+| Route                  | Page                            |
+| ---------------------- | ------------------------------- |
+| `/`                    | Home                            |
+| `/about-us`            | About Us                        |
+| `/contact-us`          | Contact Us                      |
+| `/services`            | Services — all projects         |
+| `/services/:slug`      | Services — filtered by service  |
+| `/project/:slug`       | Project detail (dynamic)        |
+| `/posts`               | Posts & articles                |
+| `/posts/:slug`         | Post detail (dynamic)           |
+| `/login`               | Admin login (Supabase Auth)     |
+| `/admin/*`             | Admin dashboard (protected)     |
 
 ---
 
