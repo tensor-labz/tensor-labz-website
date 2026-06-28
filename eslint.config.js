@@ -10,7 +10,7 @@ import prettierConfig from 'eslint-config-prettier';
 
 export default [
   {
-    ignores: ['dist'], // Ignore the 'dist' directory
+    ignores: ['dist', 'docs', 'image-lambda'], // Ignore build output and vendored submodules
   },
   {
     files: ['**/*.ts', '**/*.tsx'], // Apply to TypeScript files

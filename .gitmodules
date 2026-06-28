@@ -1,0 +1,6 @@
+[submodule "docs"]
+	path = docs
+	url = git@github.com:tensor-labz/tensor-labz-docs.git
+[submodule "image-lambda"]
+	path = image-lambda
+	url = git@github.com:tensor-labz/tensor-labz-image-lambda.git
