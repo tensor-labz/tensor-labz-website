@@ -51,6 +51,25 @@ export function toYouTubeEmbed(url: string): string {
   return url;
 }
 
+/* A still-image URL usable as a card thumbnail for any cover.
+ * YouTube → its thumbnail image; plain images → as-is; direct video → no thumb. */
+export function coverThumbnail(
+  url?: string,
+  type?: CoverMediaType
+): string | undefined {
+  if (!url) return undefined;
+  const kind = type ?? detectCoverType(url);
+  if (kind === 'youtube') {
+    const short = url.match(/youtu\.be\/([^?&]+)/);
+    const watch = url.match(/[?&]v=([^&]+)/);
+    const embed = url.match(/embed\/([^?&/]+)/);
+    const id = short?.[1] ?? watch?.[1] ?? embed?.[1];
+    return id ? `https://img.youtube.com/vi/${id}/hqdefault.jpg` : undefined;
+  }
+  if (kind === 'video' || kind === 'drive_video') return undefined;
+  return url;
+}
+
 /* Parse comma-separated string OR JSON array OR PostgreSQL array → string[] */
 function parseArray(val: unknown): string[] {
   if (!val) return [];

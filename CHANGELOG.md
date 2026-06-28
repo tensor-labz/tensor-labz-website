@@ -6,6 +6,27 @@ All notable changes to the Tensor Labs website are documented here.
 
 ## [Unreleased]
 
+### Added
+
+- Reusable content components: `ContentPage`, `ContentCard`, `ContentList`, `ContentPagination`, `ContentHeader` — one data-driven set powering the posts and services pages (#40)
+- Search on the services and posts pages; services search filters projects via the `?q` URL param (#37, #40)
+- Vendor `tensor-labz-docs` and `tensor-labz-image-lambda` as git submodules (#35)
+
+### Changed
+
+- Branch flow: feature/fix branches now PR directly into `staging` (`feature → staging → main`); the `dev → staging` funnel was dropped (`enforce-flow.yml`) (#37)
+- Services page is URL-driven — active service comes from the route `:slug`, so the correct list loads immediately on entry/refresh/back-forward; `/services` shows all (no `/services/all` redirect) (#37)
+- Services filter moved to a left slide-in drawer (glass, opens below the sticky header) replacing the horizontal tab row + mobile dropdown (#38, #39)
+- Sticky glassmorphism page header with accent glow and frosted search input (#38, #39)
+
+### Fixed
+
+- Mobile navigation drawer rendered see-through — now a solid, portaled, readable panel (#36)
+
+### Refactor
+
+- Posts and services pages reduced to thin wrappers over `ContentPage`; removed `PostCard`, `ProjectCard`, `ServiceHero`, `ServiceContainer`, and the service-page `Pagination` (#40)
+
 ---
 ## [v1.11.1] — 2026-05-10
 

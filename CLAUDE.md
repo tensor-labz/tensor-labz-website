@@ -46,6 +46,20 @@ src/app/hooks.ts                    ← useAppSelector / useAppDispatch
 - Navigation must use `useNavigate` from `react-router-dom`, never `window.location.href`.
 - Use `useAppSelector` / `useAppDispatch` typed hooks — never raw `useSelector` / `useDispatch`.
 
+### Shared content components
+
+The posts and services list pages are built from ONE reusable, data-driven set in `src/shared/components/` — do **not** reintroduce per-page card/list/pagination/hero components:
+
+- `layout/ContentHeader` — sticky page header (eyebrow, title, description, optional search, accent glow); publishes its height as the `--page-header-h` CSS var so a sidebar can sit below it. Also used by the project detail page (`ProjectHero`).
+- `ui/ContentCard` — content card with normalized props `{ id, title, imgUrl, tags, description, link, created_at }` (+ `reverse`). Uniform desktop height (`md:h-56`) with the image filling via `object-cover`.
+- `ui/ContentList` — vertical list of `ContentCard`s with `loadingState` / `emptyState` slots.
+- `ui/ContentPagination` — controlled prev/next + numbered paging (`page`, `totalPages`, `onPageChange`, optional `summary`).
+- `ui/ContentPage` — composes `ContentHeader` + optional `sidebar` + `ContentList` + `ContentPagination`; pages just map data into it.
+
+`src/pages/Posts.tsx` and `src/pages/Services.tsx` are thin wrappers over `ContentPage`. The **services page** derives its active service from the URL `:slug` (source of truth — loads the correct list immediately on entry/refresh/back-forward), searches via `?q`, paginates via `?page`, and renders `ServiceFilterDrawer` through `ContentPage`'s `sidebar` slot. Route is `/services` (all) and `/services/:slug` (one) — no `/services/all` redirect.
+
+> `src/features/home-services/components/ServiceCard.tsx` is the **home page** service-category card and is separate from the content components above.
+
 ---
 
 ## Admin Dashboard
@@ -312,16 +326,27 @@ aws --profile tensor s3 sync ./dist/assets \
 
 ## Documentation Repo
 
-Developer docs live in a **separate dedicated repo** — `tensor-labz/tensor-labz-docs` (not in this repo).
+Developer docs live in their **own dedicated repo** — `tensor-labz/tensor-labz-docs` — and are **vendored into this repo as a git submodule** at `docs/` for colocation only.
 
 | Item          | Value                                              |
 | ------------- | -------------------------------------------------- |
 | **Repo**      | https://github.com/tensor-labz/tensor-labz-docs   |
 | **Docs site** | https://tensor-labz.github.io/tensor-labz-docs/   |
 | **Tool**      | MkDocs Material + GitHub Actions (auto-deploy on push to `main`) |
-| **Local**     | `cd ../tensor-labz-docs && mkdocs serve`           |
+| **Submodule** | `docs/` → `tensor-labz/tensor-labz-docs`          |
+| **Local**     | `git submodule update --init --recursive`, then `cd docs && mkdocs serve` |
 
-> Do **not** add `docs/`, `mkdocs.yml`, or a docs workflow to this repo — they were removed and live in `tensor-labz-docs` only.
+> The `docs/` submodule is **source colocation only**. Docs are still built and deployed **exclusively** from the `tensor-labz-docs` repo to GitHub Pages — this repo does **not** build, bundle, or host them, and `mkdocs.yml`/docs workflows must **not** be added to this repo's root.
+>
+> The image Lambda is likewise vendored as a submodule at `image-lambda/` → `tensor-labz/tensor-labz-image-lambda`, for reference only; it is built and deployed from its own repo, not from here.
+
+### Submodules & CI
+
+Both submodules are **private**, so build hosts must be able to clone them or builds break:
+
+- **AWS Amplify (production)** — recursively inits submodules on clone. Add an SSH private key in the Amplify console and register the matching public key as a deploy key on both submodule repos.
+- **Firebase staging + CI (`deploy-staging.yml`, `ci.yml`)** — the `actions/checkout@v4` step needs `submodules: recursive` and an `ssh-key`/PAT with read access to both repos (the default `GITHUB_TOKEN` cannot read other private repos).
+- `eslint.config.js` ignores `docs` and `image-lambda` so submodule source is not linted by this repo's CI.
 
 ---
 
@@ -358,15 +383,16 @@ Key field names returned by the API (do not rename in TypeScript interfaces):
 ### Branch strategy
 
 ```
-dev  →  staging  →  main
-         ↓              ↓
-      Firebase      AWS Amplify
-      (staging)     (production)
+feature/fix branch  →  staging  →  main
+                          ↓            ↓
+                       Firebase     AWS Amplify
+                       (staging)    (production)
 ```
 
-- All dev work happens on `dev`.
-- Merge `dev` → `staging` to deploy to Firebase Hosting for QA/UAT.
+- Branch off `staging` for any work (`fix/*`, `feat/*`, `style/*`, `refactor/*`), then open a PR into `staging`.
+- `staging` deploys to Firebase Hosting for QA/UAT.
 - Merge `staging` → `main` to release on AWS Amplify (production). Amplify triggers automatically — do not deploy manually.
+- Enforced by `.github/workflows/enforce-flow.yml`: any branch may PR into `staging`, but `main` accepts PRs **only** from `staging`. (The earlier `dev → staging` funnel was dropped.)
 
 ---
 
