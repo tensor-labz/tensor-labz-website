@@ -1,15 +1,17 @@
 import { FC, memo, useMemo } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
+import { useSearchParams } from 'react-router-dom';
 import { useAppSelector } from '../../../app/hooks';
 import { selectServices } from '../../../store/servicesSlice';
 import { selectActiveSlug } from '../../../store/projectsSlice';
 import { useSiteSettings } from '../../../shared/hooks/useSiteSettings';
-import { EASE_EXPO } from '../../../lib/motion';
+import PageHeader from '../../../shared/components/layout/PageHeader';
 
 const ServiceHero: FC = memo(() => {
   const services = useAppSelector(selectServices);
   const activeSlug = useAppSelector(selectActiveSlug);
   const { get } = useSiteSettings();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const query = searchParams.get('q') ?? '';
 
   const selectedService = useMemo(() => {
     return (
@@ -21,50 +23,32 @@ const ServiceHero: FC = memo(() => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [services, activeSlug]);
 
+  const updateQuery = (value: string) => {
+    setSearchParams(
+      (prev) => {
+        const next = new URLSearchParams(prev);
+        if (value) next.set('q', value);
+        else next.delete('q');
+        next.delete('page');
+        return next;
+      },
+      { replace: true }
+    );
+  };
+
   return (
-    <div className="w-full pt-28 pb-12 sm:pt-32 sm:pb-14 px-4 text-center">
-      <motion.span
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.5 }}
-        className="text-[10px] font-semibold tracking-[0.3em] uppercase block mb-4 text-accent"
-      >
-        {get('services.hero_label')}
-      </motion.span>
-
-      <AnimatePresence mode="wait">
-        <motion.h2
-          key={activeSlug}
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -10 }}
-          transition={{ duration: 0.5, ease: EASE_EXPO }}
-          className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 text-fg font-display"
-        >
-          {(selectedService as { service_name: string }).service_name}
-        </motion.h2>
-      </AnimatePresence>
-
-      <motion.div
-        initial={{ width: 0 }}
-        animate={{ width: '3rem' }}
-        transition={{ delay: 0.3, duration: 0.5, ease: 'easeOut' }}
-        className="h-1 rounded-full mx-auto mb-5 bg-accent"
-      />
-
-      <AnimatePresence mode="wait">
-        <motion.p
-          key={`desc-${activeSlug}`}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.4, delay: 0.15 }}
-          className="text-sm md:text-base max-w-2xl mx-auto text-muted"
-        >
-          {(selectedService as { description: string }).description}
-        </motion.p>
-      </AnimatePresence>
-    </div>
+    <PageHeader
+      centered
+      eyebrow={get('services.hero_label')}
+      title={(selectedService as { service_name: string }).service_name}
+      description={(selectedService as { description: string }).description}
+      search={{
+        value: query,
+        onChange: (e) => updateQuery(e.target.value),
+        onClear: () => updateQuery(''),
+        placeholder: 'Search projects…',
+      }}
+    />
   );
 });
 
