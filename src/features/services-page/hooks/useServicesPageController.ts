@@ -1,5 +1,10 @@
 import { useEffect, useMemo } from 'react';
-import { useLocation, useParams, useNavigate } from 'react-router-dom';
+import {
+  useLocation,
+  useParams,
+  useNavigate,
+  useSearchParams,
+} from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import {
   loadServices,
@@ -21,6 +26,8 @@ export const useServicesPageController = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { slug } = useParams<{ slug: string }>();
+  const [searchParams] = useSearchParams();
+  const query = (searchParams.get('q') ?? '').trim().toLowerCase();
 
   const services = useAppSelector(selectServices);
   const servicesStatus = useAppSelector(selectServicesStatus);
@@ -58,13 +65,23 @@ export const useServicesPageController = () => {
     if (activeSlug && activeSlug !== 'all') {
       result = result.filter((p) => p.service === activeSlug);
     }
+    if (query) {
+      result = result.filter(
+        (p) =>
+          p.title.toLowerCase().includes(query) ||
+          (p.description ?? '').toLowerCase().includes(query) ||
+          (Array.isArray(p.tags) ? p.tags : []).some((t) =>
+            t.toLowerCase().includes(query)
+          )
+      );
+    }
     const totalItems = result.length;
     const start = (currentPage - 1) * ITEMS_PER_PAGE;
     return {
       filteredProjects: result.slice(start, start + ITEMS_PER_PAGE),
       totalItems,
     };
-  }, [allProjects, activeSlug, currentPage]);
+  }, [allProjects, activeSlug, currentPage, query]);
 
   const isLoading =
     servicesStatus === 'idle' ||
