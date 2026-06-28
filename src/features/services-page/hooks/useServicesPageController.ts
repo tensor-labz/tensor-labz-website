@@ -94,6 +94,13 @@ export const useServicesPageController = () => {
   const setActiveSlug = (newSlug: string) =>
     navigate(newSlug === 'all' ? '/services' : `/services/${newSlug}`);
 
+  // Page changes update the ?page param, preserving the path and other params.
+  const setPage = (p: number) => {
+    const params = new URLSearchParams(location.search);
+    params.set('page', String(p));
+    navigate(`${location.pathname}?${params.toString()}`);
+  };
+
   return {
     services,
     filteredProjects,
@@ -103,5 +110,6 @@ export const useServicesPageController = () => {
     currentPage,
     itemsPerPage: ITEMS_PER_PAGE,
     setActiveSlug,
+    setPage,
   };
 };
