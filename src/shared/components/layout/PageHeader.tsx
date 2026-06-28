@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React, { memo, useRef, useEffect } from 'react';
 import { motion } from 'motion/react';
 import ReactIcon from '../ui/ReactIcon';
 import { EASE_EXPO } from '../../../lib/motion';
@@ -61,9 +61,30 @@ const PageHeader: React.FC<PageHeaderProps> = ({
   centered = false,
   className = '',
 }) => {
+  const headerRef = useRef<HTMLElement>(null);
+
+  // Publish the sticky header's height so the filter drawer can start below it.
+  useEffect(() => {
+    const el = headerRef.current;
+    if (!el) return;
+    const setVar = () =>
+      document.documentElement.style.setProperty(
+        '--page-header-h',
+        `${el.offsetHeight}px`
+      );
+    setVar();
+    const ro = new ResizeObserver(setVar);
+    ro.observe(el);
+    return () => {
+      ro.disconnect();
+      document.documentElement.style.removeProperty('--page-header-h');
+    };
+  }, []);
+
   return (
     <motion.header
-      className={`relative text-white pt-20 pb-4 md:pt-20 md:pb-5 px-4 md:px-8 overflow-hidden ${className}`}
+      ref={headerRef}
+      className={`sticky top-0 z-30 bg-canvas text-white pt-20 pb-4 md:pt-20 md:pb-5 px-4 md:px-8 overflow-hidden ${className}`}
       variants={containerVariants}
       initial="hidden"
       animate="visible"
@@ -77,6 +98,13 @@ const PageHeader: React.FC<PageHeaderProps> = ({
       >
         <div className="absolute inset-0 bg-gradient-to-b from-slate-950/30 via-slate-900/50 to-slate-950/70" />
       </motion.div>
+
+      {/* Colorful glow blobs — give the frosted-glass elements something to blur */}
+      <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
+        <div className="absolute -top-16 left-[12%] w-72 h-72 rounded-full bg-sky-500/30 blur-3xl" />
+        <div className="absolute -top-8 right-[16%] w-80 h-80 rounded-full bg-violet-500/25 blur-3xl" />
+        <div className="absolute bottom-[-4rem] left-1/2 -translate-x-1/2 w-[36rem] h-44 rounded-full bg-cyan-400/20 blur-3xl" />
+      </div>
 
       {/* Engineering grid overlay */}
       <div
@@ -165,34 +193,34 @@ const PageHeader: React.FC<PageHeaderProps> = ({
 
         {search && (
           <motion.div
-            className="relative max-w-lg mx-auto mt-4"
+            className="relative max-w-lg mx-auto mt-5"
             variants={itemVariants(0.5)}
             initial="hidden"
             animate="visible"
           >
             <ReactIcon
               name="FiSearch"
-              size={14}
-              className="absolute left-3.5 top-1/2 -translate-y-1/2 text-white/40 pointer-events-none"
+              size={15}
+              className="absolute left-4 top-1/2 -translate-y-1/2 text-white/45 pointer-events-none"
             />
             <input
               type="text"
               value={search.value}
               onChange={search.onChange}
               placeholder={search.placeholder ?? 'Search…'}
-              className="w-full pl-9 pr-10 py-2.5 rounded-xl border-0 bg-white/[0.04] text-white text-sm
-                ring-1 ring-inset ring-white/10
-                placeholder:text-white/40 placeholder:font-mono backdrop-blur-lg
-                focus:outline-none focus:bg-white/[0.08] focus:ring-white/25 transition-all duration-200"
+              className="w-full pl-11 pr-10 py-3 rounded-xl border-0 bg-white/[0.07] text-white text-sm
+                ring-1 ring-inset ring-white/20 backdrop-blur-xl
+                placeholder:text-white/45 placeholder:font-mono shadow-lg shadow-black/20
+                focus:outline-none focus:bg-white/[0.12] focus:ring-white/35 transition-all duration-200"
             />
             {search.value && (
               <button
                 type="button"
                 onClick={search.onClear}
                 aria-label="Clear search"
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-white/50 hover:text-white transition-colors"
+                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-white/50 hover:text-white transition-colors"
               >
-                <ReactIcon name="FiX" size={13} />
+                <ReactIcon name="FiX" size={14} />
               </button>
             )}
           </motion.div>
