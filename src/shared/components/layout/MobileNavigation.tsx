@@ -84,105 +84,105 @@ const MobileNavigation: React.FC = memo(() => {
         <AnimatePresence>
           {isOpen && (
             <>
-            <motion.div
-              key="overlay"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.25 }}
-              onClick={close}
-              className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[99]"
-            />
-            <motion.div
-              key="drawer"
-              initial={{ x: '100%' }}
-              animate={{ x: 0 }}
-              exit={{ x: '100%' }}
-              transition={{ type: 'spring', damping: 28, stiffness: 280 }}
-              style={{
-                backgroundColor: theme === 'dark' ? '#0f172a' : '#ffffff',
-                borderColor: 'var(--border)',
-              }}
-              className="fixed top-0 right-0 h-full w-72 border-l z-[100] flex flex-col shadow-2xl"
-            >
-              <div
-                style={{ borderColor: 'var(--border)' }}
-                className="flex items-center justify-between px-6 py-5 border-b"
+              <motion.div
+                key="overlay"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.25 }}
+                onClick={close}
+                className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[99]"
+              />
+              <motion.div
+                key="drawer"
+                initial={{ x: '100%' }}
+                animate={{ x: 0 }}
+                exit={{ x: '100%' }}
+                transition={{ type: 'spring', damping: 28, stiffness: 280 }}
+                style={{
+                  backgroundColor: theme === 'dark' ? '#0f172a' : '#ffffff',
+                  borderColor: 'var(--border)',
+                }}
+                className="fixed top-0 right-0 h-full w-72 border-l z-[100] flex flex-col shadow-2xl"
               >
-                <button
-                  type="button"
-                  className="bg-transparent border-0 p-0 cursor-pointer"
-                  onClick={() => {
-                    navigate('/');
-                    close();
-                  }}
+                <div
+                  style={{ borderColor: 'var(--border)' }}
+                  className="flex items-center justify-between px-6 py-5 border-b"
                 >
-                  <img
-                    src={resolveLogo(info, theme, logo)}
-                    alt={info.name}
-                    className="h-9 w-auto object-contain"
-                    onError={(e) => {
-                      (e.currentTarget as HTMLImageElement).src = logo;
-                    }}
-                  />
-                </button>
-                <div className="flex items-center gap-2">
-                  <motion.button
+                  <button
                     type="button"
-                    whileTap={{ scale: 0.9 }}
-                    onClick={toggleTheme}
-                    aria-label="Toggle theme"
-                    className="w-8 h-8 flex items-center justify-center rounded
+                    className="bg-transparent border-0 p-0 cursor-pointer"
+                    onClick={() => {
+                      navigate('/');
+                      close();
+                    }}
+                  >
+                    <img
+                      src={resolveLogo(info, theme, logo)}
+                      alt={info.name}
+                      className="h-9 w-auto object-contain"
+                      onError={(e) => {
+                        (e.currentTarget as HTMLImageElement).src = logo;
+                      }}
+                    />
+                  </button>
+                  <div className="flex items-center gap-2">
+                    <motion.button
+                      type="button"
+                      whileTap={{ scale: 0.9 }}
+                      onClick={toggleTheme}
+                      aria-label="Toggle theme"
+                      className="w-8 h-8 flex items-center justify-center rounded
                       text-[var(--text-muted)] hover:text-[var(--accent)]
                       bg-[var(--bg-raised)] border border-[var(--border)]
                       transition-colors text-base"
-                  >
-                    {theme === 'dark' ? (
-                      <ReactIcon name="RiSunLine" size={16} />
-                    ) : (
-                      <ReactIcon name="RiMoonLine" size={16} />
-                    )}
-                  </motion.button>
-                  <motion.button
-                    type="button"
-                    whileTap={{ scale: 0.9 }}
-                    onClick={close}
-                    className="text-[var(--text-muted)] hover:text-[var(--text-primary)] text-2xl transition-colors"
-                  >
-                    <ReactIcon name="RiCloseLine" size={24} />
-                  </motion.button>
+                    >
+                      {theme === 'dark' ? (
+                        <ReactIcon name="RiSunLine" size={16} />
+                      ) : (
+                        <ReactIcon name="RiMoonLine" size={16} />
+                      )}
+                    </motion.button>
+                    <motion.button
+                      type="button"
+                      whileTap={{ scale: 0.9 }}
+                      onClick={close}
+                      className="text-[var(--text-muted)] hover:text-[var(--text-primary)] text-2xl transition-colors"
+                    >
+                      <ReactIcon name="RiCloseLine" size={24} />
+                    </motion.button>
+                  </div>
                 </div>
-              </div>
 
-              <nav className="flex flex-col mt-2">
-                {navData.map((item, i) => (
-                  <MobileNavItem
-                    key={i}
-                    nav={item.nav}
-                    to={item.to}
-                    index={i}
-                    isActive={
-                      item.to === '/'
-                        ? pathname === '/'
-                        : pathname.startsWith(item.to)
-                    }
-                    onNavigate={close}
-                  />
-                ))}
-              </nav>
+                <nav className="flex flex-col mt-2">
+                  {navData.map((item, i) => (
+                    <MobileNavItem
+                      key={i}
+                      nav={item.nav}
+                      to={item.to}
+                      index={i}
+                      isActive={
+                        item.to === '/'
+                          ? pathname === '/'
+                          : pathname.startsWith(item.to)
+                      }
+                      onNavigate={close}
+                    />
+                  ))}
+                </nav>
 
-              <div
-                style={{ borderColor: 'var(--border)' }}
-                className="mt-auto px-6 py-6 border-t"
-              >
-                <p className="text-[var(--text-muted)] text-[10px] tracking-widest uppercase">
-                  {info.name}
-                </p>
-                <p className="text-[var(--text-muted)] opacity-60 text-[10px] mt-1">
-                  {info.tagline}
-                </p>
-              </div>
-            </motion.div>
+                <div
+                  style={{ borderColor: 'var(--border)' }}
+                  className="mt-auto px-6 py-6 border-t"
+                >
+                  <p className="text-[var(--text-muted)] text-[10px] tracking-widest uppercase">
+                    {info.name}
+                  </p>
+                  <p className="text-[var(--text-muted)] opacity-60 text-[10px] mt-1">
+                    {info.tagline}
+                  </p>
+                </div>
+              </motion.div>
             </>
           )}
         </AnimatePresence>,
