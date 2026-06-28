@@ -2,7 +2,6 @@ import { memo, useState, FC } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import ReactIcon from '../../../shared/components/ui/ReactIcon';
-import { useTheme } from '../../../shared/hooks/useTheme';
 import { useServicesPageController } from '../hooks/useServicesPageController';
 
 /**
@@ -12,7 +11,6 @@ import { useServicesPageController } from '../hooks/useServicesPageController';
  */
 const ServiceFilterDrawer: FC = memo(() => {
   const [open, setOpen] = useState(false);
-  const { theme } = useTheme();
   const { services, activeSlug, setActiveSlug, isLoading } =
     useServicesPageController();
 
@@ -65,7 +63,8 @@ const ServiceFilterDrawer: FC = memo(() => {
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.25 }}
                 onClick={() => setOpen(false)}
-                className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[99]"
+                style={{ top: 'var(--page-header-h, 4rem)' }}
+                className="fixed inset-x-0 bottom-0 bg-black/40 backdrop-blur-sm z-[99]"
               />
               <motion.div
                 key="panel"
@@ -73,28 +72,25 @@ const ServiceFilterDrawer: FC = memo(() => {
                 animate={{ x: 0 }}
                 exit={{ x: '-100%' }}
                 transition={{ type: 'spring', damping: 28, stiffness: 280 }}
-                style={{
-                  backgroundColor: theme === 'dark' ? '#0f172a' : '#ffffff',
-                  borderColor: 'var(--border)',
-                }}
-                className="fixed top-0 left-0 h-full w-72 border-r z-[100] flex flex-col shadow-2xl"
+                style={{ top: 'var(--page-header-h, 4rem)' }}
+                className="fixed left-0 bottom-0 w-60 z-[100] flex flex-col shadow-2xl text-white
+                  bg-slate-950/70 backdrop-blur-2xl
+                  border-r border-white/10"
               >
-                <div
-                  className="flex items-center justify-end px-6 py-4 border-b"
-                  style={{ borderColor: 'var(--border)' }}
+                <motion.button
+                  type="button"
+                  whileTap={{ scale: 0.9 }}
+                  whileHover={{ scale: 1.05 }}
+                  onClick={() => setOpen(false)}
+                  aria-label="Close filter"
+                  className="absolute top-3 -right-12 w-10 h-10 rounded-full flex items-center justify-center
+                    bg-slate-900 border border-white/15 text-white/80 hover:text-white
+                    shadow-lg transition-colors"
                 >
-                  <motion.button
-                    type="button"
-                    whileTap={{ scale: 0.9 }}
-                    onClick={() => setOpen(false)}
-                    aria-label="Close filter"
-                    className="text-[var(--text-muted)] hover:text-[var(--text-primary)] text-2xl transition-colors"
-                  >
-                    <ReactIcon name="RiCloseLine" size={22} />
-                  </motion.button>
-                </div>
+                  <ReactIcon name="RiCloseLine" size={20} />
+                </motion.button>
 
-                <nav className="flex flex-col mt-2 overflow-y-auto">
+                <nav className="flex flex-col pt-2 flex-1 min-h-0 overflow-y-auto">
                   {options.map((option, i) => {
                     const isActive = option.slug === activeSlug;
                     return (
@@ -105,17 +101,12 @@ const ServiceFilterDrawer: FC = memo(() => {
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: i * 0.05 + 0.08, duration: 0.3 }}
                         onClick={() => select(option.slug)}
-                        style={
-                          isActive
-                            ? {
-                                color: 'var(--accent)',
-                                backgroundColor: 'var(--accent-soft)',
-                              }
-                            : { color: 'var(--text-muted)' }
-                        }
-                        className="w-full text-left px-6 py-4 text-xs font-semibold tracking-widest uppercase
-                          border-b flex items-center gap-3 transition-colors
-                          hover:text-[var(--text-primary)] hover:bg-[var(--bg-raised)]"
+                        className={`w-full text-left px-5 py-3.5 text-[11px] font-semibold tracking-wider uppercase
+                          flex items-center gap-2.5 transition-colors ${
+                            isActive
+                              ? 'text-[var(--accent)] bg-white/[0.06]'
+                              : 'text-white/55 hover:text-white hover:bg-white/[0.04]'
+                          }`}
                       >
                         <span
                           className="w-1 h-4 rounded-full shrink-0"

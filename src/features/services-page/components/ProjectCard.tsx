@@ -79,10 +79,10 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
         </motion.div>
       </div>
 
-      <div className="p-6 flex flex-col flex-grow relative">
+      <div className="p-4 flex flex-col flex-grow relative">
         {isTop && (
           <motion.div
-            className="absolute top-4 right-4 flex items-center gap-1 bg-gradient-to-r from-amber-500 to-yellow-400 text-white text-xs font-medium py-1 px-2 rounded-full shadow-md"
+            className="absolute top-3 right-3 flex items-center gap-1 bg-gradient-to-r from-amber-500 to-yellow-400 text-white text-[10px] font-medium py-0.5 px-2 rounded-full shadow-md"
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ delay: 0.2 }}
@@ -92,11 +92,11 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
           </motion.div>
         )}
 
-        <h3 className="text-xl md:text-2xl font-bold font-display mb-2 line-clamp-1 pr-16 text-fg">
+        <h3 className="text-base md:text-lg font-bold font-display mb-1.5 line-clamp-1 pr-14 text-fg">
           {title}
         </h3>
 
-        <div className="flex flex-wrap gap-2 mb-4">
+        <div className="flex flex-wrap gap-1.5 mb-3">
           <AnimatePresence>
             {services.slice(0, 3).map((service, index) => (
               <motion.span
@@ -124,27 +124,27 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
           </AnimatePresence>
         </div>
 
-        <p className="mb-10 line-clamp-2 flex-grow text-sm text-muted">
+        <p className="mb-9 line-clamp-2 flex-grow text-xs text-muted">
           {description}
         </p>
 
         {/* Explore button */}
         <motion.div
-          className="absolute bottom-4 left-4 cursor-pointer"
+          className="absolute bottom-3 left-3 cursor-pointer"
           initial="initial"
           whileHover="expanded"
           onClick={handleExplore}
         >
           <motion.div
             className="flex items-center overflow-hidden rounded-full shadow-md text-white bg-gradient-to-r from-accent to-sky-900"
-            variants={{ initial: { width: 40 }, expanded: { width: 160 } }}
+            variants={{ initial: { width: 36 }, expanded: { width: 150 } }}
             transition={{ type: 'spring', stiffness: 500, damping: 30 }}
           >
             <motion.button
-              className="h-10 w-10 flex items-center relative justify-center rounded-full"
+              className="h-9 w-9 flex items-center relative justify-center rounded-full"
               whileTap={{ scale: 0.9 }}
             >
-              <ReactIcon name="FiArrowRight" size={20} />
+              <ReactIcon name="FiArrowRight" size={18} />
             </motion.button>
             <motion.span
               className="whitespace-nowrap pr-4 pl-1 font-medium mx-auto"
