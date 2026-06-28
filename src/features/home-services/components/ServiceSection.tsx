@@ -11,7 +11,7 @@ const ServiceSection: React.FC = memo(() => {
   const { get } = useSiteSettings();
 
   return (
-    <Section className="md:px-14 px-0">
+    <Section className="min-h-dvh flex flex-col justify-center md:px-14 px-0">
       <div className="px-4 text-center mb-4 mt-6">
         <p className="text-[10px] font-mono tracking-[0.3em] uppercase text-accent mb-3">
           {get('services.label')}
