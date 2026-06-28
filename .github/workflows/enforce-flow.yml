@@ -9,19 +9,21 @@ jobs:
     name: Branch flow check
     runs-on: ubuntu-latest
     steps:
-      - name: Enforce dev → staging → main
+      - name: Enforce feature → staging → main
         run: |
           TARGET="${{ github.base_ref }}"
           SOURCE="${{ github.head_ref }}"
 
+          # Production stays protected: only staging can merge into main
           if [ "$TARGET" = "main" ] && [ "$SOURCE" != "staging" ]; then
             echo "❌  PRs to main must come from staging (got: $SOURCE)."
-            echo "    Merge dev → staging first, then open a staging → main PR."
+            echo "    Merge your branch → staging first, then open a staging → main PR."
             exit 1
           fi
 
-          if [ "$TARGET" = "staging" ] && [ "$SOURCE" != "dev" ]; then
-            echo "❌  PRs to staging must come from dev (got: $SOURCE)."
+          # staging accepts any feature branch, but never main merged back down
+          if [ "$TARGET" = "staging" ] && [ "$SOURCE" = "main" ]; then
+            echo "❌  Don't merge main back into staging."
             exit 1
           fi
 
