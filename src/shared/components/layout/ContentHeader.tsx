@@ -10,7 +10,7 @@ interface SearchControl {
   placeholder?: string;
 }
 
-interface PageHeaderProps {
+interface ContentHeaderProps {
   /** Small line above the title — a label (services) or a breadcrumb (project). */
   eyebrow?: React.ReactNode;
   title: string;
@@ -50,7 +50,7 @@ const itemVariants = (delay: number) => ({
  * Shared page header used by both the services and project pages — same design
  * and structure, varying only by the props each page supplies.
  */
-const PageHeader: React.FC<PageHeaderProps> = ({
+const ContentHeader: React.FC<ContentHeaderProps> = ({
   eyebrow,
   title,
   titleAdornment,
@@ -230,4 +230,4 @@ const PageHeader: React.FC<PageHeaderProps> = ({
   );
 };
 
-export default memo(PageHeader);
+export default memo(ContentHeader);

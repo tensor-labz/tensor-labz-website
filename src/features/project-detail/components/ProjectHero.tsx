@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useAppSelector } from '../../../app/hooks';
 import { selectServices } from '../../../store/servicesSlice';
 import ReactIcon from '../../../shared/components/ui/ReactIcon';
-import PageHeader from '../../../shared/components/layout/PageHeader';
+import ContentHeader from '../../../shared/components/layout/ContentHeader';
 
 interface ProjectHeroProps {
   title: string;
@@ -56,7 +56,7 @@ const ProjectHero: React.FC<ProjectHeroProps> = ({
     : null;
 
   return (
-    <PageHeader
+    <ContentHeader
       className={className}
       title={title}
       description={description}

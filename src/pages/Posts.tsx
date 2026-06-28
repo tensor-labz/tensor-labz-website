@@ -1,12 +1,10 @@
 import React, { memo, useState, useMemo } from 'react';
 import { motion } from 'motion/react';
 import Page from '../components/resuable/Page';
-import PostCard from '../features/posts/components/PostCard';
-import ReactIcon from '../shared/components/ui/ReactIcon';
+import ContentPage from '../shared/components/ui/ContentPage';
 import { usePostListController } from '../features/posts/hooks/usePostListController';
 import { useSiteSettings } from '../shared/hooks/useSiteSettings';
 import { VIEWPORT } from '../lib/motion';
-import PageHeader from '../shared/components/layout/PageHeader';
 
 const PostSkeleton = () => (
   <div className="rounded-xl overflow-hidden border border-rim bg-surface animate-pulse flex flex-col md:flex-row">
@@ -51,10 +49,20 @@ const Posts: React.FC = memo(() => {
     setPage(1);
   };
 
+  const items = paginated.map((post, i) => ({
+    id: post.id,
+    link: `/posts/${post.slug}`,
+    title: post.title,
+    description: post.description,
+    imgUrl: post.cover_image,
+    tags: post.tags,
+    created_at: post.created_at,
+    reverse: i % 2 !== 0,
+  }));
+
   return (
     <Page HeadProps={{ title: 'Posts' }}>
-      <PageHeader
-        centered
+      <ContentPage
         eyebrow={get('posts.label')}
         title={get('posts.title')}
         description={get('posts.description')}
@@ -67,17 +75,17 @@ const Posts: React.FC = memo(() => {
           },
           placeholder: 'Search posts…',
         }}
-      />
-
-      {/* ── Posts ── */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 mt-2 pb-16">
-        {isLoading ? (
+        items={items}
+        isLoading={isLoading}
+        isEmpty={filtered.length === 0}
+        loadingState={
           <div className="flex flex-col gap-6">
             {Array.from({ length: 3 }).map((_, i) => (
               <PostSkeleton key={i} />
             ))}
           </div>
-        ) : filtered.length === 0 ? (
+        }
+        emptyState={
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -91,89 +99,16 @@ const Posts: React.FC = memo(() => {
               No posts match your search. Try different keywords.
             </p>
           </motion.div>
-        ) : (
-          <div className="flex flex-col gap-6">
-            {paginated.map((post, i) => (
-              <PostCard
-                key={post.id}
-                slug={post.slug}
-                title={post.title}
-                description={post.description}
-                cover_image={post.cover_image}
-                cover_media_type={post.cover_media_type}
-                tags={post.tags}
-                created_at={post.created_at}
-                reverse={i % 2 !== 0}
-              />
-            ))}
-          </div>
-        )}
-
-        {/* ── Pagination ── */}
-        {!isLoading && totalPages > 1 && (
-          <div className="flex items-center justify-center gap-2 mt-12">
-            <button
-              onClick={() => setPage((p) => Math.max(1, p - 1))}
-              disabled={safePage === 1}
-              className="w-9 h-9 flex items-center justify-center rounded-lg border border-rim
-                text-muted hover:border-accent/50 hover:text-accent
-                disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-200"
-            >
-              <ReactIcon name="FiChevronLeft" size={15} />
-            </button>
-
-            {Array.from({ length: totalPages }, (_, i) => i + 1).map((n) => {
-              const isActive = n === safePage;
-              const isNear =
-                Math.abs(n - safePage) <= 1 || n === 1 || n === totalPages;
-              if (!isNear) {
-                if (n === safePage - 2 || n === safePage + 2)
-                  return (
-                    <span
-                      key={n}
-                      className="text-muted/40 text-sm font-mono px-1"
-                    >
-                      …
-                    </span>
-                  );
-                return null;
-              }
-              return (
-                <button
-                  key={n}
-                  onClick={() => setPage(n)}
-                  className={`w-9 h-9 flex items-center justify-center rounded-lg border text-sm font-mono
-                    transition-all duration-200
-                    ${
-                      isActive
-                        ? 'border-accent bg-accent/10 text-accent'
-                        : 'border-rim text-muted hover:border-accent/40 hover:text-accent/80'
-                    }`}
-                >
-                  {n}
-                </button>
-              );
-            })}
-
-            <button
-              onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-              disabled={safePage === totalPages}
-              className="w-9 h-9 flex items-center justify-center rounded-lg border border-rim
-                text-muted hover:border-accent/50 hover:text-accent
-                disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-200"
-            >
-              <ReactIcon name="FiChevronRight" size={15} />
-            </button>
-          </div>
-        )}
-
-        {!isLoading && filtered.length > 0 && (
-          <p className="text-center text-[10px] font-mono text-muted/40 mt-4">
-            {filtered.length} post{filtered.length !== 1 ? 's' : ''} · page{' '}
-            {safePage} of {totalPages}
-          </p>
-        )}
-      </section>
+        }
+        page={safePage}
+        totalPages={totalPages}
+        onPageChange={setPage}
+        summary={
+          filtered.length > 0
+            ? `${filtered.length} post${filtered.length !== 1 ? 's' : ''} · page ${safePage} of ${totalPages}`
+            : undefined
+        }
+      />
     </Page>
   );
 });
