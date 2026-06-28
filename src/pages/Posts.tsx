@@ -4,6 +4,7 @@ import Page from '../components/resuable/Page';
 import ContentPage from '../shared/components/ui/ContentPage';
 import { usePostListController } from '../features/posts/hooks/usePostListController';
 import { useSiteSettings } from '../shared/hooks/useSiteSettings';
+import { coverThumbnail } from '../services/postService';
 import { VIEWPORT } from '../lib/motion';
 
 const PostSkeleton = () => (
@@ -54,7 +55,7 @@ const Posts: React.FC = memo(() => {
     link: `/posts/${post.slug}`,
     title: post.title,
     description: post.description,
-    imgUrl: post.cover_image,
+    imgUrl: coverThumbnail(post.cover_image, post.cover_media_type),
     tags: post.tags,
     created_at: post.created_at,
     reverse: i % 2 !== 0,
