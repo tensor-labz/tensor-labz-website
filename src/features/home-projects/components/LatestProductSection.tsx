@@ -278,7 +278,7 @@ const LatestProductSection: React.FC = memo(() => {
   const ready = topProjects.length > 0;
 
   return (
-    <Section className="py-16 sm:py-24 overflow-hidden">
+    <Section className="min-h-dvh flex flex-col justify-center py-16 sm:py-24 overflow-hidden">
       {/* Header */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}

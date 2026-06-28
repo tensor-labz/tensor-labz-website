@@ -1,4 +1,5 @@
 import React, { memo, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import ReactIcon from '../ui/ReactIcon';
@@ -79,9 +80,10 @@ const MobileNavigation: React.FC = memo(() => {
         </motion.button>
       </div>
 
-      <AnimatePresence>
-        {isOpen && (
-          <>
+      {createPortal(
+        <AnimatePresence>
+          {isOpen && (
+            <>
             <motion.div
               key="overlay"
               initial={{ opacity: 0 }}
@@ -89,7 +91,7 @@ const MobileNavigation: React.FC = memo(() => {
               exit={{ opacity: 0 }}
               transition={{ duration: 0.25 }}
               onClick={close}
-              className="fixed inset-0 bg-black/40 backdrop-blur-sm z-40"
+              className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[99]"
             />
             <motion.div
               key="drawer"
@@ -98,10 +100,10 @@ const MobileNavigation: React.FC = memo(() => {
               exit={{ x: '100%' }}
               transition={{ type: 'spring', damping: 28, stiffness: 280 }}
               style={{
-                backgroundColor: 'var(--bg-surface)',
+                backgroundColor: theme === 'dark' ? '#0f172a' : '#ffffff',
                 borderColor: 'var(--border)',
               }}
-              className="fixed top-0 right-0 h-full w-72 border-l z-50 flex flex-col"
+              className="fixed top-0 right-0 h-full w-72 border-l z-[100] flex flex-col shadow-2xl"
             >
               <div
                 style={{ borderColor: 'var(--border)' }}
@@ -181,9 +183,11 @@ const MobileNavigation: React.FC = memo(() => {
                 </p>
               </div>
             </motion.div>
-          </>
-        )}
-      </AnimatePresence>
+            </>
+          )}
+        </AnimatePresence>,
+        document.body
+      )}
     </>
   );
 });

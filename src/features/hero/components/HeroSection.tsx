@@ -30,6 +30,13 @@ const textVariants = {
   }),
 };
 
+// Heading animates opacity only — a residual `y` transform leaves a paint
+// layer that clips the Syne font's deep descenders (g, y, p). No transform = no clip.
+const headingVariants = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1, transition: { duration: 0.7, ease: EASE_EXPO } },
+};
+
 const HeroSection: React.FC = memo(() => {
   const [ref, inView] = useInView({ threshold: 0.1, triggerOnce: true });
 
@@ -69,8 +76,8 @@ const HeroSection: React.FC = memo(() => {
   return (
     <Section
       ref={ref}
-      className="relative min-h-screen flex items-center bg-canvas
-        pt-20 pb-12 sm:pt-24 sm:pb-16 lg:pt-36 lg:pb-24 px-6 md:px-8 lg:px-12"
+      className="relative min-h-dvh flex items-center bg-canvas
+        pt-24 pb-10 sm:pt-24 sm:pb-12 lg:pt-20 lg:pb-16 px-6 md:px-8 lg:px-12"
     >
       {/* radial vignette */}
       <div
@@ -94,14 +101,14 @@ const HeroSection: React.FC = memo(() => {
       <div
         className="relative z-10 max-w-7xl mx-auto w-full
         flex flex-col items-center gap-6
-        lg:flex-row lg:items-stretch lg:gap-x-12"
+        lg:flex-row lg:items-center lg:gap-x-12"
       >
         {/* IMAGE */}
         <motion.div
           initial={{ opacity: 0, scale: 0.96 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 1.0, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-          className="w-full relative z-10 order-1 lg:order-2 lg:w-6/12 h-[220px] sm:h-[300px] lg:h-[520px]"
+          className="w-full relative z-10 order-1 lg:order-2 lg:w-6/12 h-[220px] sm:h-[300px] lg:h-[430px] xl:h-[500px]"
         >
           <div
             className="absolute inset-0 rounded-2xl blur-3xl opacity-20 scale-90 pointer-events-none"
@@ -129,7 +136,8 @@ const HeroSection: React.FC = memo(() => {
             variants={textVariants}
             initial="hidden"
             animate={inView ? 'visible' : 'hidden'}
-            className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold leading-[1.2] tracking-tight mb-4 text-fg font-display"
+            style={{ lineHeight: 1.02 }}
+            className="text-balance text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold tracking-tight mb-4 text-fg font-display"
           >
             {tagline}
           </motion.h1>
