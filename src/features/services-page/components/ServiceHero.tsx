@@ -22,12 +22,12 @@ const ServiceHero: FC = memo(() => {
   }, [services, activeSlug]);
 
   return (
-    <div className="w-full pt-28 pb-12 sm:pt-32 sm:pb-14 px-4 text-center">
+    <div className="w-full pt-24 pb-4 px-4 text-center">
       <motion.span
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
-        className="text-[10px] font-semibold tracking-[0.3em] uppercase block mb-4 text-accent"
+        className="text-[10px] font-semibold tracking-[0.3em] uppercase block mb-2 text-accent"
       >
         {get('services.hero_label')}
       </motion.span>
@@ -35,22 +35,15 @@ const ServiceHero: FC = memo(() => {
       <AnimatePresence mode="wait">
         <motion.h2
           key={activeSlug}
-          initial={{ opacity: 0, y: 16 }}
+          initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -10 }}
-          transition={{ duration: 0.5, ease: EASE_EXPO }}
-          className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 text-fg font-display"
+          exit={{ opacity: 0, y: -8 }}
+          transition={{ duration: 0.4, ease: EASE_EXPO }}
+          className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2 text-fg font-display"
         >
           {(selectedService as { service_name: string }).service_name}
         </motion.h2>
       </AnimatePresence>
-
-      <motion.div
-        initial={{ width: 0 }}
-        animate={{ width: '3rem' }}
-        transition={{ delay: 0.3, duration: 0.5, ease: 'easeOut' }}
-        className="h-1 rounded-full mx-auto mb-5 bg-accent"
-      />
 
       <AnimatePresence mode="wait">
         <motion.p
@@ -58,8 +51,8 @@ const ServiceHero: FC = memo(() => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.4, delay: 0.15 }}
-          className="text-sm md:text-base max-w-2xl mx-auto text-muted"
+          transition={{ duration: 0.4, delay: 0.1 }}
+          className="text-sm max-w-2xl mx-auto text-muted"
         >
           {(selectedService as { description: string }).description}
         </motion.p>

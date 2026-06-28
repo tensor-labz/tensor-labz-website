@@ -2,8 +2,7 @@ import { memo } from 'react';
 import { motion } from 'motion/react';
 import Page from '../components/resuable/Page';
 import ServiceHero from '../features/services-page/components/ServiceHero';
-import TabBar from '../features/services-page/components/TabBar';
-import ServiceDropDown from '../features/services-page/components/ServiceDropDown';
+import ServiceFilterDrawer from '../features/services-page/components/ServiceFilterDrawer';
 import ServiceContainer from '../features/services-page/components/ServiceContainer';
 import { fadeIn } from '../lib/motion';
 
@@ -18,10 +17,7 @@ const Services = memo(() => {
       >
         <ServiceHero />
 
-        <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 mt-6">
-          <TabBar />
-          <ServiceDropDown />
-        </div>
+        <ServiceFilterDrawer />
 
         <div className="flex-1">
           <ServiceContainer />

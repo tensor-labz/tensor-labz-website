@@ -1,5 +1,5 @@
 import { useEffect, useMemo } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useParams, useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import {
   loadServices,
@@ -19,12 +19,19 @@ const ITEMS_PER_PAGE = 6;
 export const useServicesPageController = () => {
   const dispatch = useAppDispatch();
   const location = useLocation();
+  const navigate = useNavigate();
+  const { slug } = useParams<{ slug: string }>();
 
   const services = useAppSelector(selectServices);
   const servicesStatus = useAppSelector(selectServicesStatus);
   const allProjects = useAppSelector(selectAllProjects);
   const projectsStatus = useAppSelector(selectProjectsStatus);
-  const activeSlug = useAppSelector(selectActiveSlug);
+  const reduxSlug = useAppSelector(selectActiveSlug);
+
+  // The URL param is the source of truth for the active service. Using it
+  // directly means the correct list renders immediately on navigation,
+  // direct entry, refresh, and back/forward — no dependency on stale store state.
+  const activeSlug = slug || 'all';
 
   useEffect(() => {
     if (servicesStatus === 'idle') dispatch(loadServices());
@@ -33,6 +40,12 @@ export const useServicesPageController = () => {
   useEffect(() => {
     if (projectsStatus === 'idle') dispatch(loadProjects());
   }, [dispatch, projectsStatus]);
+
+  // Keep the store in sync with the URL so components that read it directly
+  // (e.g. ServiceHero) stay consistent with the route.
+  useEffect(() => {
+    if (activeSlug !== reduxSlug) dispatch(setActiveServiceSlug(activeSlug));
+  }, [activeSlug, reduxSlug, dispatch]);
 
   const currentPage = useMemo(() => {
     const params = new URLSearchParams(location.search);
@@ -59,7 +72,10 @@ export const useServicesPageController = () => {
     projectsStatus === 'idle' ||
     projectsStatus === 'loading';
 
-  const setActiveSlug = (slug: string) => dispatch(setActiveServiceSlug(slug));
+  // Switching the service navigates (URL = source of truth) and resets to page 1.
+  // "all" maps to the bare /services route (no redundant /services/all).
+  const setActiveSlug = (newSlug: string) =>
+    navigate(newSlug === 'all' ? '/services' : `/services/${newSlug}`);
 
   return {
     services,
