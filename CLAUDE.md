@@ -312,16 +312,27 @@ aws --profile tensor s3 sync ./dist/assets \
 
 ## Documentation Repo
 
-Developer docs live in a **separate dedicated repo** — `tensor-labz/tensor-labz-docs` (not in this repo).
+Developer docs live in their **own dedicated repo** — `tensor-labz/tensor-labz-docs` — and are **vendored into this repo as a git submodule** at `docs/` for colocation only.
 
 | Item          | Value                                              |
 | ------------- | -------------------------------------------------- |
 | **Repo**      | https://github.com/tensor-labz/tensor-labz-docs   |
 | **Docs site** | https://tensor-labz.github.io/tensor-labz-docs/   |
 | **Tool**      | MkDocs Material + GitHub Actions (auto-deploy on push to `main`) |
-| **Local**     | `cd ../tensor-labz-docs && mkdocs serve`           |
+| **Submodule** | `docs/` → `tensor-labz/tensor-labz-docs`          |
+| **Local**     | `git submodule update --init --recursive`, then `cd docs && mkdocs serve` |
 
-> Do **not** add `docs/`, `mkdocs.yml`, or a docs workflow to this repo — they were removed and live in `tensor-labz-docs` only.
+> The `docs/` submodule is **source colocation only**. Docs are still built and deployed **exclusively** from the `tensor-labz-docs` repo to GitHub Pages — this repo does **not** build, bundle, or host them, and `mkdocs.yml`/docs workflows must **not** be added to this repo's root.
+>
+> The image Lambda is likewise vendored as a submodule at `image-lambda/` → `tensor-labz/tensor-labz-image-lambda`, for reference only; it is built and deployed from its own repo, not from here.
+
+### Submodules & CI
+
+Both submodules are **private**, so build hosts must be able to clone them or builds break:
+
+- **AWS Amplify (production)** — recursively inits submodules on clone. Add an SSH private key in the Amplify console and register the matching public key as a deploy key on both submodule repos.
+- **Firebase staging + CI (`deploy-staging.yml`, `ci.yml`)** — the `actions/checkout@v4` step needs `submodules: recursive` and an `ssh-key`/PAT with read access to both repos (the default `GITHUB_TOKEN` cannot read other private repos).
+- `eslint.config.js` ignores `docs` and `image-lambda` so submodule source is not linted by this repo's CI.
 
 ---
 
