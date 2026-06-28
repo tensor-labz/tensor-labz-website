@@ -30,13 +30,6 @@ const textVariants = {
   }),
 };
 
-// Heading animates opacity only — a residual `y` transform leaves a paint
-// layer that clips the Syne font's deep descenders (g, y, p). No transform = no clip.
-const headingVariants = {
-  hidden: { opacity: 0 },
-  visible: { opacity: 1, transition: { duration: 0.7, ease: EASE_EXPO } },
-};
-
 const HeroSection: React.FC = memo(() => {
   const [ref, inView] = useInView({ threshold: 0.1, triggerOnce: true });
 
