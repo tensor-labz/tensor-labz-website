@@ -5,17 +5,15 @@ import ProjectCard from './ProjectCard';
 import ServiceEmpty from './ServiceEmpty';
 import ServiceLoading from './ServiceLoading';
 import { useServicesPageController } from '../hooks/useServicesPageController';
-import { useSiteSettings } from '../../../shared/hooks/useSiteSettings';
 
 function ServiceContainer() {
   const { filteredProjects, totalItems, isLoading, itemsPerPage } =
     useServicesPageController();
-  const { get } = useSiteSettings();
 
   if (isLoading) return <ServiceLoading />;
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 mt-8 mb-16">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 mt-2 mb-16">
       <motion.div
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
@@ -29,7 +27,7 @@ function ServiceContainer() {
             fontFamily: '"Syne", sans-serif',
           }}
         >
-          {get('services.title')}
+          Projects
         </h2>
         <div
           className="flex-1 h-px"
