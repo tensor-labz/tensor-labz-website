@@ -70,7 +70,7 @@ const Posts: React.FC = memo(() => {
       />
 
       {/* ── Posts ── */}
-      <section className="px-6 lg:px-16 pb-16 max-w-7xl mx-auto">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 mt-2 pb-16">
         {isLoading ? (
           <div className="flex flex-col gap-6">
             {Array.from({ length: 3 }).map((_, i) => (

@@ -63,7 +63,7 @@ const PageHeader: React.FC<PageHeaderProps> = ({
 }) => {
   return (
     <motion.header
-      className={`relative text-white md:py-11 py-16 px-4 md:px-8 overflow-hidden ${className}`}
+      className={`relative text-white pt-20 pb-4 md:pt-20 md:pb-5 px-4 md:px-8 overflow-hidden ${className}`}
       variants={containerVariants}
       initial="hidden"
       animate="visible"
@@ -90,11 +90,11 @@ const PageHeader: React.FC<PageHeaderProps> = ({
 
       {/* Content */}
       <div
-        className={`max-w-6xl mx-auto relative z-10 mt-6 ${centered ? 'text-center' : ''}`}
+        className={`max-w-6xl mx-auto relative z-10 ${centered ? 'text-center' : ''}`}
       >
         {eyebrow && (
           <motion.div
-            className="mb-2 text-sm md:text-base opacity-80"
+            className="mb-2 text-[11px] md:text-xs font-mono tracking-[0.2em] uppercase text-accent"
             variants={itemVariants(0.1)}
             initial="hidden"
             animate="visible"
@@ -110,7 +110,7 @@ const PageHeader: React.FC<PageHeaderProps> = ({
         >
           <div className={centered ? '' : 'flex-1 lg:pr-8'}>
             <motion.h1
-              className={`text-2xl md:text-3xl font-bold mb-4 flex items-center gap-3 text-white font-display ${
+              className={`text-xl md:text-2xl font-bold mb-2 flex items-center gap-3 text-white font-display ${
                 centered ? 'justify-center' : ''
               }`}
               variants={itemVariants(0.1)}
@@ -154,7 +154,7 @@ const PageHeader: React.FC<PageHeaderProps> = ({
 
         {description && (
           <motion.p
-            className="text-base md:text-lg opacity-80 text-center w-full leading-relaxed text-white mt-2"
+            className="text-sm opacity-70 text-center w-full leading-relaxed text-white mt-1"
             variants={itemVariants(0.4)}
             initial="hidden"
             animate="visible"
@@ -165,7 +165,7 @@ const PageHeader: React.FC<PageHeaderProps> = ({
 
         {search && (
           <motion.div
-            className="relative max-w-lg mx-auto mt-6"
+            className="relative max-w-lg mx-auto mt-4"
             variants={itemVariants(0.5)}
             initial="hidden"
             animate="visible"
