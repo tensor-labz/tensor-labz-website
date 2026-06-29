@@ -6,7 +6,7 @@ import {
 import type { RootState } from '../app/store';
 import {
   fetchPublishedPosts,
-  fetchPostBySlug,
+  fetchPostById,
   type Post,
 } from '../services/postService';
 
@@ -29,9 +29,9 @@ export const loadPosts = createAsyncThunk(
   fetchPublishedPosts
 );
 
-export const loadPostBySlug = createAsyncThunk(
-  'posts/loadPostBySlug',
-  (slug: string) => fetchPostBySlug(slug)
+export const loadPostById = createAsyncThunk(
+  'posts/loadPostById',
+  (id: string) => fetchPostById(id)
 );
 
 const postSlice = createSlice({
@@ -56,14 +56,14 @@ const postSlice = createSlice({
         state.listStatus = 'failed';
       })
 
-      .addCase(loadPostBySlug.pending, (state) => {
+      .addCase(loadPostById.pending, (state) => {
         state.detailStatus = 'loading';
       })
-      .addCase(loadPostBySlug.fulfilled, (state, { payload }) => {
+      .addCase(loadPostById.fulfilled, (state, { payload }) => {
         state.selected = payload;
         state.detailStatus = 'succeeded';
       })
-      .addCase(loadPostBySlug.rejected, (state) => {
+      .addCase(loadPostById.rejected, (state) => {
         state.detailStatus = 'failed';
       });
   },

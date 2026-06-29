@@ -1,5 +1,5 @@
-import { supabase } from '../lib/supabase';
 import { type CoverTypeValue } from '../shared/components/ui/CoverTypeSelect';
+import { listPublishedPosts, getPostPublic } from './firebase/postsRepo';
 
 export interface PostSocialLink {
   id: number;
@@ -17,7 +17,7 @@ export interface PostAdditionalMedia {
 }
 
 export interface Post {
-  id: number;
+  id: string;
   title: string;
   slug: string;
   cover_image?: string;
@@ -70,94 +70,13 @@ export function coverThumbnail(
   return url;
 }
 
-/* Parse comma-separated string OR JSON array OR PostgreSQL array → string[] */
-function parseArray(val: unknown): string[] {
-  if (!val) return [];
-  if (Array.isArray(val)) return val as string[];
-  if (typeof val === 'string') {
-    const t = val.trim();
-    if (t.startsWith('[')) {
-      try {
-        return JSON.parse(t) as string[];
-      } catch {
-        /* fall through */
-      }
-    }
-    return t
-      .split(',')
-      .map((s) => s.trim())
-      .filter(Boolean);
-  }
-  return [];
-}
-
-function rowToPost(row: Record<string, unknown>): Post {
-  const rawLinks = row.post_social_links;
-  const social_links: PostSocialLink[] = Array.isArray(rawLinks)
-    ? (rawLinks as Record<string, unknown>[]).map((l) => ({
-        id: l.id as number,
-        platform: (l.platform as string) ?? '',
-        url: (l.url as string) ?? '',
-      }))
-    : [];
-
-  const rawMedia = row.post_additional_media;
-  const additional_media: PostAdditionalMedia[] = Array.isArray(rawMedia)
-    ? (rawMedia as Record<string, unknown>[]).map((m) => ({
-        id: m.id as number,
-        post_id: m.post_id as number,
-        url: (m.url as string) ?? '',
-        type: (m.type as CoverMediaType) ?? 'image',
-      }))
-    : [];
-
-  const cover_image = (row.cover_image as string) || undefined;
-
-  return {
-    id: row.id as number,
-    title: (row.title as string) ?? '',
-    slug: (row.slug as string) ?? '',
-    cover_image,
-    cover_media_type:
-      (row.cover_image_type as CoverMediaType) || detectCoverType(cover_image),
-    description: (row.description as string) || undefined,
-    meta_title: (row.meta_title as string) || undefined,
-    content: (row.content as string) || undefined,
-    tags: parseArray(row.tags),
-    status: (row.status as Post['status']) ?? 'draft',
-    social_links,
-    additional_media,
-    created_at: (row.created_at as string) ?? '',
-    updated_at: (row.updated_at as string) ?? '',
-  };
-}
-
-const POST_SELECT = `
-  *,
-  post_social_links ( id, platform, url ),
-  post_additional_media ( id, post_id, url, type )
-`;
+/* Data now lives in Firestore — these delegate to postsRepo. */
 
 export async function fetchPublishedPosts(): Promise<Post[]> {
-  const { data, error } = await supabase
-    .from('posts')
-    .select(POST_SELECT)
-    .eq('status', 'published')
-    .order('sort_order', { ascending: true })
-    .order('created_at', { ascending: false });
-
-  if (error) throw new Error(error.message);
-  return (data ?? []).map((row) => rowToPost(row as Record<string, unknown>));
+  return listPublishedPosts();
 }
 
-export async function fetchPostBySlug(slug: string): Promise<Post | null> {
-  const { data, error } = await supabase
-    .from('posts')
-    .select(POST_SELECT)
-    .eq('slug', slug)
-    .eq('status', 'published')
-    .single();
-
-  if (error) return null;
-  return data ? rowToPost(data as Record<string, unknown>) : null;
+/** Fetch a single published post by its Firestore document id. */
+export async function fetchPostById(id: string): Promise<Post | null> {
+  return getPostPublic(id);
 }

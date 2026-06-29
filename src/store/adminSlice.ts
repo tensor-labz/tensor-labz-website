@@ -7,11 +7,8 @@ import {
   type PayloadAction,
 } from '@reduxjs/toolkit';
 import { supabase } from '../lib/supabase';
-import * as servicesRepo from '../services/firebase/servicesRepo';
+import { FIRESTORE_REPOS } from '../services/firebase/registry';
 import type { RootState } from '../app/store';
-
-/** Modules whose data lives in Firestore (migrated off Supabase). */
-const FIRESTORE_MODULES = new Set(['services']);
 
 /* ── Types ─────────────────────────────────────────────────────────────── */
 
@@ -57,8 +54,9 @@ export const fetchRecords = createAsyncThunk(
   'admin/fetchRecords',
   async ({ moduleId, tableId }: { moduleId: string; tableId?: string }) => {
     const tid = tableId ?? moduleId;
-    if (FIRESTORE_MODULES.has(tid)) {
-      const records = await servicesRepo.listServices();
+    const repo = FIRESTORE_REPOS[tid];
+    if (repo) {
+      const records = await repo.list();
       return { moduleId, records: records as unknown as AdminRecord[] };
     }
     const { data, error } = await supabase.from(tid).select('*').order('id');
@@ -81,8 +79,9 @@ export const fetchRecord = createAsyncThunk(
     if (!id || (typeof id === 'number' && isNaN(id)))
       throw new Error('Invalid record id');
     const tid = tableId ?? moduleId;
-    if (FIRESTORE_MODULES.has(tid)) {
-      const record = await servicesRepo.getService(String(id));
+    const repo = FIRESTORE_REPOS[tid];
+    if (repo) {
+      const record = await repo.get(String(id));
       if (!record) throw new Error('Record not found');
       return { moduleId, record: record as unknown as AdminRecord };
     }
@@ -111,9 +110,10 @@ export const createRecord = createAsyncThunk(
     { getState }
   ) => {
     const tid = tableId ?? moduleId;
-    if (FIRESTORE_MODULES.has(tid)) {
+    const repo = FIRESTORE_REPOS[tid];
+    if (repo) {
       const by = (getState() as RootState).auth.user?.email ?? 'admin';
-      const record = await servicesRepo.createService(data, by);
+      const record = await repo.create(data, by);
       return { moduleId, record: record as unknown as AdminRecord };
     }
     const { data: result, error } = await supabase
@@ -143,9 +143,10 @@ export const updateRecord = createAsyncThunk(
     { getState }
   ) => {
     const tid = tableId ?? moduleId;
-    if (FIRESTORE_MODULES.has(tid)) {
+    const repo = FIRESTORE_REPOS[tid];
+    if (repo) {
       const by = (getState() as RootState).auth.user?.email ?? 'admin';
-      const record = await servicesRepo.updateService(String(id), data, by);
+      const record = await repo.update(String(id), data, by);
       return { moduleId, record: record as unknown as AdminRecord };
     }
     const { data: result, error } = await supabase
@@ -177,8 +178,9 @@ export const deleteRecord = createAsyncThunk(
       await deleteImages(imageKeys).catch(() => {});
     }
     const tid = tableId ?? moduleId;
-    if (FIRESTORE_MODULES.has(tid)) {
-      await servicesRepo.deleteService(String(id));
+    const repo = FIRESTORE_REPOS[tid];
+    if (repo) {
+      await repo.remove(String(id));
       return { moduleId, id };
     }
     const { error } = await supabase.from(tid).delete().eq('id', id);

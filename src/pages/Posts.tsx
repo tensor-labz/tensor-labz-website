@@ -52,7 +52,7 @@ const Posts: React.FC = memo(() => {
 
   const items = paginated.map((post, i) => ({
     id: post.id,
-    link: `/posts/${post.slug}`,
+    link: `/posts/${post.id}`,
     title: post.title,
     description: post.description,
     imgUrl: coverThumbnail(post.cover_image, post.cover_media_type),
