@@ -42,7 +42,7 @@ const MobileTopCarousel: React.FC = memo(() => {
           >
             <LatestProductCard
               {...topProjects[currentIndex]}
-              id={currentIndex}
+              id={String(currentIndex)}
             />
           </motion.div>
         </AnimatePresence>

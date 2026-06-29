@@ -13,7 +13,7 @@ const ProjectPage = memo(() => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, [project?.slug]);
+  }, [project?.id]);
 
   const supportHref = useMemo(
     () =>
@@ -81,10 +81,10 @@ const ProjectPage = memo(() => {
       >
         <MediaGallery
           title="◈ Project Gallery"
-          media={(project.extraImages ?? []).map((url, i) => ({
+          media={(project.additional_media ?? []).map((m, i) => ({
             id: i,
-            type: 'image' as const,
-            url,
+            type: m.type as 'image' | 'youtube' | 'video',
+            url: m.url,
           }))}
         />
       </DetailsPage>

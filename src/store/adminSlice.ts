@@ -200,6 +200,14 @@ export const fetchRelationOptions = createAsyncThunk(
     labelField: string;
     valueField?: string;
   }) => {
+    const repo = FIRESTORE_REPOS[table];
+    if (repo) {
+      const records = (await repo.list()) as Array<Record<string, unknown>>;
+      return records.map((r) => ({
+        [valueField]: r[valueField],
+        [labelField]: r[labelField],
+      }));
+    }
     const { data, error } = await supabase
       .from(table)
       .select(`${valueField}, ${labelField}`)

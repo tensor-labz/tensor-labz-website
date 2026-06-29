@@ -70,7 +70,7 @@ export const selectCurrentPage = (state: RootState) =>
 export const selectTopProjects = createSelector(selectAllProjects, (items) =>
   items.filter((p) => p.is_top)
 );
-export const selectProjectBySlug =
-  (slug: string) =>
+export const selectProjectById =
+  (id: string) =>
   (state: RootState): ProjectItem | null =>
-    state.projects.items.find((p) => p.slug === slug) ?? null;
+    state.projects.items.find((p) => p.id === id) ?? null;

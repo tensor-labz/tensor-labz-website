@@ -4,6 +4,7 @@
  */
 import * as servicesRepo from './servicesRepo';
 import * as postsRepo from './postsRepo';
+import * as projectsRepo from './projectsRepo';
 
 export interface FirestoreRepo {
   list: () => Promise<unknown[]>;
@@ -31,6 +32,13 @@ export const FIRESTORE_REPOS: Record<string, FirestoreRepo> = {
     create: postsRepo.createPost,
     update: postsRepo.updatePost,
     remove: postsRepo.deletePost,
+  },
+  projects: {
+    list: projectsRepo.listProjectsForAdmin,
+    get: projectsRepo.getProjectAdmin,
+    create: projectsRepo.createProject,
+    update: projectsRepo.updateProject,
+    remove: projectsRepo.deleteProject,
   },
 };
 
