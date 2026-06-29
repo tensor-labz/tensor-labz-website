@@ -1,4 +1,8 @@
-import { supabase } from '../lib/supabase';
+import { createFlatRepo } from './firebase/flatRepo';
+
+const ciRepo = createFlatRepo('company_info');
+const socialRepo = createFlatRepo('social');
+const contactRepo = createFlatRepo('contact');
 
 export interface SocialLink {
   platform: string;
@@ -43,39 +47,31 @@ export const DEFAULTS: CompanyInfo = {
 };
 
 export async function fetchCompanyInfo(
-  signal?: AbortSignal
+  _signal?: AbortSignal
 ): Promise<CompanyInfo> {
-  const [{ data: ci }, { data: social }, { data: contact }] = await Promise.all(
-    [
-      supabase.from('company_info').select('*').maybeSingle(),
-      supabase.from('social').select('social_media, value').order('id'),
-      supabase
-        .from('contact')
-        .select('contact, title, value, link')
-        .order('id'),
-    ]
-  );
-
-  // AbortSignal is accepted for future use / cancellation signalling;
-  // the supabase-js v2 client does not yet propagate it, but the parameter
-  // keeps the signature compatible with createAsyncThunk's { signal }.
-  void signal;
+  void _signal; // Firestore one-shot read
+  const [ciRows, social, contact] = await Promise.all([
+    ciRepo.list(),
+    socialRepo.list(),
+    contactRepo.list(),
+  ]);
+  const ci = (ciRows[0] ?? {}) as Record<string, unknown>;
 
   const socialLinks: SocialLink[] =
     social && social.length > 0
       ? social.map((r) => ({
-          platform: r.social_media ?? '',
-          url: r.value ?? '',
+          platform: (r.social_media as string) ?? '',
+          url: (r.value as string) ?? '',
         }))
       : DEFAULTS.social_links;
 
   const contactRows: ContactRow[] =
     contact && contact.length > 0
       ? contact.map((r) => ({
-          type: r.contact ?? '',
-          title: r.title ?? '',
-          value: r.value ?? '',
-          link: r.link ?? '',
+          type: (r.contact as string) ?? '',
+          title: (r.title as string) ?? '',
+          value: (r.value as string) ?? '',
+          link: (r.link as string) ?? '',
         }))
       : DEFAULTS.contact_rows;
 

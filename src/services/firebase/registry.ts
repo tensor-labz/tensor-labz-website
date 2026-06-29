@@ -5,6 +5,7 @@
 import * as servicesRepo from './servicesRepo';
 import * as postsRepo from './postsRepo';
 import * as projectsRepo from './projectsRepo';
+import { createFlatRepo } from './flatRepo';
 
 export interface FirestoreRepo {
   list: () => Promise<unknown[]>;
@@ -40,6 +41,14 @@ export const FIRESTORE_REPOS: Record<string, FirestoreRepo> = {
     update: projectsRepo.updateProject,
     remove: projectsRepo.deleteProject,
   },
+  // Flat config collections (1:1 rows).
+  hero: createFlatRepo('hero'),
+  about: createFlatRepo('about'),
+  contact: createFlatRepo('contact'),
+  social: createFlatRepo('social'),
+  about_media: createFlatRepo('about_media'),
+  company_info: createFlatRepo('company_info'),
+  site_settings: createFlatRepo('site_settings'),
 };
 
 /** True if the given module/table id is backed by Firestore (not Supabase). */
