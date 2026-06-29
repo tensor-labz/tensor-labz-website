@@ -16,7 +16,10 @@ import SocialPlatformSelect from '../../../shared/components/ui/SocialPlatformSe
 import Breadcrumbs from '../../../shared/components/ui/Breadcrumbs';
 import { supabase } from '../../../lib/supabase';
 import { auth } from '../../../lib/firebase';
-import { isFirestoreModule } from '../../../services/firebase/registry';
+import {
+  isFirestoreModule,
+  FIRESTORE_REPOS,
+} from '../../../services/firebase/registry';
 import { uploadImage, moduleFolder } from '../../../lib/imageUpload';
 import { uploadAvatar } from '../../../lib/supabaseStorage';
 import { detectCoverType, toYouTubeEmbed } from '../../../services/postService';
@@ -1222,19 +1225,28 @@ const RelationSelect = ({
   useEffect(() => {
     if (!relation) return;
     const vf = relation.valueField ?? 'id';
-    supabase
-      .from(relation.table)
-      .select('*')
-      .order(vf)
-      .then(({ data }) => {
-        if (!data) return;
-        setOpts(
-          data.map((row) => ({
-            value: String(row[vf] ?? ''),
-            label: String(row[relation.labelField] ?? row[vf] ?? ''),
-          }))
-        );
-      });
+    const load = async () => {
+      let rows: Record<string, unknown>[] = [];
+      if (isFirestoreModule(relation.table)) {
+        rows = (await FIRESTORE_REPOS[relation.table].list()) as Record<
+          string,
+          unknown
+        >[];
+      } else {
+        const { data } = await supabase
+          .from(relation.table)
+          .select('*')
+          .order(vf);
+        rows = (data ?? []) as Record<string, unknown>[];
+      }
+      setOpts(
+        rows.map((row) => ({
+          value: String(row[vf] ?? ''),
+          label: String(row[relation.labelField] ?? row[vf] ?? ''),
+        }))
+      );
+    };
+    load();
   }, [relation]);
 
   return (

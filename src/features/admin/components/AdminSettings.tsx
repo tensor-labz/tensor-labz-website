@@ -7,7 +7,7 @@ import {
   DEFAULT_PAGE_COMPONENTS,
   type PageComponentConfig,
 } from '../../../shared/types/pageConfig';
-import { supabase } from '../../../lib/supabase';
+import { listConfigs, setConfig } from '../../../services/firebase/configRepo';
 import type { TableColumnConfig } from '../../../shared/types/tableConfig';
 
 type SectionId =
@@ -383,18 +383,14 @@ const PageConfigSection = memo(() => {
   const [saved, setSaved] = useState(false);
 
   useEffect(() => {
-    supabase
-      .from('page_config')
-      .select('*')
-      .then(({ data, error }) => {
-        if (error || !data) return;
-        const map: Record<string, PageComponentConfig[]> = {};
-        (
-          data as { module_id: string; components: PageComponentConfig[] }[]
-        ).forEach((r) => {
-          map[r.module_id] = r.components;
-        });
-        setConfigs(map);
+    listConfigs('page_config').then((rows) => {
+      const map: Record<string, PageComponentConfig[]> = {};
+      (
+        rows as { module_id: string; components?: PageComponentConfig[] }[]
+      ).forEach((r) => {
+        if (r.components) map[r.module_id] = r.components;
+      });
+      setConfigs(map);
       });
   }, []);
 
@@ -415,12 +411,7 @@ const PageConfigSection = memo(() => {
 
   const handleSave = async () => {
     setSaving(true);
-    await supabase
-      .from('page_config')
-      .upsert(
-        { module_id: activeModule, components },
-        { onConflict: 'module_id' }
-      );
+    await setConfig('page_config', activeModule, { components });
     setSaving(false);
     setSaved(true);
     setTimeout(() => setSaved(false), 2000);
@@ -782,18 +773,14 @@ const TableColumnsSection = memo(() => {
 
   /* load all configs once */
   useEffect(() => {
-    supabase
-      .from('table_config')
-      .select('*')
-      .then(({ data }) => {
-        if (!data) return;
-        const map: Record<string, TableColumnConfig[]> = {};
-        (data as { module_id: string; columns: TableColumnConfig[] }[]).forEach(
-          (r) => {
-            map[r.module_id] = r.columns;
-          }
-        );
-        setConfigs(map);
+    listConfigs('table_config').then((rows) => {
+      const map: Record<string, TableColumnConfig[]> = {};
+      (rows as { module_id: string; columns?: TableColumnConfig[] }[]).forEach(
+        (r) => {
+          if (r.columns) map[r.module_id] = r.columns;
+        }
+      );
+      setConfigs(map);
       });
   }, []);
 
@@ -812,12 +799,7 @@ const TableColumnsSection = memo(() => {
 
   const handleSave = async () => {
     setSaving(true);
-    await supabase
-      .from('table_config')
-      .upsert(
-        { module_id: activeModule, columns: cols },
-        { onConflict: 'module_id' }
-      );
+    await setConfig('table_config', activeModule, { columns: cols });
     setSaving(false);
     setSaved(true);
     setTimeout(() => setSaved(false), 2000);

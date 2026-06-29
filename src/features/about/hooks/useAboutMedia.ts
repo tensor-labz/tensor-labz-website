@@ -1,13 +1,15 @@
 import { useState, useEffect } from 'react';
-import { supabase } from '../../../lib/supabase';
+import { createFlatRepo } from '../../../services/firebase/flatRepo';
 
 export interface MediaItem {
-  id: number;
+  id: string | number;
   type: 'video' | 'image';
   url: string;
   title: string;
   sort_order: number;
 }
+
+const aboutMediaRepo = createFlatRepo('about_media');
 
 let _cache: MediaItem[] | null = null;
 
@@ -17,15 +19,11 @@ export function useAboutMedia() {
 
   useEffect(() => {
     if (_cache !== null) return;
-    supabase
-      .from('about_media')
-      .select('id, type, url, title, sort_order')
-      .order('sort_order')
-      .then(({ data }) => {
-        _cache = (data as MediaItem[]) ?? [];
-        setItems(_cache);
-        setLoading(false);
-      });
+    aboutMediaRepo.list().then((rows) => {
+      _cache = rows as unknown as MediaItem[];
+      setItems(_cache);
+      setLoading(false);
+    });
   }, []);
 
   return { items, loading };

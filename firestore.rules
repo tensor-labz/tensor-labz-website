@@ -9,7 +9,8 @@ service cloud.firestore {
       return c in [
         'services', 'posts', 'projects',
         'hero', 'about', 'contact', 'social',
-        'about_media', 'company_info', 'site_settings'
+        'about_media', 'company_info', 'site_settings',
+        'table_config', 'form_config', 'page_config'
       ];
     }
 
