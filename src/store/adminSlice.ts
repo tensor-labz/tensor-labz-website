@@ -7,7 +7,11 @@ import {
   type PayloadAction,
 } from '@reduxjs/toolkit';
 import { supabase } from '../lib/supabase';
+import * as servicesRepo from '../services/firebase/servicesRepo';
 import type { RootState } from '../app/store';
+
+/** Modules whose data lives in Firestore (migrated off Supabase). */
+const FIRESTORE_MODULES = new Set(['services']);
 
 /* ── Types ─────────────────────────────────────────────────────────────── */
 
@@ -53,6 +57,10 @@ export const fetchRecords = createAsyncThunk(
   'admin/fetchRecords',
   async ({ moduleId, tableId }: { moduleId: string; tableId?: string }) => {
     const tid = tableId ?? moduleId;
+    if (FIRESTORE_MODULES.has(tid)) {
+      const records = await servicesRepo.listServices();
+      return { moduleId, records: records as unknown as AdminRecord[] };
+    }
     const { data, error } = await supabase.from(tid).select('*').order('id');
     if (error) throw new Error(error.message);
     return { moduleId, records: (data ?? []) as AdminRecord[] };
@@ -73,6 +81,11 @@ export const fetchRecord = createAsyncThunk(
     if (!id || (typeof id === 'number' && isNaN(id)))
       throw new Error('Invalid record id');
     const tid = tableId ?? moduleId;
+    if (FIRESTORE_MODULES.has(tid)) {
+      const record = await servicesRepo.getService(String(id));
+      if (!record) throw new Error('Record not found');
+      return { moduleId, record: record as unknown as AdminRecord };
+    }
     const { data, error } = await supabase
       .from(tid)
       .select('*')
@@ -85,16 +98,24 @@ export const fetchRecord = createAsyncThunk(
 
 export const createRecord = createAsyncThunk(
   'admin/createRecord',
-  async ({
-    moduleId,
-    data,
-    tableId,
-  }: {
-    moduleId: string;
-    data: Record<string, unknown>;
-    tableId?: string;
-  }) => {
+  async (
+    {
+      moduleId,
+      data,
+      tableId,
+    }: {
+      moduleId: string;
+      data: Record<string, unknown>;
+      tableId?: string;
+    },
+    { getState }
+  ) => {
     const tid = tableId ?? moduleId;
+    if (FIRESTORE_MODULES.has(tid)) {
+      const by = (getState() as RootState).auth.user?.email ?? 'admin';
+      const record = await servicesRepo.createService(data, by);
+      return { moduleId, record: record as unknown as AdminRecord };
+    }
     const { data: result, error } = await supabase
       .from(tid)
       .insert(data)
@@ -107,18 +128,26 @@ export const createRecord = createAsyncThunk(
 
 export const updateRecord = createAsyncThunk(
   'admin/updateRecord',
-  async ({
-    moduleId,
-    id,
-    data,
-    tableId,
-  }: {
-    moduleId: string;
-    id: number | string;
-    data: Record<string, unknown>;
-    tableId?: string;
-  }) => {
+  async (
+    {
+      moduleId,
+      id,
+      data,
+      tableId,
+    }: {
+      moduleId: string;
+      id: number | string;
+      data: Record<string, unknown>;
+      tableId?: string;
+    },
+    { getState }
+  ) => {
     const tid = tableId ?? moduleId;
+    if (FIRESTORE_MODULES.has(tid)) {
+      const by = (getState() as RootState).auth.user?.email ?? 'admin';
+      const record = await servicesRepo.updateService(String(id), data, by);
+      return { moduleId, record: record as unknown as AdminRecord };
+    }
     const { data: result, error } = await supabase
       .from(tid)
       .update(data)
@@ -148,6 +177,10 @@ export const deleteRecord = createAsyncThunk(
       await deleteImages(imageKeys).catch(() => {});
     }
     const tid = tableId ?? moduleId;
+    if (FIRESTORE_MODULES.has(tid)) {
+      await servicesRepo.deleteService(String(id));
+      return { moduleId, id };
+    }
     const { error } = await supabase.from(tid).delete().eq('id', id);
     if (error) throw new Error(error.message);
     return { moduleId, id };

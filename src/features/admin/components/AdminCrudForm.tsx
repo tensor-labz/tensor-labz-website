@@ -15,6 +15,7 @@ import CoverTypeSelect from '../../../shared/components/ui/CoverTypeSelect';
 import SocialPlatformSelect from '../../../shared/components/ui/SocialPlatformSelect';
 import Breadcrumbs from '../../../shared/components/ui/Breadcrumbs';
 import { supabase } from '../../../lib/supabase';
+import { auth } from '../../../lib/firebase';
 import { uploadImage, moduleFolder } from '../../../lib/imageUpload';
 import { uploadAvatar } from '../../../lib/supabaseStorage';
 import { detectCoverType, toYouTubeEmbed } from '../../../services/postService';
@@ -172,10 +173,7 @@ export const ImageField = ({
       try {
         let publicUrl: string;
         if (storageBackend === 'supabase') {
-          const uid =
-            userId ??
-            (await supabase.auth.getUser()).data.user?.id ??
-            'unknown';
+          const uid = userId ?? auth.currentUser?.uid ?? 'unknown';
           publicUrl = await uploadAvatar(file, uid);
         } else {
           ({ publicUrl } = await uploadImage(
