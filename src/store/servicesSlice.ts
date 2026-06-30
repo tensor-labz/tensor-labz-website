@@ -50,5 +50,10 @@ export default servicesSlice.reducer;
 export const selectServices = (state: RootState) => state.services.items;
 export const selectServicesStatus = (state: RootState) => state.services.status;
 export const selectHomeServices = createSelector(selectServices, (items) =>
-  items.filter((s) => s.show_in_home === 'true' || s.show_in_home === '1')
+  items.filter(
+    (s) =>
+      s.show_in_home === true ||
+      s.show_in_home === 'true' ||
+      s.show_in_home === '1'
+  )
 );
