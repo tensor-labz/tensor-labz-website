@@ -3,9 +3,15 @@ import {
   createAsyncThunk,
   type PayloadAction,
 } from '@reduxjs/toolkit';
-import { supabase } from '../lib/supabase';
+import {
+  signInWithEmailAndPassword,
+  signOut as firebaseSignOut,
+  sendPasswordResetEmail,
+  updateProfile,
+  type User as FirebaseUser,
+} from 'firebase/auth';
+import { auth } from '../lib/firebase';
 import type { RootState } from '../app/store';
-import type { User } from '@supabase/supabase-js';
 
 /* ── Types ──────────────────────────────────────────────────────────────── */
 
@@ -25,12 +31,12 @@ interface AuthState {
 
 /* ── Helpers ─────────────────────────────────────────────────────────────── */
 
-function toAuthUser(user: User): AuthUser {
+export function toAuthUser(user: FirebaseUser): AuthUser {
   return {
-    uid: user.id,
+    uid: user.uid,
     email: user.email ?? null,
-    displayName: (user.user_metadata?.full_name as string) ?? null,
-    avatarUrl: (user.user_metadata?.avatar_url as string) ?? null,
+    displayName: user.displayName ?? null,
+    avatarUrl: user.photoURL ?? null,
   };
 }
 
@@ -39,48 +45,36 @@ function toAuthUser(user: User): AuthUser {
 export const signIn = createAsyncThunk(
   'auth/signIn',
   async ({ email, password }: { email: string; password: string }) => {
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-    if (error) throw new Error(error.message);
-    return toAuthUser(data.user);
+    const cred = await signInWithEmailAndPassword(auth, email, password);
+    return toAuthUser(cred.user);
   }
 );
 
 export const signOut = createAsyncThunk('auth/signOut', async () => {
-  await supabase.auth.signOut();
+  await firebaseSignOut(auth);
 });
 
 export const sendPasswordReset = createAsyncThunk(
   'auth/sendPasswordReset',
   async (email: string) => {
-    const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${window.location.origin}/admin`,
+    await sendPasswordResetEmail(auth, email, {
+      url: `${window.location.origin}/admin`,
     });
-    if (error) throw new Error(error.message);
   }
 );
 
-/** Update the currently logged-in user's auth metadata + profiles row. */
+/** Update the currently logged-in user's Firebase profile (displayName / photoURL). */
 export const updateCurrentUserProfile = createAsyncThunk(
   'auth/updateCurrentUserProfile',
   async (patch: { full_name?: string; avatar_url?: string }) => {
-    const {
-      data: { user },
-      error,
-    } = await supabase.auth.updateUser({ data: patch });
-    if (error || !user) throw new Error(error?.message ?? 'Update failed');
-
-    // Mirror into profiles table so other parts of the app stay in sync
-    const profilePatch: Record<string, unknown> = {};
-    if (patch.full_name !== undefined) profilePatch.name = patch.full_name;
-    if (patch.avatar_url !== undefined)
-      profilePatch.avatar_url = patch.avatar_url;
-    if (Object.keys(profilePatch).length) {
-      await supabase.from('profiles').update(profilePatch).eq('id', user.id);
-    }
-
+    const user = auth.currentUser;
+    if (!user) throw new Error('Not authenticated');
+    await updateProfile(user, {
+      ...(patch.full_name !== undefined
+        ? { displayName: patch.full_name }
+        : {}),
+      ...(patch.avatar_url !== undefined ? { photoURL: patch.avatar_url } : {}),
+    });
     return toAuthUser(user);
   }
 );

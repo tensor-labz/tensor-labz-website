@@ -1,20 +1,18 @@
-import { supabase } from '../lib/supabase';
+import { createFlatRepo } from './firebase/flatRepo';
 
 export interface ContactItem {
-  id: number;
+  id: string | number;
   contact: string;
   title: string;
   value: string;
+  link?: string;
 }
 
+const contactRepo = createFlatRepo('contact');
+
 export const fetchContactData = async (
-  signal?: AbortSignal
+  _signal?: AbortSignal
 ): Promise<ContactItem[]> => {
-  const { data, error } = await supabase
-    .from('contact')
-    .select('*')
-    .order('id')
-    .abortSignal(signal!);
-  if (error) throw new Error(error.message);
-  return (data ?? []) as ContactItem[];
+  void _signal; // Firestore one-shot read
+  return (await contactRepo.list()) as unknown as ContactItem[];
 };

@@ -1,4 +1,4 @@
-import { supabase } from './supabase';
+import { auth } from './firebase';
 
 const LAMBDA_URL = import.meta.env.VITE_IMAGE_LAMBDA_URL as string;
 const CDN_URL = (import.meta.env.VITE_CDN_URL ?? '') as string;
@@ -16,11 +16,10 @@ export function keyFromUrl(url: string): string | null {
 }
 
 async function getToken(): Promise<string> {
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
-  if (!session) throw new Error('Not authenticated');
-  return session.access_token;
+  const user = auth.currentUser;
+  if (!user) throw new Error('Not authenticated');
+  // Firebase ID token — the Lambda must verify Firebase tokens (not Supabase JWT).
+  return user.getIdToken();
 }
 
 /**

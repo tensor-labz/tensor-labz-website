@@ -40,8 +40,8 @@ const Services = memo(() => {
   const totalPages = Math.max(1, Math.ceil(totalItems / itemsPerPage));
 
   const items = filteredProjects.map((pro, index) => ({
-    id: pro.slug || index,
-    link: `/project/${pro.slug}`,
+    id: pro.id || index,
+    link: `/project/${pro.id}`,
     title: pro.title,
     description: pro.description,
     imgUrl: pro.imageURL,

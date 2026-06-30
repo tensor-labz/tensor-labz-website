@@ -3,7 +3,9 @@ import { Link } from 'react-router-dom';
 import Page from '../components/resuable/Page';
 import DetailsPage from '../shared/components/ui/DetailsPage';
 import ReactIcon from '../shared/components/ui/ReactIcon';
-import MediaGallery from '../shared/components/ui/MediaGallery';
+import MediaGallery, {
+  type MediaItem,
+} from '../shared/components/ui/MediaGallery';
 import ProjectPageLoading from '../features/project-detail/components/ProjectPageLoading';
 import ProjectNotFound from '../features/project-detail/components/ProjectNotFound';
 import { useProjectDetailController } from '../features/project-detail/hooks/useProjectDetailController';
@@ -13,7 +15,7 @@ const ProjectPage = memo(() => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, [project?.slug]);
+  }, [project?.id]);
 
   const supportHref = useMemo(
     () =>
@@ -81,10 +83,10 @@ const ProjectPage = memo(() => {
       >
         <MediaGallery
           title="◈ Project Gallery"
-          media={(project.extraImages ?? []).map((url, i) => ({
+          media={(project.additional_media ?? []).map((m, i) => ({
             id: i,
-            type: 'image' as const,
-            url,
+            type: m.type as MediaItem['type'],
+            url: m.url,
           }))}
         />
       </DetailsPage>

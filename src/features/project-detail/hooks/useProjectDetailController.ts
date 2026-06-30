@@ -4,14 +4,14 @@ import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import {
   loadProjects,
   selectProjectsStatus,
-  selectProjectBySlug,
+  selectProjectById,
 } from '../../../store/projectsSlice';
 
 export const useProjectDetailController = () => {
   const dispatch = useAppDispatch();
-  const { slug = '' } = useParams<{ slug: string }>();
+  const { id = '' } = useParams<{ id: string }>();
   const status = useAppSelector(selectProjectsStatus);
-  const project = useAppSelector(selectProjectBySlug(slug));
+  const project = useAppSelector(selectProjectById(id));
 
   useEffect(() => {
     if (status === 'idle') dispatch(loadProjects());
@@ -19,7 +19,7 @@ export const useProjectDetailController = () => {
 
   return {
     project,
-    slug,
+    id,
     isLoading: status === 'idle' || status === 'loading',
   };
 };

@@ -4,7 +4,7 @@ import { AnimatePresence, motion } from 'motion/react';
 import ReactIcon from '../../../shared/components/ui/ReactIcon';
 import { MODULES, type FieldConfig } from '../config/modules';
 import Breadcrumbs from '../../../shared/components/ui/Breadcrumbs';
-import { supabase } from '../../../lib/supabase';
+import { getConfig, setConfig } from '../../../services/firebase/configRepo';
 
 /* ── Types ── */
 
@@ -361,19 +361,16 @@ const AdminFormBuilder = memo(() => {
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
 
-  /* Load config from Supabase, fall back to static modules definition */
+  /* Load config from Firestore, fall back to static modules definition */
   useEffect(() => {
     setLoading(true);
     setEditIdx(null);
-    supabase
-      .from('form_config')
-      .select('fields')
-      .eq('module_id', moduleId)
-      .maybeSingle()
-      .then(({ data }) => {
-        setFields((data?.fields as FieldConfig[]) ?? mod?.fields ?? []);
+    getConfig<{ fields?: FieldConfig[] }>('form_config', moduleId).then(
+      (data) => {
+        setFields(data?.fields ?? mod?.fields ?? []);
         setLoading(false);
-      });
+      }
+    );
   }, [moduleId, mod]);
 
   /* Reorder */
@@ -422,12 +419,10 @@ const AdminFormBuilder = memo(() => {
     setEditIdx(null);
   }, []);
 
-  /* Persist to Supabase */
+  /* Persist to Firestore */
   const handleSave = async () => {
     setSaving(true);
-    await supabase
-      .from('form_config')
-      .upsert({ module_id: moduleId, fields }, { onConflict: 'module_id' });
+    await setConfig('form_config', moduleId, { fields });
     setSaving(false);
     setSaved(true);
     setTimeout(() => setSaved(false), 2000);

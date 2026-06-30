@@ -7,7 +7,7 @@ import DataTable, {
 } from 'react-data-table-component';
 import ReactIcon from '../../../shared/components/ui/ReactIcon';
 import { MODULES, getModuleFields } from '../config/modules';
-import { supabase } from '../../../lib/supabase';
+import { getConfig } from '../../../services/firebase/configRepo';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import {
   fetchRecords,
@@ -339,18 +339,16 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
       });
   }, [moduleId, mod, dispatch]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  /* Fetch column + pagination config from Supabase */
+  /* Fetch column + pagination config from Firestore */
   useEffect(() => {
     setColConfig(null);
-    supabase
-      .from('table_config')
-      .select('*')
-      .eq('module_id', moduleId)
-      .maybeSingle()
-      .then(({ data }) => {
-        if (data?.columns) setColConfig(data.columns as TableColumnConfig[]);
-        if (data?.page_size) setPageSize(data.page_size as number);
-      });
+    getConfig<{ columns?: TableColumnConfig[]; page_size?: number }>(
+      'table_config',
+      moduleId
+    ).then((data) => {
+      if (data?.columns) setColConfig(data.columns);
+      if (data?.page_size) setPageSize(data.page_size);
+    });
   }, [moduleId]);
 
   /* Keys of fields typed 'image' or 'images' in the static module config.

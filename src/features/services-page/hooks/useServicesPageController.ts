@@ -63,7 +63,12 @@ export const useServicesPageController = () => {
   const { filteredProjects, totalItems } = useMemo(() => {
     let result = allProjects;
     if (activeSlug && activeSlug !== 'all') {
-      result = result.filter((p) => p.service === activeSlug);
+      // project.service holds the service doc-id; the URL carries the slug —
+      // resolve the slug to the active service's doc-id, then filter.
+      const activeServiceId = services.find((s) => s.slug === activeSlug)?.id;
+      result = activeServiceId
+        ? result.filter((p) => String(p.service) === String(activeServiceId))
+        : [];
     }
     if (query) {
       result = result.filter(
@@ -81,7 +86,7 @@ export const useServicesPageController = () => {
       filteredProjects: result.slice(start, start + ITEMS_PER_PAGE),
       totalItems,
     };
-  }, [allProjects, activeSlug, currentPage, query]);
+  }, [allProjects, services, activeSlug, currentPage, query]);
 
   const isLoading =
     servicesStatus === 'idle' ||

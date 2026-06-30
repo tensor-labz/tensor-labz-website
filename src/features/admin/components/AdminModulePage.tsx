@@ -2,7 +2,7 @@ import { memo, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ReactIcon from '../../../shared/components/ui/ReactIcon';
 import { MODULES } from '../config/modules';
-import { supabase } from '../../../lib/supabase';
+import { getConfig } from '../../../services/firebase/configRepo';
 import {
   DEFAULT_PAGE_COMPONENTS,
   type PageComponentConfig,
@@ -24,15 +24,12 @@ const AdminModulePage = memo(({ moduleId }: { moduleId: string }) => {
 
   useEffect(() => {
     setComponents(DEFAULT_PAGE_COMPONENTS);
-    supabase
-      .from('page_config')
-      .select('*')
-      .eq('module_id', moduleId)
-      .maybeSingle()
-      .then(({ data, error }) => {
-        if (!error && data?.components)
-          setComponents(data.components as PageComponentConfig[]);
-      });
+    getConfig<{ components?: PageComponentConfig[] }>(
+      'page_config',
+      moduleId
+    ).then((data) => {
+      if (data?.components) setComponents(data.components);
+    });
   }, [moduleId]);
 
   return (

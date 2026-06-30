@@ -1,7 +1,7 @@
-import { supabase } from '../lib/supabase';
+import { createFlatRepo } from './firebase/flatRepo';
 
 export interface HeroSlide {
-  id: number;
+  id: string | number;
   img: string;
   title?: string;
   subtitle?: string;
@@ -10,14 +10,11 @@ export interface HeroSlide {
   sort_order?: number;
 }
 
+const heroRepo = createFlatRepo('hero');
+
 export const fetchHeroSlides = async (
-  signal?: AbortSignal
+  _signal?: AbortSignal
 ): Promise<HeroSlide[]> => {
-  const { data, error } = await supabase
-    .from('hero')
-    .select('*')
-    .order('id')
-    .abortSignal(signal!);
-  if (error) throw new Error(error.message);
-  return (data ?? []) as HeroSlide[];
+  void _signal; // Firestore one-shot read
+  return (await heroRepo.list()) as unknown as HeroSlide[];
 };
