@@ -391,7 +391,7 @@ const PageConfigSection = memo(() => {
         if (r.components) map[r.module_id] = r.components;
       });
       setConfigs(map);
-      });
+    });
   }, []);
 
   const components = configs[activeModule] ?? DEFAULT_PAGE_COMPONENTS;
@@ -781,7 +781,7 @@ const TableColumnsSection = memo(() => {
         }
       );
       setConfigs(map);
-      });
+    });
   }, []);
 
   const cols = configs[activeModule] ?? defaultColumns(activeModule);

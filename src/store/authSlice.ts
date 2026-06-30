@@ -73,9 +73,7 @@ export const updateCurrentUserProfile = createAsyncThunk(
       ...(patch.full_name !== undefined
         ? { displayName: patch.full_name }
         : {}),
-      ...(patch.avatar_url !== undefined
-        ? { photoURL: patch.avatar_url }
-        : {}),
+      ...(patch.avatar_url !== undefined ? { photoURL: patch.avatar_url } : {}),
     });
     return toAuthUser(user);
   }
