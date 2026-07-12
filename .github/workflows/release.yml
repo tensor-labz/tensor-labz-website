@@ -7,6 +7,11 @@ on:
 permissions:
   contents: write # push the version tag + publish a GitHub Release (no commit to main)
 
+# Never run two releases at once; let an in-flight release finish.
+concurrency:
+  group: release
+  cancel-in-progress: false
+
 jobs:
   release:
     name: Bump version, update changelog & tag

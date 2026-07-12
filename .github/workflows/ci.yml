@@ -2,9 +2,18 @@ name: CI
 
 on:
   pull_request:
-    branches: [main, staging, dev]
+    branches: [main, staging]
   push:
-    branches: [dev]
+    branches: [main, staging]
+
+# Cancel superseded runs on the same ref to save CI minutes.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+# Least privilege: CI only needs to read the repo.
+permissions:
+  contents: read
 
 jobs:
   ci:
@@ -28,7 +37,7 @@ jobs:
         run: npm run lint
 
       - name: Type check
-        run: npx tsc --noEmit
+        run: npm run typecheck
 
       - name: Build
         run: npm run build

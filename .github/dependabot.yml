@@ -1,0 +1,14 @@
+version: 2
+updates:
+  # Keep the docs + image-lambda submodule pins current, via reviewable PRs.
+  # Dependabot watches each submodule's tracked branch (.gitmodules:
+  # docs=main, image-lambda=master) and opens a PR into staging when it moves.
+  - package-ecosystem: 'gitsubmodule'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+    target-branch: 'staging'
+    commit-message:
+      prefix: 'chore'
+    labels:
+      - 'submodules'
