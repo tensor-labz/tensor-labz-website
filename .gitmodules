@@ -5,4 +5,4 @@
 [submodule "image-lambda"]
 	path = image-lambda
 	url = git@github.com:tensor-labz/tensor-labz-image-lambda.git
-	branch = main
+	branch = master
