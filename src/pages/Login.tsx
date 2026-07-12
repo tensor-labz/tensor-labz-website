@@ -18,13 +18,8 @@ import logo from '../assets/images/logo.png';
 /* ── Pulsing grid node ── */
 const GridNode = ({ x, y, delay }: { x: number; y: number; delay: number }) => (
   <motion.div
-    className="absolute w-1 h-1 rounded-full pointer-events-none"
-    style={{
-      left: `${x}%`,
-      top: `${y}%`,
-      backgroundColor: 'var(--accent)',
-      transform: 'translate(-50%, -50%)',
-    }}
+    className="absolute w-1 h-1 rounded-full pointer-events-none bg-accent -translate-x-1/2 -translate-y-1/2"
+    style={{ left: `${x}%`, top: `${y}%` }}
     animate={{ opacity: [0.15, 0.9, 0.15], scale: [0.7, 1.6, 0.7] }}
     transition={{
       duration: 3 + delay,
@@ -38,11 +33,10 @@ const GridNode = ({ x, y, delay }: { x: number; y: number; delay: number }) => (
 /* ── Animated horizontal scan line ── */
 const ScanLine = () => (
   <motion.div
-    className="absolute inset-x-0 h-px pointer-events-none"
+    className="absolute inset-x-0 h-px pointer-events-none opacity-35"
     style={{
       background:
         'linear-gradient(90deg, transparent 0%, var(--accent) 50%, transparent 100%)',
-      opacity: 0.35,
     }}
     animate={{ top: ['0%', '100%'] }}
     transition={{
@@ -63,10 +57,7 @@ const Corner = ({ pos }: { pos: 'tl' | 'tr' | 'bl' | 'br' }) => {
     br: 'bottom-0 right-0 border-b border-r',
   }[pos];
   return (
-    <div
-      className={`absolute w-5 h-5 ${cls}`}
-      style={{ borderColor: 'var(--accent)', opacity: 0.6 }}
-    />
+    <div className={`absolute w-5 h-5 border-accent opacity-60 ${cls}`} />
   );
 };
 
@@ -133,6 +124,7 @@ const Login = () => {
     { x: 35, y: 35, delay: 1.1 },
   ];
 
+  // Focus-dependent border/shadow — genuinely dynamic, kept inline.
   const inputStyle = (field: string) => ({
     backgroundColor: 'var(--bg-raised)',
     border: `1px solid ${focusedField === field ? 'var(--accent)' : 'var(--border)'}`,
@@ -145,10 +137,7 @@ const Login = () => {
   });
 
   return (
-    <div
-      className="min-h-screen flex"
-      style={{ backgroundColor: 'var(--bg-base)' }}
-    >
+    <div className="min-h-screen flex bg-canvas">
       <HeaderHelmet title="Admin Login" />
 
       {/* Theme toggle */}
@@ -156,12 +145,7 @@ const Login = () => {
         whileTap={{ scale: 0.88 }}
         onClick={toggleTheme}
         aria-label="Toggle theme"
-        className="fixed top-4 right-4 z-50 w-9 h-9 flex items-center justify-center rounded-lg"
-        style={{
-          backgroundColor: 'var(--bg-raised)',
-          border: '1px solid var(--border)',
-          color: 'var(--text-muted)',
-        }}
+        className="fixed top-4 right-4 z-50 w-9 h-9 flex items-center justify-center rounded-lg bg-raised border border-rim text-muted"
       >
         {theme === 'dark' ? (
           <ReactIcon name="RiSunLine" size={16} />
@@ -177,12 +161,7 @@ const Login = () => {
         initial={{ opacity: 0, x: -32 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-        className="hidden lg:flex relative flex-col items-center justify-center overflow-hidden"
-        style={{
-          width: '54%',
-          backgroundColor: 'var(--bg-surface)',
-          borderRight: '1px solid var(--border)',
-        }}
+        className="hidden lg:flex relative w-[54%] flex-col items-center justify-center overflow-hidden bg-surface border-r border-rim"
       >
         {/* Grid background */}
         <div
@@ -204,10 +183,7 @@ const Login = () => {
         />
 
         {/* Diagonal accent lines */}
-        <svg
-          className="absolute inset-0 w-full h-full pointer-events-none"
-          style={{ opacity: 0.05 }}
-        >
+        <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-5">
           <line
             x1="0"
             y1="100%"
@@ -249,8 +225,8 @@ const Login = () => {
         ].map(({ label, x, y }) => (
           <div
             key={label}
-            className="absolute text-[8px] font-mono pointer-events-none select-none"
-            style={{ left: x, top: y, color: 'var(--accent)', opacity: 0.25 }}
+            className="absolute text-[8px] font-mono pointer-events-none select-none text-accent opacity-25"
+            style={{ left: x, top: y }}
           >
             {label}
           </div>
@@ -284,24 +260,15 @@ const Login = () => {
               ease: [0.22, 1, 0.36, 1],
             }}
           >
-            <p
-              className="text-[9px] font-mono tracking-[0.4em] uppercase mb-4"
-              style={{ color: 'var(--accent)' }}
-            >
+            <p className="text-[9px] font-mono tracking-[0.4em] uppercase mb-4 text-accent">
               ◈ Secure Access Terminal
             </p>
-            <h2
-              className="text-3xl xl:text-4xl font-bold leading-snug mb-4 font-display"
-              style={{ color: 'var(--text-primary)' }}
-            >
+            <h2 className="text-3xl xl:text-4xl font-bold leading-snug mb-4 font-display text-fg">
               {info.name}
               <br />
-              <span style={{ color: 'var(--accent)' }}>Admin</span> Portal
+              <span className="text-accent">Admin</span> Portal
             </h2>
-            <p
-              className="text-xs font-mono leading-relaxed max-w-[260px] mx-auto"
-              style={{ color: 'var(--text-muted)' }}
-            >
+            <p className="text-xs font-mono leading-relaxed max-w-[260px] mx-auto text-muted">
               Authorized personnel only.
               <br />
               All sessions are monitored and logged.
@@ -323,8 +290,7 @@ const Login = () => {
               <div key={label} className="flex flex-col items-center gap-1.5">
                 <div className="flex items-center gap-1.5">
                   <motion.span
-                    className="w-1.5 h-1.5 rounded-full"
-                    style={{ backgroundColor: 'var(--accent)' }}
+                    className="w-1.5 h-1.5 rounded-full bg-accent"
                     animate={{ opacity: [1, 0.2, 1] }}
                     transition={{
                       duration: 2,
@@ -332,17 +298,11 @@ const Login = () => {
                       ease: 'easeInOut',
                     }}
                   />
-                  <span
-                    className="text-[9px] font-mono font-semibold"
-                    style={{ color: 'var(--accent)' }}
-                  >
+                  <span className="text-[9px] font-mono font-semibold text-accent">
                     {value}
                   </span>
                 </div>
-                <span
-                  className="text-[7px] font-mono tracking-widest uppercase"
-                  style={{ color: 'var(--text-muted)', opacity: 0.45 }}
-                >
+                <span className="text-[7px] font-mono tracking-widest uppercase text-muted opacity-[0.45]">
                   {label}
                 </span>
               </div>
@@ -351,10 +311,7 @@ const Login = () => {
         </div>
 
         {/* Build tag */}
-        <div
-          className="absolute bottom-5 left-6 text-[8px] font-mono select-none"
-          style={{ color: 'var(--text-muted)', opacity: 0.3 }}
-        >
+        <div className="absolute bottom-5 left-6 text-[8px] font-mono select-none text-muted opacity-30">
           TL-ADMIN v1.9.0 // BUILD STABLE // {new Date().getFullYear()}
         </div>
       </motion.div>
@@ -388,8 +345,7 @@ const Login = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.4 }}
-              className="text-[9px] font-mono tracking-[0.35em] uppercase mb-3"
-              style={{ color: 'var(--accent)' }}
+              className="text-[9px] font-mono tracking-[0.35em] uppercase mb-3 text-accent"
             >
               ◈ Authentication Required
             </motion.p>
@@ -401,8 +357,7 @@ const Login = () => {
                 duration: 0.6,
                 ease: [0.22, 1, 0.36, 1],
               }}
-              className="text-3xl font-bold font-display"
-              style={{ color: 'var(--text-primary)' }}
+              className="text-3xl font-bold font-display text-fg"
             >
               Sign In
             </motion.h1>
@@ -410,8 +365,7 @@ const Login = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.55 }}
-              className="text-sm mt-1.5"
-              style={{ color: 'var(--text-muted)' }}
+              className="text-sm mt-1.5 text-muted"
             >
               Access the admin control panel
             </motion.p>
@@ -422,11 +376,7 @@ const Login = () => {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6, duration: 0.6 }}
-            className="relative p-6 rounded-xl"
-            style={{
-              backgroundColor: 'var(--glass-bg)',
-              border: '1px solid var(--glass-border)',
-            }}
+            className="relative p-6 rounded-xl bg-glass-bg border border-glass-rim"
           >
             <Corner pos="tl" />
             <Corner pos="tr" />
@@ -438,12 +388,9 @@ const Login = () => {
               <div>
                 <label
                   htmlFor="email"
-                  className="flex items-center gap-2 text-[10px] font-mono tracking-widest uppercase mb-2"
-                  style={{ color: 'var(--text-muted)' }}
+                  className="flex items-center gap-2 text-[10px] font-mono tracking-widest uppercase mb-2 text-muted"
                 >
-                  <span style={{ color: 'var(--accent)', fontWeight: 700 }}>
-                    01
-                  </span>
+                  <span className="text-accent font-bold">01</span>
                   Identifier
                 </label>
                 <div className="relative">
@@ -479,12 +426,9 @@ const Login = () => {
               <div>
                 <label
                   htmlFor="password"
-                  className="flex items-center gap-2 text-[10px] font-mono tracking-widest uppercase mb-2"
-                  style={{ color: 'var(--text-muted)' }}
+                  className="flex items-center gap-2 text-[10px] font-mono tracking-widest uppercase mb-2 text-muted"
                 >
-                  <span style={{ color: 'var(--accent)', fontWeight: 700 }}>
-                    02
-                  </span>
+                  <span className="text-accent font-bold">02</span>
                   Passkey
                 </label>
                 <div className="relative">
@@ -516,8 +460,7 @@ const Login = () => {
                   <button
                     type="button"
                     onClick={() => setShowPassword((v) => !v)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 transition-colors duration-200"
-                    style={{ color: 'var(--text-muted)' }}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 transition-colors duration-200 text-muted"
                     aria-label={
                       showPassword ? 'Hide password' : 'Show password'
                     }
@@ -537,12 +480,7 @@ const Login = () => {
                     initial={{ opacity: 0, height: 0, marginTop: 0 }}
                     animate={{ opacity: 1, height: 'auto', marginTop: 4 }}
                     exit={{ opacity: 0, height: 0, marginTop: 0 }}
-                    className="flex items-center gap-2 px-3 py-2.5 rounded-lg text-xs font-mono"
-                    style={{
-                      backgroundColor: 'rgba(239,68,68,0.08)',
-                      border: '1px solid rgba(239,68,68,0.25)',
-                      color: '#f87171',
-                    }}
+                    className="flex items-center gap-2 px-3 py-2.5 rounded-lg text-xs font-mono bg-red-500/[0.08] border border-red-500/25 text-red-400"
                   >
                     <ReactIcon name="FaExclamationTriangle" size={11} />
                     {errorMsg}
@@ -555,8 +493,7 @@ const Login = () => {
                 type="submit"
                 disabled={isLoading}
                 whileTap={{ scale: 0.98 }}
-                className="relative w-full py-3 rounded-lg text-sm font-semibold font-mono tracking-wider overflow-hidden disabled:opacity-60"
-                style={{ backgroundColor: 'var(--accent)', color: '#fff' }}
+                className="relative w-full py-3 rounded-lg text-sm font-semibold font-mono tracking-wider overflow-hidden disabled:opacity-60 bg-accent text-white"
               >
                 {/* Shimmer sweep */}
                 <motion.span
@@ -598,16 +535,12 @@ const Login = () => {
           <div className="mt-6 flex flex-col items-center gap-2">
             <Link
               to="/"
-              className="flex items-center gap-1.5 text-[10px] font-mono tracking-wide transition-colors duration-200"
-              style={{ color: 'var(--text-muted)' }}
+              className="flex items-center gap-1.5 text-[10px] font-mono tracking-wide transition-colors duration-200 text-muted"
             >
               <ReactIcon name="FiArrowLeft" size={10} />
               Back to site
             </Link>
-            <p
-              className="text-center text-[9px] font-mono select-none"
-              style={{ color: 'var(--text-muted)', opacity: 0.35 }}
-            >
+            <p className="text-center text-[9px] font-mono select-none text-muted opacity-[0.35]">
               {info.name.toUpperCase()} {'// SECURE ADMIN ACCESS //'}{' '}
               {new Date().getFullYear()}
             </p>
