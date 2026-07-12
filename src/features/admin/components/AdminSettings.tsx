@@ -1241,22 +1241,6 @@ const AdminSettings = memo(() => {
                   </div>
                 </SectionCard>
                 <SectionCard
-                  title="Google Sheets CMS"
-                  sub="Sheet URL used as headless CMS"
-                  onSave={save}
-                >
-                  <Input
-                    label="Sheet API Base URL"
-                    defaultValue="https://sheets.googleapis.com/v4/spreadsheets/..."
-                    hint="VITE_SHEET_URL — do not expose to public clients"
-                  />
-                  <ToggleRow
-                    label="Cache Responses"
-                    sub="Cache sheet data for 5 minutes to reduce API calls"
-                    defaultOn
-                  />
-                </SectionCard>
-                <SectionCard
                   title="AWS"
                   sub="S3 bucket for image uploads"
                   onSave={save}
