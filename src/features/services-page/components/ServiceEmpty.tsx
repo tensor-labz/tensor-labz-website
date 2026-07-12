@@ -4,7 +4,7 @@ import { motion } from 'motion/react';
 
 const ServiceEmpty: React.FC = memo(() => {
   return (
-    <div className="col-span-1 sm:col-span-2 lg:col-span-3 flex flex-col items-center justify-center py-20 px-8">
+    <div className="col-span-1 flex flex-col items-center justify-center px-8 py-20 sm:col-span-2 lg:col-span-3">
       <motion.div
         className="mb-8"
         initial={{ opacity: 0, y: 20 }}
@@ -12,7 +12,7 @@ const ServiceEmpty: React.FC = memo(() => {
         transition={{ duration: 0.6, ease: 'easeOut' }}
       >
         <div
-          className="relative p-8 rounded-2xl shadow-sm"
+          className="relative rounded-2xl p-8 shadow-sm"
           style={{
             backgroundColor: 'var(--bg-raised)',
             border: '1px solid var(--border)',
@@ -28,7 +28,7 @@ const ServiceEmpty: React.FC = memo(() => {
       </motion.div>
 
       <motion.div
-        className="text-center max-w-md space-y-4"
+        className="max-w-md space-y-4 text-center"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.2, ease: 'easeOut' }}
@@ -38,7 +38,7 @@ const ServiceEmpty: React.FC = memo(() => {
           We&apos;re crafting something extraordinary for you
         </p>
         <motion.div
-          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium"
+          className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium"
           style={{
             backgroundColor: 'var(--accent-soft)',
             color: 'var(--accent)',
@@ -49,7 +49,7 @@ const ServiceEmpty: React.FC = memo(() => {
           transition={{ duration: 0.4, delay: 0.4 }}
         >
           <motion.div
-            className="w-2 h-2 rounded-full"
+            className="h-2 w-2 rounded-full"
             style={{ backgroundColor: 'var(--accent)' }}
             animate={{ opacity: [0.4, 1, 0.4] }}
             transition={{ duration: 2, repeat: Infinity }}

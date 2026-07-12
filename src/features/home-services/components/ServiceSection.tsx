@@ -11,15 +11,15 @@ const ServiceSection: React.FC = memo(() => {
   const { get } = useSiteSettings();
 
   return (
-    <Section className="min-h-dvh flex flex-col justify-center md:px-14 px-0">
-      <div className="px-4 text-center mb-4 mt-6">
-        <p className="text-[10px] font-mono tracking-[0.3em] uppercase text-accent mb-3">
+    <Section className="flex min-h-dvh flex-col justify-center px-0 md:px-14">
+      <div className="mb-4 mt-6 px-4 text-center">
+        <p className="mb-3 font-mono text-[10px] uppercase tracking-[0.3em] text-accent">
           {get('services.label')}
         </p>
-        <h2 className="sm:text-4xl text-xl sm:font-bold font-semibold text-fg font-display">
+        <h2 className="font-display text-xl font-semibold text-fg sm:text-4xl sm:font-bold">
           {get('services.title')}
         </h2>
-        <p className="sm:text-lg text-base text-muted">
+        <p className="text-base text-muted sm:text-lg">
           {get('services.description')}
         </p>
       </div>
@@ -29,7 +29,7 @@ const ServiceSection: React.FC = memo(() => {
         initial="hidden"
         whileInView="visible"
         viewport={VIEWPORT}
-        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:px-0 px-4"
+        className="grid grid-cols-1 gap-6 px-4 sm:grid-cols-2 sm:px-0 lg:grid-cols-3"
       >
         {!isLoading &&
           services.map((serv, index) => (

@@ -26,7 +26,7 @@ const Thumb = memo(
     return (
       <button
         onClick={onClick}
-        className="relative shrink-0 rounded-xl overflow-hidden transition-all duration-300 focus:outline-none"
+        className="relative shrink-0 overflow-hidden rounded-xl transition-all duration-300 focus:outline-none"
         style={{
           width: 110,
           height: 62,
@@ -46,11 +46,11 @@ const Thumb = memo(
           <img
             src={thumb}
             alt={item.title}
-            className="w-full h-full object-cover"
+            className="h-full w-full object-cover"
           />
         ) : (
           <div
-            className="w-full h-full flex items-center justify-center"
+            className="flex h-full w-full items-center justify-center"
             style={{ backgroundColor: 'var(--glass-bg-raised)' }}
           >
             <ReactIcon
@@ -63,7 +63,7 @@ const Thumb = memo(
         {item.type === 'video' && (
           <div className="absolute inset-0 flex items-center justify-center">
             <div
-              className="w-6 h-6 rounded-full flex items-center justify-center"
+              className="flex h-6 w-6 items-center justify-center rounded-full"
               style={{ backgroundColor: 'rgba(0,0,0,0.55)' }}
             >
               <ReactIcon name="FaPlay" size={8} style={{ color: '#fff' }} />
@@ -96,7 +96,7 @@ const FeaturedPlayer = memo(({ item }: { item: MediaItem }) => (
       {item.type === 'video' ? (
         <iframe
           src={item.url}
-          className="w-full h-full"
+          className="h-full w-full"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen
           title={item.title}
@@ -106,7 +106,7 @@ const FeaturedPlayer = memo(({ item }: { item: MediaItem }) => (
         <img
           src={item.url}
           alt={item.title}
-          className="w-full h-full object-cover"
+          className="h-full w-full object-cover"
         />
       )}
 
@@ -119,7 +119,7 @@ const FeaturedPlayer = memo(({ item }: { item: MediaItem }) => (
               'linear-gradient(to top, rgba(0,0,0,0.65) 0%, transparent 100%)',
           }}
         >
-          <p className="text-sm font-medium text-white truncate">
+          <p className="truncate text-sm font-medium text-white">
             {item.title}
           </p>
         </div>
@@ -133,7 +133,7 @@ FeaturedPlayer.displayName = 'FeaturedPlayer';
 const Skeleton = () => (
   <div className="w-full space-y-4">
     <div
-      className="w-full rounded-2xl animate-pulse"
+      className="w-full animate-pulse rounded-2xl"
       style={{
         paddingBottom: '56.25%',
         backgroundColor: 'var(--glass-bg-raised)',
@@ -144,7 +144,7 @@ const Skeleton = () => (
       {[1, 2, 3].map((i) => (
         <div
           key={i}
-          className="shrink-0 rounded-xl animate-pulse"
+          className="shrink-0 animate-pulse rounded-xl"
           style={{
             width: 110,
             height: 62,
@@ -202,7 +202,7 @@ const MediaGallery = memo(() => {
     <div className="w-full">
       {/* ── Featured frame ── */}
       <div
-        className="relative w-full rounded-2xl overflow-hidden"
+        className="relative w-full overflow-hidden rounded-2xl"
         style={{
           paddingBottom: '56.25%',
           border: '1px solid var(--glass-border)',
@@ -218,7 +218,7 @@ const MediaGallery = memo(() => {
           <>
             <button
               onClick={prev}
-              className="absolute left-3 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center rounded-full transition-all duration-200 z-10"
+              className="absolute left-3 top-1/2 z-10 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full transition-all duration-200"
               style={{
                 backgroundColor: 'rgba(0,0,0,0.45)',
                 border: '1px solid rgba(255,255,255,0.15)',
@@ -237,7 +237,7 @@ const MediaGallery = memo(() => {
             </button>
             <button
               onClick={next}
-              className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center rounded-full transition-all duration-200 z-10"
+              className="absolute right-3 top-1/2 z-10 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full transition-all duration-200"
               style={{
                 backgroundColor: 'rgba(0,0,0,0.45)',
                 border: '1px solid rgba(255,255,255,0.15)',
@@ -259,7 +259,7 @@ const MediaGallery = memo(() => {
 
         {/* Dot indicators */}
         {items.length > 1 && (
-          <div className="absolute top-3 right-3 flex gap-1.5 z-10">
+          <div className="absolute right-3 top-3 z-10 flex gap-1.5">
             {items.map((_, i) => (
               <button
                 key={i}
@@ -282,7 +282,7 @@ const MediaGallery = memo(() => {
 
       {/* ── Thumbnail strip ── */}
       {items.length > 1 && (
-        <div className="flex gap-2.5 mt-4 overflow-x-auto pb-1 scrollbar-none">
+        <div className="scrollbar-none mt-4 flex gap-2.5 overflow-x-auto pb-1">
           {items.map((item, i) => (
             <Thumb
               key={item.id}

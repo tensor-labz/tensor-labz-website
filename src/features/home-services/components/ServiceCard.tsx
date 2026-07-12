@@ -17,7 +17,7 @@ const Bracket = memo(({ pos }: { pos: 'tl' | 'tr' | 'bl' | 'br' }) => {
   }[pos];
   return (
     <div
-      className={`absolute w-3 h-3 border-accent/40 pointer-events-none z-10 transition-all duration-300 group-hover:border-accent/80 group-hover:w-4 group-hover:h-4 ${edge}`}
+      className={`border-accent/40 group-hover:border-accent/80 pointer-events-none absolute z-10 h-3 w-3 transition-all duration-300 group-hover:h-4 group-hover:w-4 ${edge}`}
     />
   );
 });
@@ -30,13 +30,7 @@ const ServiceCard: React.FC<ServiceCardProps> = memo(
 
     return (
       <Card
-        className="group relative flex sm:flex-col flex-row justify-between
-          rounded-xl overflow-hidden px-3 py-3 sm:p-6
-          shadow-sm hover:shadow-lg transition-all duration-300
-          hover:scale-[1.005] sm:gap-x-0 gap-x-6
-          min-h-[200px] sm:min-h-[250px]
-          cursor-pointer bg-surface border border-rim
-          hover:border-accent/40"
+        className="hover:border-accent/40 group relative flex min-h-[200px] cursor-pointer flex-row justify-between gap-x-6 overflow-hidden rounded-xl border border-rim bg-surface px-3 py-3 shadow-sm transition-all duration-300 hover:scale-[1.005] hover:shadow-lg sm:min-h-[250px] sm:flex-col sm:gap-x-0 sm:p-6"
         animation={{
           initial: { opacity: 0, y: 50 },
           whileHover: {
@@ -62,7 +56,7 @@ const ServiceCard: React.FC<ServiceCardProps> = memo(
 
         {/* Subtle engineering grid on card surface */}
         <div
-          className="absolute inset-0 pointer-events-none z-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+          className="pointer-events-none absolute inset-0 z-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
           style={{
             backgroundImage:
               'linear-gradient(rgba(56,189,248,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(56,189,248,0.04) 1px, transparent 1px)',
@@ -72,7 +66,7 @@ const ServiceCard: React.FC<ServiceCardProps> = memo(
 
         {/* Icon */}
         <motion.div
-          className="relative sm:w-full w-2/5 flex justify-center items-center sm:mb-1 z-10"
+          className="relative z-10 flex w-2/5 items-center justify-center sm:mb-1 sm:w-full"
           variants={scaleIn()}
           initial="hidden"
           whileInView="visible"
@@ -80,43 +74,28 @@ const ServiceCard: React.FC<ServiceCardProps> = memo(
           <img
             src={icon}
             alt={`${service_name} Service Icon`}
-            className="md:w-28 md:h-28 sm:w-20 sm:h-20 w-full h-full object-contain object-center transition-transform group-hover:scale-105 duration-300"
+            className="h-full w-full object-contain object-center transition-transform duration-300 group-hover:scale-105 sm:h-20 sm:w-20 md:h-28 md:w-28"
           />
         </motion.div>
 
         {/* Details */}
-        <div className="relative sm:w-full w-3/5 flex flex-col justify-center text-center px-2 z-10">
-          <p className="text-[9px] font-mono tracking-[0.2em] uppercase text-accent/70 mb-1 sm:block hidden">
+        <div className="relative z-10 flex w-3/5 flex-col justify-center px-2 text-center sm:w-full">
+          <p className="text-accent/70 mb-1 hidden font-mono text-[9px] uppercase tracking-[0.2em] sm:block">
             ◈ Service
           </p>
-          <h3 className="md:text-2xl sm:text-xl text-lg font-bold mb-1 text-fg">
+          <h3 className="mb-1 text-lg font-bold text-fg sm:text-xl md:text-2xl">
             {service_name}
           </h3>
           {/* Mobile inline description */}
-          <p className="text-sm sm:hidden block text-muted">{description}</p>
+          <p className="block text-sm text-muted sm:hidden">{description}</p>
         </div>
 
         {/* Hover reveal — dark overlay so text is always readable */}
-        <div
-          className="hidden absolute bottom-0 left-0 w-full px-4 py-3 sm:px-5
-            sm:flex flex-col justify-center overflow-hidden
-            h-0 group-hover:h-[48%] transition-all duration-500 ease-in-out z-20
-            border-t border-accent/30 bg-slate-900/95"
-        >
-          <p
-            className="text-[9px] font-mono tracking-widest uppercase text-accent
-              opacity-0 group-hover:opacity-100
-              translate-y-2 group-hover:translate-y-0
-              transition-all duration-500 ease-in-out mb-1.5"
-          >
+        <div className="border-accent/30 absolute bottom-0 left-0 z-20 hidden h-0 w-full flex-col justify-center overflow-hidden border-t bg-slate-900/95 px-4 py-3 transition-all duration-500 ease-in-out group-hover:h-[48%] sm:flex sm:px-5">
+          <p className="mb-1.5 translate-y-2 font-mono text-[9px] uppercase tracking-widest text-accent opacity-0 transition-all duration-500 ease-in-out group-hover:translate-y-0 group-hover:opacity-100">
             {'// Description'}
           </p>
-          <p
-            className="text-slate-200 text-xs sm:text-sm leading-relaxed
-              opacity-0 group-hover:opacity-100
-              translate-y-3 group-hover:translate-y-0
-              transition-all duration-500 delay-75 ease-in-out"
-          >
+          <p className="translate-y-3 text-xs leading-relaxed text-slate-200 opacity-0 transition-all delay-75 duration-500 ease-in-out group-hover:translate-y-0 group-hover:opacity-100 sm:text-sm">
             {description}
           </p>
         </div>

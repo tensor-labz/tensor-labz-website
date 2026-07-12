@@ -284,6 +284,7 @@ aws --profile tensor s3 cp <local-file> s3://tensor-labz-store/<folder>/<filenam
 ```
 
 Example — upload the logo:
+
 ```bash
 aws --profile tensor s3 cp src/assets/images/logo.png \
   s3://tensor-labz-store/assets/upload/logo.png \
@@ -294,11 +295,13 @@ aws --profile tensor s3 cp src/assets/images/logo.png \
 ### Get the public URL
 
 After upload the public URL is always:
+
 ```
 https://tensor-labz-store.s3.eu-north-1.amazonaws.com/<folder>/<filename>
 ```
 
 Example:
+
 ```
 https://tensor-labz-store.s3.eu-north-1.amazonaws.com/assets/upload/logo.png
 ```
@@ -313,12 +316,12 @@ aws --profile tensor s3 sync ./dist/assets \
 
 ### When to use CLI vs Lambda
 
-| Situation | Use |
-| --------- | --- |
-| Admin panel image upload (users) | Lambda (pre-signed URL) |
-| One-off assets (logo, static files) | AWS CLI |
-| Batch upload / migration | AWS CLI |
-| Budget-sensitive / Lambda cold-start concerns | AWS CLI |
+| Situation                                     | Use                     |
+| --------------------------------------------- | ----------------------- |
+| Admin panel image upload (users)              | Lambda (pre-signed URL) |
+| One-off assets (logo, static files)           | AWS CLI                 |
+| Batch upload / migration                      | AWS CLI                 |
+| Budget-sensitive / Lambda cold-start concerns | AWS CLI                 |
 
 > The bucket `tensor-labz-store` is in `eu-north-1`. Always use `--profile tensor` to authenticate with the correct IAM credentials.
 
@@ -328,12 +331,12 @@ aws --profile tensor s3 sync ./dist/assets \
 
 Developer docs live in their **own dedicated repo** — `tensor-labz/tensor-labz-docs` — and are **vendored into this repo as a git submodule** at `docs/` for colocation only.
 
-| Item          | Value                                              |
-| ------------- | -------------------------------------------------- |
-| **Repo**      | https://github.com/tensor-labz/tensor-labz-docs   |
-| **Docs site** | https://tensor-labz.github.io/tensor-labz-docs/   |
-| **Tool**      | MkDocs Material + GitHub Actions (auto-deploy on push to `main`) |
-| **Submodule** | `docs/` → `tensor-labz/tensor-labz-docs`          |
+| Item          | Value                                                                     |
+| ------------- | ------------------------------------------------------------------------- |
+| **Repo**      | https://github.com/tensor-labz/tensor-labz-docs                           |
+| **Docs site** | https://tensor-labz.github.io/tensor-labz-docs/                           |
+| **Tool**      | MkDocs Material + GitHub Actions (auto-deploy on push to `main`)          |
+| **Submodule** | `docs/` → `tensor-labz/tensor-labz-docs`                                  |
 | **Local**     | `git submodule update --init --recursive`, then `cd docs && mkdocs serve` |
 
 > The `docs/` submodule is **source colocation only**. Docs are still built and deployed **exclusively** from the `tensor-labz-docs` repo to GitHub Pages — this repo does **not** build, bundle, or host them, and `mkdocs.yml`/docs workflows must **not** be added to this repo's root.
@@ -506,13 +509,13 @@ cp .env.example .env
 
 Key variables:
 
-| Variable                 | Purpose                                       |
-| ------------------------ | --------------------------------------------- |
-| `VITE_SHEET_URL`         | Google Sheets API base URL (headless CMS)     |
-| `VITE_SUPABASE_URL`      | Supabase project URL                          |
-| `VITE_SUPABASE_ANON_KEY` | Supabase public anon key                      |
-| `VITE_IMAGE_LAMBDA_URL`  | Lambda API Gateway base URL (image upload)    |
-| `VITE_S3_BUCKET`         | S3 bucket name (`tensor-labz-store`)          |
-| `VITE_S3_REGION`         | S3 region (`eu-north-1`)                      |
-| `VITE_CDN_URL`           | CDN base URL for stored images                |
+| Variable                 | Purpose                                                            |
+| ------------------------ | ------------------------------------------------------------------ |
+| `VITE_SHEET_URL`         | Google Sheets API base URL (headless CMS)                          |
+| `VITE_SUPABASE_URL`      | Supabase project URL                                               |
+| `VITE_SUPABASE_ANON_KEY` | Supabase public anon key                                           |
+| `VITE_IMAGE_LAMBDA_URL`  | Lambda API Gateway base URL (image upload)                         |
+| `VITE_S3_BUCKET`         | S3 bucket name (`tensor-labz-store`)                               |
+| `VITE_S3_REGION`         | S3 region (`eu-north-1`)                                           |
+| `VITE_CDN_URL`           | CDN base URL for stored images                                     |
 | `VITE_FIREBASE_*`        | Firebase project config (staging hosting only — not used for auth) |

@@ -83,8 +83,7 @@ export function createFlatRepo(col: string) {
     const payload = strip(data);
     const ref = doc(db, col, id);
     const before = (await getDoc(ref)).data() as
-      | Record<string, unknown>
-      | undefined;
+      Record<string, unknown> | undefined;
     await updateDoc(ref, { ...payload, updated_at: serverTimestamp() });
     const change: Record<string, { from: unknown; to: unknown }> = {};
     for (const [k, v] of Object.entries(payload)) {

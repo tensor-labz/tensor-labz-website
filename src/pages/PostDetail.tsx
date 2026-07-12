@@ -13,14 +13,14 @@ const PostDetail: React.FC = memo(() => {
   if (isLoading) {
     return (
       <Page HeadProps={{ title: 'Loading…' }}>
-        <div className="min-h-screen flex items-center justify-center">
+        <div className="flex min-h-screen items-center justify-center">
           <div className="flex flex-col items-center gap-4">
             <motion.div
-              className="w-8 h-8 rounded-full border-2 border-accent border-t-transparent"
+              className="h-8 w-8 rounded-full border-2 border-accent border-t-transparent"
               animate={{ rotate: 360 }}
               transition={{ duration: 0.9, repeat: Infinity, ease: 'linear' }}
             />
-            <p className="text-[10px] font-mono tracking-widest uppercase text-accent/60">
+            <p className="text-accent/60 font-mono text-[10px] uppercase tracking-widest">
               Loading post…
             </p>
           </div>
@@ -32,19 +32,19 @@ const PostDetail: React.FC = memo(() => {
   if (notFound || !post) {
     return (
       <Page HeadProps={{ title: '404 — Post Not Found' }}>
-        <div className="min-h-screen flex flex-col items-center justify-center gap-4 px-6 text-center">
-          <p className="text-[10px] font-mono tracking-widest uppercase text-accent">
+        <div className="flex min-h-screen flex-col items-center justify-center gap-4 px-6 text-center">
+          <p className="font-mono text-[10px] uppercase tracking-widest text-accent">
             ◈ 404
           </p>
-          <h1 className="text-3xl font-bold font-display text-fg">
+          <h1 className="font-display text-3xl font-bold text-fg">
             Post not found
           </h1>
-          <p className="text-muted text-sm">
+          <p className="text-sm text-muted">
             This post may have been removed or is not yet published.
           </p>
           <Link
             to="/posts"
-            className="mt-4 inline-flex items-center gap-2 text-sm text-accent hover:underline font-mono"
+            className="mt-4 inline-flex items-center gap-2 font-mono text-sm text-accent hover:underline"
           >
             <ReactIcon name="FiArrowLeft" size={14} /> Back to Posts
           </Link>

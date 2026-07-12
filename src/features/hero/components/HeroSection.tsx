@@ -69,12 +69,11 @@ const HeroSection: React.FC = memo(() => {
   return (
     <Section
       ref={ref}
-      className="relative min-h-dvh flex items-center bg-canvas
-        pt-24 pb-10 sm:pt-24 sm:pb-12 lg:pt-20 lg:pb-16 px-6 md:px-8 lg:px-12"
+      className="relative flex min-h-dvh items-center bg-canvas px-6 pb-10 pt-24 sm:pb-12 sm:pt-24 md:px-8 lg:px-12 lg:pb-16 lg:pt-20"
     >
       {/* radial vignette */}
       <div
-        className="absolute inset-0 z-0 pointer-events-none"
+        className="pointer-events-none absolute inset-0 z-0"
         style={{
           background:
             'radial-gradient(ellipse 70% 60% at 60% 40%, transparent 0%, var(--bg-base) 70%)',
@@ -82,7 +81,7 @@ const HeroSection: React.FC = memo(() => {
       />
       {/* engineering grid — subtle across the hero */}
       <div
-        className="absolute inset-0 z-0 pointer-events-none"
+        className="pointer-events-none absolute inset-0 z-0"
         style={{
           backgroundImage:
             'linear-gradient(var(--grid-dot) 1px, transparent 1px), linear-gradient(90deg, var(--grid-dot) 1px, transparent 1px)',
@@ -91,20 +90,16 @@ const HeroSection: React.FC = memo(() => {
         }}
       />
 
-      <div
-        className="relative z-10 max-w-7xl mx-auto w-full
-        flex flex-col items-center gap-6
-        lg:flex-row lg:items-center lg:gap-x-12"
-      >
+      <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-col items-center gap-6 lg:flex-row lg:items-center lg:gap-x-12">
         {/* IMAGE */}
         <motion.div
           initial={{ opacity: 0, scale: 0.96 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 1.0, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-          className="w-full relative z-10 order-1 lg:order-2 lg:w-6/12 h-[220px] sm:h-[300px] lg:h-[430px] xl:h-[500px]"
+          className="relative z-10 order-1 h-[220px] w-full sm:h-[300px] lg:order-2 lg:h-[430px] lg:w-6/12 xl:h-[500px]"
         >
           <div
-            className="absolute inset-0 rounded-2xl blur-3xl opacity-20 scale-90 pointer-events-none"
+            className="pointer-events-none absolute inset-0 scale-90 rounded-2xl opacity-20 blur-3xl"
             style={{
               background:
                 'radial-gradient(circle, var(--accent) 0%, transparent 70%)',
@@ -113,24 +108,21 @@ const HeroSection: React.FC = memo(() => {
           <motion.div
             whileHover={{ scale: 1.015 }}
             transition={{ duration: 0.4, ease: 'easeOut' }}
-            className="w-full h-full relative rounded-2xl overflow-hidden"
+            className="relative h-full w-full overflow-hidden rounded-2xl"
           >
             <HolographicFrame />
           </motion.div>
         </motion.div>
 
         {/* TEXT */}
-        <div
-          className="w-full flex flex-col order-2 lg:order-1 lg:w-6/12
-            items-center text-center lg:items-start lg:text-left"
-        >
+        <div className="order-2 flex w-full flex-col items-center text-center lg:order-1 lg:w-6/12 lg:items-start lg:text-left">
           <motion.h1
             custom={0}
             variants={textVariants}
             initial="hidden"
             animate={inView ? 'visible' : 'hidden'}
             style={{ lineHeight: 1.02 }}
-            className="text-balance text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold tracking-tight mb-4 text-fg font-display"
+            className="mb-4 text-balance font-display text-3xl font-bold tracking-tight text-fg sm:text-4xl lg:text-5xl xl:text-6xl"
           >
             {tagline}
           </motion.h1>
@@ -139,7 +131,7 @@ const HeroSection: React.FC = memo(() => {
             initial={{ width: 0 }}
             animate={inView ? { width: '3.5rem' } : { width: 0 }}
             transition={{ delay: 0.8, duration: 0.6, ease: 'easeOut' }}
-            className="h-1 rounded-full mb-6 mx-auto lg:mx-0 bg-accent"
+            className="mx-auto mb-6 h-1 rounded-full bg-accent lg:mx-0"
           />
 
           <motion.div
@@ -162,7 +154,7 @@ const HeroSection: React.FC = memo(() => {
             >
               <Link
                 to={slide.cta_link}
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all bg-accent text-white"
+                className="inline-flex items-center gap-2 rounded-xl bg-accent px-5 py-2.5 text-sm font-semibold text-white transition-all"
               >
                 {slide.cta_label}
                 <ReactIcon name="FiArrowRight" size={15} />
@@ -175,13 +167,13 @@ const HeroSection: React.FC = memo(() => {
             variants={textVariants}
             initial="hidden"
             animate={inView ? 'visible' : 'hidden'}
-            className="flex justify-center lg:justify-start gap-8 md:gap-10"
+            className="flex justify-center gap-8 md:gap-10 lg:justify-start"
           >
             {stats.map(({ value, label, icon, loading }) =>
               loading ? (
                 <div key={icon} className="flex items-center gap-2">
                   <motion.div
-                    className="w-3 h-3 rounded-full bg-accent"
+                    className="h-3 w-3 rounded-full bg-accent"
                     animate={{ scale: [1, 1.4, 1], opacity: [1, 0.5, 1] }}
                     transition={{
                       duration: 1,
@@ -194,13 +186,13 @@ const HeroSection: React.FC = memo(() => {
                 <div key={icon} className="flex items-center gap-2.5">
                   <ReactIcon
                     name={icon}
-                    className="text-xl shrink-0 text-accent"
+                    className="shrink-0 text-xl text-accent"
                   />
                   <div>
-                    <div className="text-xl font-bold leading-none text-fg font-display">
+                    <div className="font-display text-xl font-bold leading-none text-fg">
                       {value}
                     </div>
-                    <div className="text-xs mt-0.5 text-muted">{label}</div>
+                    <div className="mt-0.5 text-xs text-muted">{label}</div>
                   </div>
                 </div>
               )

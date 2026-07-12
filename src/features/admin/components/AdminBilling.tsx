@@ -209,7 +209,7 @@ const RevTip = ({ active, payload, label }: any) => {
       }}
     >
       <p
-        className="font-semibold mb-0.5"
+        className="mb-0.5 font-semibold"
         style={{ color: 'var(--text-muted)' }}
       >
         {label}
@@ -236,9 +236,9 @@ const AdminBilling = memo(() => {
   });
 
   return (
-    <div className="p-6 max-w-6xl mx-auto space-y-5">
+    <div className="mx-auto max-w-6xl space-y-5 p-6">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h2
             className="text-2xl font-bold"
@@ -249,13 +249,13 @@ const AdminBilling = memo(() => {
           >
             Customers & Billing
           </h2>
-          <p className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>
+          <p className="mt-0.5 text-xs" style={{ color: 'var(--text-muted)' }}>
             Subscriptions, invoices, and payment history
           </p>
         </div>
         <motion.button
           whileTap={{ scale: 0.96 }}
-          className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold self-start sm:self-auto"
+          className="flex items-center gap-2 self-start rounded-xl px-4 py-2.5 text-sm font-semibold sm:self-auto"
           style={{
             backgroundColor: 'var(--glass-bg-raised)',
             border: '1px solid var(--glass-border)',
@@ -267,11 +267,11 @@ const AdminBilling = memo(() => {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
         {STATS.map((s) => (
           <div
             key={s.label}
-            className="rounded-2xl p-4 flex flex-col gap-3"
+            className="flex flex-col gap-3 rounded-2xl p-4"
             style={{
               backgroundColor: 'var(--glass-bg)',
               border: '1px solid var(--glass-border)',
@@ -285,7 +285,7 @@ const AdminBilling = memo(() => {
                 {s.label}
               </span>
               <span
-                className="w-7 h-7 rounded-lg flex items-center justify-center"
+                className="flex h-7 w-7 items-center justify-center rounded-lg"
                 style={{ backgroundColor: s.bg, color: s.color }}
               >
                 <ReactIcon name="FaCreditCard" size={11} />
@@ -308,10 +308,10 @@ const AdminBilling = memo(() => {
       </div>
 
       {/* Charts row */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 items-stretch">
+      <div className="grid grid-cols-1 items-stretch gap-5 lg:grid-cols-3">
         {/* Revenue trend */}
         <div
-          className="lg:col-span-2 rounded-2xl p-5 flex flex-col"
+          className="flex flex-col rounded-2xl p-5 lg:col-span-2"
           style={{
             backgroundColor: 'var(--glass-bg)',
             border: '1px solid var(--glass-border)',
@@ -319,7 +319,7 @@ const AdminBilling = memo(() => {
         >
           <div className="mb-5">
             <p
-              className="font-bold text-sm"
+              className="text-sm font-bold"
               style={{
                 color: 'var(--text-primary)',
                 fontFamily: '"Syne", sans-serif',
@@ -328,7 +328,7 @@ const AdminBilling = memo(() => {
               Revenue Trend
             </p>
             <p
-              className="text-xs mt-0.5"
+              className="mt-0.5 text-xs"
               style={{ color: 'var(--text-muted)' }}
             >
               Monthly recurring revenue (USD)
@@ -384,7 +384,7 @@ const AdminBilling = memo(() => {
 
         {/* Plan distribution */}
         <div
-          className="rounded-2xl p-5 flex flex-col"
+          className="flex flex-col rounded-2xl p-5"
           style={{
             backgroundColor: 'var(--glass-bg)',
             border: '1px solid var(--glass-border)',
@@ -392,7 +392,7 @@ const AdminBilling = memo(() => {
         >
           <div className="mb-5">
             <p
-              className="font-bold text-sm"
+              className="text-sm font-bold"
               style={{
                 color: 'var(--text-primary)',
                 fontFamily: '"Syne", sans-serif',
@@ -401,13 +401,13 @@ const AdminBilling = memo(() => {
               Plan Distribution
             </p>
             <p
-              className="text-xs mt-0.5"
+              className="mt-0.5 text-xs"
               style={{ color: 'var(--text-muted)' }}
             >
               Customers by plan tier
             </p>
           </div>
-          <div className="h-[140px] flex items-center justify-center">
+          <div className="flex h-[140px] items-center justify-center">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie
@@ -462,7 +462,7 @@ const AdminBilling = memo(() => {
               <div key={d.name} className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <span
-                    className="w-2.5 h-2.5 rounded-full"
+                    className="h-2.5 w-2.5 rounded-full"
                     style={{ backgroundColor: d.color }}
                   />
                   <span
@@ -485,7 +485,7 @@ const AdminBilling = memo(() => {
       </div>
 
       {/* Filters */}
-      <div className="flex flex-col sm:flex-row gap-3">
+      <div className="flex flex-col gap-3 sm:flex-row">
         <div className="relative flex-1">
           <ReactIcon
             name="FaSearch"
@@ -498,7 +498,7 @@ const AdminBilling = memo(() => {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search customers…"
-            className="w-full pl-8 pr-3 py-2.5 rounded-xl text-sm"
+            className="w-full rounded-xl py-2.5 pl-8 pr-3 text-sm"
             style={{
               backgroundColor: 'var(--input-bg)',
               border: '1px solid var(--input-border)',
@@ -517,7 +517,7 @@ const AdminBilling = memo(() => {
             <button
               key={p}
               onClick={() => setPlanFilter(p)}
-              className="px-3 py-2 rounded-lg text-xs font-medium transition-colors"
+              className="rounded-lg px-3 py-2 text-xs font-medium transition-colors"
               style={
                 planFilter === p
                   ? { backgroundColor: 'var(--accent)', color: '#fff' }
@@ -536,14 +536,14 @@ const AdminBilling = memo(() => {
 
       {/* Customer table */}
       <div
-        className="rounded-2xl overflow-hidden"
+        className="overflow-hidden rounded-2xl"
         style={{
           backgroundColor: 'var(--glass-bg)',
           border: '1px solid var(--glass-border)',
         }}
       >
         <div
-          className="grid items-center px-5 py-3 text-[10px] font-semibold tracking-widest uppercase"
+          className="grid items-center px-5 py-3 text-[10px] font-semibold uppercase tracking-widest"
           style={{
             gridTemplateColumns: '80px 1fr 110px 90px 110px 140px',
             color: 'var(--text-muted)',
@@ -585,39 +585,39 @@ const AdminBilling = memo(() => {
                 }}
               >
                 <span
-                  className="text-xs font-mono"
+                  className="font-mono text-xs"
                   style={{ color: 'var(--text-muted)' }}
                 >
                   {c.id}
                 </span>
                 <div className="min-w-0 pr-3">
                   <p
-                    className="text-sm font-semibold truncate"
+                    className="truncate text-sm font-semibold"
                     style={{ color: 'var(--text-primary)' }}
                   >
                     {c.name}
                   </p>
                   <p
-                    className="text-xs truncate"
+                    className="truncate text-xs"
                     style={{ color: 'var(--text-muted)' }}
                   >
                     {c.email}
                   </p>
                 </div>
                 <span
-                  className="text-[11px] font-semibold px-2 py-1 rounded-lg w-fit"
+                  className="w-fit rounded-lg px-2 py-1 text-[11px] font-semibold"
                   style={{ backgroundColor: plan.bg, color: plan.color }}
                 >
                   {c.plan}
                 </span>
                 <span
-                  className="hidden sm:flex items-center gap-1.5 text-[11px] font-medium px-2 py-1 rounded-lg w-fit"
+                  className="hidden w-fit items-center gap-1.5 rounded-lg px-2 py-1 text-[11px] font-medium sm:flex"
                   style={{ backgroundColor: tx.bg, color: tx.color }}
                 >
                   {tx.icon} {c.status}
                 </span>
                 <span
-                  className="hidden md:block text-sm font-semibold"
+                  className="hidden text-sm font-semibold md:block"
                   style={{ color: 'var(--text-primary)' }}
                 >
                   ${c.amount}
@@ -629,7 +629,7 @@ const AdminBilling = memo(() => {
                   </span>
                 </span>
                 <span
-                  className="hidden lg:block text-xs"
+                  className="hidden text-xs lg:block"
                   style={{ color: 'var(--text-muted)' }}
                 >
                   {c.nextBilling}

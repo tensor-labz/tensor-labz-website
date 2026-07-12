@@ -76,17 +76,17 @@ const Footer = () => {
   return (
     <footer className="relative bg-footer-bg text-muted">
       {/* gradient fade from page into footer */}
-      <div className="absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-canvas to-transparent pointer-events-none" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-canvas to-transparent" />
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.15 }}
         transition={{ duration: 0.6, ease: 'easeOut' }}
-        className="max-w-7xl mx-auto px-6 lg:px-10 py-16"
+        className="mx-auto max-w-7xl px-6 py-16 lg:px-10"
       >
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12">
+        <div className="grid grid-cols-1 gap-12 sm:grid-cols-2 lg:grid-cols-4">
           {/* Brand */}
-          <div className="flex flex-col items-center sm:items-start gap-5">
+          <div className="flex flex-col items-center gap-5 sm:items-start">
             <Link to="/">
               <img
                 src={info.logo_url || logo}
@@ -98,10 +98,10 @@ const Footer = () => {
                 }}
               />
             </Link>
-            <p className="text-sm leading-relaxed text-muted max-w-xs text-center sm:text-left">
+            <p className="max-w-xs text-center text-sm leading-relaxed text-muted sm:text-left">
               {info.description}
             </p>
-            <div className="flex items-center justify-center sm:justify-start gap-3 pt-1 flex-wrap">
+            <div className="flex flex-wrap items-center justify-center gap-3 pt-1 sm:justify-start">
               {info.social_links.map(({ platform, url }) => {
                 return (
                   <a
@@ -110,9 +110,7 @@ const Footer = () => {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={platform}
-                    className="w-8 h-8 flex items-center justify-center rounded
-                      bg-glass-bg text-muted hover:bg-glass-hover hover:text-accent
-                      transition-all duration-200 text-sm border border-glass-rim hover:border-accent/30"
+                    className="hover:border-accent/30 flex h-8 w-8 items-center justify-center rounded border border-glass-rim bg-glass-bg text-sm text-muted transition-all duration-200 hover:bg-glass-hover hover:text-accent"
                   >
                     <ReactIcon name={socialIconName(platform)} size={14} />
                   </a>
@@ -122,23 +120,23 @@ const Footer = () => {
           </div>
 
           {/* Services */}
-          <div className="flex flex-col items-center sm:items-start gap-4">
-            <h4 className="text-xs font-semibold font-display tracking-widest uppercase text-fg">
+          <div className="flex flex-col items-center gap-4 sm:items-start">
+            <h4 className="font-display text-xs font-semibold uppercase tracking-widest text-fg">
               Services
             </h4>
-            <ul className="flex flex-col items-center sm:items-start gap-2.5">
+            <ul className="flex flex-col items-center gap-2.5 sm:items-start">
               {isLoading
                 ? Array.from({ length: 4 }).map((_, i) => (
                     <li
                       key={i}
-                      className="h-4 w-24 bg-white/10 rounded animate-pulse"
+                      className="h-4 w-24 animate-pulse rounded bg-white/10"
                     />
                   ))
                 : serviceLinks.map((s) => (
                     <li key={s.link}>
                       <Link
                         to={s.link}
-                        className="text-sm text-muted hover:text-accent transition-colors duration-200"
+                        className="text-sm text-muted transition-colors duration-200 hover:text-accent"
                       >
                         {s.title}
                       </Link>
@@ -148,16 +146,16 @@ const Footer = () => {
           </div>
 
           {/* Company */}
-          <div className="flex flex-col items-center sm:items-start gap-4">
-            <h4 className="text-xs font-semibold font-display tracking-widest uppercase text-fg">
+          <div className="flex flex-col items-center gap-4 sm:items-start">
+            <h4 className="font-display text-xs font-semibold uppercase tracking-widest text-fg">
               Company
             </h4>
-            <ul className="flex flex-col items-center sm:items-start gap-2.5">
+            <ul className="flex flex-col items-center gap-2.5 sm:items-start">
               {companyLinks.map(({ title, link }) => (
                 <li key={link}>
                   <Link
                     to={link}
-                    className="text-sm text-muted hover:text-accent transition-colors duration-200"
+                    className="text-sm text-muted transition-colors duration-200 hover:text-accent"
                   >
                     {title}
                   </Link>
@@ -167,11 +165,11 @@ const Footer = () => {
           </div>
 
           {/* Contact */}
-          <div className="flex flex-col items-center sm:items-start gap-4">
-            <h4 className="text-xs font-semibold font-display tracking-widest uppercase text-fg">
+          <div className="flex flex-col items-center gap-4 sm:items-start">
+            <h4 className="font-display text-xs font-semibold uppercase tracking-widest text-fg">
               Contact
             </h4>
-            <ul className="flex flex-col items-center sm:items-start gap-3">
+            <ul className="flex flex-col items-center gap-3 sm:items-start">
               {info.contact_rows.map((row) => {
                 const href = contactHref(row);
                 return (
@@ -182,17 +180,17 @@ const Footer = () => {
                     <ReactIcon
                       name={contactIconName(row.type)}
                       size={13}
-                      className="text-muted mt-0.5 shrink-0"
+                      className="mt-0.5 shrink-0 text-muted"
                     />
                     {href ? (
                       <a
                         href={href}
-                        className="text-sm text-muted hover:text-accent transition-colors duration-200 leading-snug"
+                        className="text-sm leading-snug text-muted transition-colors duration-200 hover:text-accent"
                       >
                         {row.value}
                       </a>
                     ) : (
-                      <span className="text-sm text-muted leading-snug">
+                      <span className="text-sm leading-snug text-muted">
                         {row.value}
                       </span>
                     )}
@@ -204,9 +202,9 @@ const Footer = () => {
                   <ReactIcon
                     name="FaClock"
                     size={13}
-                    className="text-muted mt-0.5 shrink-0"
+                    className="mt-0.5 shrink-0 text-muted"
                   />
-                  <span className="text-sm text-muted leading-snug">
+                  <span className="text-sm leading-snug text-muted">
                     {info.available_hours}
                   </span>
                 </li>
@@ -215,8 +213,8 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="mt-16 pt-6 border-t border-glass-rim flex justify-center">
-          <p className="text-xs text-muted text-center">
+        <div className="mt-16 flex justify-center border-t border-glass-rim pt-6">
+          <p className="text-center text-xs text-muted">
             &copy; {new Date().getFullYear()} {info.name}. All rights reserved.
           </p>
         </div>

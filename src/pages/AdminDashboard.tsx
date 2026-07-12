@@ -32,12 +32,12 @@ const AdminDashboard = memo(() => {
   };
 
   return (
-    <div className="h-screen overflow-hidden flex flex-col text-fg">
+    <div className="flex h-screen flex-col overflow-hidden text-fg">
       <HeaderHelmet title="Admin Dashboard" />
 
       {/* ── Top bar ── */}
       <header
-        className="sticky top-0 z-50 flex items-center justify-between px-5 py-3.5 shrink-0"
+        className="sticky top-0 z-50 flex shrink-0 items-center justify-between px-5 py-3.5"
         style={{
           backgroundColor: 'var(--header-bg)',
           borderBottom: '1px solid var(--glass-border)',
@@ -50,7 +50,7 @@ const AdminDashboard = memo(() => {
           <motion.button
             whileTap={{ scale: 0.88 }}
             onClick={() => setSidebarOpen(true)}
-            className="lg:hidden w-8 h-8 flex items-center justify-center rounded-lg"
+            className="flex h-8 w-8 items-center justify-center rounded-lg lg:hidden"
             style={{
               backgroundColor: 'var(--bg-raised)',
               border: '1px solid var(--border)',
@@ -73,7 +73,7 @@ const AdminDashboard = memo(() => {
         </div>
 
         <div className="flex items-center gap-2.5">
-          <span className="text-xs hidden sm:block text-muted">
+          <span className="hidden text-xs text-muted sm:block">
             {user?.displayName || user?.email}
           </span>
 
@@ -81,7 +81,7 @@ const AdminDashboard = memo(() => {
             whileTap={{ scale: 0.88 }}
             onClick={toggleTheme}
             aria-label="Toggle theme"
-            className="w-8 h-8 flex items-center justify-center rounded-lg text-base shrink-0"
+            className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-base"
             style={{
               backgroundColor: 'var(--bg-raised)',
               border: '1px solid var(--border)',
@@ -98,7 +98,7 @@ const AdminDashboard = memo(() => {
           <motion.button
             whileTap={{ scale: 0.96 }}
             onClick={handleSignOut}
-            className="flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-medium"
+            className="flex items-center gap-2 rounded-lg px-3 py-2 text-xs font-medium"
             style={{
               backgroundColor: 'var(--glass-bg-raised)',
               border: '1px solid var(--glass-border)',
@@ -112,14 +112,14 @@ const AdminDashboard = memo(() => {
       </header>
 
       {/* ── Body: sidebar + content ── */}
-      <div className="flex flex-1 min-h-0">
+      <div className="flex min-h-0 flex-1">
         <AdminSidebar
           open={sidebarOpen}
           onClose={() => setSidebarOpen(false)}
         />
 
         {/* Main area — offset by fixed sidebar width on desktop */}
-        <main className="flex-1 min-h-0 overflow-y-auto lg:ml-56">
+        <main className="min-h-0 flex-1 overflow-y-auto lg:ml-56">
           <Routes>
             <Route index element={<AdminOverview />} />
             <Route path="billing" element={<AdminBilling />} />

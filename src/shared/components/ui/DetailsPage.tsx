@@ -7,11 +7,7 @@ import { toYouTubeEmbed } from '../../../services/postService';
 import { EASE_EXPO } from '../../../lib/motion';
 
 export type DetailsMediaType =
-  | 'image'
-  | 'youtube'
-  | 'video'
-  | 'drive_image'
-  | 'drive_video';
+  'image' | 'youtube' | 'video' | 'drive_image' | 'drive_video';
 
 interface SocialLink {
   platform: string;
@@ -62,7 +58,7 @@ function socialIcon(platform: string): string {
 /* ── Animated circuit / wiring SVG background ─────────────────────────── */
 const CircuitTraces = () => (
   <svg
-    className="absolute inset-0 w-full h-full pointer-events-none"
+    className="pointer-events-none absolute inset-0 h-full w-full"
     viewBox="0 0 1200 560"
     preserveAspectRatio="xMidYMid slice"
     xmlns="http://www.w3.org/2000/svg"
@@ -171,7 +167,7 @@ const Cover = ({
       <iframe
         src={toYouTubeEmbed(url)}
         title={title}
-        className="w-full h-full"
+        className="h-full w-full"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
         allowFullScreen
       />
@@ -181,7 +177,7 @@ const Cover = ({
       <iframe
         src={url}
         title={title}
-        className="w-full h-full"
+        className="h-full w-full"
         allow="autoplay"
         allowFullScreen
       />
@@ -194,10 +190,10 @@ const Cover = ({
         muted
         loop
         playsInline
-        className="w-full h-full object-cover"
+        className="h-full w-full object-cover"
       />
     );
-  return <img src={url} alt={title} className="w-full h-full object-cover" />;
+  return <img src={url} alt={title} className="h-full w-full object-cover" />;
 };
 
 /**
@@ -222,10 +218,10 @@ const DetailsPage: React.FC<DetailsPageProps> = memo(
   }) => (
     <>
       {/* ── Hero ── */}
-      <div className="relative bg-slate-950 overflow-hidden pt-24 pb-14 lg:pt-32 lg:pb-20">
+      <div className="relative overflow-hidden bg-slate-950 pb-14 pt-24 lg:pb-20 lg:pt-32">
         <CircuitTraces />
         <div
-          className="absolute inset-0 pointer-events-none"
+          className="pointer-events-none absolute inset-0"
           style={{
             backgroundImage:
               'radial-gradient(rgba(56,189,248,0.06) 1px, transparent 1px)',
@@ -234,19 +230,19 @@ const DetailsPage: React.FC<DetailsPageProps> = memo(
         />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_70%_at_50%_50%,transparent_30%,rgba(2,6,23,0.65)_100%)]" />
 
-        <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+        <div className="relative z-10 mx-auto max-w-7xl px-6 lg:px-8">
+          <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
             {/* metadata */}
             <motion.div
               initial={{ opacity: 0, x: -28 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.7, ease: EASE_EXPO }}
-              className="flex flex-col gap-5 order-2 lg:order-1"
+              className="order-2 flex flex-col gap-5 lg:order-1"
             >
               {kicker && (
                 <div className="flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
-                  <p className="text-[10px] font-mono tracking-[0.3em] uppercase text-accent/80">
+                  <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-accent" />
+                  <p className="text-accent/80 font-mono text-[10px] uppercase tracking-[0.3em]">
                     {kicker}
                   </p>
                 </div>
@@ -257,8 +253,7 @@ const DetailsPage: React.FC<DetailsPageProps> = memo(
                   {tags.map((tag) => (
                     <span
                       key={tag}
-                      className="px-2 py-0.5 rounded text-[10px] font-mono tracking-wider uppercase
-                        border border-accent/40 bg-accent/10 text-accent"
+                      className="border-accent/40 bg-accent/10 rounded border px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider text-accent"
                     >
                       {tag}
                     </span>
@@ -266,20 +261,20 @@ const DetailsPage: React.FC<DetailsPageProps> = memo(
                 </div>
               )}
 
-              <h1 className="text-2xl sm:text-3xl lg:text-[2.1rem] font-bold font-display text-white leading-tight flex items-center gap-3">
+              <h1 className="flex items-center gap-3 font-display text-2xl font-bold leading-tight text-white sm:text-3xl lg:text-[2.1rem]">
                 {title}
                 {titleBadge}
               </h1>
 
               {description && (
-                <p className="text-slate-400 text-sm leading-relaxed line-clamp-3">
+                <p className="line-clamp-3 text-sm leading-relaxed text-slate-400">
                   {description}
                 </p>
               )}
 
-              <div className="flex items-center gap-3 flex-wrap">
+              <div className="flex flex-wrap items-center gap-3">
                 {meta && (
-                  <div className="flex items-center gap-1.5 text-[11px] font-mono text-slate-500">
+                  <div className="flex items-center gap-1.5 font-mono text-[11px] text-slate-500">
                     <ReactIcon name="FiCalendar" size={11} />
                     {meta}
                   </div>
@@ -291,8 +286,7 @@ const DetailsPage: React.FC<DetailsPageProps> = memo(
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={platform}
-                    className="w-7 h-7 flex items-center justify-center rounded border border-white/15
-                      bg-white/5 text-white/50 hover:text-accent hover:border-accent/50 transition-all duration-200"
+                    className="hover:border-accent/50 flex h-7 w-7 items-center justify-center rounded border border-white/15 bg-white/5 text-white/50 transition-all duration-200 hover:text-accent"
                   >
                     <ReactIcon name={socialIcon(platform)} size={12} />
                   </a>
@@ -304,8 +298,7 @@ const DetailsPage: React.FC<DetailsPageProps> = memo(
               {back && (
                 <Link
                   to={back.to}
-                  className="inline-flex items-center gap-1.5 text-[11px] font-mono text-slate-500
-                    hover:text-accent transition-colors w-fit"
+                  className="inline-flex w-fit items-center gap-1.5 font-mono text-[11px] text-slate-500 transition-colors hover:text-accent"
                 >
                   <ReactIcon name="FiArrowLeft" size={11} /> {back.label}
                 </Link>
@@ -321,28 +314,28 @@ const DetailsPage: React.FC<DetailsPageProps> = memo(
             >
               {cover?.url ? (
                 <div className="relative">
-                  <div className="absolute -inset-px rounded-xl bg-gradient-to-br from-accent/20 via-transparent to-accent/10 blur-sm" />
-                  <div className="relative rounded-xl overflow-hidden border border-accent/30 bg-slate-900">
-                    <div className="flex items-center justify-between px-3 py-2 border-b border-accent/15 bg-slate-950/70">
+                  <div className="from-accent/20 to-accent/10 absolute -inset-px rounded-xl bg-gradient-to-br via-transparent blur-sm" />
+                  <div className="border-accent/30 relative overflow-hidden rounded-xl border bg-slate-900">
+                    <div className="border-accent/15 flex items-center justify-between border-b bg-slate-950/70 px-3 py-2">
                       <div className="flex items-center gap-2">
-                        <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
-                        <span className="text-[9px] font-mono text-accent/60 tracking-widest uppercase">
+                        <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-accent" />
+                        <span className="text-accent/60 font-mono text-[9px] uppercase tracking-widest">
                           {coverLabel}
                         </span>
                       </div>
-                      <span className="text-[9px] font-mono text-slate-600 uppercase tracking-widest">
+                      <span className="font-mono text-[9px] uppercase tracking-widest text-slate-600">
                         {cover.mediaType}
                       </span>
                     </div>
 
-                    <div className="aspect-[16/10] relative overflow-hidden bg-slate-950">
+                    <div className="relative aspect-[16/10] overflow-hidden bg-slate-950">
                       <Cover
                         url={cover.url}
                         mediaType={cover.mediaType}
                         title={title}
                       />
                       <div
-                        className="absolute inset-0 pointer-events-none"
+                        className="pointer-events-none absolute inset-0"
                         style={{
                           backgroundImage:
                             'linear-gradient(rgba(56,189,248,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(56,189,248,0.04) 1px, transparent 1px)',
@@ -350,7 +343,7 @@ const DetailsPage: React.FC<DetailsPageProps> = memo(
                         }}
                       />
                       <motion.div
-                        className="absolute left-0 right-0 h-px bg-gradient-to-r from-transparent via-accent/60 to-transparent pointer-events-none"
+                        className="via-accent/60 pointer-events-none absolute left-0 right-0 h-px bg-gradient-to-r from-transparent to-transparent"
                         animate={{ top: ['0%', '100%'] }}
                         transition={{
                           duration: 3.5,
@@ -361,15 +354,15 @@ const DetailsPage: React.FC<DetailsPageProps> = memo(
                       />
                     </div>
 
-                    <div className="flex items-center justify-between px-3 py-1.5 border-t border-accent/10 bg-slate-950/50">
-                      <span className="text-[9px] font-mono text-slate-600">
+                    <div className="border-accent/10 flex items-center justify-between border-t bg-slate-950/50 px-3 py-1.5">
+                      <span className="font-mono text-[9px] text-slate-600">
                         ● LIVE
                       </span>
                       <div className="flex items-center gap-2">
                         {[...Array(5)].map((_, i) => (
                           <div
                             key={i}
-                            className="w-4 h-0.5 rounded-full bg-accent/30"
+                            className="bg-accent/30 h-0.5 w-4 rounded-full"
                             style={{ opacity: 0.2 + i * 0.18 }}
                           />
                         ))}
@@ -380,22 +373,18 @@ const DetailsPage: React.FC<DetailsPageProps> = memo(
                   {(['tl', 'tr', 'bl', 'br'] as const).map((pos) => (
                     <div
                       key={pos}
-                      className={`absolute w-5 h-5 border-accent/60 pointer-events-none
-                        ${pos === 'tl' ? '-top-1.5 -left-1.5 border-t-2 border-l-2' : ''}
-                        ${pos === 'tr' ? '-top-1.5 -right-1.5 border-t-2 border-r-2' : ''}
-                        ${pos === 'bl' ? '-bottom-1.5 -left-1.5 border-b-2 border-l-2' : ''}
-                        ${pos === 'br' ? '-bottom-1.5 -right-1.5 border-b-2 border-r-2' : ''}`}
+                      className={`border-accent/60 pointer-events-none absolute h-5 w-5 ${pos === 'tl' ? '-left-1.5 -top-1.5 border-l-2 border-t-2' : ''} ${pos === 'tr' ? '-right-1.5 -top-1.5 border-r-2 border-t-2' : ''} ${pos === 'bl' ? '-bottom-1.5 -left-1.5 border-b-2 border-l-2' : ''} ${pos === 'br' ? '-bottom-1.5 -right-1.5 border-b-2 border-r-2' : ''}`}
                     />
                   ))}
                 </div>
               ) : (
-                <div className="aspect-[16/10] rounded-xl border border-accent/20 bg-slate-900/50 flex flex-col items-center justify-center gap-3">
+                <div className="border-accent/20 flex aspect-[16/10] flex-col items-center justify-center gap-3 rounded-xl border bg-slate-900/50">
                   <ReactIcon
                     name="FaNewspaper"
                     size={48}
                     className="text-accent/15"
                   />
-                  <span className="text-[10px] font-mono text-slate-600 tracking-widest">
+                  <span className="font-mono text-[10px] tracking-widest text-slate-600">
                     NO MEDIA
                   </span>
                 </div>
@@ -406,15 +395,15 @@ const DetailsPage: React.FC<DetailsPageProps> = memo(
       </div>
 
       {/* ── Body ── */}
-      <main className="max-w-4xl mx-auto px-6 lg:px-8 py-14">
+      <main className="mx-auto max-w-4xl px-6 py-14 lg:px-8">
         {description && (
           <motion.div
             initial={{ opacity: 0, x: -12 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.2, ease: EASE_EXPO }}
-            className="border-l-2 border-accent pl-4 mb-10 py-1"
+            className="mb-10 border-l-2 border-accent py-1 pl-4"
           >
-            <p className="text-muted text-sm leading-relaxed italic">
+            <p className="text-sm italic leading-relaxed text-muted">
               {description}
             </p>
           </motion.div>
@@ -422,7 +411,7 @@ const DetailsPage: React.FC<DetailsPageProps> = memo(
 
         {contentHtml && (
           <motion.div
-            className="project-content prose-sm sm:prose max-w-none text-fg"
+            className="project-content prose-sm max-w-none text-fg sm:prose"
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3, ease: EASE_EXPO }}
@@ -435,8 +424,8 @@ const DetailsPage: React.FC<DetailsPageProps> = memo(
         {children}
 
         {socialLinks.length > 0 && (
-          <div className="mt-12 pt-6 border-t border-rim flex items-center gap-3 flex-wrap">
-            <span className="text-[10px] font-mono tracking-widest uppercase text-muted">
+          <div className="mt-12 flex flex-wrap items-center gap-3 border-t border-rim pt-6">
+            <span className="font-mono text-[10px] uppercase tracking-widest text-muted">
               ◈ Share
             </span>
             {socialLinks.map(({ platform, url }) => (
@@ -446,9 +435,7 @@ const DetailsPage: React.FC<DetailsPageProps> = memo(
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={platform}
-                className="w-8 h-8 flex items-center justify-center rounded border border-rim
-                  bg-glass-bg text-muted hover:text-accent hover:border-accent/40 hover:bg-glass-raised
-                  transition-all duration-200"
+                className="hover:border-accent/40 flex h-8 w-8 items-center justify-center rounded border border-rim bg-glass-bg text-muted transition-all duration-200 hover:bg-glass-raised hover:text-accent"
               >
                 <ReactIcon name={socialIcon(platform)} size={14} />
               </a>

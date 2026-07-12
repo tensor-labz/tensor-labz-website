@@ -18,7 +18,7 @@ import logo from '../assets/images/logo.png';
 /* ── Pulsing grid node ── */
 const GridNode = ({ x, y, delay }: { x: number; y: number; delay: number }) => (
   <motion.div
-    className="absolute w-1 h-1 rounded-full pointer-events-none bg-accent -translate-x-1/2 -translate-y-1/2"
+    className="pointer-events-none absolute h-1 w-1 -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent"
     style={{ left: `${x}%`, top: `${y}%` }}
     animate={{ opacity: [0.15, 0.9, 0.15], scale: [0.7, 1.6, 0.7] }}
     transition={{
@@ -33,7 +33,7 @@ const GridNode = ({ x, y, delay }: { x: number; y: number; delay: number }) => (
 /* ── Animated horizontal scan line ── */
 const ScanLine = () => (
   <motion.div
-    className="absolute inset-x-0 h-px pointer-events-none opacity-35"
+    className="pointer-events-none absolute inset-x-0 h-px opacity-35"
     style={{
       background:
         'linear-gradient(90deg, transparent 0%, var(--accent) 50%, transparent 100%)',
@@ -56,9 +56,7 @@ const Corner = ({ pos }: { pos: 'tl' | 'tr' | 'bl' | 'br' }) => {
     bl: 'bottom-0 left-0 border-b border-l',
     br: 'bottom-0 right-0 border-b border-r',
   }[pos];
-  return (
-    <div className={`absolute w-5 h-5 border-accent opacity-60 ${cls}`} />
-  );
+  return <div className={`absolute h-5 w-5 border-accent opacity-60 ${cls}`} />;
 };
 
 /* ── Page ── */
@@ -137,7 +135,7 @@ const Login = () => {
   });
 
   return (
-    <div className="min-h-screen flex bg-canvas">
+    <div className="flex min-h-screen bg-canvas">
       <HeaderHelmet title="Admin Login" />
 
       {/* Theme toggle */}
@@ -145,7 +143,7 @@ const Login = () => {
         whileTap={{ scale: 0.88 }}
         onClick={toggleTheme}
         aria-label="Toggle theme"
-        className="fixed top-4 right-4 z-50 w-9 h-9 flex items-center justify-center rounded-lg bg-raised border border-rim text-muted"
+        className="fixed right-4 top-4 z-50 flex h-9 w-9 items-center justify-center rounded-lg border border-rim bg-raised text-muted"
       >
         {theme === 'dark' ? (
           <ReactIcon name="RiSunLine" size={16} />
@@ -161,11 +159,11 @@ const Login = () => {
         initial={{ opacity: 0, x: -32 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-        className="hidden lg:flex relative w-[54%] flex-col items-center justify-center overflow-hidden bg-surface border-r border-rim"
+        className="relative hidden w-[54%] flex-col items-center justify-center overflow-hidden border-r border-rim bg-surface lg:flex"
       >
         {/* Grid background */}
         <div
-          className="absolute inset-0 pointer-events-none"
+          className="pointer-events-none absolute inset-0"
           style={{
             backgroundImage:
               'linear-gradient(rgba(56,189,248,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(56,189,248,0.06) 1px, transparent 1px)',
@@ -175,7 +173,7 @@ const Login = () => {
 
         {/* Radial vignette — softens edges */}
         <div
-          className="absolute inset-0 pointer-events-none"
+          className="pointer-events-none absolute inset-0"
           style={{
             background:
               'radial-gradient(ellipse 75% 75% at 50% 50%, transparent 25%, var(--bg-surface) 100%)',
@@ -183,7 +181,7 @@ const Login = () => {
         />
 
         {/* Diagonal accent lines */}
-        <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-5">
+        <svg className="pointer-events-none absolute inset-0 h-full w-full opacity-5">
           <line
             x1="0"
             y1="100%"
@@ -225,7 +223,7 @@ const Login = () => {
         ].map(({ label, x, y }) => (
           <div
             key={label}
-            className="absolute text-[8px] font-mono pointer-events-none select-none text-accent opacity-25"
+            className="pointer-events-none absolute select-none font-mono text-[8px] text-accent opacity-25"
             style={{ left: x, top: y }}
           >
             {label}
@@ -233,13 +231,13 @@ const Login = () => {
         ))}
 
         {/* Center content */}
-        <div className="relative z-10 text-center px-14">
+        <div className="relative z-10 px-14 text-center">
           {logoSrc && (
             <Link to="/">
               <motion.img
                 src={logoSrc}
                 alt={info.name}
-                className="h-14 mx-auto mb-8 object-contain"
+                className="mx-auto mb-8 h-14 object-contain"
                 initial={{ opacity: 0, scale: 0.88 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{
@@ -260,15 +258,15 @@ const Login = () => {
               ease: [0.22, 1, 0.36, 1],
             }}
           >
-            <p className="text-[9px] font-mono tracking-[0.4em] uppercase mb-4 text-accent">
+            <p className="mb-4 font-mono text-[9px] uppercase tracking-[0.4em] text-accent">
               ◈ Secure Access Terminal
             </p>
-            <h2 className="text-3xl xl:text-4xl font-bold leading-snug mb-4 font-display text-fg">
+            <h2 className="mb-4 font-display text-3xl font-bold leading-snug text-fg xl:text-4xl">
               {info.name}
               <br />
               <span className="text-accent">Admin</span> Portal
             </h2>
-            <p className="text-xs font-mono leading-relaxed max-w-[260px] mx-auto text-muted">
+            <p className="mx-auto max-w-[260px] font-mono text-xs leading-relaxed text-muted">
               Authorized personnel only.
               <br />
               All sessions are monitored and logged.
@@ -280,7 +278,7 @@ const Login = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 1.0 }}
-            className="flex items-center justify-center gap-8 mt-10"
+            className="mt-10 flex items-center justify-center gap-8"
           >
             {[
               { label: 'SYS', value: 'ONLINE' },
@@ -290,7 +288,7 @@ const Login = () => {
               <div key={label} className="flex flex-col items-center gap-1.5">
                 <div className="flex items-center gap-1.5">
                   <motion.span
-                    className="w-1.5 h-1.5 rounded-full bg-accent"
+                    className="h-1.5 w-1.5 rounded-full bg-accent"
                     animate={{ opacity: [1, 0.2, 1] }}
                     transition={{
                       duration: 2,
@@ -298,11 +296,11 @@ const Login = () => {
                       ease: 'easeInOut',
                     }}
                   />
-                  <span className="text-[9px] font-mono font-semibold text-accent">
+                  <span className="font-mono text-[9px] font-semibold text-accent">
                     {value}
                   </span>
                 </div>
-                <span className="text-[7px] font-mono tracking-widest uppercase text-muted opacity-[0.45]">
+                <span className="font-mono text-[7px] uppercase tracking-widest text-muted opacity-[0.45]">
                   {label}
                 </span>
               </div>
@@ -311,7 +309,7 @@ const Login = () => {
         </div>
 
         {/* Build tag */}
-        <div className="absolute bottom-5 left-6 text-[8px] font-mono select-none text-muted opacity-30">
+        <div className="absolute bottom-5 left-6 select-none font-mono text-[8px] text-muted opacity-30">
           TL-ADMIN v1.9.0 // BUILD STABLE // {new Date().getFullYear()}
         </div>
       </motion.div>
@@ -319,7 +317,7 @@ const Login = () => {
       {/* ══════════════════════════════════════════
           RIGHT — form panel
       ══════════════════════════════════════════ */}
-      <div className="flex-1 flex items-center justify-center px-6 py-12 lg:py-0">
+      <div className="flex flex-1 items-center justify-center px-6 py-12 lg:py-0">
         <motion.div
           initial={{ opacity: 0, y: 28 }}
           animate={{ opacity: 1, y: 0 }}
@@ -327,13 +325,13 @@ const Login = () => {
           className="w-full max-w-sm"
         >
           {/* Mobile logo */}
-          <div className="lg:hidden text-center mb-8">
+          <div className="mb-8 text-center lg:hidden">
             {logoSrc && (
               <Link to="/">
                 <img
                   src={logoSrc}
                   alt={info.name}
-                  className="h-10 mx-auto mb-3 object-contain"
+                  className="mx-auto mb-3 h-10 object-contain"
                 />
               </Link>
             )}
@@ -345,7 +343,7 @@ const Login = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.4 }}
-              className="text-[9px] font-mono tracking-[0.35em] uppercase mb-3 text-accent"
+              className="mb-3 font-mono text-[9px] uppercase tracking-[0.35em] text-accent"
             >
               ◈ Authentication Required
             </motion.p>
@@ -357,7 +355,7 @@ const Login = () => {
                 duration: 0.6,
                 ease: [0.22, 1, 0.36, 1],
               }}
-              className="text-3xl font-bold font-display text-fg"
+              className="font-display text-3xl font-bold text-fg"
             >
               Sign In
             </motion.h1>
@@ -365,7 +363,7 @@ const Login = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.55 }}
-              className="text-sm mt-1.5 text-muted"
+              className="mt-1.5 text-sm text-muted"
             >
               Access the admin control panel
             </motion.p>
@@ -376,7 +374,7 @@ const Login = () => {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6, duration: 0.6 }}
-            className="relative p-6 rounded-xl bg-glass-bg border border-glass-rim"
+            className="relative rounded-xl border border-glass-rim bg-glass-bg p-6"
           >
             <Corner pos="tl" />
             <Corner pos="tr" />
@@ -388,16 +386,16 @@ const Login = () => {
               <div>
                 <label
                   htmlFor="email"
-                  className="flex items-center gap-2 text-[10px] font-mono tracking-widest uppercase mb-2 text-muted"
+                  className="mb-2 flex items-center gap-2 font-mono text-[10px] uppercase tracking-widest text-muted"
                 >
-                  <span className="text-accent font-bold">01</span>
+                  <span className="font-bold text-accent">01</span>
                   Identifier
                 </label>
                 <div className="relative">
                   <ReactIcon
                     name="FaEnvelope"
                     size={12}
-                    className="absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none"
+                    className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2"
                     style={{
                       color:
                         focusedField === 'email'
@@ -416,7 +414,7 @@ const Login = () => {
                     onFocus={() => setFocusedField('email')}
                     onBlur={() => setFocusedField(null)}
                     placeholder="admin@tensorlabz.com"
-                    className="w-full pl-9 pr-4 py-3 rounded-lg text-sm font-mono outline-none"
+                    className="w-full rounded-lg py-3 pl-9 pr-4 font-mono text-sm outline-none"
                     style={inputStyle('email')}
                   />
                 </div>
@@ -426,16 +424,16 @@ const Login = () => {
               <div>
                 <label
                   htmlFor="password"
-                  className="flex items-center gap-2 text-[10px] font-mono tracking-widest uppercase mb-2 text-muted"
+                  className="mb-2 flex items-center gap-2 font-mono text-[10px] uppercase tracking-widest text-muted"
                 >
-                  <span className="text-accent font-bold">02</span>
+                  <span className="font-bold text-accent">02</span>
                   Passkey
                 </label>
                 <div className="relative">
                   <ReactIcon
                     name="FaLock"
                     size={12}
-                    className="absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none"
+                    className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2"
                     style={{
                       color:
                         focusedField === 'password'
@@ -454,13 +452,13 @@ const Login = () => {
                     onFocus={() => setFocusedField('password')}
                     onBlur={() => setFocusedField(null)}
                     placeholder="••••••••••••"
-                    className="w-full pl-9 pr-10 py-3 rounded-lg text-sm font-mono outline-none"
+                    className="w-full rounded-lg py-3 pl-9 pr-10 font-mono text-sm outline-none"
                     style={inputStyle('password')}
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword((v) => !v)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 transition-colors duration-200 text-muted"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted transition-colors duration-200"
                     aria-label={
                       showPassword ? 'Hide password' : 'Show password'
                     }
@@ -480,7 +478,7 @@ const Login = () => {
                     initial={{ opacity: 0, height: 0, marginTop: 0 }}
                     animate={{ opacity: 1, height: 'auto', marginTop: 4 }}
                     exit={{ opacity: 0, height: 0, marginTop: 0 }}
-                    className="flex items-center gap-2 px-3 py-2.5 rounded-lg text-xs font-mono bg-red-500/[0.08] border border-red-500/25 text-red-400"
+                    className="flex items-center gap-2 rounded-lg border border-red-500/25 bg-red-500/[0.08] px-3 py-2.5 font-mono text-xs text-red-400"
                   >
                     <ReactIcon name="FaExclamationTriangle" size={11} />
                     {errorMsg}
@@ -493,11 +491,11 @@ const Login = () => {
                 type="submit"
                 disabled={isLoading}
                 whileTap={{ scale: 0.98 }}
-                className="relative w-full py-3 rounded-lg text-sm font-semibold font-mono tracking-wider overflow-hidden disabled:opacity-60 bg-accent text-white"
+                className="relative w-full overflow-hidden rounded-lg bg-accent py-3 font-mono text-sm font-semibold tracking-wider text-white disabled:opacity-60"
               >
                 {/* Shimmer sweep */}
                 <motion.span
-                  className="absolute inset-0 pointer-events-none"
+                  className="pointer-events-none absolute inset-0"
                   style={{
                     background:
                       'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.15) 50%, transparent 100%)',
@@ -510,7 +508,7 @@ const Login = () => {
                   {isLoading ? (
                     <>
                       <motion.span
-                        className="w-3.5 h-3.5 rounded-full border-2 border-white/30 border-t-white inline-block"
+                        className="inline-block h-3.5 w-3.5 rounded-full border-2 border-white/30 border-t-white"
                         animate={{ rotate: 360 }}
                         transition={{
                           duration: 0.75,
@@ -535,12 +533,12 @@ const Login = () => {
           <div className="mt-6 flex flex-col items-center gap-2">
             <Link
               to="/"
-              className="flex items-center gap-1.5 text-[10px] font-mono tracking-wide transition-colors duration-200 text-muted"
+              className="flex items-center gap-1.5 font-mono text-[10px] tracking-wide text-muted transition-colors duration-200"
             >
               <ReactIcon name="FiArrowLeft" size={10} />
               Back to site
             </Link>
-            <p className="text-center text-[9px] font-mono select-none text-muted opacity-[0.35]">
+            <p className="select-none text-center font-mono text-[9px] text-muted opacity-[0.35]">
               {info.name.toUpperCase()} {'// SECURE ADMIN ACCESS //'}{' '}
               {new Date().getFullYear()}
             </p>

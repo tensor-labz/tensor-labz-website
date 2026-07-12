@@ -29,8 +29,8 @@ const MobileTopCarousel: React.FC = memo(() => {
   if (topProjects.length === 0) return null;
 
   return (
-    <div className="relative flex flex-col justify-center items-center w-full min-h-full">
-      <div className="overflow-hidden w-full relative h-full">
+    <div className="relative flex min-h-full w-full flex-col items-center justify-center">
+      <div className="relative h-full w-full overflow-hidden">
         <AnimatePresence initial={false} mode="wait">
           <motion.div
             key={currentIndex}
@@ -63,7 +63,7 @@ const MobileTopCarousel: React.FC = memo(() => {
             key={`navi${index}`}
             onClick={navi.onClick}
             aria-label={index === 0 ? 'Previous slide' : 'Next slide'}
-            className={`hover:text-white text-slate-300 absolute bg-transparent hover:bg-blue-900 top-1/2 -translate-y-1/2 p-2 rounded-full cursor-pointer ${navi.position} z-10`}
+            className={`absolute top-1/2 -translate-y-1/2 cursor-pointer rounded-full bg-transparent p-2 text-slate-300 hover:bg-blue-900 hover:text-white ${navi.position} z-10`}
           >
             {navi.icon}
           </button>
@@ -71,12 +71,12 @@ const MobileTopCarousel: React.FC = memo(() => {
       </div>
 
       {topProjects.length > 1 && (
-        <div className="flex justify-center gap-2 mt-4">
+        <div className="mt-4 flex justify-center gap-2">
           {topProjects.map((_, index) => (
             <motion.div
               key={index}
-              className={`h-1 rounded-full cursor-pointer ${
-                index === currentIndex ? 'bg-blue-500 w-6' : 'bg-gray-300 w-3'
+              className={`h-1 cursor-pointer rounded-full ${
+                index === currentIndex ? 'w-6 bg-blue-500' : 'w-3 bg-gray-300'
               }`}
               onClick={() => setCurrentIndex(index)}
               whileHover={{ scale: 1.2 }}

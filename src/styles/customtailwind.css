@@ -4,56 +4,56 @@
 
 /* Typography */
 .h {
-  @apply md:font-bold font-semibold text-blue-900;
+  @apply font-semibold text-blue-900 md:font-bold;
 }
 .h1 {
-  @apply text-2xl md:text-4xl h;
+  @apply h text-2xl md:text-4xl;
 }
 
 .h2 {
-  @apply text-lg md:text-3xl h;
+  @apply h text-lg md:text-3xl;
 }
 .h3 {
-  @apply text-base md:text-2xl h;
+  @apply h text-base md:text-2xl;
 }
 .h4 {
-  @apply text-xs md:text-xl h;
+  @apply h text-xs md:text-xl;
 }
 .h5 {
-  @apply text-[13px] md:text-lg h;
+  @apply h text-[13px] md:text-lg;
 }
 .h6 {
-  @apply text-xs md:text-base h;
+  @apply h text-xs md:text-base;
 }
 .hero {
-  @apply sm:text-3xl text-xl lg:text-left text-center md:text-6xl font-bold leading-snug bg-gradient-to-tr from-blue-500 via-sky-900 to-blue-800 bg-clip-text text-transparent py-2 flex flex-col lg:justify-start lg:items-start justify-center md:space-y-4 space-y-2;
+  @apply flex flex-col justify-center space-y-2 bg-gradient-to-tr from-blue-500 via-sky-900 to-blue-800 bg-clip-text py-2 text-center text-xl font-bold leading-snug text-transparent sm:text-3xl md:space-y-4 md:text-6xl lg:items-start lg:justify-start lg:text-left;
 }
 .title {
-  @apply font-extrabold md:text-7xl text-4xl;
+  @apply text-4xl font-extrabold md:text-7xl;
 }
 .p {
-  @apply text-sm md:text-base break-all;
+  @apply break-all text-sm md:text-base;
 }
 /* Components */
 @layer components {
   /* Common styles for all buttons */
   .btn {
-    @apply px-4 py-2 font-medium rounded shadow inline-flex items-center justify-center transition-all duration-150 ease-in-out;
+    @apply inline-flex items-center justify-center rounded px-4 py-2 font-medium shadow transition-all duration-150 ease-in-out;
   }
 
   /* Primary button */
   .btn-normal {
-    @apply bg-blue-500 text-white border border-blue-600 hover:bg-blue-600 hover:border-blue-700;
+    @apply border border-blue-600 bg-blue-500 text-white hover:border-blue-700 hover:bg-blue-600;
   }
 
   /* Outline button */
   .btn-outline {
-    @apply bg-transparent border border-gray-500 text-gray-500 hover:bg-gray-100 hover:text-gray-700;
+    @apply border border-gray-500 bg-transparent text-gray-500 hover:bg-gray-100 hover:text-gray-700;
   }
 
   /* Small button */
   .btn-small {
-    @apply text-sm px-2 py-1;
+    @apply px-2 py-1 text-sm;
   }
 
   /* Transparent button */
@@ -63,11 +63,11 @@
 
   /* Danger button */
   .btn-danger {
-    @apply bg-red-500 text-white border border-red-600 hover:bg-red-600 hover:border-red-700;
+    @apply border border-red-600 bg-red-500 text-white hover:border-red-700 hover:bg-red-600;
   }
 
   /* Disabled button */
   .btn-disabled {
-    @apply bg-gray-300 text-gray-500 border border-gray-400 cursor-not-allowed opacity-50;
+    @apply cursor-not-allowed border border-gray-400 bg-gray-300 text-gray-500 opacity-50;
   }
 }

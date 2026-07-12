@@ -8,14 +8,14 @@ import { coverThumbnail } from '../services/postService';
 import { VIEWPORT } from '../lib/motion';
 
 const PostSkeleton = () => (
-  <div className="rounded-xl overflow-hidden border border-rim bg-surface animate-pulse flex flex-col md:flex-row">
-    <div className="aspect-video md:aspect-auto md:w-[44%] md:shrink-0 bg-raised" />
-    <div className="flex-1 p-5 md:p-8 space-y-4">
-      <div className="h-2 bg-raised rounded w-1/4" />
-      <div className="h-5 bg-raised rounded w-3/4" />
-      <div className="h-3 bg-raised rounded w-full" />
-      <div className="h-3 bg-raised rounded w-2/3" />
-      <div className="h-3 bg-raised rounded w-1/2" />
+  <div className="flex animate-pulse flex-col overflow-hidden rounded-xl border border-rim bg-surface md:flex-row">
+    <div className="aspect-video bg-raised md:aspect-auto md:w-[44%] md:shrink-0" />
+    <div className="flex-1 space-y-4 p-5 md:p-8">
+      <div className="h-2 w-1/4 rounded bg-raised" />
+      <div className="h-5 w-3/4 rounded bg-raised" />
+      <div className="h-3 w-full rounded bg-raised" />
+      <div className="h-3 w-2/3 rounded bg-raised" />
+      <div className="h-3 w-1/2 rounded bg-raised" />
     </div>
   </div>
 );
@@ -91,12 +91,12 @@ const Posts: React.FC = memo(() => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             viewport={VIEWPORT}
-            className="text-center py-24"
+            className="py-24 text-center"
           >
-            <p className="text-[10px] font-mono tracking-widest uppercase text-accent mb-3">
+            <p className="mb-3 font-mono text-[10px] uppercase tracking-widest text-accent">
               ◈ No Results
             </p>
-            <p className="text-muted text-sm">
+            <p className="text-sm text-muted">
               No posts match your search. Try different keywords.
             </p>
           </motion.div>

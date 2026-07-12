@@ -18,11 +18,11 @@ export default function ProjectNotFound() {
   }, [countdown]);
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 px-4">
-      <div className="max-w-md w-full text-center">
+    <div className="flex min-h-screen flex-col items-center justify-center bg-gray-50 px-4">
+      <div className="w-full max-w-md text-center">
         <div className="mb-6 text-red-500">
           <svg
-            className="w-24 h-24 mx-auto"
+            className="mx-auto h-24 w-24"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
@@ -36,24 +36,24 @@ export default function ProjectNotFound() {
           </svg>
         </div>
 
-        <h1 className="text-4xl font-bold text-gray-800 mb-2">
+        <h1 className="mb-2 text-4xl font-bold text-gray-800">
           Project Not Found
         </h1>
-        <p className="text-gray-600 mb-8">
+        <p className="mb-8 text-gray-600">
           We couldn&apos;t find the project you&apos;re looking for. It may have
           been deleted, moved, or never existed.
         </p>
 
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
+        <div className="mb-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
           <button
             onClick={goBack}
-            className="px-5 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 w-full sm:w-auto"
+            className="w-full rounded-md border border-gray-300 bg-white px-5 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 sm:w-auto"
           >
             Go Back
           </button>
           <button
             onClick={goToProjects}
-            className="px-5 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md shadow-sm hover:bg-blue-700 w-full sm:w-auto"
+            className="w-full rounded-md border border-transparent bg-blue-600 px-5 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 sm:w-auto"
           >
             View All Projects
           </button>

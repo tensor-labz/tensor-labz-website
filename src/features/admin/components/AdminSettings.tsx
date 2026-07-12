@@ -98,7 +98,7 @@ const Input = ({
   return (
     <div>
       <label
-        className="block text-xs font-semibold mb-1.5"
+        className="mb-1.5 block text-xs font-semibold"
         style={{ color: 'var(--text-muted)' }}
       >
         {label}
@@ -108,7 +108,7 @@ const Input = ({
           type={isPassword && !show ? 'password' : 'text'}
           defaultValue={defaultValue}
           placeholder={placeholder}
-          className="w-full px-3 py-2.5 rounded-lg text-sm"
+          className="w-full rounded-lg px-3 py-2.5 text-sm"
           style={{
             backgroundColor: 'var(--input-bg)',
             border: '1px solid var(--input-border)',
@@ -134,7 +134,7 @@ const Input = ({
       </div>
       {hint && (
         <p
-          className="text-[11px] mt-1.5"
+          className="mt-1.5 text-[11px]"
           style={{ color: 'var(--text-muted)' }}
         >
           {hint}
@@ -159,7 +159,7 @@ const MaskedField = ({
   return (
     <div>
       <label
-        className="block text-xs font-semibold mb-1.5"
+        className="mb-1.5 block text-xs font-semibold"
         style={{ color: 'var(--text-muted)' }}
       >
         {label}
@@ -168,7 +168,7 @@ const MaskedField = ({
         <input
           readOnly
           value={reveal ? value : masked}
-          className="w-full px-3 py-2.5 pr-10 rounded-lg text-sm font-mono"
+          className="w-full rounded-lg px-3 py-2.5 pr-10 font-mono text-sm"
           style={{
             backgroundColor: 'var(--input-bg)',
             border: '1px solid var(--input-border)',
@@ -191,7 +191,7 @@ const MaskedField = ({
       </div>
       {hint && (
         <p
-          className="text-[11px] mt-1.5"
+          className="mt-1.5 text-[11px]"
           style={{ color: 'var(--text-muted)' }}
         >
           {hint}
@@ -225,7 +225,7 @@ const ToggleRow = ({
           {label}
         </p>
         {sub && (
-          <p className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>
+          <p className="mt-0.5 text-xs" style={{ color: 'var(--text-muted)' }}>
             {sub}
           </p>
         )}
@@ -233,7 +233,7 @@ const ToggleRow = ({
       <button
         type="button"
         onClick={() => setOn((v) => !v)}
-        className="relative w-11 h-6 rounded-full shrink-0 transition-colors duration-200"
+        className="relative h-6 w-11 shrink-0 rounded-full transition-colors duration-200"
         style={{
           backgroundColor: on ? 'var(--accent)' : 'var(--glass-bg-raised)',
         }}
@@ -243,7 +243,7 @@ const ToggleRow = ({
         <motion.span
           animate={{ x: on ? 22 : 2 }}
           transition={{ type: 'spring', damping: 20, stiffness: 300 }}
-          className="absolute top-1 w-4 h-4 rounded-full bg-white shadow"
+          className="absolute top-1 h-4 w-4 rounded-full bg-white shadow"
         />
       </button>
     </div>
@@ -266,7 +266,7 @@ const SavedToast = ({ visible }: { visible: boolean }) => (
     initial={{ opacity: 0, y: 12 }}
     animate={{ opacity: visible ? 1 : 0, y: visible ? 0 : 12 }}
     transition={{ duration: 0.25 }}
-    className="fixed bottom-6 right-6 z-50 flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium shadow-xl pointer-events-none"
+    className="pointer-events-none fixed bottom-6 right-6 z-50 flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-medium shadow-xl"
     style={{ backgroundColor: '#34d399', color: '#fff' }}
   >
     <ReactIcon name="FaCheck" size={12} /> Settings saved
@@ -286,7 +286,7 @@ const SectionCard = ({
   onSave: () => void;
 }) => (
   <div
-    className="rounded-2xl overflow-hidden"
+    className="overflow-hidden rounded-2xl"
     style={{
       backgroundColor: 'var(--glass-bg)',
       border: '1px solid var(--glass-border)',
@@ -297,7 +297,7 @@ const SectionCard = ({
       style={{ borderBottom: '1px solid var(--glass-border-subtle)' }}
     >
       <p
-        className="font-bold text-sm"
+        className="text-sm font-bold"
         style={{
           color: 'var(--text-primary)',
           fontFamily: '"Syne", sans-serif',
@@ -305,19 +305,19 @@ const SectionCard = ({
       >
         {title}
       </p>
-      <p className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>
+      <p className="mt-0.5 text-xs" style={{ color: 'var(--text-muted)' }}>
         {sub}
       </p>
     </div>
-    <div className="px-6 py-5 space-y-4">{children}</div>
+    <div className="space-y-4 px-6 py-5">{children}</div>
     <div
-      className="px-6 py-4 flex justify-end"
+      className="flex justify-end px-6 py-4"
       style={{ borderTop: '1px solid var(--glass-border-subtle)' }}
     >
       <motion.button
         whileTap={{ scale: 0.96 }}
         onClick={onSave}
-        className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold"
+        className="flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-semibold"
         style={{ backgroundColor: 'var(--accent)', color: '#fff' }}
       >
         <ReactIcon name="FaSave" size={12} /> Save Changes
@@ -419,7 +419,7 @@ const PageConfigSection = memo(() => {
 
   return (
     <div
-      className="rounded-2xl overflow-hidden"
+      className="overflow-hidden rounded-2xl"
       style={{
         backgroundColor: 'var(--glass-bg)',
         border: '1px solid var(--glass-border)',
@@ -431,7 +431,7 @@ const PageConfigSection = memo(() => {
         style={{ borderBottom: '1px solid var(--glass-border-subtle)' }}
       >
         <p
-          className="font-bold text-sm"
+          className="text-sm font-bold"
           style={{
             color: 'var(--text-primary)',
             fontFamily: '"Syne", sans-serif',
@@ -439,21 +439,21 @@ const PageConfigSection = memo(() => {
         >
           Page Components
         </p>
-        <p className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>
+        <p className="mt-0.5 text-xs" style={{ color: 'var(--text-muted)' }}>
           Configure which components appear on each module&apos;s admin page
         </p>
       </div>
 
       {/* Module tabs */}
       <div
-        className="px-6 pt-4 flex flex-wrap gap-1.5 pb-4"
+        className="flex flex-wrap gap-1.5 px-6 pb-4 pt-4"
         style={{ borderBottom: '1px solid var(--glass-border-subtle)' }}
       >
         {MODULES.map((m) => (
           <button
             key={m.id}
             onClick={() => setActiveModule(m.id)}
-            className="px-3 py-1.5 rounded-lg text-xs font-medium transition-colors"
+            className="rounded-lg px-3 py-1.5 text-xs font-medium transition-colors"
             style={
               activeModule === m.id
                 ? { backgroundColor: 'var(--accent)', color: '#fff' }
@@ -470,7 +470,7 @@ const PageConfigSection = memo(() => {
       </div>
 
       {/* Component list */}
-      <div className="px-6 py-4 space-y-2">
+      <div className="space-y-2 px-6 py-4">
         {AVAILABLE_PAGE_COMPONENTS.map((avail, idx) => {
           const conf = components.find((c) => c.type === avail.type);
           const visible = conf?.visible !== false;
@@ -480,14 +480,14 @@ const PageConfigSection = memo(() => {
               initial={{ opacity: 0, y: 6 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: idx * 0.05 }}
-              className="flex items-center gap-3 px-4 py-3 rounded-xl"
+              className="flex items-center gap-3 rounded-xl px-4 py-3"
               style={{
                 backgroundColor: 'var(--glass-bg-raised)',
                 border: '1px solid var(--glass-border-subtle)',
                 opacity: visible ? 1 : 0.5,
               }}
             >
-              <div className="flex-1 min-w-0">
+              <div className="min-w-0 flex-1">
                 <p
                   className="text-sm font-medium"
                   style={{ color: 'var(--text-primary)' }}
@@ -495,7 +495,7 @@ const PageConfigSection = memo(() => {
                   {avail.label}
                 </p>
                 <p
-                  className="text-xs mt-0.5"
+                  className="mt-0.5 text-xs"
                   style={{ color: 'var(--text-muted)' }}
                 >
                   {avail.description}
@@ -504,7 +504,7 @@ const PageConfigSection = memo(() => {
               <button
                 type="button"
                 onClick={() => toggleVisible(avail.type)}
-                className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 transition-colors"
+                className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg transition-colors"
                 style={
                   visible
                     ? { backgroundColor: 'var(--accent)', color: '#fff' }
@@ -529,14 +529,14 @@ const PageConfigSection = memo(() => {
 
       {/* Footer */}
       <div
-        className="px-6 py-4 flex justify-end"
+        className="flex justify-end px-6 py-4"
         style={{ borderTop: '1px solid var(--glass-border-subtle)' }}
       >
         <motion.button
           whileTap={{ scale: 0.96 }}
           onClick={handleSave}
           disabled={saving}
-          className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold disabled:opacity-60"
+          className="flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-semibold disabled:opacity-60"
           style={{
             backgroundColor: saved ? '#34d399' : 'var(--accent)',
             color: '#fff',
@@ -584,7 +584,7 @@ const ColRow = memo(
         initial={{ opacity: 0, y: 6 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: idx * 0.04 }}
-        className="rounded-xl overflow-hidden"
+        className="overflow-hidden rounded-xl"
         style={{
           backgroundColor: 'var(--glass-bg-raised)',
           border: '1px solid var(--glass-border-subtle)',
@@ -593,12 +593,12 @@ const ColRow = memo(
       >
         {/* Main row */}
         <div
-          className="grid gap-3 items-center py-2.5 px-3"
+          className="grid items-center gap-3 px-3 py-2.5"
           style={{ gridTemplateColumns: '1fr 160px 48px 96px 28px' }}
         >
           {/* Field badge */}
           <span
-            className="text-xs font-mono px-2 py-0.5 rounded w-fit truncate"
+            className="w-fit truncate rounded px-2 py-0.5 font-mono text-xs"
             style={{
               backgroundColor: 'var(--glass-bg)',
               color: 'var(--text-muted)',
@@ -613,7 +613,7 @@ const ColRow = memo(
             type="text"
             value={col.title}
             onChange={(e) => onChange({ title: e.target.value })}
-            className="px-2.5 py-1.5 rounded-lg text-xs w-full"
+            className="w-full rounded-lg px-2.5 py-1.5 text-xs"
             style={inputStyle}
           />
 
@@ -624,7 +624,7 @@ const ColRow = memo(
               onClick={() =>
                 onChange({ visible: col.visible === false ? true : false })
               }
-              className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors"
+              className="flex h-8 w-8 items-center justify-center rounded-lg transition-colors"
               style={
                 col.visible !== false
                   ? { backgroundColor: 'var(--accent)', color: '#fff' }
@@ -645,13 +645,13 @@ const ColRow = memo(
           </div>
 
           {/* Alignment */}
-          <div className="flex gap-1 justify-center">
+          <div className="flex justify-center gap-1">
             {(['left', 'center', 'right'] as const).map((a) => (
               <button
                 key={a}
                 type="button"
                 onClick={() => onChange({ align: a })}
-                className="w-7 h-7 rounded-lg flex items-center justify-center transition-colors"
+                className="flex h-7 w-7 items-center justify-center rounded-lg transition-colors"
                 style={
                   col.align === a
                     ? { backgroundColor: 'var(--accent)', color: '#fff' }
@@ -672,7 +672,7 @@ const ColRow = memo(
           <button
             type="button"
             onClick={() => setExpanded((v) => !v)}
-            className="w-7 h-7 flex items-center justify-center rounded-lg"
+            className="flex h-7 w-7 items-center justify-center rounded-lg"
             style={
               expanded
                 ? { backgroundColor: 'var(--accent)', color: '#fff' }
@@ -695,13 +695,13 @@ const ColRow = memo(
         {/* Expanded: cell type + link URL */}
         {expanded && (
           <div
-            className="px-3 pb-3 pt-2 space-y-3"
+            className="space-y-3 px-3 pb-3 pt-2"
             style={{ borderTop: '1px solid var(--glass-border-subtle)' }}
           >
             {/* Cell type */}
             <div>
               <p
-                className="text-[10px] font-semibold uppercase tracking-widest mb-1.5"
+                className="mb-1.5 text-[10px] font-semibold uppercase tracking-widest"
                 style={{ color: 'var(--text-muted)' }}
               >
                 Cell Type
@@ -714,7 +714,7 @@ const ColRow = memo(
                     onClick={() =>
                       onChange({ type: t === 'text' ? undefined : t })
                     }
-                    className="flex-1 py-1 rounded-lg text-xs font-medium"
+                    className="flex-1 rounded-lg py-1 text-xs font-medium"
                     style={
                       (col.type ?? 'text') === t
                         ? { backgroundColor: 'var(--accent)', color: '#fff' }
@@ -742,13 +742,13 @@ const ColRow = memo(
               value={col.link ?? ''}
               onChange={(e) => onChange({ link: e.target.value || undefined })}
               placeholder="/admin/services/${service_id}"
-              className="w-full px-2.5 py-1.5 rounded-lg text-xs font-mono"
+              className="w-full rounded-lg px-2.5 py-1.5 font-mono text-xs"
               style={inputStyle}
             />
             <p className="text-[10px]" style={{ color: 'var(--text-muted)' }}>
               Use {'${fieldName}'} for dynamic row values — e.g.{' '}
               <code
-                className="px-1 py-0.5 rounded"
+                className="rounded px-1 py-0.5"
                 style={{ backgroundColor: 'var(--glass-bg)' }}
               >
                 /admin/services/$&#123;service_id&#125;
@@ -807,7 +807,7 @@ const TableColumnsSection = memo(() => {
 
   return (
     <div
-      className="rounded-2xl overflow-hidden"
+      className="overflow-hidden rounded-2xl"
       style={{
         backgroundColor: 'var(--glass-bg)',
         border: '1px solid var(--glass-border)',
@@ -819,7 +819,7 @@ const TableColumnsSection = memo(() => {
         style={{ borderBottom: '1px solid var(--glass-border-subtle)' }}
       >
         <p
-          className="font-bold text-sm"
+          className="text-sm font-bold"
           style={{
             color: 'var(--text-primary)',
             fontFamily: '"Syne", sans-serif',
@@ -827,7 +827,7 @@ const TableColumnsSection = memo(() => {
         >
           Table Columns
         </p>
-        <p className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>
+        <p className="mt-0.5 text-xs" style={{ color: 'var(--text-muted)' }}>
           Control label, visibility and alignment for each module&apos;s table
           columns
         </p>
@@ -835,7 +835,7 @@ const TableColumnsSection = memo(() => {
 
       {/* Module tabs */}
       <div
-        className="px-6 pt-4 flex flex-wrap gap-1.5"
+        className="flex flex-wrap gap-1.5 px-6 pt-4"
         style={{
           borderBottom: '1px solid var(--glass-border-subtle)',
           paddingBottom: '1rem',
@@ -845,7 +845,7 @@ const TableColumnsSection = memo(() => {
           <button
             key={m.id}
             onClick={() => setActiveModule(m.id)}
-            className="px-3 py-1.5 rounded-lg text-xs font-medium transition-colors"
+            className="rounded-lg px-3 py-1.5 text-xs font-medium transition-colors"
             style={
               activeModule === m.id
                 ? { backgroundColor: 'var(--accent)', color: '#fff' }
@@ -862,10 +862,10 @@ const TableColumnsSection = memo(() => {
       </div>
 
       {/* Column rows */}
-      <div className="px-6 py-4 space-y-2">
+      <div className="space-y-2 px-6 py-4">
         {/* Row header */}
         <div
-          className="grid gap-3 mb-3 text-xs font-semibold tracking-widest uppercase"
+          className="mb-3 grid gap-3 text-xs font-semibold uppercase tracking-widest"
           style={{
             color: 'var(--text-muted)',
             gridTemplateColumns: '1fr 160px 48px 96px 28px',
@@ -890,7 +890,7 @@ const TableColumnsSection = memo(() => {
 
       {/* Footer */}
       <div
-        className="px-6 py-4 flex items-center justify-between"
+        className="flex items-center justify-between px-6 py-4"
         style={{ borderTop: '1px solid var(--glass-border-subtle)' }}
       >
         <button
@@ -910,7 +910,7 @@ const TableColumnsSection = memo(() => {
           whileTap={{ scale: 0.96 }}
           onClick={handleSave}
           disabled={saving}
-          className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold disabled:opacity-60"
+          className="flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-semibold disabled:opacity-60"
           style={{
             backgroundColor: saved ? '#34d399' : 'var(--accent)',
             color: '#fff',
@@ -938,7 +938,7 @@ const FormBuilderLinks = memo(() => {
   const navigate = useNavigate();
   return (
     <div
-      className="rounded-2xl overflow-hidden"
+      className="overflow-hidden rounded-2xl"
       style={{
         backgroundColor: 'var(--glass-bg)',
         border: '1px solid var(--glass-border)',
@@ -949,7 +949,7 @@ const FormBuilderLinks = memo(() => {
         style={{ borderBottom: '1px solid var(--glass-border-subtle)' }}
       >
         <p
-          className="font-bold text-sm"
+          className="text-sm font-bold"
           style={{
             color: 'var(--text-primary)',
             fontFamily: '"Syne", sans-serif',
@@ -957,17 +957,17 @@ const FormBuilderLinks = memo(() => {
         >
           Form Builder
         </p>
-        <p className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>
+        <p className="mt-0.5 text-xs" style={{ color: 'var(--text-muted)' }}>
           Open the dedicated builder to add, edit, reorder, or delete fields for
           any module.
         </p>
       </div>
-      <div className="px-6 py-4 grid grid-cols-2 sm:grid-cols-3 gap-3">
+      <div className="grid grid-cols-2 gap-3 px-6 py-4 sm:grid-cols-3">
         {MODULES.map((m) => (
           <button
             key={m.id}
             onClick={() => navigate(`/admin/${m.id}/form-config`)}
-            className="flex items-center gap-3 px-4 py-3 rounded-xl text-left transition-colors"
+            className="flex items-center gap-3 rounded-xl px-4 py-3 text-left transition-colors"
             style={{
               backgroundColor: 'var(--glass-bg-raised)',
               border: '1px solid var(--glass-border)',
@@ -979,7 +979,7 @@ const FormBuilderLinks = memo(() => {
               size={15}
               style={{ color: 'var(--accent)', flexShrink: 0 }}
             />
-            <span className="text-sm font-medium truncate">{m.label}</span>
+            <span className="truncate text-sm font-medium">{m.label}</span>
           </button>
         ))}
       </div>
@@ -1002,7 +1002,7 @@ const AdminSettings = memo(() => {
 
   return (
     <>
-      <div className="p-6 max-w-5xl mx-auto space-y-5">
+      <div className="mx-auto max-w-5xl space-y-5 p-6">
         {/* Header */}
         <div>
           <h2
@@ -1014,21 +1014,21 @@ const AdminSettings = memo(() => {
           >
             Settings
           </h2>
-          <p className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>
+          <p className="mt-0.5 text-xs" style={{ color: 'var(--text-muted)' }}>
             Configure your site, appearance, and integrations
           </p>
         </div>
 
-        <div className="flex flex-col lg:flex-row gap-5 items-start">
+        <div className="flex flex-col items-start gap-5 lg:flex-row">
           {/* Sidebar tabs */}
-          <div className="w-full lg:w-48 shrink-0 flex flex-row lg:flex-col gap-1.5 flex-wrap">
+          <div className="flex w-full shrink-0 flex-row flex-wrap gap-1.5 lg:w-48 lg:flex-col">
             {SECTIONS.map((s) => {
               const active = activeSection === s.id;
               return (
                 <button
                   key={s.id}
                   onClick={() => setActiveSection(s.id)}
-                  className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-medium text-left transition-colors"
+                  className="flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-left text-sm font-medium transition-colors"
                   style={
                     active
                       ? { backgroundColor: 'var(--accent)', color: '#fff' }
@@ -1040,7 +1040,7 @@ const AdminSettings = memo(() => {
                   }
                 >
                   <span
-                    className="w-6 h-6 rounded-lg flex items-center justify-center shrink-0"
+                    className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg"
                     style={{
                       backgroundColor: active ? 'rgba(255,255,255,0.2)' : s.bg,
                       color: active ? '#fff' : s.color,
@@ -1055,7 +1055,7 @@ const AdminSettings = memo(() => {
           </div>
 
           {/* Section panels */}
-          <div className="flex-1 min-w-0 space-y-5">
+          <div className="min-w-0 flex-1 space-y-5">
             {activeSection === 'general' && (
               <motion.div
                 key="general"
@@ -1067,7 +1067,7 @@ const AdminSettings = memo(() => {
                   sub="Basic site information and contact details"
                   onSave={save}
                 >
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                     <Input label="Site Name" defaultValue="Tensor Labz" />
                     <Input
                       label="Tagline"
@@ -1091,7 +1091,7 @@ const AdminSettings = memo(() => {
                     </div>
                     <div className="sm:col-span-2">
                       <label
-                        className="block text-xs font-semibold mb-1.5"
+                        className="mb-1.5 block text-xs font-semibold"
                         style={{ color: 'var(--text-muted)' }}
                       >
                         Site Description
@@ -1099,7 +1099,7 @@ const AdminSettings = memo(() => {
                       <textarea
                         rows={3}
                         defaultValue="Tensor Labz builds innovative AI, robotics and IoT solutions for sustainable impact."
-                        className="w-full px-3 py-2.5 rounded-lg text-sm resize-none"
+                        className="w-full resize-none rounded-lg px-3 py-2.5 text-sm"
                         style={{
                           backgroundColor: 'var(--input-bg)',
                           border: '1px solid var(--input-border)',
@@ -1127,7 +1127,7 @@ const AdminSettings = memo(() => {
                 >
                   <div>
                     <label
-                      className="block text-xs font-semibold mb-2"
+                      className="mb-2 block text-xs font-semibold"
                       style={{ color: 'var(--text-muted)' }}
                     >
                       Default Theme
@@ -1137,7 +1137,7 @@ const AdminSettings = memo(() => {
                         <button
                           key={t}
                           onClick={() => setDefaultTheme(t)}
-                          className="flex-1 py-2.5 rounded-xl text-sm font-medium capitalize border transition-colors"
+                          className="flex-1 rounded-xl border py-2.5 text-sm font-medium capitalize transition-colors"
                           style={
                             defaultTheme === t
                               ? {
@@ -1160,7 +1160,7 @@ const AdminSettings = memo(() => {
                   </div>
                   <div>
                     <label
-                      className="block text-xs font-semibold mb-2"
+                      className="mb-2 block text-xs font-semibold"
                       style={{ color: 'var(--text-muted)' }}
                     >
                       Accent Color
@@ -1171,7 +1171,7 @@ const AdminSettings = memo(() => {
                           key={a.label}
                           onClick={() => setAccentPick(idx)}
                           title={a.label}
-                          className="w-8 h-8 rounded-full flex items-center justify-center transition-transform"
+                          className="flex h-8 w-8 items-center justify-center rounded-full transition-transform"
                           style={{
                             backgroundColor: a.dark,
                             transform:
@@ -1189,7 +1189,7 @@ const AdminSettings = memo(() => {
                       ))}
                     </div>
                     <p
-                      className="text-[11px] mt-2"
+                      className="mt-2 text-[11px]"
                       style={{ color: 'var(--text-muted)' }}
                     >
                       Selected: {ACCENT_OPTIONS[accentPick].label}
@@ -1220,7 +1220,7 @@ const AdminSettings = memo(() => {
                   sub="Firestore database and authentication config"
                   onSave={save}
                 >
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                     <MaskedField
                       label="API Key"
                       value="AIzaSyCExAMPLEkeyHere1234567890abcdef"
@@ -1245,7 +1245,7 @@ const AdminSettings = memo(() => {
                   sub="S3 bucket for image uploads"
                   onSave={save}
                 >
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                     <Input
                       label="Bucket Name"
                       defaultValue="tensor-labz-media"
@@ -1314,13 +1314,13 @@ const AdminSettings = memo(() => {
                   />
                   <div>
                     <label
-                      className="block text-xs font-semibold mb-1.5"
+                      className="mb-1.5 block text-xs font-semibold"
                       style={{ color: 'var(--text-muted)' }}
                     >
                       Session Timeout
                     </label>
                     <select
-                      className="w-full px-3 py-2.5 rounded-lg text-sm"
+                      className="w-full rounded-lg px-3 py-2.5 text-sm"
                       style={{
                         backgroundColor: 'var(--input-bg)',
                         border: '1px solid var(--input-border)',

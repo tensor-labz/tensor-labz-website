@@ -135,14 +135,14 @@ const ImageCell = ({ src }: { src: string }) =>
     <img
       src={src}
       alt=""
-      className="w-10 h-10 object-cover rounded-lg flex-shrink-0"
+      className="h-10 w-10 flex-shrink-0 rounded-lg object-cover"
       onError={(e) => {
         (e.currentTarget as HTMLImageElement).style.display = 'none';
       }}
     />
   ) : (
     <div
-      className="w-10 h-10 rounded-lg flex-shrink-0"
+      className="h-10 w-10 flex-shrink-0 rounded-lg"
       style={{ backgroundColor: 'var(--glass-bg-raised)' }}
     />
   );
@@ -199,7 +199,7 @@ const MobileCardList = ({
   if (!rows.length) {
     return (
       <div
-        className="py-14 text-sm text-center"
+        className="py-14 text-center text-sm"
         style={{ color: 'var(--text-muted)' }}
       >
         {search ? `No results for "${search}"` : 'No records yet.'}
@@ -222,7 +222,7 @@ const MobileCardList = ({
           <div
             key={row.id as number}
             onClick={() => navigate(`/admin/${moduleId}/${row.id}`)}
-            className="flex items-center gap-3 px-4 py-3 cursor-pointer transition-colors"
+            className="flex cursor-pointer items-center gap-3 px-4 py-3 transition-colors"
             style={{
               borderTop: i > 0 ? '1px solid var(--glass-border)' : undefined,
             }}
@@ -231,22 +231,22 @@ const MobileCardList = ({
               <img
                 src={imgSrc}
                 alt=""
-                className="w-10 h-10 object-cover rounded-lg shrink-0"
+                className="h-10 w-10 shrink-0 rounded-lg object-cover"
                 onError={(e) => {
                   (e.currentTarget as HTMLImageElement).style.display = 'none';
                 }}
               />
             )}
-            <div className="flex-1 min-w-0">
+            <div className="min-w-0 flex-1">
               <p
-                className="text-sm font-medium truncate"
+                className="truncate text-sm font-medium"
                 style={{ color: 'var(--text-primary)' }}
               >
                 {title || `#${row.id}`}
               </p>
               {desc && (
                 <p
-                  className="text-xs mt-0.5 truncate"
+                  className="mt-0.5 truncate text-xs"
                   style={{ color: 'var(--text-muted)' }}
                 >
                   {desc}
@@ -428,7 +428,7 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={(e) => e.stopPropagation()}
-                    className="flex items-center justify-center w-8 h-8 rounded-lg transition-colors"
+                    className="flex h-8 w-8 items-center justify-center rounded-lg transition-colors"
                     style={{
                       color: 'var(--text-primary)',
                       backgroundColor: 'var(--glass-bg-raised)',
@@ -454,8 +454,7 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
             });
           } else {
             let cellRenderer:
-              | ((row: AdminRecord) => React.ReactNode)
-              | undefined;
+              ((row: AdminRecord) => React.ReactNode) | undefined;
             if (c.link) {
               cellRenderer = (row) => {
                 const label = resolveRelation(relMap, rowVal(row, c.field));
@@ -535,7 +534,7 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={(e) => e.stopPropagation()}
-                  className="flex items-center justify-center w-8 h-8 rounded-lg transition-colors"
+                  className="flex h-8 w-8 items-center justify-center rounded-lg transition-colors"
                   style={{
                     color: 'var(--text-primary)',
                     backgroundColor: 'var(--glass-bg-raised)',
@@ -628,11 +627,11 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
   }, [rows, search]);
 
   return (
-    <div className="h-full flex flex-col pt-3 px-4 sm:pt-4 sm:px-5">
+    <div className="flex h-full flex-col px-4 pt-3 sm:px-5 sm:pt-4">
       {/* Search + record count row — stays pinned above the table */}
-      <div className="shrink-0 flex flex-col sm:flex-row sm:items-center gap-3 mb-4">
+      <div className="mb-4 flex shrink-0 flex-col gap-3 sm:flex-row sm:items-center">
         <div
-          className="flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl w-full sm:max-w-[380px]"
+          className="flex w-full items-center gap-2.5 rounded-xl px-3.5 py-2.5 sm:max-w-[380px]"
           style={{
             backgroundColor: 'var(--glass-bg)',
             border: '1px solid var(--glass-border)',
@@ -648,7 +647,7 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder={`Search ${mod?.label ?? moduleId}…`}
-            className="flex-1 text-sm bg-transparent outline-none"
+            className="flex-1 bg-transparent text-sm outline-none"
             style={{ color: 'var(--text-primary)' }}
           />
           {search && (
@@ -661,7 +660,7 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
             </button>
           )}
         </div>
-        <p className="text-xs shrink-0" style={{ color: 'var(--text-muted)' }}>
+        <p className="shrink-0 text-xs" style={{ color: 'var(--text-muted)' }}>
           {loading
             ? '—'
             : `${filtered.length} record${filtered.length !== 1 ? 's' : ''}`}
@@ -670,7 +669,7 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
 
       {/* Table card — fills remaining height; row area scrolls, header+pagination fixed */}
       <div
-        className="rounded-2xl flex-1 min-h-0 no-scrollbar"
+        className="no-scrollbar min-h-0 flex-1 rounded-2xl"
         style={{
           border: '1px solid var(--glass-border)',
           backgroundColor: 'var(--glass-bg)',
@@ -714,7 +713,7 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
                   }
                   noDataComponent={
                     <div
-                      className="py-16 text-sm text-center w-full"
+                      className="w-full py-16 text-center text-sm"
                       style={{ color: 'var(--text-muted)' }}
                     >
                       {search

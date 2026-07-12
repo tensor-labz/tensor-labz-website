@@ -23,16 +23,16 @@ class ErrorBoundary extends Component<Props, State> {
   override render() {
     if (this.state.hasError) {
       return (
-        <div className="flex flex-col items-center justify-center min-h-screen bg-white text-center p-8">
-          <h1 className="text-2xl font-bold text-gray-800 mb-4">
+        <div className="flex min-h-screen flex-col items-center justify-center bg-white p-8 text-center">
+          <h1 className="mb-4 text-2xl font-bold text-gray-800">
             Something went wrong
           </h1>
-          <p className="text-gray-500 mb-6">
+          <p className="mb-6 text-gray-500">
             Please refresh the page or try again later.
           </p>
           <button
             type="button"
-            className="px-6 py-2 bg-[#092B4A] text-white rounded hover:opacity-90"
+            className="rounded bg-[#092B4A] px-6 py-2 text-white hover:opacity-90"
             onClick={() => window.location.reload()}
           >
             Refresh Page

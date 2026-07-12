@@ -1,5 +1,9 @@
 import type { Config } from 'tailwindcss';
 import typography from '@tailwindcss/typography';
+import forms from '@tailwindcss/forms';
+
+// @tailwindcss/forms ships no type declarations.
+declare module '@tailwindcss/forms';
 
 export default {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
@@ -94,5 +98,10 @@ export default {
       },
     },
   },
-  plugins: [typography],
+  plugins: [
+    typography,
+    // 'class' strategy: opt-in via form-input/form-select classes — no global
+    // reset, so existing custom-styled admin inputs are untouched.
+    forms({ strategy: 'class' }),
+  ],
 } satisfies Config;

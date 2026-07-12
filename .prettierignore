@@ -1,0 +1,12 @@
+# Build output & deps
+dist
+build
+node_modules
+site
+
+# Generated
+package-lock.json
+
+# Vendored submodules — formatted in their own repos
+docs
+image-lambda

@@ -6,7 +6,7 @@ const NavBar: React.FC = () => {
   const ctaLink = navData[navData.length - 1];
 
   return (
-    <nav className="hidden md:flex items-center gap-8">
+    <nav className="hidden items-center gap-8 md:flex">
       {mainLinks.map((item, i) => (
         <NavItem key={i} nav={item.nav} to={item.to} />
       ))}

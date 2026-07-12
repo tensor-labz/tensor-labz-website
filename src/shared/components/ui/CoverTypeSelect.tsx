@@ -18,7 +18,7 @@ const CoverTypeSelect = ({
   <select
     value={value || 'image'}
     onChange={(e) => onChange(e.target.value)}
-    className="w-full px-3 py-1.5 rounded-lg text-sm appearance-none cursor-pointer"
+    className="w-full cursor-pointer appearance-none rounded-lg px-3 py-1.5 text-sm"
     style={{
       backgroundColor: 'var(--bg-surface)',
       border: '1px solid var(--input-border)',

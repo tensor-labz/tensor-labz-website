@@ -19,15 +19,13 @@ const Header: React.FC<{ className?: string }> = memo(({ className = '' }) => {
       initial={{ opacity: 0, y: -12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, ease: 'easeOut' }}
-      className={`fixed top-0 left-0 w-full z-50 border-b backdrop-blur-md bg-canvas
-        transition-[border-color,box-shadow] duration-300
-        ${
-          isScrolled
-            ? 'border-rim shadow-lg shadow-black/10 dark:shadow-black/40'
-            : 'border-transparent'
-        } ${className}`}
+      className={`fixed left-0 top-0 z-50 w-full border-b bg-canvas backdrop-blur-md transition-[border-color,box-shadow] duration-300 ${
+        isScrolled
+          ? 'border-rim shadow-lg shadow-black/10 dark:shadow-black/40'
+          : 'border-transparent'
+      } ${className}`}
     >
-      <div className="max-w-7xl mx-auto px-6 lg:px-10 py-3.5 flex items-center justify-between">
+      <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-3.5 lg:px-10">
         <Link to="/" className="shrink-0">
           <motion.img
             src={resolveLogo(info, theme, logo)}
@@ -39,7 +37,7 @@ const Header: React.FC<{ className?: string }> = memo(({ className = '' }) => {
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.1, duration: 0.35 }}
-            className="h-9 md:h-10 w-auto object-contain"
+            className="h-9 w-auto object-contain md:h-10"
           />
         </Link>
 
@@ -50,10 +48,7 @@ const Header: React.FC<{ className?: string }> = memo(({ className = '' }) => {
             whileTap={{ scale: 0.88 }}
             onClick={toggleTheme}
             aria-label="Toggle theme"
-            className="w-8 h-8 flex items-center justify-center rounded
-              text-muted hover:text-accent
-              bg-raised border border-rim
-              transition-colors duration-200 text-base shrink-0"
+            className="flex h-8 w-8 shrink-0 items-center justify-center rounded border border-rim bg-raised text-base text-muted transition-colors duration-200 hover:text-accent"
           >
             {theme === 'dark' ? (
               <ReactIcon name="RiSunLine" size={16} />

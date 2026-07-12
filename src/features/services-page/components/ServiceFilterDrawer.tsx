@@ -40,8 +40,7 @@ const ServiceFilterDrawer: FC = memo(() => {
           borderColor: 'var(--border)',
           color: 'var(--accent)',
         }}
-        className="fixed left-0 top-1/2 -translate-y-1/2 z-40 flex items-center justify-center
-          w-9 h-14 rounded-r-xl border border-l-0 shadow-lg"
+        className="fixed left-0 top-1/2 z-40 flex h-14 w-9 -translate-y-1/2 items-center justify-center rounded-r-xl border border-l-0 shadow-lg"
       >
         <motion.span
           className="flex"
@@ -64,7 +63,7 @@ const ServiceFilterDrawer: FC = memo(() => {
                 transition={{ duration: 0.25 }}
                 onClick={() => setOpen(false)}
                 style={{ top: 'var(--page-header-h, 4rem)' }}
-                className="fixed inset-x-0 bottom-0 bg-black/40 backdrop-blur-sm z-[99]"
+                className="fixed inset-x-0 bottom-0 z-[99] bg-black/40 backdrop-blur-sm"
               />
               <motion.div
                 key="panel"
@@ -73,9 +72,7 @@ const ServiceFilterDrawer: FC = memo(() => {
                 exit={{ x: '-100%' }}
                 transition={{ type: 'spring', damping: 28, stiffness: 280 }}
                 style={{ top: 'var(--page-header-h, 4rem)' }}
-                className="fixed left-0 bottom-0 w-60 z-[100] flex flex-col shadow-2xl text-white
-                  bg-slate-950/70 backdrop-blur-2xl
-                  border-r border-white/10"
+                className="fixed bottom-0 left-0 z-[100] flex w-60 flex-col border-r border-white/10 bg-slate-950/70 text-white shadow-2xl backdrop-blur-2xl"
               >
                 <motion.button
                   type="button"
@@ -83,14 +80,12 @@ const ServiceFilterDrawer: FC = memo(() => {
                   whileHover={{ scale: 1.05 }}
                   onClick={() => setOpen(false)}
                   aria-label="Close filter"
-                  className="absolute top-3 -right-12 w-10 h-10 rounded-full flex items-center justify-center
-                    bg-slate-900 border border-white/15 text-white/80 hover:text-white
-                    shadow-lg transition-colors"
+                  className="absolute -right-12 top-3 flex h-10 w-10 items-center justify-center rounded-full border border-white/15 bg-slate-900 text-white/80 shadow-lg transition-colors hover:text-white"
                 >
                   <ReactIcon name="RiCloseLine" size={20} />
                 </motion.button>
 
-                <nav className="flex flex-col pt-2 flex-1 min-h-0 overflow-y-auto">
+                <nav className="flex min-h-0 flex-1 flex-col overflow-y-auto pt-2">
                   {options.map((option, i) => {
                     const isActive = option.slug === activeSlug;
                     return (
@@ -101,15 +96,14 @@ const ServiceFilterDrawer: FC = memo(() => {
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: i * 0.05 + 0.08, duration: 0.3 }}
                         onClick={() => select(option.slug)}
-                        className={`w-full text-left px-5 py-3.5 text-[11px] font-semibold tracking-wider uppercase
-                          flex items-center gap-2.5 transition-colors ${
-                            isActive
-                              ? 'text-[var(--accent)] bg-white/[0.06]'
-                              : 'text-white/55 hover:text-white hover:bg-white/[0.04]'
-                          }`}
+                        className={`flex w-full items-center gap-2.5 px-5 py-3.5 text-left text-[11px] font-semibold uppercase tracking-wider transition-colors ${
+                          isActive
+                            ? 'bg-white/[0.06] text-[var(--accent)]'
+                            : 'text-white/55 hover:bg-white/[0.04] hover:text-white'
+                        }`}
                       >
                         <span
-                          className="w-1 h-4 rounded-full shrink-0"
+                          className="h-4 w-1 shrink-0 rounded-full"
                           style={{
                             backgroundColor: isActive
                               ? 'var(--accent)'
