@@ -1,4 +1,5 @@
 import type { Config } from 'tailwindcss';
+import typography from '@tailwindcss/typography';
 
 export default {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
@@ -16,10 +17,17 @@ export default {
         raised: 'var(--bg-raised)',
         rim: 'var(--border)',
         'glass-bg': 'var(--glass-bg)',
+        'glass-subtle': 'var(--glass-bg-subtle)',
         'glass-rim': 'var(--glass-border)',
+        'glass-rim-strong': 'var(--glass-border-strong)',
+        'glass-rim-subtle': 'var(--glass-border-subtle)',
         'glass-raised': 'var(--glass-bg-raised)',
         'glass-hover': 'var(--glass-bg-hover)',
         'footer-bg': 'var(--footer-bg)',
+        'header-bg': 'var(--header-bg)',
+        'input-bg': 'var(--input-bg)',
+        'input-border': 'var(--input-border)',
+        'grid-dot': 'var(--grid-dot)',
         /* ── legacy palette (backwards compat) ── */
         primary: {
           100: '#F0F0E4',
@@ -86,5 +94,5 @@ export default {
       },
     },
   },
-  plugins: [],
+  plugins: [typography],
 } satisfies Config;
