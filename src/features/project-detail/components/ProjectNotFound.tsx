@@ -12,9 +12,9 @@ export default function ProjectNotFound() {
     if (countdown > 0) {
       const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
       return () => clearTimeout(timer);
-    } else {
-      goToProjects();
     }
+    goToProjects();
+    return undefined;
   }, [countdown]);
 
   return (
