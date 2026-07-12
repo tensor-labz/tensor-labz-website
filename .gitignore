@@ -7,11 +7,19 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# Dependencies
 node_modules
+
+# Build output
 dist
 dist-ssr
 /build
+
+# Caches & generated
 *.tsbuildinfo
+.eslintcache
+.cache
+coverage
 *.local
 
 # Environment variables
@@ -22,14 +30,28 @@ dist-ssr
 # Service-account / admin credentials — never commit
 *-firebase-adminsdk-*.json
 
+# Firebase CLI artifacts (staging deploys via Firebase Hosting)
+.firebase/
+firebase-debug.log*
+firestore-debug.log*
+database-debug.log*
+ui-debug.log*
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
 .idea
-.DS_Store
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
+
+# MkDocs local build output
 site/
+
+# OS files
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini

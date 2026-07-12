@@ -1,6 +1,11 @@
 # Changelog
 
-All notable changes to the Tensor Labs website are documented here.
+All notable changes to the **Tensor Labz** website are documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this
+project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html). Versions are
+tagged automatically from [Conventional Commits](https://www.conventionalcommits.org/) on
+merge to `main` (`.github/workflows/release.yml`); this file is curated per pull request.
 
 ---
 
@@ -8,15 +13,49 @@ All notable changes to the Tensor Labs website are documented here.
 
 ### Added
 
-- Reusable content components: `ContentPage`, `ContentCard`, `ContentList`, `ContentPagination`, `ContentHeader` — one data-driven set powering the posts and services pages (#40)
-- Search on the services and posts pages; services search filters projects via the `?q` URL param (#37, #40)
-- Vendor `tensor-labz-docs` and `tensor-labz-image-lambda` as git submodules (#35)
+- Firebase Analytics on the public site — guarded, browser-only, initialized from env (#47)
+- Production-grade Vite config: `@ → src` alias, dev/preview server, `optimizeDeps`, production `console` stripping, and a targeted `three`/`firebase` vendor split (#48)
+- Stricter TypeScript (`noImplicitReturns`, `noImplicitOverride`, `forceConsistentCasingInFileNames`, `resolveJsonModule`) applied consistently to the app and node configs (#48)
+- `.gitattributes` normalizing line endings to LF across all platforms
 
 ### Changed
 
-- Branch flow: feature/fix branches now PR directly into `staging` (`feature → staging → main`); the `dev → staging` funnel was dropped (`enforce-flow.yml`) (#37)
-- Services page is URL-driven — active service comes from the route `:slug`, so the correct list loads immediately on entry/refresh/back-forward; `/services` shows all (no `/services/all` redirect) (#37)
-- Services filter moved to a left slide-in drawer (glass, opens below the sticky header) replacing the horizontal tab row + mobile dropdown (#38, #39)
+- **Migrated authentication and content data from Supabase to Firebase (Firebase Auth + Firestore).** Admin image uploads now authenticate the image Lambda with a Firebase ID token (#46)
+- Hardened git configuration — sectioned `.gitignore` (Firebase/cache/OS artifacts), `.gitattributes` (`*.sh` LF, `linguist-vendored` submodules, generated lockfile), and `branch = main` submodule tracking
+
+### Removed
+
+- Legacy Google Sheets CMS layer (`sheetsClient`, unused `LatestHero`) and the `VITE_SHEET_URL` variable (#47)
+- Dead dependencies (`path`, `react-helmet`) and stale committed artifacts (`build/`, `.firebase/` cache, `HISTORY.md`)
+
+---
+
+## [v1.11.3] — 2026-07-12
+
+### Refactor
+
+- Shared `DetailsPage` + `MediaGallery` powering the project and post detail pages (#41)
+
+### CI / Build
+
+- Release job is tag-only — stop pushing to the protected `main` branch; publish a GitHub Release instead (#43)
+- Fix release-workflow permissions and branch flow (#45)
+
+---
+
+## [v1.11.2] — 2026-06-28
+
+### Added
+
+- Reusable, data-driven content components: `ContentPage`, `ContentCard`, `ContentList`, `ContentPagination`, `ContentHeader` — one set powering the posts and services pages (#40)
+- Search on the services and posts pages; services search filters projects via the `?q` URL param (#37, #40)
+- Vendored `tensor-labz-docs` and `tensor-labz-image-lambda` as git submodules (#35)
+
+### Changed
+
+- Branch flow: feature/fix branches PR directly into `staging` (`feature → staging → main`); the `dev → staging` funnel was dropped (`enforce-flow.yml`) (#32, #37)
+- Services page is URL-driven — active service comes from the route `:slug`, so the correct list loads on entry/refresh/back-forward; `/services` shows all (no `/services/all` redirect) (#37)
+- Services filter moved to a left slide-in glass drawer, replacing the horizontal tab row + mobile dropdown (#38, #39)
 - Sticky glassmorphism page header with accent glow and frosted search input (#38, #39)
 
 ### Fixed
@@ -28,24 +67,23 @@ All notable changes to the Tensor Labs website are documented here.
 - Posts and services pages reduced to thin wrappers over `ContentPage`; removed `PostCard`, `ProjectCard`, `ServiceHero`, `ServiceContainer`, and the service-page `Pagination` (#40)
 
 ---
+
 ## [v1.11.1] — 2026-05-10
 
 ### Other
 
 - staging → main (enforce branch flow) (#33)
 
-
-
 ---
+
 ## [v1.11.0] — 2026-05-10
 
 ### Added
 
 - Customers and Orders CRUD modules with tabbed forms (#31)
 
-
-
 ---
+
 ## [v1.10.0] — 2026-05-10
 
 ### Added
@@ -75,9 +113,8 @@ All notable changes to the Tensor Labs website are documented here.
 - Merge branch 'staging' of github.com:tensor-labz/tensor-labz-website into staging
 - Merge pull request #29 from tensor-labz/dev
 
-
-
 ---
+
 ## [v1.9.0] — 2026-05-10
 
 ### Added
@@ -105,9 +142,8 @@ All notable changes to the Tensor Labs website are documented here.
 - Merge pull request #28 from tensor-labz/staging
 - Merge pull request #27 from tensor-labz/dev
 
-
-
 ---
+
 ## [v1.8.0] — 2026-05-10
 
 ### Added
@@ -159,9 +195,8 @@ All notable changes to the Tensor Labs website are documented here.
 - add PR attribution rule and Redux decoupling rule to CLAUDE.md
 - Merge pull request #19 from tensor-labz/feat/dynamic-react-icon
 
-
-
 ---
+
 ## [v1.7.0] — 2026-05-09
 
 ### Added
@@ -181,9 +216,8 @@ All notable changes to the Tensor Labs website are documented here.
 - Merge pull request #17 from tensor-labz/dev
 - Merge pull request #16 from tensor-labz/feat/about-refactor
 
-
-
 ---
+
 ## [v1.6.3] — 2026-05-09
 
 ### Bug Fixes
@@ -194,9 +228,8 @@ All notable changes to the Tensor Labs website are documented here.
 
 - Merge pull request #15 from tensor-labz/staging
 
-
-
 ---
+
 ## [v1.6.2] — 2026-05-09
 
 ### Bug Fixes
@@ -207,9 +240,8 @@ All notable changes to the Tensor Labs website are documented here.
 
 - Merge pull request #14 from tensor-labz/staging
 
-
-
 ---
+
 ## [v1.6.1] — 2026-05-09
 
 ### Bug Fixes
@@ -220,9 +252,8 @@ All notable changes to the Tensor Labs website are documented here.
 
 - Merge pull request #13 from tensor-labz/staging
 
-
-
 ---
+
 ## [v1.6.0] — 2026-05-09
 
 ### Added
@@ -244,9 +275,8 @@ All notable changes to the Tensor Labs website are documented here.
 - Merge pull request #11 from tensor-labz/dev
 - Merge pull request #10 from tensor-labz/feat/form-refactor
 
-
-
 ---
+
 ## [v1.5.0] — 2026-05-09
 
 ### Added
@@ -292,18 +322,16 @@ All notable changes to the Tensor Labs website are documented here.
 
 - Merge pull request #9 from tensor-labz/feat/crud-table
 
-
-
 ---
+
 ## [v1.4.0] — 2026-05-09
 
 ### Added
 
 - wire admin CRUD through Redux entity adapter and async thunks (#8)
 
-
-
 ---
+
 ## [v1.3.1] — 2026-05-09
 
 ### Chore
@@ -315,9 +343,8 @@ All notable changes to the Tensor Labs website are documented here.
 - Merge branch 'main' of github.com:tensor-labz/tensor-labz-website
 - update CLAUDE.md — all backend live, tensor-labz-docs repo, all 12 field types, Supabase auth references
 
-
-
 ---
+
 ## [v1.3.0] — 2026-05-09
 
 ### Added
@@ -352,7 +379,18 @@ All notable changes to the Tensor Labs website are documented here.
 - fix mkdocs site_url and repo_url to tensor-labz org
 - add MkDocs site with Mermaid diagrams + GitHub Pages workflow
 
+---
 
+## [v1.2.0] — 2026-05-09
+
+### Added
+
+- Migrated admin authentication from Firebase to Supabase
+- Wired admin CRUD and social data through Supabase
+- S3 image upload via Lambda presigned URLs
+- Live module counts on the dashboard + S3 cleanup on record delete
+- Search, sort, and mobile card layout for the admin data table
+- MkDocs documentation site with Mermaid diagrams + GitHub Pages workflow
 
 ---
 
@@ -500,6 +538,13 @@ All notable changes to the Tensor Labs website are documented here.
 
 ---
 
-## Previous releases
+## [v1.0.0] — 2025-07-27
 
-See git log for historical changes prior to this changelog.
+Initial release of the Tensor Labz website, prior to the Redux/Three.js
+architecture rewrite that began at v1.1.0.
+
+---
+
+[Unreleased]: https://github.com/tensor-labz/tensor-labz-website/compare/v1.11.3...staging
+[v1.11.3]: https://github.com/tensor-labz/tensor-labz-website/releases/tag/v1.11.3
+[v1.11.2]: https://github.com/tensor-labz/tensor-labz-website/releases/tag/v1.11.2

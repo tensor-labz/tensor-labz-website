@@ -4,6 +4,14 @@ on:
   push:
     branches: [staging]
 
+# Serialize staging deploys; a newer push supersedes an in-flight one.
+concurrency:
+  group: deploy-staging
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
 jobs:
   deploy:
     name: Build & Deploy to Firebase Hosting
@@ -21,7 +29,7 @@ jobs:
         run: npm ci
 
       - name: Type check
-        run: npx tsc --noEmit
+        run: npm run typecheck
 
       - name: Build
         run: npm run build
