@@ -66,7 +66,7 @@ const ContentPage: React.FC<ContentPageProps> = ({
 
     {sidebar}
 
-    <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 mt-2 pb-16">
+    <section className="mx-auto mt-2 max-w-7xl px-4 pb-16 sm:px-6 lg:px-10">
       <ContentList
         isLoading={isLoading}
         isEmpty={isEmpty}

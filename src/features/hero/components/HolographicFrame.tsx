@@ -26,7 +26,7 @@ const cornerDelays: Record<CornerPos, number> = {
 
 const CornerBracket = memo(({ pos }: { pos: CornerPos }) => (
   <motion.div
-    className={`absolute w-5 h-5 border-accent/70 pointer-events-none z-30 ${cornerStyles[pos]}`}
+    className={`border-accent/70 pointer-events-none absolute z-30 h-5 w-5 ${cornerStyles[pos]}`}
     initial={{ opacity: 0, scale: 0.4 }}
     animate={{ opacity: 1, scale: 1 }}
     transition={{ delay: cornerDelays[pos], duration: 0.5, ease: EASE_EXPO }}
@@ -40,29 +40,29 @@ const HolographicFrame = memo(() => {
   const slides = useAppSelector(selectHeroSlides);
 
   return (
-    <div className="relative w-full h-full flex flex-col gap-2">
+    <div className="relative flex h-full w-full flex-col gap-2">
       {/* ── status bar ── */}
       <div className="flex items-center justify-between px-0.5">
         <div className="flex items-center gap-1.5">
           <motion.div
-            className="w-1.5 h-1.5 rounded-full bg-accent"
+            className="h-1.5 w-1.5 rounded-full bg-accent"
             animate={{ opacity: [1, 0.25, 1] }}
             transition={{ duration: 2.4, repeat: Infinity, ease: 'easeInOut' }}
           />
-          <span className="text-[9px] font-mono tracking-[0.22em] uppercase text-accent/70 select-none">
+          <span className="text-accent/70 select-none font-mono text-[9px] uppercase tracking-[0.22em]">
             TL.SYSTEMS
           </span>
         </div>
-        <span className="text-[9px] font-mono text-muted/50 select-none">
+        <span className="text-muted/50 select-none font-mono text-[9px]">
           DISPLAY-{String(currentIndex + 1).padStart(3, '0')}
         </span>
       </div>
 
       {/* ── main frame ── */}
-      <div className="relative flex-1 overflow-hidden rounded-xl border border-accent/20">
+      <div className="border-accent/20 relative flex-1 overflow-hidden rounded-xl border">
         {/* engineering grid overlay */}
         <div
-          className="absolute inset-0 z-[5] pointer-events-none"
+          className="pointer-events-none absolute inset-0 z-[5]"
           style={{
             backgroundImage:
               'linear-gradient(rgba(56,189,248,0.035) 1px, transparent 1px), ' +
@@ -90,21 +90,21 @@ const HolographicFrame = memo(() => {
               <img
                 src={slide.img as string}
                 alt={slide.title as string}
-                className="w-full h-full object-cover"
+                className="h-full w-full object-cover"
                 loading="eager"
               />
             ) : (
-              <div className="w-full h-full bg-raised animate-pulse" />
+              <div className="h-full w-full animate-pulse bg-raised" />
             )}
           </motion.div>
         </AnimatePresence>
 
         {/* gradient vignette */}
-        <div className="absolute inset-0 z-10 pointer-events-none bg-gradient-to-t from-slate-950/80 via-transparent to-slate-950/50" />
+        <div className="pointer-events-none absolute inset-0 z-10 bg-gradient-to-t from-slate-950/80 via-transparent to-slate-950/50" />
 
         {/* scan line */}
         <motion.div
-          className="absolute left-0 right-0 h-px z-20 pointer-events-none"
+          className="pointer-events-none absolute left-0 right-0 z-20 h-px"
           style={{
             background:
               'linear-gradient(90deg, transparent 0%, var(--accent) 40%, #fff 50%, var(--accent) 60%, transparent 100%)',
@@ -125,7 +125,7 @@ const HolographicFrame = memo(() => {
           <AnimatePresence mode="wait">
             <motion.p
               key={`ann-${currentIndex}`}
-              className="text-[9px] font-mono tracking-[0.22em] uppercase text-accent/80 mb-1.5 select-none"
+              className="text-accent/80 mb-1.5 select-none font-mono text-[9px] uppercase tracking-[0.22em]"
               initial={{ opacity: 0, y: 6 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -6 }}
@@ -154,16 +154,16 @@ const HolographicFrame = memo(() => {
 
       {/* ── footer bar ── */}
       <div className="flex items-center justify-between px-0.5">
-        <span className="text-[9px] font-mono text-muted/40 select-none">
+        <span className="text-muted/40 select-none font-mono text-[9px]">
           {'// FRAME'} {currentIndex + 1}/{slides.length || '—'}
         </span>
         <div className="flex items-center gap-1">
           <motion.div
-            className="w-1 h-1 rounded-full bg-accent"
+            className="h-1 w-1 rounded-full bg-accent"
             animate={{ opacity: [1, 0.2, 1] }}
             transition={{ duration: 1.6, repeat: Infinity }}
           />
-          <span className="text-[9px] font-mono text-accent/60 select-none">
+          <span className="text-accent/60 select-none font-mono text-[9px]">
             LIVE
           </span>
         </div>

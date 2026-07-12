@@ -174,7 +174,7 @@ const GlobalBackground: React.FC = memo(() => {
   return (
     <div
       ref={mountRef}
-      className="fixed inset-0 w-full h-full pointer-events-none"
+      className="pointer-events-none fixed inset-0 h-full w-full"
       style={{ zIndex: 0 }}
       aria-hidden="true"
     />

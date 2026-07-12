@@ -54,7 +54,7 @@ const AdminSidebar = memo(({ open, onClose }: AdminSidebarProps) => {
     <motion.button
       onClick={onClick}
       whileTap={{ scale: 0.97 }}
-      className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-left w-full transition-colors"
+      className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm font-medium transition-colors"
       style={
         isActive
           ? { backgroundColor: 'var(--accent)', color: '#fff' }
@@ -66,7 +66,7 @@ const AdminSidebar = memo(({ open, onClose }: AdminSidebarProps) => {
       {isActive && (
         <motion.div
           layoutId={layoutId ?? 'sidebar-indicator'}
-          className="ml-auto w-1.5 h-1.5 rounded-full bg-white"
+          className="ml-auto h-1.5 w-1.5 rounded-full bg-white"
         />
       )}
     </motion.button>
@@ -75,7 +75,7 @@ const AdminSidebar = memo(({ open, onClose }: AdminSidebarProps) => {
   const SidebarContent = () => (
     <nav className="flex flex-col gap-1 p-4">
       <p
-        className="text-[10px] font-semibold tracking-[0.25em] uppercase px-3 mb-2"
+        className="mb-2 px-3 text-[10px] font-semibold uppercase tracking-[0.25em]"
         style={{ color: 'var(--text-muted)' }}
       >
         Overview
@@ -94,7 +94,7 @@ const AdminSidebar = memo(({ open, onClose }: AdminSidebarProps) => {
       />
 
       <p
-        className="text-[10px] font-semibold tracking-[0.25em] uppercase px-3 mb-2"
+        className="mb-2 px-3 text-[10px] font-semibold uppercase tracking-[0.25em]"
         style={{ color: 'var(--text-muted)' }}
       >
         Modules
@@ -133,7 +133,7 @@ const AdminSidebar = memo(({ open, onClose }: AdminSidebarProps) => {
       />
 
       <p
-        className="text-[10px] font-semibold tracking-[0.25em] uppercase px-3 mb-2"
+        className="mb-2 px-3 text-[10px] font-semibold uppercase tracking-[0.25em]"
         style={{ color: 'var(--text-muted)' }}
       >
         Management
@@ -169,7 +169,7 @@ const AdminSidebar = memo(({ open, onClose }: AdminSidebarProps) => {
       />
 
       <p
-        className="text-[10px] font-semibold tracking-[0.25em] uppercase px-3 mb-2"
+        className="mb-2 px-3 text-[10px] font-semibold uppercase tracking-[0.25em]"
         style={{ color: 'var(--text-muted)' }}
       >
         System
@@ -187,7 +187,7 @@ const AdminSidebar = memo(({ open, onClose }: AdminSidebarProps) => {
     <>
       {/* ── Desktop: fixed, never scrolls, never shifts ── */}
       <aside
-        className="hidden lg:flex flex-col"
+        className="hidden flex-col lg:flex"
         style={{
           position: 'fixed',
           top: 57, // header height
@@ -220,7 +220,7 @@ const AdminSidebar = memo(({ open, onClose }: AdminSidebarProps) => {
               animate={{ x: 0 }}
               exit={{ x: '-100%' }}
               transition={{ type: 'spring', damping: 30, stiffness: 300 }}
-              className="fixed top-0 left-0 h-full w-64 z-50 lg:hidden flex flex-col"
+              className="fixed left-0 top-0 z-50 flex h-full w-64 flex-col lg:hidden"
               style={{
                 backgroundColor: 'var(--bg-surface)',
                 borderRight: '1px solid var(--glass-border)',
@@ -231,7 +231,7 @@ const AdminSidebar = memo(({ open, onClose }: AdminSidebarProps) => {
                 style={{ borderBottom: '1px solid var(--glass-border)' }}
               >
                 <span
-                  className="font-bold text-base"
+                  className="text-base font-bold"
                   style={{
                     color: 'var(--text-primary)',
                     fontFamily: '"Syne", sans-serif',

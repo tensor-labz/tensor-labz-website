@@ -144,12 +144,12 @@ const Card = ({
 const CardHeader = ({ title, sub }: { title: string; sub: string }) => (
   <div className="mb-5">
     <p
-      className="font-bold text-sm"
+      className="text-sm font-bold"
       style={{ color: 'var(--text-primary)', fontFamily: '"Syne", sans-serif' }}
     >
       {title}
     </p>
-    <p className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>
+    <p className="mt-0.5 text-xs" style={{ color: 'var(--text-muted)' }}>
       {sub}
     </p>
   </div>
@@ -187,7 +187,7 @@ const AreaTip = ({ active, payload, label }: any) => {
         color: 'var(--text-primary)',
       }}
     >
-      <p className="font-semibold mb-1" style={{ color: 'var(--text-muted)' }}>
+      <p className="mb-1 font-semibold" style={{ color: 'var(--text-muted)' }}>
         {label}
       </p>
       {payload.map((p: any) => (
@@ -211,7 +211,7 @@ const BarTip = ({ active, payload, label }: any) => {
       }}
     >
       <p
-        className="font-semibold mb-0.5"
+        className="mb-0.5 font-semibold"
         style={{ color: 'var(--text-muted)' }}
       >
         {label}
@@ -293,10 +293,10 @@ const AdminOverview = memo(() => {
   ];
 
   return (
-    <div className="p-6 space-y-5 max-w-[1400px] mx-auto">
+    <div className="mx-auto max-w-[1400px] space-y-5 p-6">
       {/* ── Page heading ── */}
       <FadeIn delay={0}>
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h2
               className="text-2xl font-bold"
@@ -308,14 +308,14 @@ const AdminOverview = memo(() => {
               Dashboard
             </h2>
             <p
-              className="text-xs mt-0.5"
+              className="mt-0.5 text-xs"
               style={{ color: 'var(--text-muted)' }}
             >
               {today}
             </p>
           </div>
           <span
-            className="text-xs px-3 py-1.5 rounded-full font-medium self-start sm:self-auto"
+            className="self-start rounded-full px-3 py-1.5 text-xs font-medium sm:self-auto"
             style={{
               backgroundColor: 'rgba(52,211,153,0.1)',
               color: '#34d399',
@@ -328,10 +328,10 @@ const AdminOverview = memo(() => {
       </FadeIn>
 
       {/* ── Row 1: Stat cards ── */}
-      <div className="grid grid-cols-2 xl:grid-cols-4 gap-5 items-stretch">
+      <div className="grid grid-cols-2 items-stretch gap-5 xl:grid-cols-4">
         {STATS.map((s, i) => (
           <FadeIn key={s.label} delay={0.06 + i * 0.07} className="flex">
-            <Card className="flex-1 flex flex-col gap-4">
+            <Card className="flex flex-1 flex-col gap-4">
               <div className="flex items-start justify-between gap-2">
                 <span
                   className="text-xs font-semibold leading-tight"
@@ -340,7 +340,7 @@ const AdminOverview = memo(() => {
                   {s.label}
                 </span>
                 <span
-                  className="w-7 h-7 flex items-center justify-center rounded-lg shrink-0"
+                  className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg"
                   style={{ backgroundColor: s.bg, color: s.color }}
                 >
                   {s.up ? (
@@ -360,7 +360,7 @@ const AdminOverview = memo(() => {
                 <Counter target={s.value} />
               </p>
               <p
-                className="text-xs mt-auto"
+                className="mt-auto text-xs"
                 style={{ color: s.up ? '#34d399' : '#fb923c' }}
               >
                 {s.delta}
@@ -371,29 +371,29 @@ const AdminOverview = memo(() => {
       </div>
 
       {/* ── Row 2: Area chart (2/3) + Radial chart (1/3) ── */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 items-stretch">
+      <div className="grid grid-cols-1 items-stretch gap-5 lg:grid-cols-3">
         {/* Area chart */}
-        <FadeIn delay={0.28} className="lg:col-span-2 flex">
-          <Card className="flex-1 flex flex-col">
-            <div className="flex items-start justify-between gap-3 mb-5">
+        <FadeIn delay={0.28} className="flex lg:col-span-2">
+          <Card className="flex flex-1 flex-col">
+            <div className="mb-5 flex items-start justify-between gap-3">
               <CardHeader
                 title="Content Activity"
                 sub="Updates & additions over the year"
               />
               <div
-                className="flex items-center gap-4 text-xs shrink-0 pt-0.5"
+                className="flex shrink-0 items-center gap-4 pt-0.5 text-xs"
                 style={{ color: 'var(--text-muted)' }}
               >
                 <span className="flex items-center gap-1.5">
                   <span
-                    className="w-3 h-px inline-block"
+                    className="inline-block h-px w-3"
                     style={{ backgroundColor: '#38bdf8' }}
                   />
                   Updates
                 </span>
                 <span className="flex items-center gap-1.5">
                   <span
-                    className="w-3 h-px inline-block"
+                    className="inline-block h-px w-3"
                     style={{ backgroundColor: '#818cf8' }}
                   />
                   Additions
@@ -479,9 +479,9 @@ const AdminOverview = memo(() => {
 
         {/* Radial chart */}
         <FadeIn delay={0.36} className="flex">
-          <Card className="flex-1 flex flex-col">
+          <Card className="flex flex-1 flex-col">
             <CardHeader title="Content Distribution" sub="Records per module" />
-            <div className="h-[170px] min-w-0 flex items-center justify-center">
+            <div className="flex h-[170px] min-w-0 items-center justify-center">
               <ResponsiveContainer width="100%" height="100%">
                 <RadialBarChart
                   cx="50%"
@@ -535,13 +535,13 @@ const AdminOverview = memo(() => {
               style={{ borderTop: '1px solid var(--glass-border-subtle)' }}
             >
               {MODULE_COUNTS.map((m) => (
-                <div key={m.name} className="flex items-center gap-1.5 min-w-0">
+                <div key={m.name} className="flex min-w-0 items-center gap-1.5">
                   <span
-                    className="w-2 h-2 rounded-full shrink-0"
+                    className="h-2 w-2 shrink-0 rounded-full"
                     style={{ backgroundColor: m.color }}
                   />
                   <span
-                    className="text-xs truncate"
+                    className="truncate text-xs"
                     style={{ color: 'var(--text-muted)' }}
                   >
                     {m.name}
@@ -560,10 +560,10 @@ const AdminOverview = memo(() => {
       </div>
 
       {/* ── Row 3: Bar chart (1/2) + Activity feed (1/2) ── */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 items-stretch">
+      <div className="grid grid-cols-1 items-stretch gap-5 lg:grid-cols-2">
         {/* Bar chart */}
         <FadeIn delay={0.44} className="flex">
-          <Card className="flex-1 flex flex-col">
+          <Card className="flex flex-1 flex-col">
             <CardHeader
               title="Records by Module"
               sub="Total content entries per section"
@@ -613,12 +613,12 @@ const AdminOverview = memo(() => {
 
         {/* Recent activity feed */}
         <FadeIn delay={0.51} className="flex">
-          <Card className="flex-1 flex flex-col">
+          <Card className="flex flex-1 flex-col">
             <CardHeader
               title="Recent Activity"
               sub="Latest changes across all modules"
             />
-            <div className="flex-1 flex flex-col">
+            <div className="flex flex-1 flex-col">
               {RECENT_ACTIVITY.map((item, i) => (
                 <motion.div
                   key={i}
@@ -629,7 +629,7 @@ const AdminOverview = memo(() => {
                     duration: 0.3,
                     ease: 'easeOut',
                   }}
-                  className="flex items-start gap-3 py-3 flex-1"
+                  className="flex flex-1 items-start gap-3 py-3"
                   style={{
                     borderBottom:
                       i < RECENT_ACTIVITY.length - 1
@@ -638,14 +638,14 @@ const AdminOverview = memo(() => {
                   }}
                 >
                   {/* Timeline */}
-                  <div className="flex flex-col items-center shrink-0 mt-0.5">
+                  <div className="mt-0.5 flex shrink-0 flex-col items-center">
                     <span
-                      className="w-2 h-2 rounded-full"
+                      className="h-2 w-2 rounded-full"
                       style={{ backgroundColor: actColor[item.type] }}
                     />
                     {i < RECENT_ACTIVITY.length - 1 && (
                       <span
-                        className="w-px flex-1 mt-1.5"
+                        className="mt-1.5 w-px flex-1"
                         style={{
                           backgroundColor: 'var(--glass-border-subtle)',
                           minHeight: 16,
@@ -654,10 +654,10 @@ const AdminOverview = memo(() => {
                     )}
                   </div>
                   {/* Text */}
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 flex-wrap">
+                  <div className="min-w-0 flex-1">
+                    <div className="flex flex-wrap items-center gap-2">
                       <span
-                        className="text-[11px] font-semibold px-1.5 py-0.5 rounded"
+                        className="rounded px-1.5 py-0.5 text-[11px] font-semibold"
                         style={{
                           backgroundColor: `${actColor[item.type]}18`,
                           color: actColor[item.type],
@@ -666,14 +666,14 @@ const AdminOverview = memo(() => {
                         {item.action}
                       </span>
                       <span
-                        className="text-xs font-medium truncate"
+                        className="truncate text-xs font-medium"
                         style={{ color: 'var(--text-primary)' }}
                       >
                         {item.title}
                       </span>
                     </div>
                     <p
-                      className="text-[11px] mt-0.5"
+                      className="mt-0.5 text-[11px]"
                       style={{ color: 'var(--text-muted)' }}
                     >
                       {item.module} · {item.time}
@@ -693,7 +693,7 @@ const AdminOverview = memo(() => {
             title="Module Health"
             sub="Record count relative to the busiest module"
           />
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
             {MODULE_COUNTS.map((m, i) => {
               const max = Math.max(...MODULE_COUNTS.map((x) => x.count));
               const pct = Math.round((m.count / max) * 100);
@@ -707,14 +707,14 @@ const AdminOverview = memo(() => {
                     duration: 0.35,
                     ease: [0.22, 1, 0.36, 1],
                   }}
-                  className="rounded-xl p-3.5 flex flex-col gap-3"
+                  className="flex flex-col gap-3 rounded-xl p-3.5"
                   style={{
                     backgroundColor: 'var(--glass-bg-raised)',
                     border: '1px solid var(--glass-border)',
                   }}
                 >
                   <div
-                    className="w-9 h-9 rounded-xl flex items-center justify-center"
+                    className="flex h-9 w-9 items-center justify-center rounded-xl"
                     style={{ backgroundColor: `${m.color}18`, color: m.color }}
                   >
                     <ReactIcon name={m.icon} size={16} />
@@ -730,14 +730,14 @@ const AdminOverview = memo(() => {
                       {m.count}
                     </p>
                     <p
-                      className="text-xs mt-1"
+                      className="mt-1 text-xs"
                       style={{ color: 'var(--text-muted)' }}
                     >
                       {m.name}
                     </p>
                   </div>
                   <div
-                    className="h-1.5 rounded-full overflow-hidden"
+                    className="h-1.5 overflow-hidden rounded-full"
                     style={{ backgroundColor: 'var(--glass-bg)' }}
                   >
                     <motion.div

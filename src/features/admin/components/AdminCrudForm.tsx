@@ -76,7 +76,7 @@ const DeleteModal = ({
       animate={{ scale: 1, opacity: 1 }}
       exit={{ scale: 0.92, opacity: 0 }}
       transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-      className="rounded-2xl p-8 max-w-sm w-full"
+      className="w-full max-w-sm rounded-2xl p-8"
       style={{
         backgroundColor: 'var(--bg-surface)',
         border: '1px solid var(--glass-border)',
@@ -84,13 +84,13 @@ const DeleteModal = ({
       onClick={(e) => e.stopPropagation()}
     >
       <div
-        className="w-12 h-12 rounded-full flex items-center justify-center mb-4 mx-auto"
+        className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full"
         style={{ backgroundColor: 'rgba(239,68,68,0.12)' }}
       >
         <ReactIcon name="FaTrash" size={18} style={{ color: '#ef4444' }} />
       </div>
       <h3
-        className="text-lg font-bold text-center mb-2"
+        className="mb-2 text-center text-lg font-bold"
         style={{
           color: 'var(--text-primary)',
           fontFamily: '"Syne", sans-serif',
@@ -99,7 +99,7 @@ const DeleteModal = ({
         Delete record?
       </h3>
       <p
-        className="text-sm text-center mb-6"
+        className="mb-6 text-center text-sm"
         style={{ color: 'var(--text-muted)' }}
       >
         This action cannot be undone.
@@ -107,7 +107,7 @@ const DeleteModal = ({
       <div className="flex gap-3">
         <button
           onClick={onCancel}
-          className="flex-1 py-2.5 rounded-lg text-sm font-medium border"
+          className="flex-1 rounded-lg border py-2.5 text-sm font-medium"
           style={{
             color: 'var(--text-muted)',
             borderColor: 'var(--glass-border)',
@@ -118,7 +118,7 @@ const DeleteModal = ({
         </button>
         <button
           onClick={onConfirm}
-          className="flex-1 py-2.5 rounded-lg text-sm font-semibold"
+          className="flex-1 rounded-lg py-2.5 text-sm font-semibold"
           style={{ backgroundColor: '#ef4444', color: '#fff' }}
         >
           Delete
@@ -208,7 +208,7 @@ export const ImageField = ({
         <iframe
           src={toYouTubeEmbed(url)}
           title="preview"
-          className="w-full h-full"
+          className="h-full w-full"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen
         />
@@ -219,7 +219,7 @@ export const ImageField = ({
         <iframe
           src={url}
           title="preview"
-          className="w-full h-full"
+          className="h-full w-full"
           allow="autoplay"
           allowFullScreen
         />
@@ -230,7 +230,7 @@ export const ImageField = ({
         <video
           src={url}
           controls
-          className="w-full h-full object-contain bg-black"
+          className="h-full w-full bg-black object-contain"
         />
       );
     }
@@ -239,7 +239,7 @@ export const ImageField = ({
       <img
         src={url}
         alt="preview"
-        className="w-full h-full object-cover"
+        className="h-full w-full object-cover"
         onError={() => {
           if (!uploading) setPreview('');
         }}
@@ -253,7 +253,7 @@ export const ImageField = ({
       {storageBackend !== 'supabase' && (
         <div className="flex items-center gap-2">
           <label
-            className="text-xs font-medium shrink-0"
+            className="shrink-0 text-xs font-medium"
             style={{ color: 'var(--text-muted)' }}
           >
             Input via
@@ -261,7 +261,7 @@ export const ImageField = ({
           <select
             value={mode}
             onChange={(e) => setMode(e.target.value as 'upload' | 'url')}
-            className="flex-1 px-3 py-1.5 rounded-lg text-xs font-medium appearance-none cursor-pointer"
+            className="flex-1 cursor-pointer appearance-none rounded-lg px-3 py-1.5 text-xs font-medium"
             style={{
               backgroundColor: 'var(--bg-surface)',
               border: '1px solid var(--input-border)',
@@ -280,7 +280,7 @@ export const ImageField = ({
       {/* ── Preview card ── */}
       {preview && (
         <div
-          className="relative w-full rounded-xl overflow-hidden"
+          className="relative w-full overflow-hidden rounded-xl"
           style={{
             aspectRatio: '16/9',
             maxHeight: 200,
@@ -299,7 +299,7 @@ export const ImageField = ({
                 {progress}%
               </p>
               <div
-                className="rounded-full overflow-hidden"
+                className="overflow-hidden rounded-full"
                 style={{
                   width: '60%',
                   height: 6,
@@ -329,14 +329,14 @@ export const ImageField = ({
                   onChange('');
                   if (inputRef.current) inputRef.current.value = '';
                 }}
-                className="absolute top-2 right-2 w-7 h-7 rounded-full flex items-center justify-center shadow-lg"
+                className="absolute right-2 top-2 flex h-7 w-7 items-center justify-center rounded-full shadow-lg"
                 style={{ backgroundColor: 'rgba(0,0,0,0.55)', color: '#fff' }}
               >
                 <ReactIcon name="FaTimes" size={11} />
               </button>
               {fileName && (
                 <div
-                  className="absolute bottom-0 left-0 right-0 px-3 py-1.5 text-xs truncate"
+                  className="absolute bottom-0 left-0 right-0 truncate px-3 py-1.5 text-xs"
                   style={{
                     backgroundColor: 'rgba(0,0,0,0.45)',
                     color: 'rgba(255,255,255,0.85)',
@@ -377,7 +377,7 @@ export const ImageField = ({
               if (f) handleFile(f);
             }}
             onClick={() => inputRef.current?.click()}
-            className="relative w-full rounded-xl flex flex-col items-center justify-center gap-2 cursor-pointer transition-colors"
+            className="relative flex w-full cursor-pointer flex-col items-center justify-center gap-2 rounded-xl transition-colors"
             style={{
               minHeight: preview ? 64 : 120,
               border: `2px dashed ${dragging ? 'var(--accent)' : 'var(--glass-border-strong)'}`,
@@ -408,7 +408,7 @@ export const ImageField = ({
                     color: dragging ? 'var(--accent)' : 'var(--text-muted)',
                   }}
                 />
-                <div className="text-center px-4">
+                <div className="px-4 text-center">
                   <p
                     className="text-sm font-medium"
                     style={{
@@ -420,7 +420,7 @@ export const ImageField = ({
                       : 'Drag & drop or click to browse'}
                   </p>
                   <p
-                    className="text-xs mt-0.5"
+                    className="mt-0.5 text-xs"
                     style={{ color: 'var(--text-muted)' }}
                   >
                     PNG, JPG, WebP — max 10 MB
@@ -428,7 +428,7 @@ export const ImageField = ({
                 </div>
                 {fileName && (
                   <span
-                    className="text-xs px-2 py-0.5 rounded-full"
+                    className="rounded-full px-2 py-0.5 text-xs"
                     style={{
                       backgroundColor: 'var(--glass-bg)',
                       color: 'var(--text-muted)',
@@ -461,7 +461,7 @@ export const ImageField = ({
                 onChange(e.target.value);
               }}
               placeholder="https://youtube.com/... · drive.google.com/... · s3.amazonaws.com/..."
-              className="flex-1 px-3 py-2.5 rounded-lg text-sm"
+              className="flex-1 rounded-lg px-3 py-2.5 text-sm"
               style={inputStyle}
             />
           </div>
@@ -578,12 +578,12 @@ const MultiImageField = ({
     <div className="space-y-3">
       {/* Combined grid: committed images + in-flight pending */}
       {hasItems && (
-        <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
+        <div className="grid grid-cols-3 gap-2 sm:grid-cols-4">
           {/* Committed images */}
           {images.map((src, idx) => (
             <div
               key={idx}
-              className="relative rounded-xl overflow-hidden"
+              className="relative overflow-hidden rounded-xl"
               style={{
                 aspectRatio: '1',
                 backgroundColor: 'var(--glass-bg-raised)',
@@ -592,7 +592,7 @@ const MultiImageField = ({
               <img
                 src={src}
                 alt={`${idx}`}
-                className="w-full h-full object-cover"
+                className="h-full w-full object-cover"
                 onError={(e) => {
                   (e.currentTarget as HTMLImageElement).style.opacity = '0.3';
                 }}
@@ -600,7 +600,7 @@ const MultiImageField = ({
               <button
                 type="button"
                 onClick={() => onChange(images.filter((_, i) => i !== idx))}
-                className="absolute top-1 right-1 w-5 h-5 rounded-full flex items-center justify-center"
+                className="absolute right-1 top-1 flex h-5 w-5 items-center justify-center rounded-full"
                 style={{ backgroundColor: 'rgba(0,0,0,0.6)', color: '#fff' }}
               >
                 <ReactIcon name="FaTimes" size={9} />
@@ -612,7 +612,7 @@ const MultiImageField = ({
           {pending.map((p) => (
             <div
               key={p.id}
-              className="relative rounded-xl overflow-hidden"
+              className="relative overflow-hidden rounded-xl"
               style={{
                 aspectRatio: '1',
                 backgroundColor: 'var(--glass-bg-raised)',
@@ -621,7 +621,7 @@ const MultiImageField = ({
               <img
                 src={p.localUrl}
                 alt={p.name}
-                className="w-full h-full object-cover"
+                className="h-full w-full object-cover"
               />
 
               {/* Overlay: uploading state */}
@@ -631,7 +631,7 @@ const MultiImageField = ({
                   style={{ backgroundColor: 'rgba(0,0,0,0.55)' }}
                 >
                   <p
-                    className="text-xs font-semibold mb-1"
+                    className="mb-1 text-xs font-semibold"
                     style={{ color: '#fff' }}
                   >
                     {p.progress}%
@@ -663,7 +663,7 @@ const MultiImageField = ({
                   style={{ backgroundColor: 'rgba(0,0,0,0.7)' }}
                 >
                   <p
-                    className="text-xs text-center leading-tight mb-1"
+                    className="mb-1 text-center text-xs leading-tight"
                     style={{ color: '#fca5a5' }}
                   >
                     {p.error}
@@ -671,7 +671,7 @@ const MultiImageField = ({
                   <button
                     type="button"
                     onClick={() => dismissPending(p.id)}
-                    className="w-5 h-5 rounded-full flex items-center justify-center"
+                    className="flex h-5 w-5 items-center justify-center rounded-full"
                     style={{
                       backgroundColor: 'rgba(239,68,68,0.7)',
                       color: '#fff',
@@ -691,7 +691,7 @@ const MultiImageField = ({
           <button
             type="button"
             onClick={() => setAddMode('upload')}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium"
+            className="flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium"
             style={{
               backgroundColor: 'var(--glass-bg-raised)',
               color: 'var(--text-muted)',
@@ -703,7 +703,7 @@ const MultiImageField = ({
           <button
             type="button"
             onClick={() => setAddMode('url')}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium"
+            className="flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium"
             style={{
               backgroundColor: 'var(--glass-bg-raised)',
               color: 'var(--text-muted)',
@@ -734,7 +734,7 @@ const MultiImageField = ({
               handleFiles(e.dataTransfer.files);
             }}
             onClick={() => inputRef.current?.click()}
-            className="rounded-xl flex flex-col items-center justify-center gap-2 cursor-pointer"
+            className="flex cursor-pointer flex-col items-center justify-center gap-2 rounded-xl"
             style={{
               minHeight: 90,
               border: `2px dashed ${dragging ? 'var(--accent)' : 'var(--glass-border-strong)'}`,
@@ -787,7 +787,7 @@ const MultiImageField = ({
             }}
             placeholder="https://..."
             autoFocus
-            className="flex-1 px-3 py-2 rounded-lg text-sm"
+            className="flex-1 rounded-lg px-3 py-2 text-sm"
             style={{
               backgroundColor: 'var(--input-bg)',
               border: '1px solid var(--input-border)',
@@ -804,7 +804,7 @@ const MultiImageField = ({
               }
               setAddMode(null);
             }}
-            className="px-3 py-2 rounded-lg text-xs font-semibold"
+            className="rounded-lg px-3 py-2 text-xs font-semibold"
             style={{ backgroundColor: 'var(--accent)', color: '#fff' }}
           >
             Add
@@ -859,13 +859,13 @@ const MultiInputField = ({
             value={item}
             onChange={(e) => update(idx, e.target.value)}
             placeholder={placeholder ?? `Item ${idx + 1}`}
-            className="flex-1 px-3 py-2 rounded-lg text-sm"
+            className="flex-1 rounded-lg px-3 py-2 text-sm"
             style={inputStyle}
           />
           <button
             type="button"
             onClick={() => remove(idx)}
-            className="w-7 h-7 flex items-center justify-center rounded-lg shrink-0"
+            className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg"
             style={{
               backgroundColor: 'rgba(239,68,68,0.1)',
               color: '#ef4444',
@@ -879,7 +879,7 @@ const MultiInputField = ({
       <button
         type="button"
         onClick={add}
-        className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium"
+        className="flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium"
         style={{
           backgroundColor: 'var(--glass-bg-raised)',
           color: 'var(--text-muted)',
@@ -932,16 +932,16 @@ const StructuredListField = ({
       {rows.map((row, idx) => (
         <div
           key={idx}
-          className="flex flex-wrap gap-2 items-start p-3 rounded-lg"
+          className="flex flex-wrap items-start gap-2 rounded-lg p-3"
           style={{
             backgroundColor: 'var(--glass-bg-raised)',
             border: '1px solid var(--glass-border)',
           }}
         >
           {subFields.map((sf) => (
-            <div key={sf.key} className="flex-1 min-w-[140px]">
+            <div key={sf.key} className="min-w-[140px] flex-1">
               <label
-                className="block text-[10px] font-medium mb-1"
+                className="mb-1 block text-[10px] font-medium"
                 style={{ color: 'var(--text-muted)' }}
               >
                 {sf.label}
@@ -951,7 +951,7 @@ const StructuredListField = ({
                   {sf.options.map((opt) => (
                     <label
                       key={opt}
-                      className="flex items-center gap-1 text-xs cursor-pointer"
+                      className="flex cursor-pointer items-center gap-1 text-xs"
                       style={{ color: 'var(--text-primary)' }}
                     >
                       <input
@@ -972,7 +972,7 @@ const StructuredListField = ({
                   value={row[sf.key] ?? ''}
                   onChange={(e) => update(idx, sf.key, e.target.value)}
                   placeholder={sf.placeholder ?? sf.label}
-                  className="w-full px-3 py-2 rounded-lg text-sm"
+                  className="w-full rounded-lg px-3 py-2 text-sm"
                   style={inputStyle}
                 />
               )}
@@ -981,7 +981,7 @@ const StructuredListField = ({
           <button
             type="button"
             onClick={() => remove(idx)}
-            className="mt-5 w-7 h-7 flex items-center justify-center rounded-lg shrink-0"
+            className="mt-5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg"
             style={{
               backgroundColor: 'rgba(239,68,68,0.1)',
               color: '#ef4444',
@@ -995,7 +995,7 @@ const StructuredListField = ({
       <button
         type="button"
         onClick={add}
-        className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium"
+        className="flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium"
         style={{
           backgroundColor: 'var(--glass-bg-raised)',
           color: 'var(--text-muted)',
@@ -1079,16 +1079,16 @@ const SubRecordsField = ({
         return (
           <div
             key={row.id ?? visIdx}
-            className="flex flex-wrap gap-2 items-start p-3 rounded-lg"
+            className="flex flex-wrap items-start gap-2 rounded-lg p-3"
             style={{
               backgroundColor: 'var(--glass-bg-raised)',
               border: '1px solid var(--glass-border)',
             }}
           >
             {config.subFields.map((sf) => (
-              <div key={sf.key} className="flex-1 min-w-[140px]">
+              <div key={sf.key} className="min-w-[140px] flex-1">
                 <label
-                  className="block text-[10px] font-medium mb-1"
+                  className="mb-1 block text-[10px] font-medium"
                   style={{ color: 'var(--text-muted)' }}
                 >
                   {sf.label}
@@ -1108,7 +1108,7 @@ const SubRecordsField = ({
                     {sf.options.map((opt) => (
                       <label
                         key={opt}
-                        className="flex items-center gap-1 text-xs cursor-pointer"
+                        className="flex cursor-pointer items-center gap-1 text-xs"
                         style={{ color: 'var(--text-primary)' }}
                       >
                         <input
@@ -1129,7 +1129,7 @@ const SubRecordsField = ({
                     value={String(row[sf.key] ?? '')}
                     onChange={(e) => update(realIdx, sf.key, e.target.value)}
                     placeholder={sf.placeholder ?? sf.label}
-                    className="w-full px-3 py-2 rounded-lg text-sm"
+                    className="w-full rounded-lg px-3 py-2 text-sm"
                     style={inputStyle}
                   />
                 )}
@@ -1138,7 +1138,7 @@ const SubRecordsField = ({
             <button
               type="button"
               onClick={() => remove(realIdx)}
-              className="mt-5 w-7 h-7 flex items-center justify-center rounded-lg shrink-0"
+              className="mt-5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg"
               style={{
                 backgroundColor: 'rgba(239,68,68,0.1)',
                 color: '#ef4444',
@@ -1159,7 +1159,7 @@ const SubRecordsField = ({
         <button
           type="button"
           onClick={add}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium"
+          className="flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium"
           style={{
             backgroundColor: 'var(--glass-bg-raised)',
             color: 'var(--text-muted)',
@@ -1197,7 +1197,7 @@ const StaticSelect = ({
   <select
     value={value}
     onChange={(e) => onChange(e.target.value)}
-    className="w-full px-3 py-2.5 rounded-lg text-sm appearance-none cursor-pointer"
+    className="w-full cursor-pointer appearance-none rounded-lg px-3 py-2.5 text-sm"
     style={selectStyle}
   >
     <option value="">— select —</option>
@@ -1256,7 +1256,7 @@ const RelationSelect = ({
         const raw = e.target.value;
         onChange(raw === '' ? null : isNaN(Number(raw)) ? raw : Number(raw));
       }}
-      className="w-full px-3 py-2.5 rounded-lg text-sm appearance-none cursor-pointer"
+      className="w-full cursor-pointer appearance-none rounded-lg px-3 py-2.5 text-sm"
       style={selectStyle}
     >
       <option value="">— select —</option>
@@ -1296,7 +1296,7 @@ const CoverMediaField = ({
       {/* Type dropdown */}
       <div className="flex items-center gap-2">
         <label
-          className="text-xs font-medium shrink-0"
+          className="shrink-0 text-xs font-medium"
           style={{ color: 'var(--text-muted)' }}
         >
           Type
@@ -1342,14 +1342,14 @@ const CoverMediaField = ({
                       ? 'https://drive.google.com/uc?id=FILE_ID'
                       : 'https://example.com/video.mp4'
               }
-              className="flex-1 px-3 py-2.5 rounded-lg text-sm"
+              className="flex-1 rounded-lg px-3 py-2.5 text-sm"
               style={inputStyle}
             />
           </div>
           {/* Live preview */}
           {String(urlValue ?? '') && (
             <div
-              className="rounded-xl overflow-hidden"
+              className="overflow-hidden rounded-xl"
               style={{
                 aspectRatio: '16/9',
                 maxHeight: 220,
@@ -1364,7 +1364,7 @@ const CoverMediaField = ({
                     <iframe
                       src={toYouTubeEmbed(url)}
                       title="preview"
-                      className="w-full h-full"
+                      className="h-full w-full"
                       allowFullScreen
                     />
                   );
@@ -1373,7 +1373,7 @@ const CoverMediaField = ({
                     <iframe
                       src={url}
                       title="preview"
-                      className="w-full h-full"
+                      className="h-full w-full"
                       allow="autoplay"
                       allowFullScreen
                     />
@@ -1383,14 +1383,14 @@ const CoverMediaField = ({
                     <video
                       src={url}
                       controls
-                      className="w-full h-full object-contain bg-black"
+                      className="h-full w-full bg-black object-contain"
                     />
                   );
                 return (
                   <img
                     src={url}
                     alt="preview"
-                    className="w-full h-full object-cover"
+                    className="h-full w-full object-cover"
                     onError={(e) => {
                       (e.target as HTMLImageElement).style.display = 'none';
                     }}
@@ -1495,7 +1495,7 @@ const Field = ({
           <button
             type="button"
             onClick={() => onChange(!checked)}
-            className="relative w-11 h-6 rounded-full transition-colors duration-200"
+            className="relative h-6 w-11 rounded-full transition-colors duration-200"
             style={{
               backgroundColor: checked
                 ? 'var(--accent)'
@@ -1507,19 +1507,19 @@ const Field = ({
             <motion.span
               animate={{ x: checked ? 22 : 2 }}
               transition={{ type: 'spring', damping: 20, stiffness: 300 }}
-              className="absolute top-1 w-4 h-4 rounded-full bg-white shadow"
+              className="absolute top-1 h-4 w-4 rounded-full bg-white shadow"
             />
           </button>
         </div>
       );
     }
     return (
-      <label className="flex items-center gap-3 cursor-pointer select-none">
+      <label className="flex cursor-pointer select-none items-center gap-3">
         <input
           type="checkbox"
           checked={checked}
           onChange={(e) => onChange(e.target.checked)}
-          className="w-4 h-4 rounded accent-[var(--accent)]"
+          className="h-4 w-4 rounded accent-[var(--accent)]"
         />
         <span className="text-sm" style={{ color: 'var(--text-primary)' }}>
           {field.label}
@@ -1533,7 +1533,7 @@ const Field = ({
     return (
       <div className="space-y-2">
         {opts.map((opt) => (
-          <label key={opt} className="flex items-center gap-2.5 cursor-pointer">
+          <label key={opt} className="flex cursor-pointer items-center gap-2.5">
             <input
               type="radio"
               name={`radio-${field.key}`}
@@ -1575,7 +1575,7 @@ const Field = ({
         value={str}
         onChange={(e) => onChange(e.target.value)}
         placeholder={field.placeholder ?? 'tag1, tag2, tag3'}
-        className="w-full px-3 py-2.5 rounded-lg text-sm"
+        className="w-full rounded-lg px-3 py-2.5 text-sm"
         style={inputStyle}
       />
     );
@@ -1588,7 +1588,7 @@ const Field = ({
         onChange={(e) => onChange(e.target.value)}
         placeholder={field.placeholder}
         rows={3}
-        className="w-full px-3 py-2.5 rounded-lg text-sm resize-none"
+        className="w-full resize-none rounded-lg px-3 py-2.5 text-sm"
         style={inputStyle}
       />
     );
@@ -1597,7 +1597,7 @@ const Field = ({
   if (field.type === 'richtext') {
     return (
       <div
-        className="rounded-xl overflow-hidden"
+        className="overflow-hidden rounded-xl"
         style={{ border: '1px solid var(--input-border)' }}
       >
         <ReactQuill
@@ -1626,7 +1626,7 @@ const Field = ({
         value={str}
         onChange={(e) => onChange(e.target.value)}
         placeholder={field.placeholder ?? 'https://...'}
-        className="w-full px-3 py-2.5 rounded-lg text-sm"
+        className="w-full rounded-lg px-3 py-2.5 text-sm"
         style={inputStyle}
       />
     );
@@ -1642,7 +1642,7 @@ const Field = ({
         }
         placeholder={field.placeholder ?? '0'}
         min={0}
-        className="w-full px-3 py-2.5 rounded-lg text-sm"
+        className="w-full rounded-lg px-3 py-2.5 text-sm"
         style={inputStyle}
       />
     );
@@ -1664,7 +1664,7 @@ const Field = ({
         type="date"
         value={str}
         onChange={(e) => onChange(e.target.value)}
-        className="w-full px-3 py-2.5 rounded-lg text-sm"
+        className="w-full rounded-lg px-3 py-2.5 text-sm"
         style={inputStyle}
       />
     );
@@ -1675,7 +1675,7 @@ const Field = ({
       value={str}
       onChange={(e) => onChange(e.target.value)}
       placeholder={field.placeholder}
-      className="w-full px-3 py-2.5 rounded-lg text-sm"
+      className="w-full rounded-lg px-3 py-2.5 text-sm"
       style={inputStyle}
     />
   );
@@ -1684,11 +1684,11 @@ Field.displayName = 'Field';
 
 /* ── Loading skeleton ── */
 const FormSkeleton = () => (
-  <div className="space-y-5 animate-pulse">
+  <div className="animate-pulse space-y-5">
     {[1, 2, 3].map((i) => (
       <div
         key={i}
-        className="rounded-xl h-12"
+        className="h-12 rounded-xl"
         style={{ backgroundColor: 'var(--glass-bg-raised)' }}
       />
     ))}
@@ -1895,10 +1895,10 @@ const AdminCrudForm = memo(() => {
   return (
     <>
       {/* form wraps both header and body so type="submit" in header works */}
-      <form onSubmit={handleSave} className="h-full flex flex-col">
+      <form onSubmit={handleSave} className="flex h-full flex-col">
         {/* ── Sticky page header ── */}
         <div
-          className="shrink-0 flex items-center justify-between gap-3 px-4 sm:px-6 py-3 sm:py-4"
+          className="flex shrink-0 items-center justify-between gap-3 px-4 py-3 sm:px-6 sm:py-4"
           style={{ borderBottom: '1px solid var(--glass-border)' }}
         >
           <Breadcrumbs
@@ -1912,13 +1912,13 @@ const AdminCrudForm = memo(() => {
           />
 
           {/* Right: actions */}
-          <div className="flex items-center gap-2 shrink-0">
+          <div className="flex shrink-0 items-center gap-2">
             {!isNew && (
               <motion.button
                 type="button"
                 whileTap={{ scale: 0.96 }}
                 onClick={() => setShowDelete(true)}
-                className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs sm:text-sm font-medium"
+                className="flex items-center gap-1.5 rounded-lg px-3 py-2 text-xs font-medium sm:text-sm"
                 style={{
                   backgroundColor: 'rgba(239,68,68,0.1)',
                   border: '1px solid rgba(239,68,68,0.25)',
@@ -1932,7 +1932,7 @@ const AdminCrudForm = memo(() => {
             <button
               type="button"
               onClick={() => navigate(`/admin/${moduleId}`)}
-              className="px-3 py-2 rounded-lg text-xs sm:text-sm font-medium"
+              className="rounded-lg px-3 py-2 text-xs font-medium sm:text-sm"
               style={{
                 color: 'var(--text-muted)',
                 backgroundColor: 'var(--glass-bg-raised)',
@@ -1945,7 +1945,7 @@ const AdminCrudForm = memo(() => {
               type="submit"
               whileTap={{ scale: 0.97 }}
               disabled={saving}
-              className="flex items-center gap-1.5 px-3 py-2 sm:px-4 sm:py-2.5 rounded-lg text-xs sm:text-sm font-semibold disabled:opacity-60"
+              className="flex items-center gap-1.5 rounded-lg px-3 py-2 text-xs font-semibold disabled:opacity-60 sm:px-4 sm:py-2.5 sm:text-sm"
               style={{ backgroundColor: 'var(--accent)', color: '#fff' }}
             >
               <ReactIcon name="FaSave" size={12} />
@@ -1955,8 +1955,8 @@ const AdminCrudForm = memo(() => {
         </div>
 
         {/* ── Scrollable form body ── */}
-        <div className="flex-1 min-h-0 overflow-y-auto no-scrollbar">
-          <div className="p-6 max-w-3xl mx-auto">
+        <div className="no-scrollbar min-h-0 flex-1 overflow-y-auto">
+          <div className="mx-auto max-w-3xl p-6">
             <motion.div
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
@@ -1970,7 +1970,7 @@ const AdminCrudForm = memo(() => {
               {/* ── Tab bar (tabbed modules only) ── */}
               {mod.tabs && (
                 <div
-                  className="flex gap-1 mb-5 p-1 rounded-xl"
+                  className="mb-5 flex gap-1 rounded-xl p-1"
                   style={{ backgroundColor: 'var(--glass-bg-raised)' }}
                 >
                   {mod.tabs.map((tab, i) => (
@@ -1978,7 +1978,7 @@ const AdminCrudForm = memo(() => {
                       key={tab.label}
                       type="button"
                       onClick={() => setActiveTab(i)}
-                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold flex-1 justify-center transition-colors"
+                      className="flex flex-1 items-center justify-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors"
                       style={
                         activeTab === i
                           ? { backgroundColor: 'var(--accent)', color: '#fff' }
@@ -1995,7 +1995,7 @@ const AdminCrudForm = memo(() => {
               {isLoading ? (
                 <FormSkeleton />
               ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
                   {activeFields.map((field) => (
                     <div
                       key={field.key}
@@ -2011,7 +2011,7 @@ const AdminCrudForm = memo(() => {
                       {field.type === 'resetpassword' ? (
                         /* ── Password reset action ── */
                         <div
-                          className="flex items-center justify-between gap-4 px-4 py-3 rounded-xl"
+                          className="flex items-center justify-between gap-4 rounded-xl px-4 py-3"
                           style={{
                             backgroundColor: 'var(--glass-bg-raised)',
                             border: '1px solid var(--glass-border)',
@@ -2025,7 +2025,7 @@ const AdminCrudForm = memo(() => {
                               {field.label}
                             </p>
                             <p
-                              className="text-xs mt-0.5"
+                              className="mt-0.5 text-xs"
                               style={{ color: 'var(--text-muted)' }}
                             >
                               {resetSent
@@ -2055,7 +2055,7 @@ const AdminCrudForm = memo(() => {
                                 setResetSending(false);
                               }
                             }}
-                            className="flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-semibold shrink-0"
+                            className="flex shrink-0 items-center gap-2 rounded-lg px-3 py-2 text-xs font-semibold"
                             style={{
                               backgroundColor: resetSent
                                 ? 'transparent'
@@ -2083,7 +2083,7 @@ const AdminCrudForm = memo(() => {
                           {field.type !== 'toggle' &&
                             field.type !== 'checkbox' && (
                               <label
-                                className="block text-xs font-semibold mb-1.5"
+                                className="mb-1.5 block text-xs font-semibold"
                                 style={{ color: 'var(--text-muted)' }}
                               >
                                 {field.label}

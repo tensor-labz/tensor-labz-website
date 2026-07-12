@@ -18,14 +18,12 @@ const ContentPagination = memo(
     return (
       <>
         {totalPages > 1 && (
-          <div className="flex items-center justify-center gap-2 mt-12">
+          <div className="mt-12 flex items-center justify-center gap-2">
             <button
               onClick={() => onPageChange(Math.max(1, page - 1))}
               disabled={page === 1}
               aria-label="Previous page"
-              className="w-9 h-9 flex items-center justify-center rounded-lg border border-rim
-                text-muted hover:border-accent/50 hover:text-accent
-                disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-200"
+              className="hover:border-accent/50 flex h-9 w-9 items-center justify-center rounded-lg border border-rim text-muted transition-all duration-200 hover:text-accent disabled:cursor-not-allowed disabled:opacity-30"
             >
               <ReactIcon name="FiChevronLeft" size={15} />
             </button>
@@ -39,7 +37,7 @@ const ContentPagination = memo(
                   return (
                     <span
                       key={n}
-                      className="text-muted/40 text-sm font-mono px-1"
+                      className="text-muted/40 px-1 font-mono text-sm"
                     >
                       …
                     </span>
@@ -50,13 +48,11 @@ const ContentPagination = memo(
                 <button
                   key={n}
                   onClick={() => onPageChange(n)}
-                  className={`w-9 h-9 flex items-center justify-center rounded-lg border text-sm font-mono
-                    transition-all duration-200
-                    ${
-                      isActive
-                        ? 'border-accent bg-accent/10 text-accent'
-                        : 'border-rim text-muted hover:border-accent/40 hover:text-accent/80'
-                    }`}
+                  className={`flex h-9 w-9 items-center justify-center rounded-lg border font-mono text-sm transition-all duration-200 ${
+                    isActive
+                      ? 'bg-accent/10 border-accent text-accent'
+                      : 'hover:border-accent/40 hover:text-accent/80 border-rim text-muted'
+                  }`}
                 >
                   {n}
                 </button>
@@ -67,9 +63,7 @@ const ContentPagination = memo(
               onClick={() => onPageChange(Math.min(totalPages, page + 1))}
               disabled={page === totalPages}
               aria-label="Next page"
-              className="w-9 h-9 flex items-center justify-center rounded-lg border border-rim
-                text-muted hover:border-accent/50 hover:text-accent
-                disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-200"
+              className="hover:border-accent/50 flex h-9 w-9 items-center justify-center rounded-lg border border-rim text-muted transition-all duration-200 hover:text-accent disabled:cursor-not-allowed disabled:opacity-30"
             >
               <ReactIcon name="FiChevronRight" size={15} />
             </button>
@@ -77,7 +71,7 @@ const ContentPagination = memo(
         )}
 
         {summary && (
-          <p className="text-center text-[10px] font-mono text-muted/40 mt-4">
+          <p className="text-muted/40 mt-4 text-center font-mono text-[10px]">
             {summary}
           </p>
         )}

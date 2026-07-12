@@ -84,7 +84,7 @@ const ContentHeader: React.FC<ContentHeaderProps> = ({
   return (
     <motion.header
       ref={headerRef}
-      className={`sticky top-0 z-30 bg-canvas text-white pt-20 pb-4 md:pt-20 md:pb-5 px-4 md:px-8 overflow-hidden ${className}`}
+      className={`sticky top-0 z-30 overflow-hidden bg-canvas px-4 pb-4 pt-20 text-white md:px-8 md:pb-5 md:pt-20 ${className}`}
       variants={containerVariants}
       initial="hidden"
       animate="visible"
@@ -100,15 +100,15 @@ const ContentHeader: React.FC<ContentHeaderProps> = ({
       </motion.div>
 
       {/* Colorful glow blobs — give the frosted-glass elements something to blur */}
-      <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
-        <div className="absolute -top-16 left-[12%] w-72 h-72 rounded-full bg-sky-500/30 blur-3xl" />
-        <div className="absolute -top-8 right-[16%] w-80 h-80 rounded-full bg-violet-500/25 blur-3xl" />
-        <div className="absolute bottom-[-4rem] left-1/2 -translate-x-1/2 w-[36rem] h-44 rounded-full bg-cyan-400/20 blur-3xl" />
+      <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
+        <div className="absolute -top-16 left-[12%] h-72 w-72 rounded-full bg-sky-500/30 blur-3xl" />
+        <div className="absolute -top-8 right-[16%] h-80 w-80 rounded-full bg-violet-500/25 blur-3xl" />
+        <div className="absolute bottom-[-4rem] left-1/2 h-44 w-[36rem] -translate-x-1/2 rounded-full bg-cyan-400/20 blur-3xl" />
       </div>
 
       {/* Engineering grid overlay */}
       <div
-        className="absolute inset-0 z-[1] pointer-events-none"
+        className="pointer-events-none absolute inset-0 z-[1]"
         style={{
           backgroundImage:
             'linear-gradient(rgba(56,189,248,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(56,189,248,0.04) 1px, transparent 1px)',
@@ -118,11 +118,11 @@ const ContentHeader: React.FC<ContentHeaderProps> = ({
 
       {/* Content */}
       <div
-        className={`max-w-6xl mx-auto relative z-10 ${centered ? 'text-center' : ''}`}
+        className={`relative z-10 mx-auto max-w-6xl ${centered ? 'text-center' : ''}`}
       >
         {eyebrow && (
           <motion.div
-            className="mb-2 text-[11px] md:text-xs font-mono tracking-[0.2em] uppercase text-accent"
+            className="mb-2 font-mono text-[11px] uppercase tracking-[0.2em] text-accent md:text-xs"
             variants={itemVariants(0.1)}
             initial="hidden"
             animate="visible"
@@ -138,7 +138,7 @@ const ContentHeader: React.FC<ContentHeaderProps> = ({
         >
           <div className={centered ? '' : 'flex-1 lg:pr-8'}>
             <motion.h1
-              className={`text-xl md:text-2xl font-bold mb-2 flex items-center gap-3 text-white font-display ${
+              className={`mb-2 flex items-center gap-3 font-display text-xl font-bold text-white md:text-2xl ${
                 centered ? 'justify-center' : ''
               }`}
               variants={itemVariants(0.1)}
@@ -151,7 +151,7 @@ const ContentHeader: React.FC<ContentHeaderProps> = ({
 
             {tags.length > 0 && (
               <motion.div
-                className={`flex flex-wrap gap-2 mb-6 ${centered ? 'justify-center' : ''}`}
+                className={`mb-6 flex flex-wrap gap-2 ${centered ? 'justify-center' : ''}`}
                 variants={itemVariants(0.2)}
                 initial="hidden"
                 animate="visible"
@@ -159,7 +159,7 @@ const ContentHeader: React.FC<ContentHeaderProps> = ({
                 {tags.map((tag, index) => (
                   <span
                     key={index}
-                    className="px-3 py-1 rounded-full text-xs font-mono font-medium backdrop-blur-sm text-white border border-white/20 bg-white/10"
+                    className="rounded-full border border-white/20 bg-white/10 px-3 py-1 font-mono text-xs font-medium text-white backdrop-blur-sm"
                   >
                     {tag.trim()}
                   </span>
@@ -170,7 +170,7 @@ const ContentHeader: React.FC<ContentHeaderProps> = ({
 
           {actions && (
             <motion.div
-              className="flex flex-col items-center lg:items-end gap-3 mt-4 lg:mt-0"
+              className="mt-4 flex flex-col items-center gap-3 lg:mt-0 lg:items-end"
               variants={itemVariants(0.3)}
               initial="hidden"
               animate="visible"
@@ -182,7 +182,7 @@ const ContentHeader: React.FC<ContentHeaderProps> = ({
 
         {description && (
           <motion.p
-            className="text-sm opacity-70 text-center w-full leading-relaxed text-white mt-1"
+            className="mt-1 w-full text-center text-sm leading-relaxed text-white opacity-70"
             variants={itemVariants(0.4)}
             initial="hidden"
             animate="visible"
@@ -193,7 +193,7 @@ const ContentHeader: React.FC<ContentHeaderProps> = ({
 
         {search && (
           <motion.div
-            className="relative max-w-lg mx-auto mt-5"
+            className="relative mx-auto mt-5 max-w-lg"
             variants={itemVariants(0.5)}
             initial="hidden"
             animate="visible"
@@ -201,24 +201,21 @@ const ContentHeader: React.FC<ContentHeaderProps> = ({
             <ReactIcon
               name="FiSearch"
               size={15}
-              className="absolute left-4 top-1/2 -translate-y-1/2 text-white/45 pointer-events-none"
+              className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-white/45"
             />
             <input
               type="text"
               value={search.value}
               onChange={search.onChange}
               placeholder={search.placeholder ?? 'Search…'}
-              className="w-full pl-11 pr-10 py-3 rounded-xl border-0 bg-white/[0.07] text-white text-sm
-                ring-1 ring-inset ring-white/20 backdrop-blur-xl
-                placeholder:text-white/45 placeholder:font-mono shadow-lg shadow-black/20
-                focus:outline-none focus:bg-white/[0.12] focus:ring-white/35 transition-all duration-200"
+              className="w-full rounded-xl border-0 bg-white/[0.07] py-3 pl-11 pr-10 text-sm text-white shadow-lg shadow-black/20 ring-1 ring-inset ring-white/20 backdrop-blur-xl transition-all duration-200 placeholder:font-mono placeholder:text-white/45 focus:bg-white/[0.12] focus:outline-none focus:ring-white/35"
             />
             {search.value && (
               <button
                 type="button"
                 onClick={search.onClear}
                 aria-label="Clear search"
-                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-white/50 hover:text-white transition-colors"
+                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-white/50 transition-colors hover:text-white"
               >
                 <ReactIcon name="FiX" size={14} />
               </button>

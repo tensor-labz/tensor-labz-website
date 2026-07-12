@@ -10,11 +10,11 @@ interface BreadcrumbsProps {
 }
 
 const Breadcrumbs = ({ items }: BreadcrumbsProps) => (
-  <div className="flex items-center gap-1.5 min-w-0 text-sm">
+  <div className="flex min-w-0 items-center gap-1.5 text-sm">
     {items.map((item, idx) => {
       const isLast = idx === items.length - 1;
       return (
-        <span key={idx} className="flex items-center gap-1.5 min-w-0">
+        <span key={idx} className="flex min-w-0 items-center gap-1.5">
           {idx > 0 && (
             <ReactIcon
               name="FaChevronRight"
@@ -28,7 +28,7 @@ const Breadcrumbs = ({ items }: BreadcrumbsProps) => (
           )}
           {isLast ? (
             <span
-              className="font-semibold truncate"
+              className="truncate font-semibold"
               style={{
                 color: 'var(--text-primary)',
                 fontFamily: '"Syne", sans-serif',
@@ -40,7 +40,7 @@ const Breadcrumbs = ({ items }: BreadcrumbsProps) => (
             <button
               type="button"
               onClick={item.onClick}
-              className="font-medium shrink-0 hover:underline"
+              className="shrink-0 font-medium hover:underline"
               style={{ color: 'var(--text-muted)' }}
             >
               {item.label}

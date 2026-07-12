@@ -55,11 +55,10 @@ const ProjectPage = memo(() => {
         coverLabel="TL.DISPLAY — PROJECT"
         contentHtml={project.content}
         actions={
-          <div className="flex items-center gap-2 flex-wrap">
+          <div className="flex flex-wrap items-center gap-2">
             <Link
               to={supportHref}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium
-                bg-white/10 hover:bg-white/20 text-white border border-white/25 hover:border-white/50 transition-all"
+              className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-4 py-2 text-sm font-medium text-white transition-all hover:border-white/50 hover:bg-white/20"
             >
               <ReactIcon name="FiMessageCircle" size={16} />
               Get Support
@@ -67,14 +66,14 @@ const ProjectPage = memo(() => {
             <Link
               to="/contact-us"
               aria-label="Contact us"
-              className="p-2 rounded-full bg-white/10 hover:bg-white/20 border border-white/25 text-white transition-all"
+              className="rounded-full border border-white/25 bg-white/10 p-2 text-white transition-all hover:bg-white/20"
             >
               <ReactIcon name="FcOnlineSupport" size={20} />
             </Link>
             <a
               href="tel:+94770484739"
               aria-label="Call us"
-              className="p-2 rounded-full bg-white/10 hover:bg-white/20 border border-white/25 text-white transition-all"
+              className="rounded-full border border-white/25 bg-white/10 p-2 text-white transition-all hover:bg-white/20"
             >
               <ReactIcon name="FiPhone" size={18} />
             </a>

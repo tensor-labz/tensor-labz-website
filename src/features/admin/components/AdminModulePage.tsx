@@ -33,14 +33,14 @@ const AdminModulePage = memo(({ moduleId }: { moduleId: string }) => {
   }, [moduleId]);
 
   return (
-    <div className="h-full flex flex-col">
+    <div className="flex h-full flex-col">
       {/* Page header — never scrolls away */}
       <div
-        className="shrink-0 flex items-center justify-between gap-3 px-4 sm:px-6 py-3 sm:py-4"
+        className="flex shrink-0 items-center justify-between gap-3 px-4 py-3 sm:px-6 sm:py-4"
         style={{ borderBottom: '1px solid var(--glass-border)' }}
       >
         <h2
-          className="text-base sm:text-xl font-bold truncate"
+          className="truncate text-base font-bold sm:text-xl"
           style={{
             color: 'var(--text-primary)',
             fontFamily: '"Syne", sans-serif',
@@ -48,10 +48,10 @@ const AdminModulePage = memo(({ moduleId }: { moduleId: string }) => {
         >
           {mod?.label ?? moduleId}
         </h2>
-        <div className="flex items-center gap-2 shrink-0">
+        <div className="flex shrink-0 items-center gap-2">
           <button
             onClick={() => navigate(`/admin/${moduleId}/form-config`)}
-            className="flex items-center gap-1.5 px-3 py-2 sm:px-3.5 sm:py-2.5 rounded-xl text-xs sm:text-sm font-medium"
+            className="flex items-center gap-1.5 rounded-xl px-3 py-2 text-xs font-medium sm:px-3.5 sm:py-2.5 sm:text-sm"
             style={{
               backgroundColor: 'var(--glass-bg-raised)',
               border: '1px solid var(--glass-border)',
@@ -64,7 +64,7 @@ const AdminModulePage = memo(({ moduleId }: { moduleId: string }) => {
           </button>
           <button
             onClick={() => navigate(`/admin/${moduleId}/new`)}
-            className="flex items-center gap-1.5 px-3 py-2 sm:px-4 sm:py-2.5 rounded-xl text-xs sm:text-sm font-semibold"
+            className="flex items-center gap-1.5 rounded-xl px-3 py-2 text-xs font-semibold sm:px-4 sm:py-2.5 sm:text-sm"
             style={{ backgroundColor: 'var(--accent)', color: '#fff' }}
           >
             <ReactIcon name="FaPlus" size={10} /> <span>Add New</span>
@@ -72,7 +72,7 @@ const AdminModulePage = memo(({ moduleId }: { moduleId: string }) => {
         </div>
       </div>
 
-      <div className="flex-1 min-h-0 overflow-hidden">
+      <div className="min-h-0 flex-1 overflow-hidden">
         {[...components]
           .filter((c) => c.visible !== false)
           .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))

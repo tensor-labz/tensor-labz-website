@@ -117,7 +117,7 @@ const Field = ({
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
         rows={4}
-        className="px-3.5 py-2.5 rounded-xl text-sm resize-none outline-none w-full"
+        className="w-full resize-none rounded-xl px-3.5 py-2.5 text-sm outline-none"
         style={inputStyle}
       />
     ) : (
@@ -126,7 +126,7 @@ const Field = ({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className="px-3.5 py-2.5 rounded-xl text-sm outline-none w-full"
+        className="w-full rounded-xl px-3.5 py-2.5 text-sm outline-none"
         style={inputStyle}
       />
     )}
@@ -148,7 +148,7 @@ const SectionDivider = ({
       {title}
     </h3>
     {subtitle && (
-      <p className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>
+      <p className="mt-0.5 text-xs" style={{ color: 'var(--text-muted)' }}>
         {subtitle}
       </p>
     )}
@@ -170,7 +170,7 @@ const IconBtn = ({
     type="button"
     onClick={onClick}
     title={title}
-    className="w-7 h-7 flex items-center justify-center rounded-lg shrink-0"
+    className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg"
     style={{
       backgroundColor: 'var(--glass-bg-raised)',
       border: '1px solid var(--glass-border)',
@@ -185,7 +185,7 @@ const SaveRowBtn = ({ onClick }: { onClick: () => void }) => (
   <button
     type="button"
     onClick={onClick}
-    className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold shrink-0"
+    className="flex shrink-0 items-center gap-1 rounded-lg px-3 py-1.5 text-xs font-semibold"
     style={{ backgroundColor: 'var(--accent)', color: '#fff' }}
   >
     <ReactIcon name="FaCheck" size={10} /> Save
@@ -298,14 +298,14 @@ const CompanyInfoTab = ({
   };
 
   return (
-    <div className="max-w-3xl mx-auto px-4 sm:px-6 py-6 space-y-8">
+    <div className="mx-auto max-w-3xl space-y-8 px-4 py-6 sm:px-6">
       {/* ── General ── */}
       <section>
         <SectionDivider
           title="General"
           subtitle="Company name, branding, and public description."
         />
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <Field
             label="Company Name"
             value={data.name}
@@ -343,7 +343,7 @@ const CompanyInfoTab = ({
               placeholder="Mechatronics, 3D CAD Modeling, PCB Design, Embedded Systems"
             />
             <p
-              className="text-[10px] mt-1"
+              className="mt-1 text-[10px]"
               style={{ color: 'var(--text-muted)' }}
             >
               Comma-separated tags shown on the About page.
@@ -382,7 +382,7 @@ const CompanyInfoTab = ({
 
       {/* ── Contact Details ── */}
       <section>
-        <div className="flex items-start justify-between gap-3 mb-1">
+        <div className="mb-1 flex items-start justify-between gap-3">
           <SectionDivider
             title="Contact Details"
             subtitle="Address, email, phone, and hours shown in the footer."
@@ -394,7 +394,7 @@ const CompanyInfoTab = ({
               setContactEdit('new');
               setContactDraft({ contact: '', title: '', value: '', link: '' });
             }}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium shrink-0 mt-0.5"
+            className="mt-0.5 flex shrink-0 items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium"
             style={{
               backgroundColor: 'var(--glass-bg-raised)',
               border: '1px solid var(--glass-border)',
@@ -410,13 +410,13 @@ const CompanyInfoTab = ({
           {/* New-row form */}
           {contactEdit === 'new' && (
             <div
-              className="flex flex-col gap-2 px-4 py-3 rounded-xl"
+              className="flex flex-col gap-2 rounded-xl px-4 py-3"
               style={{
                 backgroundColor: 'var(--glass-bg-raised)',
                 border: '1px solid var(--accent)',
               }}
             >
-              <div className="flex flex-col sm:flex-row gap-2">
+              <div className="flex flex-col gap-2 sm:flex-row">
                 <input
                   value={contactDraft.contact}
                   onChange={(e) =>
@@ -458,7 +458,7 @@ const CompanyInfoTab = ({
                   className={`${inputCls} flex-1`}
                   style={inputStyle}
                 />
-                <div className="flex gap-1.5 shrink-0">
+                <div className="flex shrink-0 gap-1.5">
                   <SaveRowBtn onClick={saveContact} />
                   <IconBtn
                     onClick={() => setContactEdit(null)}
@@ -471,7 +471,7 @@ const CompanyInfoTab = ({
 
           {contactRows.length === 0 && contactEdit !== 'new' && (
             <p
-              className="text-xs py-6 text-center rounded-xl"
+              className="rounded-xl py-6 text-center text-xs"
               style={{
                 color: 'var(--text-muted)',
                 backgroundColor: 'var(--glass-bg)',
@@ -487,13 +487,13 @@ const CompanyInfoTab = ({
               /* Edit-row form */
               <div
                 key={row.id}
-                className="flex flex-col gap-2 px-4 py-3 rounded-xl"
+                className="flex flex-col gap-2 rounded-xl px-4 py-3"
                 style={{
                   backgroundColor: 'var(--glass-bg-raised)',
                   border: '1px solid var(--accent)',
                 }}
               >
-                <div className="flex flex-col sm:flex-row gap-2">
+                <div className="flex flex-col gap-2 sm:flex-row">
                   <input
                     value={contactDraft.contact}
                     onChange={(e) =>
@@ -541,7 +541,7 @@ const CompanyInfoTab = ({
                     className={`${inputCls} flex-1`}
                     style={inputStyle}
                   />
-                  <div className="flex gap-1.5 shrink-0">
+                  <div className="flex shrink-0 gap-1.5">
                     <SaveRowBtn onClick={saveContact} />
                     <IconBtn
                       onClick={() => setContactEdit(null)}
@@ -554,14 +554,14 @@ const CompanyInfoTab = ({
               /* Display row */
               <div
                 key={row.id}
-                className="flex items-center gap-3 px-4 py-3 rounded-xl"
+                className="flex items-center gap-3 rounded-xl px-4 py-3"
                 style={{
                   backgroundColor: 'var(--glass-bg)',
                   border: '1px solid var(--glass-border)',
                 }}
               >
                 <span
-                  className="text-xs px-2 py-0.5 rounded-md shrink-0 font-medium"
+                  className="shrink-0 rounded-md px-2 py-0.5 text-xs font-medium"
                   style={{
                     backgroundColor: 'var(--glass-bg-raised)',
                     color: 'var(--text-muted)',
@@ -570,18 +570,18 @@ const CompanyInfoTab = ({
                   {row.contact || '—'}
                 </span>
                 <span
-                  className="text-xs w-24 shrink-0 truncate"
+                  className="w-24 shrink-0 truncate text-xs"
                   style={{ color: 'var(--text-muted)' }}
                 >
                   {row.title}
                 </span>
                 <span
-                  className="text-sm flex-1 min-w-0 truncate"
+                  className="min-w-0 flex-1 truncate text-sm"
                   style={{ color: 'var(--text-primary)' }}
                 >
                   {row.value}
                 </span>
-                <div className="flex gap-1.5 shrink-0">
+                <div className="flex shrink-0 gap-1.5">
                   <IconBtn
                     onClick={() => {
                       setContactEdit(row.id!);
@@ -612,7 +612,7 @@ const CompanyInfoTab = ({
 
       {/* ── Social Media ── */}
       <section>
-        <div className="flex items-start justify-between gap-3 mb-1">
+        <div className="mb-1 flex items-start justify-between gap-3">
           <SectionDivider
             title="Social Media"
             subtitle="Platform links shown in the footer."
@@ -624,7 +624,7 @@ const CompanyInfoTab = ({
               setSocialEdit('new');
               setSocialDraft({ social_media: '', value: '' });
             }}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium shrink-0 mt-0.5"
+            className="mt-0.5 flex shrink-0 items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium"
             style={{
               backgroundColor: 'var(--glass-bg-raised)',
               border: '1px solid var(--glass-border)',
@@ -639,7 +639,7 @@ const CompanyInfoTab = ({
         <div className="space-y-2">
           {socialEdit === 'new' && (
             <div
-              className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 px-4 py-3 rounded-xl"
+              className="flex flex-col items-stretch gap-2 rounded-xl px-4 py-3 sm:flex-row sm:items-center"
               style={{
                 backgroundColor: 'var(--glass-bg-raised)',
                 border: '1px solid var(--accent)',
@@ -666,7 +666,7 @@ const CompanyInfoTab = ({
                 className={`${inputCls} flex-1`}
                 style={inputStyle}
               />
-              <div className="flex gap-1.5 shrink-0">
+              <div className="flex shrink-0 gap-1.5">
                 <SaveRowBtn onClick={saveSocial} />
                 <IconBtn onClick={() => setSocialEdit(null)} icon="FaTimes" />
               </div>
@@ -675,7 +675,7 @@ const CompanyInfoTab = ({
 
           {socialRows.length === 0 && socialEdit !== 'new' && (
             <p
-              className="text-xs py-6 text-center rounded-xl"
+              className="rounded-xl py-6 text-center text-xs"
               style={{
                 color: 'var(--text-muted)',
                 backgroundColor: 'var(--glass-bg)',
@@ -690,7 +690,7 @@ const CompanyInfoTab = ({
             socialEdit === row.id ? (
               <div
                 key={row.id}
-                className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 px-4 py-3 rounded-xl"
+                className="flex flex-col items-stretch gap-2 rounded-xl px-4 py-3 sm:flex-row sm:items-center"
                 style={{
                   backgroundColor: 'var(--glass-bg-raised)',
                   border: '1px solid var(--accent)',
@@ -717,7 +717,7 @@ const CompanyInfoTab = ({
                   className={`${inputCls} flex-1`}
                   style={inputStyle}
                 />
-                <div className="flex gap-1.5 shrink-0">
+                <div className="flex shrink-0 gap-1.5">
                   <SaveRowBtn onClick={saveSocial} />
                   <IconBtn onClick={() => setSocialEdit(null)} icon="FaTimes" />
                 </div>
@@ -725,14 +725,14 @@ const CompanyInfoTab = ({
             ) : (
               <div
                 key={row.id}
-                className="flex items-center gap-3 px-4 py-3 rounded-xl"
+                className="flex items-center gap-3 rounded-xl px-4 py-3"
                 style={{
                   backgroundColor: 'var(--glass-bg)',
                   border: '1px solid var(--glass-border)',
                 }}
               >
                 <span
-                  className="text-sm font-medium w-36 shrink-0 truncate"
+                  className="w-36 shrink-0 truncate text-sm font-medium"
                   style={{ color: 'var(--text-primary)' }}
                 >
                   {row.social_media || '—'}
@@ -741,12 +741,12 @@ const CompanyInfoTab = ({
                   href={row.value}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-xs flex-1 min-w-0 truncate hover:underline"
+                  className="min-w-0 flex-1 truncate text-xs hover:underline"
                   style={{ color: 'var(--text-muted)' }}
                 >
                   {row.value}
                 </a>
-                <div className="flex gap-1.5 shrink-0">
+                <div className="flex shrink-0 gap-1.5">
                   <IconBtn
                     onClick={() => {
                       setSocialEdit(row.id!);
@@ -789,7 +789,7 @@ const CompanyInfoTab = ({
             multiline
             placeholder="A brief story about who you are, what drives you, and what makes you different…"
           />
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <Field
               label="Vision"
               value={data.vision}
@@ -884,7 +884,7 @@ const HeroSlidesTab = () => {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-32">
+      <div className="flex h-32 items-center justify-center">
         <p className="text-sm" style={{ color: 'var(--text-muted)' }}>
           Loading…
         </p>
@@ -893,7 +893,7 @@ const HeroSlidesTab = () => {
   }
 
   return (
-    <div className="max-w-3xl mx-auto px-4 sm:px-6 py-6 space-y-4">
+    <div className="mx-auto max-w-3xl space-y-4 px-4 py-6 sm:px-6">
       <div className="flex items-center justify-between">
         <SectionDivider
           title="Hero Slides"
@@ -903,7 +903,7 @@ const HeroSlidesTab = () => {
           type="button"
           disabled={editId !== null}
           onClick={startNew}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium shrink-0"
+          className="flex shrink-0 items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium"
           style={{
             backgroundColor: 'var(--glass-bg-raised)',
             border: '1px solid var(--glass-border)',
@@ -927,7 +927,7 @@ const HeroSlidesTab = () => {
 
         {rows.length === 0 && editId !== 'new' && (
           <p
-            className="text-xs py-8 text-center rounded-xl"
+            className="rounded-xl py-8 text-center text-xs"
             style={{
               color: 'var(--text-muted)',
               backgroundColor: 'var(--glass-bg)',
@@ -950,7 +950,7 @@ const HeroSlidesTab = () => {
           ) : (
             <div
               key={row.id}
-              className="flex items-center gap-3 px-4 py-3 rounded-xl"
+              className="flex items-center gap-3 rounded-xl px-4 py-3"
               style={{
                 backgroundColor: 'var(--glass-bg)',
                 border: '1px solid var(--glass-border)',
@@ -960,23 +960,23 @@ const HeroSlidesTab = () => {
                 <img
                   src={row.img}
                   alt={row.title}
-                  className="w-14 h-10 object-cover rounded-lg shrink-0"
+                  className="h-10 w-14 shrink-0 rounded-lg object-cover"
                   onError={(e) => {
                     (e.currentTarget as HTMLImageElement).style.display =
                       'none';
                   }}
                 />
               )}
-              <div className="flex-1 min-w-0">
+              <div className="min-w-0 flex-1">
                 <p
-                  className="text-sm font-medium truncate"
+                  className="truncate text-sm font-medium"
                   style={{ color: 'var(--text-primary)' }}
                 >
                   {row.title || '(No title)'}
                 </p>
                 {row.subtitle && (
                   <p
-                    className="text-xs truncate mt-0.5"
+                    className="mt-0.5 truncate text-xs"
                     style={{ color: 'var(--text-muted)' }}
                   >
                     {row.subtitle}
@@ -984,7 +984,7 @@ const HeroSlidesTab = () => {
                 )}
               </div>
               <span
-                className="text-xs px-2 py-0.5 rounded-md shrink-0"
+                className="shrink-0 rounded-md px-2 py-0.5 text-xs"
                 style={{
                   color: 'var(--text-muted)',
                   backgroundColor: 'var(--glass-bg-raised)',
@@ -992,7 +992,7 @@ const HeroSlidesTab = () => {
               >
                 #{row.sort_order}
               </span>
-              <div className="flex gap-1.5 shrink-0">
+              <div className="flex shrink-0 gap-1.5">
                 <IconBtn
                   onClick={() => startEdit(row)}
                   icon="FaEdit"
@@ -1034,13 +1034,13 @@ const HeroSlideForm = ({
 
   return (
     <div
-      className="flex flex-col gap-3 px-4 py-4 rounded-xl"
+      className="flex flex-col gap-3 rounded-xl px-4 py-4"
       style={{
         backgroundColor: 'var(--glass-bg-raised)',
         border: '1px solid var(--accent)',
       }}
     >
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
         <Field
           label="Title"
           value={draft.title}
@@ -1086,7 +1086,7 @@ const HeroSlideForm = ({
           folder="Home/Hero"
         />
       </div>
-      <div className="flex gap-2 justify-end">
+      <div className="flex justify-end gap-2">
         <SaveRowBtn onClick={onSave} />
         <IconBtn onClick={onCancel} icon="FaTimes" />
       </div>
@@ -1165,7 +1165,7 @@ const AboutMediaTab = () => {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-32">
+      <div className="flex h-32 items-center justify-center">
         <p className="text-sm" style={{ color: 'var(--text-muted)' }}>
           Loading…
         </p>
@@ -1174,7 +1174,7 @@ const AboutMediaTab = () => {
   }
 
   return (
-    <div className="max-w-3xl mx-auto px-4 sm:px-6 py-6 space-y-4">
+    <div className="mx-auto max-w-3xl space-y-4 px-4 py-6 sm:px-6">
       <div className="flex items-center justify-between">
         <SectionDivider
           title="About Media Gallery"
@@ -1184,7 +1184,7 @@ const AboutMediaTab = () => {
           type="button"
           disabled={editId !== null}
           onClick={startNew}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium shrink-0"
+          className="flex shrink-0 items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium"
           style={{
             backgroundColor: 'var(--glass-bg-raised)',
             border: '1px solid var(--glass-border)',
@@ -1208,7 +1208,7 @@ const AboutMediaTab = () => {
 
         {rows.length === 0 && editId !== 'new' && (
           <p
-            className="text-xs py-8 text-center rounded-xl"
+            className="rounded-xl py-8 text-center text-xs"
             style={{
               color: 'var(--text-muted)',
               backgroundColor: 'var(--glass-bg)',
@@ -1231,14 +1231,14 @@ const AboutMediaTab = () => {
           ) : (
             <div
               key={row.id}
-              className="flex items-center gap-3 px-4 py-3 rounded-xl"
+              className="flex items-center gap-3 rounded-xl px-4 py-3"
               style={{
                 backgroundColor: 'var(--glass-bg)',
                 border: '1px solid var(--glass-border)',
               }}
             >
               <div
-                className="w-10 h-10 rounded-lg shrink-0 flex items-center justify-center"
+                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg"
                 style={{ backgroundColor: 'var(--glass-bg-raised)' }}
               >
                 <ReactIcon
@@ -1249,22 +1249,22 @@ const AboutMediaTab = () => {
                   }}
                 />
               </div>
-              <div className="flex-1 min-w-0">
+              <div className="min-w-0 flex-1">
                 <p
-                  className="text-sm font-medium truncate"
+                  className="truncate text-sm font-medium"
                   style={{ color: 'var(--text-primary)' }}
                 >
                   {row.title || '(No title)'}
                 </p>
                 <p
-                  className="text-xs truncate mt-0.5"
+                  className="mt-0.5 truncate text-xs"
                   style={{ color: 'var(--text-muted)' }}
                 >
                   {row.url}
                 </p>
               </div>
               <span
-                className="text-xs px-2 py-0.5 rounded-md shrink-0 font-medium"
+                className="shrink-0 rounded-md px-2 py-0.5 text-xs font-medium"
                 style={{
                   backgroundColor:
                     row.type === 'video'
@@ -1276,7 +1276,7 @@ const AboutMediaTab = () => {
                 {row.type}
               </span>
               <span
-                className="text-xs px-2 py-0.5 rounded-md shrink-0"
+                className="shrink-0 rounded-md px-2 py-0.5 text-xs"
                 style={{
                   color: 'var(--text-muted)',
                   backgroundColor: 'var(--glass-bg-raised)',
@@ -1284,7 +1284,7 @@ const AboutMediaTab = () => {
               >
                 #{row.sort_order}
               </span>
-              <div className="flex gap-1.5 shrink-0">
+              <div className="flex shrink-0 gap-1.5">
                 <IconBtn
                   onClick={() => startEdit(row)}
                   icon="FaEdit"
@@ -1326,7 +1326,7 @@ const MediaItemForm = ({
 
   return (
     <div
-      className="flex flex-col gap-3 px-4 py-4 rounded-xl"
+      className="flex flex-col gap-3 rounded-xl px-4 py-4"
       style={{
         backgroundColor: 'var(--glass-bg-raised)',
         border: '1px solid var(--accent)',
@@ -1339,7 +1339,7 @@ const MediaItemForm = ({
             key={t}
             type="button"
             onClick={() => onChange({ ...draft, type: t, url: '' })}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold capitalize transition-colors"
+            className="flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold capitalize transition-colors"
             style={
               draft.type === t
                 ? { backgroundColor: 'var(--accent)', color: '#fff' }
@@ -1359,7 +1359,7 @@ const MediaItemForm = ({
         ))}
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
         <Field
           label="Title"
           value={draft.title}
@@ -1398,7 +1398,7 @@ const MediaItemForm = ({
         </div>
       )}
 
-      <div className="flex gap-2 justify-end">
+      <div className="flex justify-end gap-2">
         <SaveRowBtn onClick={onSave} />
         <IconBtn onClick={onCancel} icon="FaTimes" />
       </div>
@@ -1516,7 +1516,7 @@ const PageContentTab = () => {
 
   if (status === 'loading' || status === 'idle') {
     return (
-      <div className="flex items-center justify-center h-32">
+      <div className="flex h-32 items-center justify-center">
         <p className="text-sm" style={{ color: 'var(--text-muted)' }}>
           Loading…
         </p>
@@ -1525,7 +1525,7 @@ const PageContentTab = () => {
   }
 
   return (
-    <div className="max-w-3xl mx-auto px-4 sm:px-6 py-6 space-y-8">
+    <div className="mx-auto max-w-3xl space-y-8 px-4 py-6 sm:px-6">
       {/* Save button */}
       <div className="flex items-center justify-between">
         <SectionDivider
@@ -1536,7 +1536,7 @@ const PageContentTab = () => {
           type="button"
           onClick={handleSave}
           disabled={saving}
-          className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all"
+          className="flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-xs font-semibold transition-all"
           style={{
             backgroundColor: saved
               ? 'var(--success, #22c55e)'
@@ -1552,7 +1552,7 @@ const PageContentTab = () => {
 
       {/* Services section */}
       <div
-        className="rounded-xl p-4 space-y-3"
+        className="space-y-3 rounded-xl p-4"
         style={{
           backgroundColor: 'var(--glass-bg)',
           border: '1px solid var(--glass-border)',
@@ -1564,7 +1564,7 @@ const PageContentTab = () => {
         >
           Services Section
         </p>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
           <Field
             label="Accent Label"
             value={draft['services.label']}
@@ -1589,7 +1589,7 @@ const PageContentTab = () => {
 
       {/* Projects section */}
       <div
-        className="rounded-xl p-4 space-y-3"
+        className="space-y-3 rounded-xl p-4"
         style={{
           backgroundColor: 'var(--glass-bg)',
           border: '1px solid var(--glass-border)',
@@ -1601,7 +1601,7 @@ const PageContentTab = () => {
         >
           Latest Projects Section
         </p>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
           <Field
             label="Accent Label"
             value={draft['projects.label']}
@@ -1626,7 +1626,7 @@ const PageContentTab = () => {
 
       {/* Posts page */}
       <div
-        className="rounded-xl p-4 space-y-3"
+        className="space-y-3 rounded-xl p-4"
         style={{
           backgroundColor: 'var(--glass-bg)',
           border: '1px solid var(--glass-border)',
@@ -1638,7 +1638,7 @@ const PageContentTab = () => {
         >
           Posts Page
         </p>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
           <Field
             label="Accent Label"
             value={draft['posts.label']}
@@ -1663,7 +1663,7 @@ const PageContentTab = () => {
 
       {/* Posts pagination */}
       <div
-        className="rounded-xl p-4 space-y-3"
+        className="space-y-3 rounded-xl p-4"
         style={{
           backgroundColor: 'var(--glass-bg)',
           border: '1px solid var(--glass-border)',
@@ -1691,7 +1691,7 @@ const PageContentTab = () => {
 
       {/* About page */}
       <div
-        className="rounded-xl p-4 space-y-3"
+        className="space-y-3 rounded-xl p-4"
         style={{
           backgroundColor: 'var(--glass-bg)',
           border: '1px solid var(--glass-border)',
@@ -1703,7 +1703,7 @@ const PageContentTab = () => {
         >
           About Page
         </p>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
           <Field
             label="Hero Label"
             value={draft['about.hero_label']}
@@ -1775,7 +1775,7 @@ const PageContentTab = () => {
 
       {/* Contact & Services pages */}
       <div
-        className="rounded-xl p-4 space-y-3"
+        className="space-y-3 rounded-xl p-4"
         style={{
           backgroundColor: 'var(--glass-bg)',
           border: '1px solid var(--glass-border)',
@@ -1787,7 +1787,7 @@ const PageContentTab = () => {
         >
           Contact & Services Pages
         </p>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
           <Field
             label="Contact Hero Label"
             value={draft['contact.hero_label']}
@@ -1805,7 +1805,7 @@ const PageContentTab = () => {
 
       {/* Hero stat labels */}
       <div
-        className="rounded-xl p-4 space-y-3"
+        className="space-y-3 rounded-xl p-4"
         style={{
           backgroundColor: 'var(--glass-bg)',
           border: '1px solid var(--glass-border)',
@@ -1817,7 +1817,7 @@ const PageContentTab = () => {
         >
           Home Hero — Stat Labels
         </p>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
           <Field
             label="Projects Label"
             value={draft['hero.stat_projects']}
@@ -1899,14 +1899,14 @@ const AdminSiteControl = memo(() => {
   };
 
   return (
-    <div className="h-full flex flex-col">
+    <div className="flex h-full flex-col">
       {/* ── Header ── */}
       <div
-        className="shrink-0 flex items-center justify-between gap-3 px-4 sm:px-6 py-3 sm:py-4"
+        className="flex shrink-0 items-center justify-between gap-3 px-4 py-3 sm:px-6 sm:py-4"
         style={{ borderBottom: '1px solid var(--glass-border)' }}
       >
         <h2
-          className="text-base sm:text-xl font-bold truncate"
+          className="truncate text-base font-bold sm:text-xl"
           style={{
             color: 'var(--text-primary)',
             fontFamily: '"Syne", sans-serif',
@@ -1919,7 +1919,7 @@ const AdminSiteControl = memo(() => {
             type="button"
             onClick={handleSave}
             disabled={saving || loading}
-            className="flex items-center gap-1.5 px-3.5 py-2 sm:px-4 sm:py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all"
+            className="flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-xs font-semibold transition-all sm:px-4 sm:py-2.5 sm:text-sm"
             style={{
               backgroundColor: saved
                 ? 'var(--success, #22c55e)'
@@ -1940,7 +1940,7 @@ const AdminSiteControl = memo(() => {
 
       {/* ── Tab bar ── */}
       <div
-        className="shrink-0 flex overflow-x-auto no-scrollbar"
+        className="no-scrollbar flex shrink-0 overflow-x-auto"
         style={{ borderBottom: '1px solid var(--glass-border)' }}
       >
         {TABS.map(({ id, label, icon }) => {
@@ -1949,7 +1949,7 @@ const AdminSiteControl = memo(() => {
             <button
               key={id}
               onClick={() => setSearchParams({ tab: id })}
-              className="flex items-center gap-1.5 px-4 sm:px-5 py-3 text-sm font-medium whitespace-nowrap transition-colors"
+              className="flex items-center gap-1.5 whitespace-nowrap px-4 py-3 text-sm font-medium transition-colors sm:px-5"
               style={{
                 borderBottom: `2px solid ${isActive ? 'var(--accent)' : 'transparent'}`,
                 color: isActive ? 'var(--text-primary)' : 'var(--text-muted)',
@@ -1964,9 +1964,9 @@ const AdminSiteControl = memo(() => {
       </div>
 
       {/* ── Content ── */}
-      <div className="flex-1 min-h-0 overflow-y-auto">
+      <div className="min-h-0 flex-1 overflow-y-auto">
         {loading && activeTab === 'company' ? (
-          <div className="flex items-center justify-center h-32">
+          <div className="flex h-32 items-center justify-center">
             <p className="text-sm" style={{ color: 'var(--text-muted)' }}>
               Loading…
             </p>
@@ -1979,11 +1979,11 @@ const AdminSiteControl = memo(() => {
             {activeTab === 'page' && (
               <>
                 <HeroSlidesTab />
-                <div className="max-w-3xl mx-auto px-4 sm:px-6">
+                <div className="mx-auto max-w-3xl px-4 sm:px-6">
                   <div style={{ borderTop: '1px solid var(--glass-border)' }} />
                 </div>
                 <AboutMediaTab />
-                <div className="max-w-3xl mx-auto px-4 sm:px-6">
+                <div className="mx-auto max-w-3xl px-4 sm:px-6">
                   <div style={{ borderTop: '1px solid var(--glass-border)' }} />
                 </div>
                 <PageContentTab />

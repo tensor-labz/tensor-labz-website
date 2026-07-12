@@ -28,13 +28,13 @@ const OfflineWarning: React.FC = memo(() => {
       initial={{ opacity: 0, y: -50 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -50 }}
-      className="fixed top-0 left-0 w-full bg-red-500 text-white p-3 z-[1000] flex items-center justify-center space-x-2"
+      className="fixed left-0 top-0 z-[1000] flex w-full items-center justify-center space-x-2 bg-red-500 p-3 text-white"
     >
       <ReactIcon name="MdSignalWifiOff" size={24} />
       <span className="font-semibold">No Internet Connection</span>
       <button
         onClick={() => window.location.reload()}
-        className="ml-4 bg-white text-red-500 px-3 py-1 rounded flex items-center space-x-1 hover:bg-gray-100 transition"
+        className="ml-4 flex items-center space-x-1 rounded bg-white px-3 py-1 text-red-500 transition hover:bg-gray-100"
       >
         <ReactIcon name="MdRefresh" size={16} />
         <span>Retry</span>

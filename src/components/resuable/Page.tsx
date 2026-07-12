@@ -39,7 +39,7 @@ const Page: React.FC<PageProps> = memo(
           animate="animate"
           exit="exit"
           variants={pageVariants}
-          className={`min-h-screen relative min-w-full ${className}`}
+          className={`relative min-h-screen min-w-full ${className}`}
           {...motionProps}
         >
           {children}

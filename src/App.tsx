@@ -10,7 +10,7 @@ const App: React.FC = memo(() => {
     <ErrorBoundary>
       <AppProviders>
         <div
-          className="min-h-screen flex flex-col relative"
+          className="relative flex min-h-screen flex-col"
           style={{
             backgroundColor: 'var(--bg-base)',
             color: 'var(--text-primary)',

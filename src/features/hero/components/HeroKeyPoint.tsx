@@ -17,7 +17,7 @@ const HeroKeyPoint: React.FC = memo(() => {
   const slide = useAppSelector(selectCurrentSlide);
 
   return (
-    <div className="min-h-[60px] relative">
+    <div className="relative min-h-[60px]">
       <AnimatePresence mode="wait">
         <motion.h2
           key={currentIndex}
@@ -25,7 +25,7 @@ const HeroKeyPoint: React.FC = memo(() => {
           initial="initial"
           animate="animate"
           exit="exit"
-          className="text-xl md:text-2xl lg:text-3xl font-semibold absolute w-full text-center lg:text-left text-fg"
+          className="absolute w-full text-center text-xl font-semibold text-fg md:text-2xl lg:text-left lg:text-3xl"
         >
           {slide?.title as string}
         </motion.h2>

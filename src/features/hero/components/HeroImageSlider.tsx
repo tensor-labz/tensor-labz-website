@@ -231,7 +231,7 @@ const HeroImageSlider: React.FC = memo(() => {
     applySlides(slides, materialsRef.current);
   }, [slides]);
 
-  return <div ref={mountRef} className="w-full h-full" />;
+  return <div ref={mountRef} className="h-full w-full" />;
 });
 
 HeroImageSlider.displayName = 'HeroImageSlider';

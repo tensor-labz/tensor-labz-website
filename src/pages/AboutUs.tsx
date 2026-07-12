@@ -14,7 +14,7 @@ const HeroParticles = lazy(
 
 /* ── Shared primitives ── */
 const Label = ({ children }: { children: React.ReactNode }) => (
-  <span className="text-[10px] font-semibold tracking-[0.35em] uppercase block mb-4 text-accent">
+  <span className="mb-4 block text-[10px] font-semibold uppercase tracking-[0.35em] text-accent">
     {children}
   </span>
 );
@@ -25,7 +25,7 @@ const Rule = ({ center = false }: { center?: boolean }) => (
     whileInView={{ width: '3rem' }}
     viewport={{ once: true }}
     transition={{ duration: 0.5, ease: 'easeOut' }}
-    className={`h-1 rounded-full mb-6 bg-accent ${center ? 'mx-auto' : ''}`}
+    className={`mb-6 h-1 rounded-full bg-accent ${center ? 'mx-auto' : ''}`}
   />
 );
 
@@ -37,7 +37,7 @@ const Card = ({
   className?: string;
 }) => (
   <div
-    className={`rounded-2xl p-8 bg-glass-raised border border-glass-rim backdrop-blur-md ${className}`}
+    className={`rounded-2xl border border-glass-rim bg-glass-raised p-8 backdrop-blur-md ${className}`}
   >
     {children}
   </div>
@@ -45,9 +45,9 @@ const Card = ({
 
 const SkeletonCard = () => (
   <Card>
-    <div className="h-3 rounded w-1/2 mb-4 animate-pulse bg-glass-rim" />
-    <div className="h-2 rounded w-full mb-2 animate-pulse bg-glass-rim" />
-    <div className="h-2 rounded w-3/4 animate-pulse bg-glass-rim" />
+    <div className="mb-4 h-3 w-1/2 animate-pulse rounded bg-glass-rim" />
+    <div className="mb-2 h-2 w-full animate-pulse rounded bg-glass-rim" />
+    <div className="h-2 w-3/4 animate-pulse rounded bg-glass-rim" />
   </Card>
 );
 
@@ -66,7 +66,7 @@ const AboutUs: React.FC = memo(() => {
       {/* ══════════════════════════════════════════════════
           HERO  — Three.js particle constellation background
       ══════════════════════════════════════════════════ */}
-      <section className="relative flex items-center justify-center px-6 lg:px-16 text-center overflow-hidden pt-32 pb-16 lg:pt-36 lg:pb-20">
+      <section className="relative flex items-center justify-center overflow-hidden px-6 pb-16 pt-32 text-center lg:px-16 lg:pb-20 lg:pt-36">
         {/* Particle background */}
         <div className="absolute inset-0 z-0">
           <Suspense fallback={null}>
@@ -84,7 +84,7 @@ const AboutUs: React.FC = memo(() => {
         />
 
         {/* Content */}
-        <div className="relative z-[2] max-w-4xl mx-auto">
+        <div className="relative z-[2] mx-auto max-w-4xl">
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -97,7 +97,7 @@ const AboutUs: React.FC = memo(() => {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.1, ease: EASE_EXPO }}
-            className="text-4xl sm:text-5xl md:text-6xl xl:text-7xl font-bold leading-tight mb-6 text-fg font-display"
+            className="mb-6 font-display text-4xl font-bold leading-tight text-fg sm:text-5xl md:text-6xl xl:text-7xl"
           >
             {companyName}
           </motion.h1>
@@ -106,14 +106,14 @@ const AboutUs: React.FC = memo(() => {
             initial={{ width: 0 }}
             animate={{ width: '4rem' }}
             transition={{ delay: 0.45, duration: 0.5, ease: 'easeOut' }}
-            className="h-1 rounded-full mx-auto mb-8 bg-accent"
+            className="mx-auto mb-8 h-1 rounded-full bg-accent"
           />
 
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.7, delay: 0.3 }}
-            className="text-base md:text-xl leading-relaxed max-w-2xl mx-auto text-muted"
+            className="mx-auto max-w-2xl text-base leading-relaxed text-muted md:text-xl"
           >
             {description}
           </motion.p>
@@ -124,7 +124,7 @@ const AboutUs: React.FC = memo(() => {
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.5, ease: EASE_EXPO }}
-              className="flex flex-wrap justify-center gap-2 mt-6"
+              className="mt-6 flex flex-wrap justify-center gap-2"
             >
               {info.domains
                 .split(',')
@@ -133,7 +133,7 @@ const AboutUs: React.FC = memo(() => {
                 .map((chip) => (
                   <span
                     key={chip}
-                    className="px-3 py-1 rounded border border-accent/30 bg-accent/5 text-accent text-[11px] font-mono tracking-wider uppercase"
+                    className="border-accent/30 bg-accent/5 rounded border px-3 py-1 font-mono text-[11px] uppercase tracking-wider text-accent"
                   >
                     {chip}
                   </span>
@@ -147,24 +147,24 @@ const AboutUs: React.FC = memo(() => {
               initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.7, ease: EASE_EXPO }}
-              className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-2xl mx-auto mt-8 text-left"
+              className="mx-auto mt-8 grid max-w-2xl grid-cols-1 gap-4 text-left sm:grid-cols-2"
             >
               {info.vision && (
-                <div className="rounded-xl border border-glass-rim bg-glass-raised backdrop-blur-sm px-4 py-3">
-                  <p className="text-[9px] font-mono tracking-widest uppercase text-accent mb-1">
+                <div className="rounded-xl border border-glass-rim bg-glass-raised px-4 py-3 backdrop-blur-sm">
+                  <p className="mb-1 font-mono text-[9px] uppercase tracking-widest text-accent">
                     ◈ Vision
                   </p>
-                  <p className="text-xs text-muted leading-relaxed line-clamp-3">
+                  <p className="line-clamp-3 text-xs leading-relaxed text-muted">
                     {info.vision}
                   </p>
                 </div>
               )}
               {info.mission && (
-                <div className="rounded-xl border border-glass-rim bg-glass-raised backdrop-blur-sm px-4 py-3">
-                  <p className="text-[9px] font-mono tracking-widest uppercase text-accent mb-1">
+                <div className="rounded-xl border border-glass-rim bg-glass-raised px-4 py-3 backdrop-blur-sm">
+                  <p className="mb-1 font-mono text-[9px] uppercase tracking-widest text-accent">
                     ◈ Mission
                   </p>
-                  <p className="text-xs text-muted leading-relaxed line-clamp-3">
+                  <p className="line-clamp-3 text-xs leading-relaxed text-muted">
                     {info.mission}
                   </p>
                 </div>
@@ -175,12 +175,12 @@ const AboutUs: React.FC = memo(() => {
 
         {/* Scroll indicator */}
         <motion.div
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 z-[2] flex flex-col items-center gap-2"
+          className="absolute bottom-8 left-1/2 z-[2] flex -translate-x-1/2 flex-col items-center gap-2"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1 }}
         >
-          <span className="text-[9px] font-medium tracking-[0.3em] uppercase text-muted">
+          <span className="text-[9px] font-medium uppercase tracking-[0.3em] text-muted">
             Scroll
           </span>
           <motion.div
@@ -196,23 +196,23 @@ const AboutUs: React.FC = memo(() => {
           VISION & MISSION
       ══════════════════════════════════════════════════ */}
       {(info.vision || info.mission) && (
-        <section className="px-6 lg:px-16 pt-12 pb-20 lg:pt-16 lg:pb-28">
-          <div className="max-w-7xl mx-auto">
+        <section className="px-6 pb-20 pt-12 lg:px-16 lg:pb-28 lg:pt-16">
+          <div className="mx-auto max-w-7xl">
             <motion.div
               variants={fadeUp(0)}
               initial="hidden"
               whileInView="visible"
               viewport={VIEWPORT}
-              className="text-center mb-12"
+              className="mb-12 text-center"
             >
               <Label>{get('about.vision_label')}</Label>
-              <h2 className="text-3xl md:text-4xl font-bold text-fg font-display">
+              <h2 className="font-display text-3xl font-bold text-fg md:text-4xl">
                 {get('about.vision_title')}
               </h2>
               <Rule center />
             </motion.div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
               {info.vision && (
                 <motion.div
                   variants={fadeUp(0.1)}
@@ -221,14 +221,14 @@ const AboutUs: React.FC = memo(() => {
                   viewport={VIEWPORT}
                 >
                   <Card>
-                    <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-6 bg-accent-soft">
+                    <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-xl bg-accent-soft">
                       <ReactIcon
                         name="FaLightbulb"
                         size={20}
                         className="text-accent"
                       />
                     </div>
-                    <h3 className="text-xl font-bold mb-4 text-fg font-display">
+                    <h3 className="mb-4 font-display text-xl font-bold text-fg">
                       {get('about.our_vision')}
                     </h3>
                     <p className="text-sm leading-relaxed text-muted">
@@ -245,14 +245,14 @@ const AboutUs: React.FC = memo(() => {
                   viewport={VIEWPORT}
                 >
                   <Card>
-                    <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-6 bg-accent-soft">
+                    <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-xl bg-accent-soft">
                       <ReactIcon
                         name="FaRocket"
                         size={20}
                         className="text-accent"
                       />
                     </div>
-                    <h3 className="text-xl font-bold mb-4 text-fg font-display">
+                    <h3 className="mb-4 font-display text-xl font-bold text-fg">
                       {get('about.our_mission')}
                     </h3>
                     <p className="text-sm leading-relaxed text-muted">
@@ -270,8 +270,8 @@ const AboutUs: React.FC = memo(() => {
           WHO WE ARE
       ══════════════════════════════════════════════════ */}
       {whoWeAre && (
-        <section className="px-6 lg:px-16 py-20 lg:py-28">
-          <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+        <section className="px-6 py-20 lg:px-16 lg:py-28">
+          <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-12 lg:grid-cols-2 lg:gap-20">
             <motion.div
               variants={fadeUp(0)}
               initial="hidden"
@@ -279,7 +279,7 @@ const AboutUs: React.FC = memo(() => {
               viewport={VIEWPORT}
             >
               <Label>{get('about.story_label')}</Label>
-              <h2 className="text-3xl md:text-4xl font-bold leading-tight mb-2 text-fg font-display">
+              <h2 className="mb-2 font-display text-3xl font-bold leading-tight text-fg md:text-4xl">
                 {get('about.story_title')}
               </h2>
               <Rule />
@@ -296,15 +296,15 @@ const AboutUs: React.FC = memo(() => {
                 <ReactIcon
                   name="FaQuoteLeft"
                   size={32}
-                  className="text-accent mb-6 block opacity-[0.45]"
+                  className="mb-6 block text-accent opacity-[0.45]"
                 />
-                <p className="text-lg md:text-xl leading-relaxed font-medium italic mb-6 text-fg">
+                <p className="mb-6 text-lg font-medium italic leading-relaxed text-fg md:text-xl">
                   &ldquo;
                   {info.tagline}
                   &rdquo;
                 </p>
-                <div className="h-px mb-4 border-t border-glass-rim" />
-                <span className="text-xs font-semibold tracking-widest uppercase text-accent">
+                <div className="mb-4 h-px border-t border-glass-rim" />
+                <span className="text-xs font-semibold uppercase tracking-widest text-accent">
                   {companyName}
                 </span>
               </Card>
@@ -316,17 +316,17 @@ const AboutUs: React.FC = memo(() => {
       {/* ══════════════════════════════════════════════════
           MEDIA GALLERY  — video / image player
       ══════════════════════════════════════════════════ */}
-      <section className="px-6 lg:px-16 py-20 lg:py-28">
-        <div className="max-w-7xl mx-auto">
+      <section className="px-6 py-20 lg:px-16 lg:py-28">
+        <div className="mx-auto max-w-7xl">
           <motion.div
             variants={fadeUp(0)}
             initial="hidden"
             whileInView="visible"
             viewport={VIEWPORT}
-            className="text-center mb-12"
+            className="mb-12 text-center"
           >
             <Label>{get('about.media_label')}</Label>
-            <h2 className="text-3xl md:text-4xl font-bold text-fg font-display">
+            <h2 className="font-display text-3xl font-bold text-fg md:text-4xl">
               {get('about.media_title')}
             </h2>
             <Rule center />
@@ -337,7 +337,7 @@ const AboutUs: React.FC = memo(() => {
             initial="hidden"
             whileInView="visible"
             viewport={VIEWPORT}
-            className="max-w-4xl mx-auto"
+            className="mx-auto max-w-4xl"
           >
             <MediaGallery />
           </motion.div>
@@ -348,23 +348,23 @@ const AboutUs: React.FC = memo(() => {
           KEY FACTS  — aboutData grid
       ══════════════════════════════════════════════════ */}
       {(isLoading || aboutData.length > 0) && (
-        <section className="px-6 lg:px-16 py-20 lg:py-28">
-          <div className="max-w-7xl mx-auto">
+        <section className="px-6 py-20 lg:px-16 lg:py-28">
+          <div className="mx-auto max-w-7xl">
             <motion.div
               variants={fadeUp(0)}
               initial="hidden"
               whileInView="visible"
               viewport={VIEWPORT}
-              className="text-center mb-12"
+              className="mb-12 text-center"
             >
               <Label>{get('about.facts_label')}</Label>
-              <h2 className="text-3xl md:text-4xl font-bold text-fg font-display">
+              <h2 className="font-display text-3xl font-bold text-fg md:text-4xl">
                 {get('about.facts_title')}
               </h2>
               <Rule center />
             </motion.div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {isLoading
                 ? Array.from({ length: 3 }).map((_, i) => (
                     <SkeletonCard key={i} />
@@ -378,10 +378,10 @@ const AboutUs: React.FC = memo(() => {
                       viewport={VIEWPORT}
                     >
                       <Card>
-                        <h3 className="text-lg font-semibold mb-3 break-words text-fg">
+                        <h3 className="mb-3 break-words text-lg font-semibold text-fg">
                           {String(section.components ?? '')}
                         </h3>
-                        <p className="text-sm leading-relaxed break-words hyphens-auto text-muted">
+                        <p className="hyphens-auto break-words text-sm leading-relaxed text-muted">
                           {String(section.value ?? '')}
                         </p>
                       </Card>

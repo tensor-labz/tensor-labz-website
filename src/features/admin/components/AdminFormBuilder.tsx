@@ -155,7 +155,7 @@ const FieldEditPanel = memo(
         className="overflow-hidden"
       >
         <div
-          className="rounded-xl px-4 py-4 mt-2"
+          className="mt-2 rounded-xl px-4 py-4"
           style={{
             backgroundColor: 'var(--bg-raised)',
             border: '1px solid var(--accent)',
@@ -165,7 +165,7 @@ const FieldEditPanel = memo(
             {/* Label */}
             <div>
               <label
-                className="block text-xs font-semibold mb-1.5"
+                className="mb-1.5 block text-xs font-semibold"
                 style={{ color: 'var(--text-muted)' }}
               >
                 Label *
@@ -184,7 +184,7 @@ const FieldEditPanel = memo(
             {/* Key */}
             <div>
               <label
-                className="block text-xs font-semibold mb-1.5"
+                className="mb-1.5 block text-xs font-semibold"
                 style={{ color: 'var(--text-muted)' }}
               >
                 Key * <span className="font-normal">(Supabase column)</span>
@@ -204,7 +204,7 @@ const FieldEditPanel = memo(
             {/* Type */}
             <div>
               <label
-                className="block text-xs font-semibold mb-1.5"
+                className="mb-1.5 block text-xs font-semibold"
                 style={{ color: 'var(--text-muted)' }}
               >
                 Type *
@@ -212,7 +212,7 @@ const FieldEditPanel = memo(
               <select
                 value={draft.type}
                 onChange={(e) => set('type', e.target.value as FieldType)}
-                className={`${inputCls} appearance-none cursor-pointer`}
+                className={`${inputCls} cursor-pointer appearance-none`}
                 style={{ ...inputSty, backgroundColor: '#fff', color: '#111' }}
               >
                 {TYPES.map((t) => (
@@ -226,7 +226,7 @@ const FieldEditPanel = memo(
             {/* Width */}
             <div>
               <label
-                className="block text-xs font-semibold mb-1.5"
+                className="mb-1.5 block text-xs font-semibold"
                 style={{ color: 'var(--text-muted)' }}
               >
                 Column Width
@@ -257,7 +257,7 @@ const FieldEditPanel = memo(
             {/* Placeholder */}
             <div>
               <label
-                className="block text-xs font-semibold mb-1.5"
+                className="mb-1.5 block text-xs font-semibold"
                 style={{ color: 'var(--text-muted)' }}
               >
                 Placeholder <span className="font-normal">(optional)</span>
@@ -274,12 +274,12 @@ const FieldEditPanel = memo(
 
             {/* Required */}
             <div className="flex items-end pb-1">
-              <label className="flex items-center gap-2.5 cursor-pointer select-none">
+              <label className="flex cursor-pointer select-none items-center gap-2.5">
                 <input
                   type="checkbox"
                   checked={draft.required}
                   onChange={(e) => set('required', e.target.checked)}
-                  className="w-4 h-4 accent-[var(--accent)]"
+                  className="h-4 w-4 accent-[var(--accent)]"
                 />
                 <span
                   className="text-sm"
@@ -294,7 +294,7 @@ const FieldEditPanel = memo(
             {(draft.type === 'radio' || draft.type === 'select') && (
               <div className="col-span-2">
                 <label
-                  className="block text-xs font-semibold mb-1.5"
+                  className="mb-1.5 block text-xs font-semibold"
                   style={{ color: 'var(--text-muted)' }}
                 >
                   Choices <span className="font-normal">(comma-separated)</span>
@@ -313,13 +313,13 @@ const FieldEditPanel = memo(
 
           {/* Actions */}
           <div
-            className="flex items-center justify-end gap-2 mt-4 pt-3"
+            className="mt-4 flex items-center justify-end gap-2 pt-3"
             style={{ borderTop: '1px solid var(--glass-border)' }}
           >
             <button
               type="button"
               onClick={onCancel}
-              className="px-3 py-2 rounded-lg text-sm"
+              className="rounded-lg px-3 py-2 text-sm"
               style={{
                 backgroundColor: 'var(--glass-bg-raised)',
                 border: '1px solid var(--glass-border)',
@@ -332,7 +332,7 @@ const FieldEditPanel = memo(
               type="button"
               onClick={onConfirm}
               disabled={!isValid}
-              className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-semibold disabled:opacity-40"
+              className="flex items-center gap-1.5 rounded-lg px-4 py-2 text-sm font-semibold disabled:opacity-40"
               style={{ backgroundColor: 'var(--accent)', color: '#fff' }}
             >
               <ReactIcon name="FaCheck" size={11} />
@@ -437,10 +437,10 @@ const AdminFormBuilder = memo(() => {
   if (!mod) return null;
 
   return (
-    <div className="h-full flex flex-col">
+    <div className="flex h-full flex-col">
       {/* ── Sticky page header ── */}
       <div
-        className="shrink-0 flex items-center justify-between gap-3 px-4 sm:px-6 py-3 sm:py-4"
+        className="flex shrink-0 items-center justify-between gap-3 px-4 py-3 sm:px-6 sm:py-4"
         style={{ borderBottom: '1px solid var(--glass-border)' }}
       >
         <Breadcrumbs
@@ -451,11 +451,11 @@ const AdminFormBuilder = memo(() => {
         />
 
         {/* Right: reset + save */}
-        <div className="flex items-center gap-2 shrink-0">
+        <div className="flex shrink-0 items-center gap-2">
           <button
             type="button"
             onClick={handleReset}
-            className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium"
+            className="flex items-center gap-1.5 rounded-lg px-3 py-2 text-xs font-medium"
             style={{
               backgroundColor: 'var(--glass-bg-raised)',
               border: '1px solid var(--glass-border)',
@@ -470,7 +470,7 @@ const AdminFormBuilder = memo(() => {
             whileTap={{ scale: 0.96 }}
             onClick={handleSave}
             disabled={saving}
-            className="flex items-center gap-1.5 px-3 py-2 sm:px-4 sm:py-2.5 rounded-lg text-xs sm:text-sm font-semibold disabled:opacity-60"
+            className="flex items-center gap-1.5 rounded-lg px-3 py-2 text-xs font-semibold disabled:opacity-60 sm:px-4 sm:py-2.5 sm:text-sm"
             style={{
               backgroundColor: saved ? '#22c55e' : 'var(--accent)',
               color: '#fff',
@@ -487,17 +487,17 @@ const AdminFormBuilder = memo(() => {
       </div>
 
       {/* ── Scrollable body ── */}
-      <div className="flex-1 min-h-0 overflow-y-auto no-scrollbar">
-        <div className="p-6 max-w-3xl mx-auto">
+      <div className="no-scrollbar min-h-0 flex-1 overflow-y-auto">
+        <div className="mx-auto max-w-3xl p-6">
           {/* ── Field list card ── */}
           <div
-            className="rounded-2xl p-5 mb-4"
+            className="mb-4 rounded-2xl p-5"
             style={{
               backgroundColor: 'var(--glass-bg)',
               border: '1px solid var(--glass-border)',
             }}
           >
-            <div className="flex items-center justify-between mb-4">
+            <div className="mb-4 flex items-center justify-between">
               <span
                 className="text-xs font-semibold"
                 style={{ color: 'var(--text-muted)' }}
@@ -510,7 +510,7 @@ const AdminFormBuilder = memo(() => {
             </div>
 
             {loading ? (
-              <div className="space-y-2 animate-pulse">
+              <div className="animate-pulse space-y-2">
                 {[1, 2, 3].map((i) => (
                   <div
                     key={i}
@@ -521,7 +521,7 @@ const AdminFormBuilder = memo(() => {
               </div>
             ) : fields.length === 0 ? (
               <p
-                className="text-sm text-center py-8"
+                className="py-8 text-center text-sm"
                 style={{ color: 'var(--text-muted)' }}
               >
                 No fields yet. Click &ldquo;Add Field&rdquo; below to start.
@@ -532,7 +532,7 @@ const AdminFormBuilder = memo(() => {
                   <div key={`${f.key}-${idx}`}>
                     {/* Field row */}
                     <div
-                      className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl transition-colors"
+                      className="flex items-center gap-2.5 rounded-xl px-3 py-2.5 transition-colors"
                       style={{
                         backgroundColor:
                           editIdx === idx
@@ -543,7 +543,7 @@ const AdminFormBuilder = memo(() => {
                     >
                       {/* Type badge */}
                       <span
-                        className="flex items-center gap-1.5 px-2 py-1 rounded-lg text-xs font-medium shrink-0"
+                        className="flex shrink-0 items-center gap-1.5 rounded-lg px-2 py-1 text-xs font-medium"
                         style={{
                           backgroundColor: 'var(--accent-soft)',
                           color: 'var(--accent)',
@@ -556,15 +556,15 @@ const AdminFormBuilder = memo(() => {
                       </span>
 
                       {/* Label + key */}
-                      <div className="flex-1 min-w-0">
+                      <div className="min-w-0 flex-1">
                         <p
-                          className="text-sm font-medium truncate"
+                          className="truncate text-sm font-medium"
                           style={{ color: 'var(--text-primary)' }}
                         >
                           {f.label}
                         </p>
                         <p
-                          className="text-xs font-mono"
+                          className="font-mono text-xs"
                           style={{ color: 'var(--text-muted)' }}
                         >
                           {f.key}
@@ -572,10 +572,10 @@ const AdminFormBuilder = memo(() => {
                       </div>
 
                       {/* Badges */}
-                      <div className="hidden sm:flex items-center gap-1.5 shrink-0">
+                      <div className="hidden shrink-0 items-center gap-1.5 sm:flex">
                         {f.required && (
                           <span
-                            className="text-xs px-1.5 py-0.5 rounded"
+                            className="rounded px-1.5 py-0.5 text-xs"
                             style={{
                               backgroundColor: 'rgba(239,68,68,0.12)',
                               color: '#ef4444',
@@ -585,7 +585,7 @@ const AdminFormBuilder = memo(() => {
                           </span>
                         )}
                         <span
-                          className="text-xs px-1.5 py-0.5 rounded"
+                          className="rounded px-1.5 py-0.5 text-xs"
                           style={{
                             backgroundColor: 'var(--glass-bg)',
                             color: 'var(--text-muted)',
@@ -597,12 +597,12 @@ const AdminFormBuilder = memo(() => {
                       </div>
 
                       {/* Controls */}
-                      <div className="flex items-center gap-1 shrink-0">
+                      <div className="flex shrink-0 items-center gap-1">
                         <button
                           type="button"
                           onClick={() => move(idx, -1)}
                           disabled={idx === 0}
-                          className="w-7 h-7 flex items-center justify-center rounded-lg disabled:opacity-25"
+                          className="flex h-7 w-7 items-center justify-center rounded-lg disabled:opacity-25"
                           style={{
                             backgroundColor: 'var(--glass-bg)',
                             color: 'var(--text-muted)',
@@ -614,7 +614,7 @@ const AdminFormBuilder = memo(() => {
                           type="button"
                           onClick={() => move(idx, 1)}
                           disabled={idx === fields.length - 1}
-                          className="w-7 h-7 flex items-center justify-center rounded-lg disabled:opacity-25"
+                          className="flex h-7 w-7 items-center justify-center rounded-lg disabled:opacity-25"
                           style={{
                             backgroundColor: 'var(--glass-bg)',
                             color: 'var(--text-muted)',
@@ -625,7 +625,7 @@ const AdminFormBuilder = memo(() => {
                         <button
                           type="button"
                           onClick={() => startEdit(idx)}
-                          className="w-7 h-7 flex items-center justify-center rounded-lg"
+                          className="flex h-7 w-7 items-center justify-center rounded-lg"
                           style={{
                             backgroundColor:
                               editIdx === idx
@@ -642,7 +642,7 @@ const AdminFormBuilder = memo(() => {
                         <button
                           type="button"
                           onClick={() => deleteField(idx)}
-                          className="w-7 h-7 flex items-center justify-center rounded-lg"
+                          className="flex h-7 w-7 items-center justify-center rounded-lg"
                           style={{
                             backgroundColor: 'rgba(239,68,68,0.1)',
                             color: '#ef4444',
@@ -676,7 +676,7 @@ const AdminFormBuilder = memo(() => {
             {editIdx === -1 && (
               <div className="mb-4">
                 <p
-                  className="text-xs font-semibold mb-2"
+                  className="mb-2 text-xs font-semibold"
                   style={{ color: 'var(--text-muted)' }}
                 >
                   NEW FIELD
@@ -697,7 +697,7 @@ const AdminFormBuilder = memo(() => {
             <button
               type="button"
               onClick={startAdd}
-              className="flex items-center justify-center gap-2 w-full py-3 rounded-xl text-sm font-medium"
+              className="flex w-full items-center justify-center gap-2 rounded-xl py-3 text-sm font-medium"
               style={{
                 backgroundColor: 'var(--glass-bg-raised)',
                 border: '2px dashed var(--glass-border)',

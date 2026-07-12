@@ -36,13 +36,11 @@ const MobileNavItem: React.FC<MobileNavItemProps> = memo(
           ease: 'easeOut',
         }}
         onClick={handleClick}
-        className={`w-full text-left px-6 py-4 text-xs font-semibold tracking-widest uppercase
-          border-b border-[var(--border)] transition-colors duration-200
-          ${
-            isActive
-              ? 'text-[var(--accent)] bg-sky-500/10'
-              : 'text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-raised)]'
-          }`}
+        className={`w-full border-b border-[var(--border)] px-6 py-4 text-left text-xs font-semibold uppercase tracking-widest transition-colors duration-200 ${
+          isActive
+            ? 'bg-sky-500/10 text-[var(--accent)]'
+            : 'text-[var(--text-muted)] hover:bg-[var(--bg-raised)] hover:text-[var(--text-primary)]'
+        }`}
       >
         {nav}
       </motion.button>
@@ -70,7 +68,7 @@ const MobileNavigation: React.FC = memo(() => {
           whileTap={{ scale: 0.9 }}
           onClick={toggle}
           aria-label="Toggle navigation"
-          className="text-[var(--text-muted)] hover:text-[var(--text-primary)] text-2xl focus:outline-none transition-colors"
+          className="text-2xl text-[var(--text-muted)] transition-colors hover:text-[var(--text-primary)] focus:outline-none"
         >
           {isOpen ? (
             <ReactIcon name="RiCloseLine" size={24} />
@@ -91,7 +89,7 @@ const MobileNavigation: React.FC = memo(() => {
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.25 }}
                 onClick={close}
-                className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[99]"
+                className="fixed inset-0 z-[99] bg-black/40 backdrop-blur-sm"
               />
               <motion.div
                 key="drawer"
@@ -103,15 +101,15 @@ const MobileNavigation: React.FC = memo(() => {
                   backgroundColor: theme === 'dark' ? '#0f172a' : '#ffffff',
                   borderColor: 'var(--border)',
                 }}
-                className="fixed top-0 right-0 h-full w-72 border-l z-[100] flex flex-col shadow-2xl"
+                className="fixed right-0 top-0 z-[100] flex h-full w-72 flex-col border-l shadow-2xl"
               >
                 <div
                   style={{ borderColor: 'var(--border)' }}
-                  className="flex items-center justify-between px-6 py-5 border-b"
+                  className="flex items-center justify-between border-b px-6 py-5"
                 >
                   <button
                     type="button"
-                    className="bg-transparent border-0 p-0 cursor-pointer"
+                    className="cursor-pointer border-0 bg-transparent p-0"
                     onClick={() => {
                       navigate('/');
                       close();
@@ -132,10 +130,7 @@ const MobileNavigation: React.FC = memo(() => {
                       whileTap={{ scale: 0.9 }}
                       onClick={toggleTheme}
                       aria-label="Toggle theme"
-                      className="w-8 h-8 flex items-center justify-center rounded
-                      text-[var(--text-muted)] hover:text-[var(--accent)]
-                      bg-[var(--bg-raised)] border border-[var(--border)]
-                      transition-colors text-base"
+                      className="flex h-8 w-8 items-center justify-center rounded border border-[var(--border)] bg-[var(--bg-raised)] text-base text-[var(--text-muted)] transition-colors hover:text-[var(--accent)]"
                     >
                       {theme === 'dark' ? (
                         <ReactIcon name="RiSunLine" size={16} />
@@ -147,14 +142,14 @@ const MobileNavigation: React.FC = memo(() => {
                       type="button"
                       whileTap={{ scale: 0.9 }}
                       onClick={close}
-                      className="text-[var(--text-muted)] hover:text-[var(--text-primary)] text-2xl transition-colors"
+                      className="text-2xl text-[var(--text-muted)] transition-colors hover:text-[var(--text-primary)]"
                     >
                       <ReactIcon name="RiCloseLine" size={24} />
                     </motion.button>
                   </div>
                 </div>
 
-                <nav className="flex flex-col mt-2">
+                <nav className="mt-2 flex flex-col">
                   {navData.map((item, i) => (
                     <MobileNavItem
                       key={i}
@@ -173,12 +168,12 @@ const MobileNavigation: React.FC = memo(() => {
 
                 <div
                   style={{ borderColor: 'var(--border)' }}
-                  className="mt-auto px-6 py-6 border-t"
+                  className="mt-auto border-t px-6 py-6"
                 >
-                  <p className="text-[var(--text-muted)] text-[10px] tracking-widest uppercase">
+                  <p className="text-[10px] uppercase tracking-widest text-[var(--text-muted)]">
                     {info.name}
                   </p>
-                  <p className="text-[var(--text-muted)] opacity-60 text-[10px] mt-1">
+                  <p className="mt-1 text-[10px] text-[var(--text-muted)] opacity-60">
                     {info.tagline}
                   </p>
                 </div>

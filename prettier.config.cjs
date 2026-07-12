@@ -10,6 +10,8 @@ const config = {
   arrowParens: 'always', // Always include parentheses for arrow function arguments
   jsxSingleQuote: false, // Use double quotes in JSX
   endOfLine: 'lf', // Use LF line endings
+  // Auto-sort Tailwind classes into the canonical order (must be last plugin).
+  plugins: ['prettier-plugin-tailwindcss'],
 };
 
 module.exports = config;
