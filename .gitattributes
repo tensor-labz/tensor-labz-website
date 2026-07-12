@@ -19,3 +19,13 @@
 *.webm  binary
 *.pdf   binary
 *.zip   binary
+
+# Shell scripts must stay LF even on Windows checkouts (they run in bash/CI)
+*.sh text eol=lf
+
+# Lockfile is generated — collapse in diffs, exclude from language stats
+package-lock.json linguist-generated=true
+
+# Vendored submodules — exclude from GitHub language statistics
+docs/**         linguist-vendored
+image-lambda/** linguist-vendored
