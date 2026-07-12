@@ -354,14 +354,6 @@ export const MODULES: ModuleConfig[] = [
         span: 'half',
       },
       {
-        key: 'slug',
-        label: 'Slug',
-        type: 'text',
-        required: true,
-        span: 'half',
-        placeholder: 'my-post',
-      },
-      {
         key: 'status',
         label: 'Status',
         type: 'radio',

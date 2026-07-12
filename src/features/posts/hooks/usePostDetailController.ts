@@ -2,26 +2,26 @@ import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import {
-  loadPostBySlug,
+  loadPostById,
   clearSelectedPost,
   selectSelectedPost,
   selectPostDetailStatus,
 } from '../../../store/postSlice';
 
 export const usePostDetailController = () => {
-  const { slug } = useParams<{ slug: string }>();
+  const { id } = useParams<{ id: string }>();
   const dispatch = useAppDispatch();
   const post = useAppSelector(selectSelectedPost);
   const status = useAppSelector(selectPostDetailStatus);
 
   useEffect(() => {
-    if (slug) {
-      dispatch(loadPostBySlug(slug));
+    if (id) {
+      dispatch(loadPostById(id));
     }
     return () => {
       dispatch(clearSelectedPost());
     };
-  }, [slug, dispatch]);
+  }, [id, dispatch]);
 
   return {
     post,

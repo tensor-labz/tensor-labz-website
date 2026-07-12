@@ -1,22 +1,17 @@
-import { supabase } from '../lib/supabase';
 import type { ServiceCardProps } from '../shared/types/service';
+import { listServices } from './firebase/servicesRepo';
 
 export const fetchServices = async (
   signal?: AbortSignal
 ): Promise<ServiceCardProps[]> => {
-  const { data, error } = await supabase
-    .from('services')
-    .select('*')
-    .order('sort_order', { ascending: true })
-    .order('id', { ascending: true })
-    .abortSignal(signal!);
-  if (error) throw new Error(error.message);
-  return (data ?? []).map((row) => ({
-    id: row.id,
-    slug: row.slug,
-    service_name: row.title,
-    description: row.description,
-    icon: row.imageurl ?? '',
-    show_in_home: row.show_in_home,
-  })) as ServiceCardProps[];
+  void signal; // Firestore one-shot read; AbortSignal not applicable
+  const rows = await listServices();
+  return rows.map((r) => ({
+    id: r.id,
+    slug: r.slug,
+    service_name: r.title,
+    description: r.description,
+    icon: r.imageURL ?? '',
+    show_in_home: r.show_in_home,
+  }));
 };

@@ -15,6 +15,11 @@ import CoverTypeSelect from '../../../shared/components/ui/CoverTypeSelect';
 import SocialPlatformSelect from '../../../shared/components/ui/SocialPlatformSelect';
 import Breadcrumbs from '../../../shared/components/ui/Breadcrumbs';
 import { supabase } from '../../../lib/supabase';
+import { auth } from '../../../lib/firebase';
+import {
+  isFirestoreModule,
+  FIRESTORE_REPOS,
+} from '../../../services/firebase/registry';
 import { uploadImage, moduleFolder } from '../../../lib/imageUpload';
 import { uploadAvatar } from '../../../lib/supabaseStorage';
 import { detectCoverType, toYouTubeEmbed } from '../../../services/postService';
@@ -172,10 +177,7 @@ export const ImageField = ({
       try {
         let publicUrl: string;
         if (storageBackend === 'supabase') {
-          const uid =
-            userId ??
-            (await supabase.auth.getUser()).data.user?.id ??
-            'unknown';
+          const uid = userId ?? auth.currentUser?.uid ?? 'unknown';
           publicUrl = await uploadAvatar(file, uid);
         } else {
           ({ publicUrl } = await uploadImage(
@@ -1017,16 +1019,20 @@ const SubRecordsField = ({
   config,
   value,
   onChange,
+  skipFetch,
 }: {
   parentId: number | string | null;
   config: SubRecordConfig;
   value: SubRow[];
   onChange: (rows: SubRow[]) => void;
+  skipFetch?: boolean;
 }) => {
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
-    if (!parentId || loaded) return;
+    // Firestore-backed modules carry subrecords inline (already in `value`);
+    // never fetch them from a Supabase child table.
+    if (!parentId || loaded || skipFetch) return;
     supabase
       .from(config.table)
       .select('*')
@@ -1219,19 +1225,28 @@ const RelationSelect = ({
   useEffect(() => {
     if (!relation) return;
     const vf = relation.valueField ?? 'id';
-    supabase
-      .from(relation.table)
-      .select('*')
-      .order(vf)
-      .then(({ data }) => {
-        if (!data) return;
-        setOpts(
-          data.map((row) => ({
-            value: String(row[vf] ?? ''),
-            label: String(row[relation.labelField] ?? row[vf] ?? ''),
-          }))
-        );
-      });
+    const load = async () => {
+      let rows: Record<string, unknown>[] = [];
+      if (isFirestoreModule(relation.table)) {
+        rows = (await FIRESTORE_REPOS[relation.table].list()) as Record<
+          string,
+          unknown
+        >[];
+      } else {
+        const { data } = await supabase
+          .from(relation.table)
+          .select('*')
+          .order(vf);
+        rows = (data ?? []) as Record<string, unknown>[];
+      }
+      setOpts(
+        rows.map((row) => ({
+          value: String(row[vf] ?? ''),
+          label: String(row[relation.labelField] ?? row[vf] ?? ''),
+        }))
+      );
+    };
+    load();
   }, [relation]);
 
   return (
@@ -1400,6 +1415,7 @@ const Field = ({
   folder,
   parentId,
   userId,
+  skipSubFetch,
 }: {
   field: FieldConfig;
   value: unknown;
@@ -1409,6 +1425,7 @@ const Field = ({
   folder: string;
   parentId?: number | string | null;
   userId?: string | null;
+  skipSubFetch?: boolean;
 }) => {
   const str = String(value ?? '');
 
@@ -1462,6 +1479,7 @@ const Field = ({
         config={field.subRecordConfig}
         value={Array.isArray(value) ? (value as SubRow[]) : []}
         onChange={(v) => onChange(v)}
+        skipFetch={skipSubFetch}
       />
     );
 
@@ -1686,6 +1704,8 @@ const AdminCrudForm = memo(() => {
 
   const mod = MODULES.find((m) => m.id === moduleId);
   const tableId = mod?.table;
+  // Firestore-backed modules embed subrecords (no Supabase child-table sync).
+  const firestoreBacked = isFirestoreModule(tableId ?? moduleId);
   const currentUid = useAppSelector(selectCurrentUid);
 
   // Handles both integer ids ("3") and UUID ids ("some-uuid-string")
@@ -1797,10 +1817,15 @@ const AdminCrudForm = memo(() => {
     setSaving(true);
     setSaveError(null);
 
-    // Strip subrecords + action fields from the main record payload
+    // Strip action fields from the main payload. Subrecords are stripped only
+    // for Supabase modules (synced separately); Firestore modules embed them.
     const subRecordKeys = new Set(
       allFields
-        .filter((f) => f.type === 'subrecords' || f.type === 'resetpassword')
+        .filter(
+          (f) =>
+            (f.type === 'subrecords' && !firestoreBacked) ||
+            f.type === 'resetpassword'
+        )
         .map((f) => f.key)
     );
     const mainValues = Object.fromEntries(
@@ -1820,7 +1845,7 @@ const AdminCrudForm = memo(() => {
         ).unwrap();
         parentId = parsedId!;
       }
-      await syncSubRecords(parentId as number | string);
+      if (!firestoreBacked) await syncSubRecords(parentId as number | string);
 
       // If editing the currently logged-in user's own profile, sync auth metadata
       if (moduleId === 'users' && String(parsedId) === currentUid) {
@@ -2090,6 +2115,7 @@ const AdminCrudForm = memo(() => {
                             }
                             parentId={isNew ? null : parsedId}
                             userId={String(parsedId ?? currentUid ?? '')}
+                            skipSubFetch={firestoreBacked}
                           />
                         </>
                       )}

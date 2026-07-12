@@ -1,19 +1,16 @@
-import { supabase } from '../lib/supabase';
+import { createFlatRepo } from './firebase/flatRepo';
 
 export interface SocialLink {
-  id: number;
+  id: string | number;
   social_media: string;
   value: string;
 }
 
+const socialRepo = createFlatRepo('social');
+
 export const fetchSocialLinks = async (
-  signal?: AbortSignal
+  _signal?: AbortSignal
 ): Promise<SocialLink[]> => {
-  const { data, error } = await supabase
-    .from('social')
-    .select('*')
-    .order('id')
-    .abortSignal(signal!);
-  if (error) throw new Error(error.message);
-  return (data ?? []) as SocialLink[];
+  void _signal; // Firestore one-shot read
+  return (await socialRepo.list()) as unknown as SocialLink[];
 };

@@ -7,6 +7,7 @@ import {
   type PayloadAction,
 } from '@reduxjs/toolkit';
 import { supabase } from '../lib/supabase';
+import { FIRESTORE_REPOS } from '../services/firebase/registry';
 import type { RootState } from '../app/store';
 
 /* ── Types ─────────────────────────────────────────────────────────────── */
@@ -53,6 +54,11 @@ export const fetchRecords = createAsyncThunk(
   'admin/fetchRecords',
   async ({ moduleId, tableId }: { moduleId: string; tableId?: string }) => {
     const tid = tableId ?? moduleId;
+    const repo = FIRESTORE_REPOS[tid];
+    if (repo) {
+      const records = await repo.list();
+      return { moduleId, records: records as unknown as AdminRecord[] };
+    }
     const { data, error } = await supabase.from(tid).select('*').order('id');
     if (error) throw new Error(error.message);
     return { moduleId, records: (data ?? []) as AdminRecord[] };
@@ -73,6 +79,12 @@ export const fetchRecord = createAsyncThunk(
     if (!id || (typeof id === 'number' && isNaN(id)))
       throw new Error('Invalid record id');
     const tid = tableId ?? moduleId;
+    const repo = FIRESTORE_REPOS[tid];
+    if (repo) {
+      const record = await repo.get(String(id));
+      if (!record) throw new Error('Record not found');
+      return { moduleId, record: record as unknown as AdminRecord };
+    }
     const { data, error } = await supabase
       .from(tid)
       .select('*')
@@ -85,16 +97,25 @@ export const fetchRecord = createAsyncThunk(
 
 export const createRecord = createAsyncThunk(
   'admin/createRecord',
-  async ({
-    moduleId,
-    data,
-    tableId,
-  }: {
-    moduleId: string;
-    data: Record<string, unknown>;
-    tableId?: string;
-  }) => {
+  async (
+    {
+      moduleId,
+      data,
+      tableId,
+    }: {
+      moduleId: string;
+      data: Record<string, unknown>;
+      tableId?: string;
+    },
+    { getState }
+  ) => {
     const tid = tableId ?? moduleId;
+    const repo = FIRESTORE_REPOS[tid];
+    if (repo) {
+      const by = (getState() as RootState).auth.user?.email ?? 'admin';
+      const record = await repo.create(data, by);
+      return { moduleId, record: record as unknown as AdminRecord };
+    }
     const { data: result, error } = await supabase
       .from(tid)
       .insert(data)
@@ -107,18 +128,27 @@ export const createRecord = createAsyncThunk(
 
 export const updateRecord = createAsyncThunk(
   'admin/updateRecord',
-  async ({
-    moduleId,
-    id,
-    data,
-    tableId,
-  }: {
-    moduleId: string;
-    id: number | string;
-    data: Record<string, unknown>;
-    tableId?: string;
-  }) => {
+  async (
+    {
+      moduleId,
+      id,
+      data,
+      tableId,
+    }: {
+      moduleId: string;
+      id: number | string;
+      data: Record<string, unknown>;
+      tableId?: string;
+    },
+    { getState }
+  ) => {
     const tid = tableId ?? moduleId;
+    const repo = FIRESTORE_REPOS[tid];
+    if (repo) {
+      const by = (getState() as RootState).auth.user?.email ?? 'admin';
+      const record = await repo.update(String(id), data, by);
+      return { moduleId, record: record as unknown as AdminRecord };
+    }
     const { data: result, error } = await supabase
       .from(tid)
       .update(data)
@@ -148,6 +178,11 @@ export const deleteRecord = createAsyncThunk(
       await deleteImages(imageKeys).catch(() => {});
     }
     const tid = tableId ?? moduleId;
+    const repo = FIRESTORE_REPOS[tid];
+    if (repo) {
+      await repo.remove(String(id));
+      return { moduleId, id };
+    }
     const { error } = await supabase.from(tid).delete().eq('id', id);
     if (error) throw new Error(error.message);
     return { moduleId, id };
@@ -165,6 +200,14 @@ export const fetchRelationOptions = createAsyncThunk(
     labelField: string;
     valueField?: string;
   }) => {
+    const repo = FIRESTORE_REPOS[table];
+    if (repo) {
+      const records = (await repo.list()) as Array<Record<string, unknown>>;
+      return records.map((r) => ({
+        [valueField]: r[valueField],
+        [labelField]: r[labelField],
+      }));
+    }
     const { data, error } = await supabase
       .from(table)
       .select(`${valueField}, ${labelField}`)

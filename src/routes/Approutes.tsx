@@ -18,9 +18,9 @@ export default function AppRoutes() {
       <Route path="/contact-us" element={<ContactUs />} />
       <Route path="/services" element={<Services />} />
       <Route path="/services/:slug" element={<Services />} />
-      <Route path="/project/:slug" element={<Project />} />
+      <Route path="/project/:id" element={<Project />} />
       <Route path="/posts" element={<Posts />} />
-      <Route path="/posts/:slug" element={<PostDetail />} />
+      <Route path="/posts/:id" element={<PostDetail />} />
       <Route path="/login" element={<Login />} />
       <Route
         path="/admin/*"

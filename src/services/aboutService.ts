@@ -1,19 +1,16 @@
-import { supabase } from '../lib/supabase';
+import { createFlatRepo } from './firebase/flatRepo';
 
 export interface AboutItem {
-  id: number;
+  id: string | number;
   components: string;
   value: string;
 }
 
+const aboutRepo = createFlatRepo('about');
+
 export const fetchAboutData = async (
-  signal?: AbortSignal
+  _signal?: AbortSignal
 ): Promise<AboutItem[]> => {
-  const { data, error } = await supabase
-    .from('about')
-    .select('*')
-    .order('id')
-    .abortSignal(signal!);
-  if (error) throw new Error(error.message);
-  return (data ?? []) as AboutItem[];
+  void _signal; // Firestore one-shot read
+  return (await aboutRepo.list()) as unknown as AboutItem[];
 };
