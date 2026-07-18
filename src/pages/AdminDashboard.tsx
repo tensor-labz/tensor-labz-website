@@ -4,7 +4,6 @@ import { Routes, Route, Link, useNavigate } from 'react-router-dom';
 import ReactIcon from '../shared/components/ui/ReactIcon';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
 import { signOut, selectAuthUser } from '../store/authSlice';
-import { useTheme } from '../shared/hooks/useTheme';
 import AdminSidebar from '../features/admin/components/AdminSidebar';
 import AdminOverview from '../features/admin/components/AdminOverview';
 import AdminDataTable from '../features/admin/components/AdminDataTable';
@@ -21,9 +20,8 @@ const AdminDashboard = memo(() => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const user = useAppSelector(selectAuthUser);
-  const { theme, toggleTheme } = useTheme();
   const info = useCompanyInfo();
-  const logoSrc = resolveLogo(info, theme, logo);
+  const logoSrc = resolveLogo(info, logo);
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const handleSignOut = async () => {
@@ -76,24 +74,6 @@ const AdminDashboard = memo(() => {
           <span className="hidden text-xs text-muted sm:block">
             {user?.displayName || user?.email}
           </span>
-
-          <motion.button
-            whileTap={{ scale: 0.88 }}
-            onClick={toggleTheme}
-            aria-label="Toggle theme"
-            className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-base"
-            style={{
-              backgroundColor: 'var(--bg-raised)',
-              border: '1px solid var(--border)',
-              color: 'var(--text-muted)',
-            }}
-          >
-            {theme === 'dark' ? (
-              <ReactIcon name="RiSunLine" size={16} />
-            ) : (
-              <ReactIcon name="RiMoonLine" size={16} />
-            )}
-          </motion.button>
 
           <motion.button
             whileTap={{ scale: 0.96 }}

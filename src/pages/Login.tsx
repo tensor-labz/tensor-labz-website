@@ -3,7 +3,6 @@ import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import ReactIcon from '../shared/components/ui/ReactIcon';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
-import { useTheme } from '../shared/hooks/useTheme';
 import {
   signIn,
   clearError,
@@ -67,7 +66,6 @@ const Login = () => {
   const status = useAppSelector(selectAuthStatus);
   const error = useAppSelector(selectAuthError);
   const isAuthenticated = useAppSelector(selectIsAuthenticated);
-  const { theme, toggleTheme } = useTheme();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -95,7 +93,7 @@ const Login = () => {
   };
 
   const info = useCompanyInfo();
-  const logoSrc = resolveLogo(info, theme, logo);
+  const logoSrc = resolveLogo(info, logo);
   const isLoading = status === 'loading';
 
   const errorMsg = !error
@@ -137,20 +135,6 @@ const Login = () => {
   return (
     <div className="flex min-h-screen bg-canvas">
       <HeaderHelmet title="Admin Login" />
-
-      {/* Theme toggle */}
-      <motion.button
-        whileTap={{ scale: 0.88 }}
-        onClick={toggleTheme}
-        aria-label="Toggle theme"
-        className="fixed right-4 top-4 z-50 flex h-9 w-9 items-center justify-center rounded-lg border border-rim bg-raised text-muted"
-      >
-        {theme === 'dark' ? (
-          <ReactIcon name="RiSunLine" size={16} />
-        ) : (
-          <ReactIcon name="RiMoonLine" size={16} />
-        )}
-      </motion.button>
 
       {/* ══════════════════════════════════════════
           LEFT — atmospheric engineering panel

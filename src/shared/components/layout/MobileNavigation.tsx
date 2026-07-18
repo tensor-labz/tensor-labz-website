@@ -5,7 +5,6 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import ReactIcon from '../ui/ReactIcon';
 import navData from '../../../data/nav_data';
 import logo from '../../../assets/images/logo.png';
-import { useTheme } from '../../hooks/useTheme';
 import { useCompanyInfo, resolveLogo } from '../../hooks/useCompanyInfo';
 
 interface MobileNavItemProps {
@@ -54,7 +53,6 @@ const MobileNavigation: React.FC = memo(() => {
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
   const { pathname } = useLocation();
-  const { theme, toggleTheme } = useTheme();
   const info = useCompanyInfo();
 
   const close = () => setIsOpen(false);
@@ -98,7 +96,7 @@ const MobileNavigation: React.FC = memo(() => {
                 exit={{ x: '100%' }}
                 transition={{ type: 'spring', damping: 28, stiffness: 280 }}
                 style={{
-                  backgroundColor: theme === 'dark' ? '#0f172a' : '#ffffff',
+                  backgroundColor: 'var(--bg-surface)',
                   borderColor: 'var(--border)',
                 }}
                 className="fixed right-0 top-0 z-[100] flex h-full w-72 flex-col border-l shadow-2xl"
@@ -116,7 +114,7 @@ const MobileNavigation: React.FC = memo(() => {
                     }}
                   >
                     <img
-                      src={resolveLogo(info, theme, logo)}
+                      src={resolveLogo(info, logo)}
                       alt={info.name}
                       className="h-9 w-auto object-contain"
                       onError={(e) => {
@@ -124,29 +122,14 @@ const MobileNavigation: React.FC = memo(() => {
                       }}
                     />
                   </button>
-                  <div className="flex items-center gap-2">
-                    <motion.button
-                      type="button"
-                      whileTap={{ scale: 0.9 }}
-                      onClick={toggleTheme}
-                      aria-label="Toggle theme"
-                      className="flex h-8 w-8 items-center justify-center rounded border border-[var(--border)] bg-[var(--bg-raised)] text-base text-[var(--text-muted)] transition-colors hover:text-[var(--accent)]"
-                    >
-                      {theme === 'dark' ? (
-                        <ReactIcon name="RiSunLine" size={16} />
-                      ) : (
-                        <ReactIcon name="RiMoonLine" size={16} />
-                      )}
-                    </motion.button>
-                    <motion.button
-                      type="button"
-                      whileTap={{ scale: 0.9 }}
-                      onClick={close}
-                      className="text-2xl text-[var(--text-muted)] transition-colors hover:text-[var(--text-primary)]"
-                    >
-                      <ReactIcon name="RiCloseLine" size={24} />
-                    </motion.button>
-                  </div>
+                  <motion.button
+                    type="button"
+                    whileTap={{ scale: 0.9 }}
+                    onClick={close}
+                    className="text-2xl text-[var(--text-muted)] transition-colors hover:text-[var(--text-primary)]"
+                  >
+                    <ReactIcon name="RiCloseLine" size={24} />
+                  </motion.button>
                 </div>
 
                 <nav className="mt-2 flex flex-col">

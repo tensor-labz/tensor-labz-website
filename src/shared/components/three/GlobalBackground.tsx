@@ -1,6 +1,5 @@
 import { useEffect, useRef, memo } from 'react';
 import * as THREE from 'three';
-import { useTheme } from '../../hooks/useTheme';
 
 /**
  * ONE animation — every page.
@@ -14,13 +13,10 @@ const BASE_SPEED = 0.00065;
 
 const GlobalBackground: React.FC = memo(() => {
   const mountRef = useRef<HTMLDivElement>(null);
-  const { theme } = useTheme();
 
   useEffect(() => {
     const mount = mountRef.current;
     if (!mount) return;
-
-    const isDark = theme === 'dark';
 
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
@@ -37,9 +33,9 @@ const GlobalBackground: React.FC = memo(() => {
     );
     camera.position.z = 2.0;
 
-    const accent = isDark ? 0x38bdf8 : 0x0ea5e9;
-    const dotOpacity = isDark ? 0.5 : 0.35;
-    const lineOpacity = isDark ? 0.13 : 0.09;
+    const accent = 0x38bdf8;
+    const dotOpacity = 0.5;
+    const lineOpacity = 0.13;
 
     interface P {
       x: number;
@@ -155,7 +151,7 @@ const GlobalBackground: React.FC = memo(() => {
       if (mount.contains(renderer.domElement))
         mount.removeChild(renderer.domElement);
     };
-  }, [theme]);
+  }, []);
 
   return (
     <div

@@ -1,37 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Exo:ital,wght@0,100..900;1,100..900&family=Syne:wght@400;500;600;700;800&display=swap');
 @import './customtailwind.css';
 
-/* ─── Theme tokens ─────────────────────────────────────── */
+/* ─── Theme tokens (dark only) ──────────────────────────── */
 :root {
-  /* light mode defaults */
-  --bg-base: #f8fafc; /* slate-50  */
-  --grid-dot: rgba(100, 116, 139, 0.1); /* slate-500 @ 10% */
-  --bg-surface: #ffffff; /* white     */
-  --bg-raised: #f1f5f9; /* slate-100 */
-  --text-primary: #0f172a; /* slate-900 */
-  --text-muted: #64748b; /* slate-500 */
-  --accent: #0ea5e9; /* sky-500   */
-  --accent-soft: #e0f2fe; /* sky-100   */
-  --border: #e2e8f0; /* slate-200 */
-  --header-bg: rgba(255, 255, 255, 0.88);
-  --footer-bg: #0f172a;
-
-  /* glassmorphism — light */
-  --glass-bg: rgba(0, 0, 0, 0.03);
-  --glass-bg-subtle: rgba(0, 0, 0, 0.02);
-  --glass-bg-raised: rgba(0, 0, 0, 0.05);
-  --glass-bg-hover: rgba(0, 0, 0, 0.05);
-  --glass-bg-hover-strong: rgba(0, 0, 0, 0.09);
-  --glass-border: rgba(0, 0, 0, 0.09);
-  --glass-border-subtle: rgba(0, 0, 0, 0.06);
-  --glass-border-strong: rgba(0, 0, 0, 0.13);
-  --input-bg: rgba(0, 0, 0, 0.04);
-  --input-border: rgba(0, 0, 0, 0.13);
-  --tag-bg: rgba(0, 0, 0, 0.07);
-  --tag-border: rgba(0, 0, 0, 0.13);
-}
-
-.dark {
   --bg-base: #020617; /* slate-950 */
   --grid-dot: rgba(56, 189, 248, 0.05); /* accent-cyan @ 5% */
   --bg-surface: #0f172a; /* slate-900 */
@@ -44,7 +15,7 @@
   --header-bg: rgba(2, 6, 23, 0.88);
   --footer-bg: #020617;
 
-  /* glassmorphism — dark */
+  /* glassmorphism */
   --glass-bg: rgba(255, 255, 255, 0.04);
   --glass-bg-subtle: rgba(255, 255, 255, 0.03);
   --glass-bg-raised: rgba(255, 255, 255, 0.06);
