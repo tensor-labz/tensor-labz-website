@@ -1,7 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Exo:ital,wght@0,100..900;1,100..900&family=Syne:wght@400;500;600;700;800&display=swap');
 @import './customtailwind.css';
 
-/* ─── Theme tokens (dark only) ──────────────────────────── */
+/* ─── Theme palette (dark) — the source values behind the Tailwind
+       semantic tokens in tailwind.config.ts (fg, accent, surface, …).
+       Kept as CSS variables so tokens resolve app-wide. ─── */
 :root {
   --bg-base: #020617; /* slate-950 */
   --grid-dot: rgba(56, 189, 248, 0.05); /* accent-cyan @ 5% */
@@ -30,104 +32,80 @@
   --tag-border: rgba(255, 255, 255, 0.2);
 }
 
-/* ─── Smooth theme transition ───────────────────────────── */
-*,
-*::before,
-*::after {
-  transition-property: background-color, border-color, color;
-  transition-duration: 200ms;
-  transition-timing-function: ease;
+@layer base {
+  html {
+    @apply scroll-smooth;
+  }
+
+  body {
+    @apply bg-canvas font-sans text-fg;
+    background-image: radial-gradient(
+      rgba(56, 189, 248, 0.05) 1px,
+      transparent 1px
+    );
+    background-size: 24px 24px;
+  }
+
+  /* Smooth colour transitions app-wide */
+  *,
+  *::before,
+  *::after {
+    @apply transition-colors duration-200;
+  }
 }
 
-/* ─── Base ───────────────────────────────────────────────── */
-html {
-  scroll-behavior: smooth;
+@layer components {
+  /* Rendered rich-text (DOMPurified HTML) headings */
+  .project-content h1 {
+    @apply mb-4 font-display text-4xl font-bold text-fg;
+  }
+  .project-content h2 {
+    @apply mb-3 font-display text-3xl font-semibold text-fg;
+  }
+  .project-content h3 {
+    @apply mb-2.5 text-2xl font-medium;
+  }
+  .project-content h4 {
+    @apply mb-2 text-xl font-medium;
+  }
+
+  /* ── react-data-table-component overrides ──
+     Third-party DOM (DTC renders its own class names, needs !important);
+     not expressible as Tailwind utilities. Layout:
+       .dt-layout > [ResponsiveWrapper(.dt-fill), div(pagination)] */
+  .dt-layout {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  .dt-layout > .dt-fill {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto !important;
+    overflow-x: hidden;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .dt-layout > .dt-fill::-webkit-scrollbar {
+    display: none;
+  }
+  .dt-layout > div:not(.dt-fill) {
+    flex-shrink: 0;
+  }
+  .rdt_TableHead {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+  }
 }
 
-body {
-  background-color: var(--bg-base);
-  color: var(--text-primary);
-  font-family: 'Exo', sans-serif;
-  background-image: radial-gradient(var(--grid-dot) 1px, transparent 1px);
-  background-size: 24px 24px;
-}
-
-#root {
-  position: relative;
-  padding: 0;
-  margin: 0;
-}
-
-/* ─── Project content typography ────────────────────────── */
-.project-content h1 {
-  font-size: 2.5rem;
-  font-weight: 700;
-  margin-bottom: 1rem;
-  color: var(--text-primary);
-  font-family: 'Syne', sans-serif;
-}
-.project-content h2 {
-  font-size: 2rem;
-  font-weight: 600;
-  margin-bottom: 0.75rem;
-  font-family: 'Syne', sans-serif;
-}
-.project-content h3 {
-  font-size: 1.8rem;
-  font-weight: 500;
-  margin-bottom: 0.6rem;
-}
-/* ─── Admin DataTable: fixed header + fixed pagination ────────────────
- * DTC renders outside ResponsiveWrapper for pagination:
- *   .dt-layout > [ResponsiveWrapper(.dt-fill), div(pagination)]
- *
- * .dt-layout = our wrapper div  → flex column, full height
- * .dt-fill   = <DataTable className> → lands on ResponsiveWrapper
- *              flex-1, overrides DTC overflow-y:hidden so rows scroll
- * pagination div is a sibling of ResponsiveWrapper → flex-shrink:0
- * ── */
-.dt-layout {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-}
-
-/* ResponsiveWrapper: fills space, rows scroll, no scrollbar */
-.dt-layout > .dt-fill {
-  flex: 1;
-  min-height: 0;
-  overflow-y: auto !important;
-  overflow-x: hidden;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-.dt-layout > .dt-fill::-webkit-scrollbar {
-  display: none;
-}
-
-/* Pagination sibling: always pinned at the bottom */
-.dt-layout > div:not(.dt-fill) {
-  flex-shrink: 0;
-}
-
-/* Column header sticky within the ResponsiveWrapper scroll context */
-.rdt_TableHead {
-  position: sticky;
-  top: 0;
-  z-index: 1;
-}
-
-/* ─── Hide scrollbars while keeping scroll functional ───── */
-.no-scrollbar {
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-
-.project-content h4 {
-  font-size: 1.5rem;
-  font-weight: 500;
-  margin-bottom: 0.5rem;
+@layer utilities {
+  /* Hide scrollbars while keeping scroll functional */
+  .no-scrollbar {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
 }
