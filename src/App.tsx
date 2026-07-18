@@ -9,13 +9,7 @@ const App: React.FC = memo(() => {
   return (
     <ErrorBoundary>
       <AppProviders>
-        <div
-          className="relative flex min-h-screen flex-col"
-          style={{
-            backgroundColor: 'var(--bg-base)',
-            color: 'var(--text-primary)',
-          }}
-        >
+        <div className="relative flex min-h-screen flex-col bg-canvas text-fg">
           {/* Three.js background — fixed, always behind everything */}
           <Suspense fallback={null}>
             <GlobalBackground />

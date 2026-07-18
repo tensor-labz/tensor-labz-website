@@ -44,7 +44,7 @@ const ContentCard: React.FC<ContentCardProps> = memo(
         viewport={{ once: true, margin: '-40px' }}
         transition={{ duration: 0.55, ease: EASE_EXPO }}
         onClick={() => navigate(link)}
-        className={`hover:border-accent/40 group relative flex cursor-pointer flex-col overflow-hidden rounded-xl border border-rim bg-surface transition-all duration-300 hover:shadow-[0_8px_40px_-8px_rgba(56,189,248,0.12)] md:h-56 ${reverse ? 'md:flex-row-reverse' : 'md:flex-row'}`}
+        className={`group relative flex cursor-pointer flex-col overflow-hidden rounded-xl border border-rim bg-surface transition-all duration-300 hover:border-accent/40 hover:shadow-[0_8px_40px_-8px_rgba(56,189,248,0.12)] md:h-56 ${reverse ? 'md:flex-row-reverse' : 'md:flex-row'}`}
       >
         {/* ── Cover ── */}
         <div className="relative h-40 overflow-hidden bg-raised sm:h-48 md:h-auto md:w-[38%] md:shrink-0">
@@ -91,13 +91,13 @@ const ContentCard: React.FC<ContentCardProps> = memo(
               {tags.slice(0, 4).map((tag) => (
                 <span
                   key={tag}
-                  className="border-accent/25 bg-accent/5 rounded border px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider text-accent"
+                  className="rounded border border-accent/25 bg-accent/5 px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider text-accent"
                 >
                   {tag}
                 </span>
               ))}
               {tags.length > 4 && (
-                <span className="text-muted/50 self-center font-mono text-[10px]">
+                <span className="self-center font-mono text-[10px] text-muted/50">
                   +{tags.length - 4}
                 </span>
               )}
@@ -114,10 +114,10 @@ const ContentCard: React.FC<ContentCardProps> = memo(
             </p>
           )}
 
-          <div className="from-accent/20 hidden h-px bg-gradient-to-r via-rim to-transparent md:block" />
+          <div className="hidden h-px bg-gradient-to-r from-accent/20 via-rim to-transparent md:block" />
 
           <div className="mt-auto flex items-center justify-between border-t border-rim pt-2 md:mt-0 md:border-0 md:pt-0">
-            <span className="text-muted/50 font-mono text-[10px]">{date}</span>
+            <span className="font-mono text-[10px] text-muted/50">{date}</span>
             <ReactIcon
               name="FiArrowRight"
               size={14}
@@ -130,7 +130,7 @@ const ContentCard: React.FC<ContentCardProps> = memo(
         {(['tl', 'tr', 'bl', 'br'] as const).map((pos) => (
           <div
             key={pos}
-            className={`border-accent/30 group-hover:border-accent/70 pointer-events-none absolute z-10 h-3 w-3 opacity-0 transition-all duration-300 group-hover:h-4 group-hover:w-4 group-hover:opacity-100 ${pos === 'tl' ? 'left-2 top-2 border-l border-t' : ''} ${pos === 'tr' ? 'right-2 top-2 border-r border-t' : ''} ${pos === 'bl' ? 'bottom-2 left-2 border-b border-l' : ''} ${pos === 'br' ? 'bottom-2 right-2 border-b border-r' : ''}`}
+            className={`pointer-events-none absolute z-10 h-3 w-3 border-accent/30 opacity-0 transition-all duration-300 group-hover:h-4 group-hover:w-4 group-hover:border-accent/70 group-hover:opacity-100 ${pos === 'tl' ? 'left-2 top-2 border-l border-t' : ''} ${pos === 'tr' ? 'right-2 top-2 border-r border-t' : ''} ${pos === 'bl' ? 'bottom-2 left-2 border-b border-l' : ''} ${pos === 'br' ? 'bottom-2 right-2 border-b border-r' : ''}`}
           />
         ))}
       </motion.article>

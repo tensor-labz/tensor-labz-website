@@ -20,7 +20,7 @@ const PostDetail: React.FC = memo(() => {
               animate={{ rotate: 360 }}
               transition={{ duration: 0.9, repeat: Infinity, ease: 'linear' }}
             />
-            <p className="text-accent/60 font-mono text-[10px] uppercase tracking-widest">
+            <p className="font-mono text-[10px] uppercase tracking-widest text-accent/60">
               Loading post…
             </p>
           </div>

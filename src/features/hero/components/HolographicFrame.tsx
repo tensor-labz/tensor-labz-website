@@ -26,7 +26,7 @@ const cornerDelays: Record<CornerPos, number> = {
 
 const CornerBracket = memo(({ pos }: { pos: CornerPos }) => (
   <motion.div
-    className={`border-accent/70 pointer-events-none absolute z-30 h-5 w-5 ${cornerStyles[pos]}`}
+    className={`pointer-events-none absolute z-30 h-5 w-5 border-accent/70 ${cornerStyles[pos]}`}
     initial={{ opacity: 0, scale: 0.4 }}
     animate={{ opacity: 1, scale: 1 }}
     transition={{ delay: cornerDelays[pos], duration: 0.5, ease: EASE_EXPO }}
@@ -49,17 +49,17 @@ const HolographicFrame = memo(() => {
             animate={{ opacity: [1, 0.25, 1] }}
             transition={{ duration: 2.4, repeat: Infinity, ease: 'easeInOut' }}
           />
-          <span className="text-accent/70 select-none font-mono text-[9px] uppercase tracking-[0.22em]">
+          <span className="select-none font-mono text-[9px] uppercase tracking-[0.22em] text-accent/70">
             TL.SYSTEMS
           </span>
         </div>
-        <span className="text-muted/50 select-none font-mono text-[9px]">
+        <span className="select-none font-mono text-[9px] text-muted/50">
           DISPLAY-{String(currentIndex + 1).padStart(3, '0')}
         </span>
       </div>
 
       {/* ── main frame ── */}
-      <div className="border-accent/20 relative flex-1 overflow-hidden rounded-xl border">
+      <div className="relative flex-1 overflow-hidden rounded-xl border border-accent/20">
         {/* engineering grid overlay */}
         <div
           className="pointer-events-none absolute inset-0 z-[5]"
@@ -125,7 +125,7 @@ const HolographicFrame = memo(() => {
           <AnimatePresence mode="wait">
             <motion.p
               key={`ann-${currentIndex}`}
-              className="text-accent/80 mb-1.5 select-none font-mono text-[9px] uppercase tracking-[0.22em]"
+              className="mb-1.5 select-none font-mono text-[9px] uppercase tracking-[0.22em] text-accent/80"
               initial={{ opacity: 0, y: 6 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -6 }}
@@ -154,7 +154,7 @@ const HolographicFrame = memo(() => {
 
       {/* ── footer bar ── */}
       <div className="flex items-center justify-between px-0.5">
-        <span className="text-muted/40 select-none font-mono text-[9px]">
+        <span className="select-none font-mono text-[9px] text-muted/40">
           {'// FRAME'} {currentIndex + 1}/{slides.length || '—'}
         </span>
         <div className="flex items-center gap-1">
@@ -163,7 +163,7 @@ const HolographicFrame = memo(() => {
             animate={{ opacity: [1, 0.2, 1] }}
             transition={{ duration: 1.6, repeat: Infinity }}
           />
-          <span className="text-accent/60 select-none font-mono text-[9px]">
+          <span className="select-none font-mono text-[9px] text-accent/60">
             LIVE
           </span>
         </div>
