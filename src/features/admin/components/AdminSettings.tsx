@@ -992,7 +992,6 @@ FormBuilderLinks.displayName = 'FormBuilderLinks';
 const AdminSettings = memo(() => {
   const [activeSection, setActiveSection] = useState<SectionId>('general');
   const [accentPick, setAccentPick] = useState(0);
-  const [defaultTheme, setDefaultTheme] = useState<'light' | 'dark'>('dark');
   const [toast, setToast] = useState(false);
 
   const save = () => {
@@ -1125,39 +1124,6 @@ const AdminSettings = memo(() => {
                   sub="Default appearance for your admin panel"
                   onSave={save}
                 >
-                  <div>
-                    <label
-                      className="mb-2 block text-xs font-semibold"
-                      style={{ color: 'var(--text-muted)' }}
-                    >
-                      Default Theme
-                    </label>
-                    <div className="flex gap-3">
-                      {(['light', 'dark'] as const).map((t) => (
-                        <button
-                          key={t}
-                          onClick={() => setDefaultTheme(t)}
-                          className="flex-1 rounded-xl border py-2.5 text-sm font-medium capitalize transition-colors"
-                          style={
-                            defaultTheme === t
-                              ? {
-                                  backgroundColor: 'var(--accent)',
-                                  color: '#fff',
-                                  borderColor: 'var(--accent)',
-                                }
-                              : {
-                                  backgroundColor: 'var(--glass-bg-raised)',
-                                  color: 'var(--text-muted)',
-                                  borderColor: 'var(--glass-border)',
-                                }
-                          }
-                        >
-                          {t === 'light' ? '☀️ ' : '🌙 '}
-                          {t}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
                   <div>
                     <label
                       className="mb-2 block text-xs font-semibold"

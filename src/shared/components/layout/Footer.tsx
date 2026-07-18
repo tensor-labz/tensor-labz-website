@@ -89,7 +89,7 @@ const Footer = () => {
           <div className="flex flex-col items-center gap-5 sm:items-start">
             <Link to="/">
               <img
-                src={info.logo_url || logo}
+                src={info.logo_url_dark || info.logo_url || logo}
                 alt={info.name}
                 className="h-10 w-auto object-contain"
                 loading="lazy"
