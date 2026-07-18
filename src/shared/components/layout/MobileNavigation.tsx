@@ -35,10 +35,10 @@ const MobileNavItem: React.FC<MobileNavItemProps> = memo(
           ease: 'easeOut',
         }}
         onClick={handleClick}
-        className={`w-full border-b border-[var(--border)] px-6 py-4 text-left text-xs font-semibold uppercase tracking-widest transition-colors duration-200 ${
+        className={`w-full border-b border-rim px-6 py-4 text-left text-xs font-semibold uppercase tracking-widest transition-colors duration-200 ${
           isActive
-            ? 'bg-sky-500/10 text-[var(--accent)]'
-            : 'text-[var(--text-muted)] hover:bg-[var(--bg-raised)] hover:text-[var(--text-primary)]'
+            ? 'bg-sky-500/10 text-accent'
+            : 'text-muted hover:bg-raised hover:text-fg'
         }`}
       >
         {nav}
@@ -66,7 +66,7 @@ const MobileNavigation: React.FC = memo(() => {
           whileTap={{ scale: 0.9 }}
           onClick={toggle}
           aria-label="Toggle navigation"
-          className="text-2xl text-[var(--text-muted)] transition-colors hover:text-[var(--text-primary)] focus:outline-none"
+          className="text-2xl text-muted transition-colors hover:text-fg focus:outline-none"
         >
           {isOpen ? (
             <ReactIcon name="RiCloseLine" size={24} />
@@ -95,16 +95,9 @@ const MobileNavigation: React.FC = memo(() => {
                 animate={{ x: 0 }}
                 exit={{ x: '100%' }}
                 transition={{ type: 'spring', damping: 28, stiffness: 280 }}
-                style={{
-                  backgroundColor: 'var(--bg-surface)',
-                  borderColor: 'var(--border)',
-                }}
-                className="fixed right-0 top-0 z-[100] flex h-full w-72 flex-col border-l shadow-2xl"
+                className="fixed right-0 top-0 z-[100] flex h-full w-72 flex-col border-l border-rim bg-surface shadow-2xl"
               >
-                <div
-                  style={{ borderColor: 'var(--border)' }}
-                  className="flex items-center justify-between border-b px-6 py-5"
-                >
+                <div className="flex items-center justify-between border-b border-rim px-6 py-5">
                   <button
                     type="button"
                     className="cursor-pointer border-0 bg-transparent p-0"
@@ -126,7 +119,7 @@ const MobileNavigation: React.FC = memo(() => {
                     type="button"
                     whileTap={{ scale: 0.9 }}
                     onClick={close}
-                    className="text-2xl text-[var(--text-muted)] transition-colors hover:text-[var(--text-primary)]"
+                    className="text-2xl text-muted transition-colors hover:text-fg"
                   >
                     <ReactIcon name="RiCloseLine" size={24} />
                   </motion.button>
@@ -149,14 +142,11 @@ const MobileNavigation: React.FC = memo(() => {
                   ))}
                 </nav>
 
-                <div
-                  style={{ borderColor: 'var(--border)' }}
-                  className="mt-auto border-t px-6 py-6"
-                >
-                  <p className="text-[10px] uppercase tracking-widest text-[var(--text-muted)]">
+                <div className="mt-auto border-t border-rim px-6 py-6">
+                  <p className="text-[10px] uppercase tracking-widest text-muted">
                     {info.name}
                   </p>
-                  <p className="mt-1 text-[10px] text-[var(--text-muted)] opacity-60">
+                  <p className="mt-1 text-[10px] text-muted opacity-60">
                     {info.tagline}
                   </p>
                 </div>
