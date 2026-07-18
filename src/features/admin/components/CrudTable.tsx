@@ -141,26 +141,12 @@ const ImageCell = ({ src }: { src: string }) =>
       }}
     />
   ) : (
-    <div
-      className="h-10 w-10 flex-shrink-0 rounded-lg"
-      style={{ backgroundColor: 'var(--glass-bg-raised)' }}
-    />
+    <div className="h-10 w-10 flex-shrink-0 rounded-lg bg-glass-raised" />
   );
 
 /* ── Truncated text cell for long descriptions ── */
 const TextCell = ({ value }: { value: string }) => (
-  <span
-    className="text-xs"
-    style={{
-      color: 'var(--text-muted)',
-      display: '-webkit-box',
-      WebkitLineClamp: 2,
-      WebkitBoxOrient: 'vertical',
-      overflow: 'hidden',
-    }}
-  >
-    {value}
-  </span>
+  <span className="line-clamp-2 text-xs text-muted">{value}</span>
 );
 
 /* ── Loading skeleton ── */
@@ -169,11 +155,8 @@ const TableSkeleton = () => (
     {Array.from({ length: 5 }).map((_, i) => (
       <div
         key={i}
-        className="h-14 w-full"
-        style={{
-          backgroundColor: 'var(--glass-bg-raised)',
-          opacity: 1 - i * 0.12,
-        }}
+        className="h-14 w-full bg-glass-raised"
+        style={{ opacity: 1 - i * 0.12 }}
       />
     ))}
   </div>
@@ -198,10 +181,7 @@ const MobileCardList = ({
 
   if (!rows.length) {
     return (
-      <div
-        className="py-14 text-center text-sm"
-        style={{ color: 'var(--text-muted)' }}
-      >
+      <div className="py-14 text-center text-sm text-muted">
         {search ? `No results for "${search}"` : 'No records yet.'}
       </div>
     );
@@ -222,10 +202,7 @@ const MobileCardList = ({
           <div
             key={row.id as number}
             onClick={() => navigate(`/admin/${moduleId}/${row.id}`)}
-            className="flex cursor-pointer items-center gap-3 px-4 py-3 transition-colors"
-            style={{
-              borderTop: i > 0 ? '1px solid var(--glass-border)' : undefined,
-            }}
+            className={`flex cursor-pointer items-center gap-3 px-4 py-3 transition-colors ${i > 0 ? 'border-t border-glass-rim' : ''}`}
           >
             {imgSrc && (
               <img
@@ -238,25 +215,17 @@ const MobileCardList = ({
               />
             )}
             <div className="min-w-0 flex-1">
-              <p
-                className="truncate text-sm font-medium"
-                style={{ color: 'var(--text-primary)' }}
-              >
+              <p className="truncate text-sm font-medium text-fg">
                 {title || `#${row.id}`}
               </p>
               {desc && (
-                <p
-                  className="mt-0.5 truncate text-xs"
-                  style={{ color: 'var(--text-muted)' }}
-                >
-                  {desc}
-                </p>
+                <p className="mt-0.5 truncate text-xs text-muted">{desc}</p>
               )}
             </div>
             <ReactIcon
               name="FiChevronRight"
               size={15}
-              style={{ color: 'var(--text-muted)', flexShrink: 0 }}
+              className="shrink-0 text-muted"
             />
           </div>
         );
@@ -428,13 +397,7 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={(e) => e.stopPropagation()}
-                    className="flex h-8 w-8 items-center justify-center rounded-lg transition-colors"
-                    style={{
-                      color: 'var(--text-primary)',
-                      backgroundColor: 'var(--glass-bg-raised)',
-                      border: '1px solid var(--glass-border)',
-                      flexShrink: 0,
-                    }}
+                    className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-glass-rim bg-glass-raised text-fg transition-colors"
                   >
                     <ReactIcon name="FiExternalLink" size={14} />
                   </a>
@@ -534,13 +497,7 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={(e) => e.stopPropagation()}
-                  className="flex h-8 w-8 items-center justify-center rounded-lg transition-colors"
-                  style={{
-                    color: 'var(--text-primary)',
-                    backgroundColor: 'var(--glass-bg-raised)',
-                    border: '1px solid var(--glass-border)',
-                    flexShrink: 0,
-                  }}
+                  className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-glass-rim bg-glass-raised text-fg transition-colors"
                 >
                   <ReactIcon name="FiExternalLink" size={14} />
                 </a>
@@ -630,37 +587,26 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
     <div className="flex h-full flex-col px-4 pt-3 sm:px-5 sm:pt-4">
       {/* Search + record count row — stays pinned above the table */}
       <div className="mb-4 flex shrink-0 flex-col gap-3 sm:flex-row sm:items-center">
-        <div
-          className="flex w-full items-center gap-2.5 rounded-xl px-3.5 py-2.5 sm:max-w-[380px]"
-          style={{
-            backgroundColor: 'var(--glass-bg)',
-            border: '1px solid var(--glass-border)',
-          }}
-        >
+        <div className="flex w-full items-center gap-2.5 rounded-xl border border-glass-rim bg-glass-bg px-3.5 py-2.5 sm:max-w-[380px]">
           <ReactIcon
             name="FiSearch"
             size={14}
-            style={{ color: 'var(--text-muted)', flexShrink: 0 }}
+            className="shrink-0 text-muted"
           />
           <input
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder={`Search ${mod?.label ?? moduleId}…`}
-            className="flex-1 bg-transparent text-sm outline-none"
-            style={{ color: 'var(--text-primary)' }}
+            className="flex-1 bg-transparent text-sm text-fg outline-none"
           />
           {search && (
             <button onClick={() => setSearch('')} className="flex-shrink-0">
-              <ReactIcon
-                name="FiX"
-                size={13}
-                style={{ color: 'var(--text-muted)' }}
-              />
+              <ReactIcon name="FiX" size={13} className="text-muted" />
             </button>
           )}
         </div>
-        <p className="shrink-0 text-xs" style={{ color: 'var(--text-muted)' }}>
+        <p className="shrink-0 text-xs text-muted">
           {loading
             ? '—'
             : `${filtered.length} record${filtered.length !== 1 ? 's' : ''}`}
@@ -669,13 +615,7 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
 
       {/* Table card — fills remaining height; row area scrolls, header+pagination fixed */}
       <div
-        className="no-scrollbar min-h-0 flex-1 rounded-2xl"
-        style={{
-          border: '1px solid var(--glass-border)',
-          backgroundColor: 'var(--glass-bg)',
-          overflowY: 'hidden',
-          overflowX: isMobile ? 'hidden' : 'auto',
-        }}
+        className={`no-scrollbar min-h-0 flex-1 overflow-y-hidden rounded-2xl border border-glass-rim bg-glass-bg ${isMobile ? 'overflow-x-hidden' : 'overflow-x-auto'}`}
       >
         {isMobile ? (
           /* ── Mobile: card list scrolls inside this container ── */
@@ -712,10 +652,7 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
                     navigate(`/admin/${moduleId}/${row.id}`)
                   }
                   noDataComponent={
-                    <div
-                      className="w-full py-16 text-center text-sm"
-                      style={{ color: 'var(--text-muted)' }}
-                    >
+                    <div className="w-full py-16 text-center text-sm text-muted">
                       {search
                         ? `No results for "${search}"`
                         : 'No records yet.'}
