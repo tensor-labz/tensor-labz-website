@@ -472,71 +472,125 @@ const CrudTable = memo(({ moduleId }: CrudTableProps) => {
 
       {/* ── Table card ── */}
       <div className="no-scrollbar min-h-0 flex-1 overflow-auto rounded-2xl border border-glass-rim bg-glass-bg">
-        <div className="min-w-[560px]">
-          {/* Header */}
-          <div
-            className="sticky top-0 z-10 grid gap-4 border-b border-glass-rim bg-glass-raised px-4 py-3"
-            style={{ gridTemplateColumns: gridCols }}
-          >
-            {columns.map((c) => (
-              <button
-                key={c.id}
-                type="button"
-                onClick={() => toggleSort(c)}
-                disabled={c.sortable === false}
-                className={`flex items-center gap-1 text-[0.7rem] font-bold uppercase tracking-[0.06em] text-muted transition-colors ${
-                  c.sortable === false ? 'cursor-default' : 'hover:text-fg'
-                } ${alignCls(c)}`}
-              >
-                <span className="truncate">{c.name}</span>
-                {activeSortId === c.id && (
-                  <ReactIcon
-                    name={sortDir === 'asc' ? 'FiChevronUp' : 'FiChevronDown'}
-                    size={12}
-                    className="shrink-0 text-accent"
-                  />
-                )}
-              </button>
+        {loading ? (
+          <div className="animate-pulse space-y-px p-1">
+            {Array.from({ length: 8 }).map((_, i) => (
+              <div key={i} className="h-12 w-full rounded bg-glass-raised" />
             ))}
           </div>
-
-          {/* Body */}
-          {loading ? (
-            <div className="animate-pulse space-y-px p-1">
-              {Array.from({ length: 8 }).map((_, i) => (
-                <div key={i} className="h-12 w-full rounded bg-glass-raised" />
-              ))}
-            </div>
-          ) : pageRows.length === 0 ? (
-            <div className="py-16 text-center text-sm text-muted">
-              {search ? `No results for "${search}"` : 'No records yet.'}
-            </div>
-          ) : (
-            pageRows.map((row) => (
+        ) : pageRows.length === 0 ? (
+          <div className="py-16 text-center text-sm text-muted">
+            {search ? `No results for "${search}"` : 'No records yet.'}
+          </div>
+        ) : (
+          <>
+            {/* ── Desktop / tablet: grid table ── */}
+            <div className="hidden min-w-[560px] md:block">
+              {/* Header */}
               <div
-                key={String(row.id)}
-                onClick={() => navigate(`/admin/${moduleId}/${row.id}`)}
-                className="grid cursor-pointer items-center gap-4 border-b border-glass-rim-subtle px-4 py-2.5 text-sm text-fg transition-colors last:border-b-0 hover:bg-glass-raised"
+                className="sticky top-0 z-10 grid gap-4 border-b border-glass-rim bg-glass-raised px-4 py-3"
                 style={{ gridTemplateColumns: gridCols }}
               >
                 {columns.map((c) => (
-                  <div
+                  <button
                     key={c.id}
-                    className={`flex min-w-0 items-center ${alignCls(c)}`}
+                    type="button"
+                    onClick={() => toggleSort(c)}
+                    disabled={c.sortable === false}
+                    className={`flex items-center gap-1 text-[0.7rem] font-bold uppercase tracking-[0.06em] text-muted transition-colors ${
+                      c.sortable === false ? 'cursor-default' : 'hover:text-fg'
+                    } ${alignCls(c)}`}
                   >
-                    {c.cell ? (
-                      c.cell(row)
-                    ) : (
-                      <span className="truncate">
-                        {String(cellVal(row, c))}
-                      </span>
+                    <span className="truncate">{c.name}</span>
+                    {activeSortId === c.id && (
+                      <ReactIcon
+                        name={
+                          sortDir === 'asc' ? 'FiChevronUp' : 'FiChevronDown'
+                        }
+                        size={12}
+                        className="shrink-0 text-accent"
+                      />
                     )}
-                  </div>
+                  </button>
                 ))}
               </div>
-            ))
-          )}
-        </div>
+
+              {/* Rows */}
+              {pageRows.map((row) => (
+                <div
+                  key={String(row.id)}
+                  onClick={() => navigate(`/admin/${moduleId}/${row.id}`)}
+                  className="grid cursor-pointer items-center gap-4 border-b border-glass-rim-subtle px-4 py-2.5 text-sm text-fg transition-colors last:border-b-0 hover:bg-glass-raised"
+                  style={{ gridTemplateColumns: gridCols }}
+                >
+                  {columns.map((c) => (
+                    <div
+                      key={c.id}
+                      className={`flex min-w-0 items-center ${alignCls(c)}`}
+                    >
+                      {c.cell ? (
+                        c.cell(row)
+                      ) : (
+                        <span className="truncate">
+                          {String(cellVal(row, c))}
+                        </span>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              ))}
+            </div>
+
+            {/* ── Mobile: card list ── */}
+            <div className="md:hidden">
+              {pageRows.map((row) => {
+                const title = String(
+                  rowVal(row, mod?.titleField ?? 'id') ?? ''
+                );
+                const desc = mod?.descriptionField
+                  ? String(rowVal(row, mod.descriptionField) ?? '')
+                  : '';
+                const img = mod?.imageField
+                  ? resolveImg(rowVal(row, mod.imageField))
+                  : '';
+                return (
+                  <div
+                    key={String(row.id)}
+                    onClick={() => navigate(`/admin/${moduleId}/${row.id}`)}
+                    className="flex cursor-pointer items-center gap-3 border-b border-glass-rim-subtle px-4 py-3 transition-colors last:border-b-0 hover:bg-glass-raised"
+                  >
+                    {img && (
+                      <img
+                        src={img}
+                        alt=""
+                        className="h-10 w-10 shrink-0 rounded-lg object-cover"
+                        onError={(e) => {
+                          (e.currentTarget as HTMLImageElement).style.display =
+                            'none';
+                        }}
+                      />
+                    )}
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate text-sm font-medium text-fg">
+                        {title || `#${row.id}`}
+                      </p>
+                      {desc && (
+                        <p className="mt-0.5 line-clamp-2 text-xs text-muted">
+                          {desc}
+                        </p>
+                      )}
+                    </div>
+                    <ReactIcon
+                      name="FiChevronRight"
+                      size={15}
+                      className="shrink-0 text-muted"
+                    />
+                  </div>
+                );
+              })}
+            </div>
+          </>
+        )}
       </div>
 
       {/* ── Pagination ── */}
