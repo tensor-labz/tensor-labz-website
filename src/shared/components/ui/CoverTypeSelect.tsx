@@ -18,16 +18,11 @@ const CoverTypeSelect = ({
   <select
     value={value || 'image'}
     onChange={(e) => onChange(e.target.value)}
-    className="w-full cursor-pointer appearance-none rounded-lg px-3 py-1.5 text-sm"
+    className="w-full cursor-pointer appearance-none rounded-lg border border-input-border bg-surface px-3 py-1.5 pr-8 text-sm text-fg outline-none"
     style={{
-      backgroundColor: 'var(--bg-surface)',
-      border: '1px solid var(--input-border)',
-      color: 'var(--text-primary)',
-      outline: 'none',
       backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23aaa'/%3E%3C/svg%3E")`,
       backgroundRepeat: 'no-repeat',
       backgroundPosition: 'right 10px center',
-      paddingRight: '2rem',
     }}
   >
     {COVER_TYPES.map((t) => (

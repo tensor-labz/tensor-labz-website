@@ -35,28 +35,14 @@ const AdminModulePage = memo(({ moduleId }: { moduleId: string }) => {
   return (
     <div className="flex h-full flex-col">
       {/* Page header — never scrolls away */}
-      <div
-        className="flex shrink-0 items-center justify-between gap-3 px-4 py-3 sm:px-6 sm:py-4"
-        style={{ borderBottom: '1px solid var(--glass-border)' }}
-      >
-        <h2
-          className="truncate text-base font-bold sm:text-xl"
-          style={{
-            color: 'var(--text-primary)',
-            fontFamily: '"Syne", sans-serif',
-          }}
-        >
+      <div className="flex shrink-0 items-center justify-between gap-3 border-b border-glass-rim px-4 py-3 sm:px-6 sm:py-4">
+        <h2 className="truncate font-display text-base font-bold text-fg sm:text-xl">
           {mod?.label ?? moduleId}
         </h2>
         <div className="flex shrink-0 items-center gap-2">
           <button
             onClick={() => navigate(`/admin/${moduleId}/form-config`)}
-            className="flex items-center gap-1.5 rounded-xl px-3 py-2 text-xs font-medium sm:px-3.5 sm:py-2.5 sm:text-sm"
-            style={{
-              backgroundColor: 'var(--glass-bg-raised)',
-              border: '1px solid var(--glass-border)',
-              color: 'var(--text-muted)',
-            }}
+            className="flex items-center gap-1.5 rounded-xl border border-glass-rim bg-glass-raised px-3 py-2 text-xs font-medium text-muted sm:px-3.5 sm:py-2.5 sm:text-sm"
             title="Configure form fields"
           >
             <ReactIcon name="FaCog" size={12} />
@@ -64,8 +50,7 @@ const AdminModulePage = memo(({ moduleId }: { moduleId: string }) => {
           </button>
           <button
             onClick={() => navigate(`/admin/${moduleId}/new`)}
-            className="flex items-center gap-1.5 rounded-xl px-3 py-2 text-xs font-semibold sm:px-4 sm:py-2.5 sm:text-sm"
-            style={{ backgroundColor: 'var(--accent)', color: '#fff' }}
+            className="flex items-center gap-1.5 rounded-xl bg-accent px-3 py-2 text-xs font-semibold text-white sm:px-4 sm:py-2.5 sm:text-sm"
           >
             <ReactIcon name="FaPlus" size={10} /> <span>Add New</span>
           </button>
