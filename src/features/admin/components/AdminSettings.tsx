@@ -97,10 +97,7 @@ const Input = ({
   const isPassword = type === 'password';
   return (
     <div>
-      <label
-        className="mb-1.5 block text-xs font-semibold"
-        style={{ color: 'var(--text-muted)' }}
-      >
+      <label className="mb-1.5 block text-xs font-semibold text-muted">
         {label}
       </label>
       <div className="relative">
@@ -108,21 +105,13 @@ const Input = ({
           type={isPassword && !show ? 'password' : 'text'}
           defaultValue={defaultValue}
           placeholder={placeholder}
-          className="w-full rounded-lg px-3 py-2.5 text-sm"
-          style={{
-            backgroundColor: 'var(--input-bg)',
-            border: '1px solid var(--input-border)',
-            color: 'var(--text-primary)',
-            outline: 'none',
-            paddingRight: isPassword ? '2.5rem' : undefined,
-          }}
+          className={`w-full rounded-lg border border-input-border bg-input-bg px-3 py-2.5 text-sm text-fg outline-none ${isPassword ? 'pr-10' : ''}`}
         />
         {isPassword && (
           <button
             type="button"
             onClick={() => setShow((v) => !v)}
-            className="absolute right-3 top-1/2 -translate-y-1/2"
-            style={{ color: 'var(--text-muted)' }}
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-muted"
           >
             {show ? (
               <ReactIcon name="FaEyeSlash" size={13} />
@@ -132,14 +121,7 @@ const Input = ({
           </button>
         )}
       </div>
-      {hint && (
-        <p
-          className="mt-1.5 text-[11px]"
-          style={{ color: 'var(--text-muted)' }}
-        >
-          {hint}
-        </p>
-      )}
+      {hint && <p className="mt-1.5 text-[11px] text-muted">{hint}</p>}
     </div>
   );
 };
@@ -158,29 +140,19 @@ const MaskedField = ({
   const masked = value.slice(0, 6) + '•'.repeat(Math.max(0, value.length - 6));
   return (
     <div>
-      <label
-        className="mb-1.5 block text-xs font-semibold"
-        style={{ color: 'var(--text-muted)' }}
-      >
+      <label className="mb-1.5 block text-xs font-semibold text-muted">
         {label}
       </label>
       <div className="relative">
         <input
           readOnly
           value={reveal ? value : masked}
-          className="w-full rounded-lg px-3 py-2.5 pr-10 font-mono text-sm"
-          style={{
-            backgroundColor: 'var(--input-bg)',
-            border: '1px solid var(--input-border)',
-            color: 'var(--text-primary)',
-            outline: 'none',
-          }}
+          className="w-full rounded-lg border border-input-border bg-input-bg px-3 py-2.5 pr-10 font-mono text-sm text-fg outline-none"
         />
         <button
           type="button"
           onClick={() => setReveal((v) => !v)}
-          className="absolute right-3 top-1/2 -translate-y-1/2"
-          style={{ color: 'var(--text-muted)' }}
+          className="absolute right-3 top-1/2 -translate-y-1/2 text-muted"
         >
           {reveal ? (
             <ReactIcon name="FaEyeSlash" size={13} />
@@ -189,14 +161,7 @@ const MaskedField = ({
           )}
         </button>
       </div>
-      {hint && (
-        <p
-          className="mt-1.5 text-[11px]"
-          style={{ color: 'var(--text-muted)' }}
-        >
-          {hint}
-        </p>
-      )}
+      {hint && <p className="mt-1.5 text-[11px] text-muted">{hint}</p>}
     </div>
   );
 };
@@ -213,30 +178,15 @@ const ToggleRow = ({
 }) => {
   const [on, setOn] = useState(defaultOn);
   return (
-    <div
-      className="flex items-center justify-between gap-4 py-3"
-      style={{ borderBottom: '1px solid var(--glass-border-subtle)' }}
-    >
+    <div className="flex items-center justify-between gap-4 border-b border-glass-rim-subtle py-3">
       <div>
-        <p
-          className="text-sm font-medium"
-          style={{ color: 'var(--text-primary)' }}
-        >
-          {label}
-        </p>
-        {sub && (
-          <p className="mt-0.5 text-xs" style={{ color: 'var(--text-muted)' }}>
-            {sub}
-          </p>
-        )}
+        <p className="text-sm font-medium text-fg">{label}</p>
+        {sub && <p className="mt-0.5 text-xs text-muted">{sub}</p>}
       </div>
       <button
         type="button"
         onClick={() => setOn((v) => !v)}
-        className="relative h-6 w-11 shrink-0 rounded-full transition-colors duration-200"
-        style={{
-          backgroundColor: on ? 'var(--accent)' : 'var(--glass-bg-raised)',
-        }}
+        className={`relative h-6 w-11 shrink-0 rounded-full transition-colors duration-200 ${on ? 'bg-accent' : 'bg-glass-raised'}`}
         role="switch"
         aria-checked={on}
       >
@@ -266,8 +216,7 @@ const SavedToast = ({ visible }: { visible: boolean }) => (
     initial={{ opacity: 0, y: 12 }}
     animate={{ opacity: visible ? 1 : 0, y: visible ? 0 : 12 }}
     transition={{ duration: 0.25 }}
-    className="pointer-events-none fixed bottom-6 right-6 z-50 flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-medium shadow-xl"
-    style={{ backgroundColor: '#34d399', color: '#fff' }}
+    className="pointer-events-none fixed bottom-6 right-6 z-50 flex items-center gap-2 rounded-xl bg-emerald-400 px-4 py-2.5 text-sm font-medium text-white shadow-xl"
   >
     <ReactIcon name="FaCheck" size={12} /> Settings saved
   </motion.div>
@@ -285,40 +234,17 @@ const SectionCard = ({
   children: React.ReactNode;
   onSave: () => void;
 }) => (
-  <div
-    className="overflow-hidden rounded-2xl"
-    style={{
-      backgroundColor: 'var(--glass-bg)',
-      border: '1px solid var(--glass-border)',
-    }}
-  >
-    <div
-      className="px-6 py-4"
-      style={{ borderBottom: '1px solid var(--glass-border-subtle)' }}
-    >
-      <p
-        className="text-sm font-bold"
-        style={{
-          color: 'var(--text-primary)',
-          fontFamily: '"Syne", sans-serif',
-        }}
-      >
-        {title}
-      </p>
-      <p className="mt-0.5 text-xs" style={{ color: 'var(--text-muted)' }}>
-        {sub}
-      </p>
+  <div className="overflow-hidden rounded-2xl border border-glass-rim bg-glass-bg">
+    <div className="border-b border-glass-rim-subtle px-6 py-4">
+      <p className="font-display text-sm font-bold text-fg">{title}</p>
+      <p className="mt-0.5 text-xs text-muted">{sub}</p>
     </div>
     <div className="space-y-4 px-6 py-5">{children}</div>
-    <div
-      className="flex justify-end px-6 py-4"
-      style={{ borderTop: '1px solid var(--glass-border-subtle)' }}
-    >
+    <div className="flex justify-end border-t border-glass-rim-subtle px-6 py-4">
       <motion.button
         whileTap={{ scale: 0.96 }}
         onClick={onSave}
-        className="flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-semibold"
-        style={{ backgroundColor: 'var(--accent)', color: '#fff' }}
+        className="flex items-center gap-2 rounded-xl bg-accent px-5 py-2.5 text-sm font-semibold text-white"
       >
         <ReactIcon name="FaSave" size={12} /> Save Changes
       </motion.button>
