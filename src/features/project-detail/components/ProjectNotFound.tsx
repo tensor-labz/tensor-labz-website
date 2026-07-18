@@ -18,7 +18,7 @@ export default function ProjectNotFound() {
   }, [countdown]);
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-gray-50 px-4">
+    <div className="flex min-h-screen flex-col items-center justify-center bg-canvas px-4">
       <div className="w-full max-w-md text-center">
         <div className="mb-6 text-red-500">
           <svg
@@ -36,10 +36,8 @@ export default function ProjectNotFound() {
           </svg>
         </div>
 
-        <h1 className="mb-2 text-4xl font-bold text-gray-800">
-          Project Not Found
-        </h1>
-        <p className="mb-8 text-gray-600">
+        <h1 className="mb-2 text-4xl font-bold text-fg">Project Not Found</h1>
+        <p className="mb-8 text-muted">
           We couldn&apos;t find the project you&apos;re looking for. It may have
           been deleted, moved, or never existed.
         </p>
@@ -47,19 +45,19 @@ export default function ProjectNotFound() {
         <div className="mb-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
           <button
             onClick={goBack}
-            className="w-full rounded-md border border-gray-300 bg-white px-5 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 sm:w-auto"
+            className="w-full rounded-md border border-rim bg-glass-raised px-5 py-2 text-sm font-medium text-fg shadow-sm hover:bg-glass-hover sm:w-auto"
           >
             Go Back
           </button>
           <button
             onClick={goToProjects}
-            className="w-full rounded-md border border-transparent bg-blue-600 px-5 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 sm:w-auto"
+            className="w-full rounded-md border border-transparent bg-accent px-5 py-2 text-sm font-medium text-white shadow-sm hover:opacity-90 sm:w-auto"
           >
             View All Projects
           </button>
         </div>
 
-        <p className="text-sm text-gray-500">
+        <p className="text-sm text-muted">
           Redirecting to Projects page in {countdown} seconds...
         </p>
       </div>

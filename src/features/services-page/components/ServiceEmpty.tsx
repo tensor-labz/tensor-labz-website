@@ -11,13 +11,7 @@ const ServiceEmpty: React.FC = memo(() => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, ease: 'easeOut' }}
       >
-        <div
-          className="relative rounded-2xl p-8 shadow-sm"
-          style={{
-            backgroundColor: 'var(--bg-raised)',
-            border: '1px solid var(--border)',
-          }}
-        >
+        <div className="relative rounded-2xl border border-rim bg-raised p-8 shadow-sm">
           <motion.div
             animate={{ rotate: 360 }}
             transition={{ duration: 8, repeat: Infinity, ease: 'linear' }}
@@ -38,19 +32,13 @@ const ServiceEmpty: React.FC = memo(() => {
           We&apos;re crafting something extraordinary for you
         </p>
         <motion.div
-          className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium"
-          style={{
-            backgroundColor: 'var(--accent-soft)',
-            color: 'var(--accent)',
-            border: '1px solid var(--border)',
-          }}
+          className="inline-flex items-center gap-2 rounded-full border border-rim bg-accent-soft px-5 py-2.5 text-sm font-medium text-accent"
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.4, delay: 0.4 }}
         >
           <motion.div
-            className="h-2 w-2 rounded-full"
-            style={{ backgroundColor: 'var(--accent)' }}
+            className="h-2 w-2 rounded-full bg-accent"
             animate={{ opacity: [0.4, 1, 0.4] }}
             transition={{ duration: 2, repeat: Infinity }}
           />

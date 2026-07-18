@@ -78,7 +78,7 @@ const MediaGallery: React.FC<MediaGalleryProps> = memo(
 
         <div className="space-y-4">
           {/* Unified viewer */}
-          <div className="border-accent/20 relative aspect-video overflow-hidden rounded-xl border bg-raised">
+          <div className="relative aspect-video overflow-hidden rounded-xl border border-accent/20 bg-raised">
             <AnimatePresence mode="wait">
               <motion.div
                 key={active.id}
@@ -104,7 +104,7 @@ const MediaGallery: React.FC<MediaGalleryProps> = memo(
 
             {/* Type badge — frame feature differs per media type */}
             <div className="pointer-events-none absolute left-3 top-3">
-              <span className="text-accent/80 border-accent/20 flex items-center gap-1 rounded border bg-black/50 px-2 py-0.5 font-mono text-[9px] uppercase tracking-widest">
+              <span className="flex items-center gap-1 rounded border border-accent/20 bg-black/50 px-2 py-0.5 font-mono text-[9px] uppercase tracking-widest text-accent/80">
                 <ReactIcon
                   name={isImage(active.type) ? 'FiImage' : 'FiPlay'}
                   size={10}
@@ -119,14 +119,14 @@ const MediaGallery: React.FC<MediaGalleryProps> = memo(
                 <button
                   onClick={() => go(-1)}
                   aria-label="Previous media"
-                  className="border-accent/30 hover:border-accent/60 absolute left-3 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full border bg-black/50 text-white transition-all duration-200 hover:bg-black/70"
+                  className="absolute left-3 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full border border-accent/30 bg-black/50 text-white transition-all duration-200 hover:border-accent/60 hover:bg-black/70"
                 >
                   <ReactIcon name="FiChevronLeft" size={16} />
                 </button>
                 <button
                   onClick={() => go(1)}
                   aria-label="Next media"
-                  className="border-accent/30 hover:border-accent/60 absolute right-3 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full border bg-black/50 text-white transition-all duration-200 hover:bg-black/70"
+                  className="absolute right-3 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full border border-accent/30 bg-black/50 text-white transition-all duration-200 hover:border-accent/60 hover:bg-black/70"
                 >
                   <ReactIcon name="FiChevronRight" size={16} />
                 </button>
@@ -135,7 +135,7 @@ const MediaGallery: React.FC<MediaGalleryProps> = memo(
 
             {/* Index label */}
             <div className="pointer-events-none absolute bottom-3 right-3">
-              <span className="text-accent/80 border-accent/20 rounded border bg-black/50 px-2 py-0.5 font-mono text-[9px]">
+              <span className="rounded border border-accent/20 bg-black/50 px-2 py-0.5 font-mono text-[9px] text-accent/80">
                 {index + 1} / {media.length}
               </span>
             </div>
@@ -153,7 +153,7 @@ const MediaGallery: React.FC<MediaGalleryProps> = memo(
                     key={item.id}
                     onClick={() => setActiveIndex(i)}
                     aria-label={`Media ${i + 1}`}
-                    className={`relative h-12 w-16 shrink-0 overflow-hidden rounded-lg border-2 transition-all duration-200 ${i === index ? 'border-accent' : 'hover:border-accent/40 border-rim'}`}
+                    className={`relative h-12 w-16 shrink-0 overflow-hidden rounded-lg border-2 transition-all duration-200 ${i === index ? 'border-accent' : 'border-rim hover:border-accent/40'}`}
                   >
                     {thumb ? (
                       <img

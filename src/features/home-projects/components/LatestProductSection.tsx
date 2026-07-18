@@ -21,7 +21,7 @@ const MarqueeCard = memo(
     return (
       <div
         onClick={() => navigate(`/project/${slug}`)}
-        className="hover:border-accent/50 group relative w-[280px] shrink-0 cursor-pointer overflow-hidden rounded-xl border border-rim bg-surface transition-all duration-300 hover:shadow-[0_8px_32px_-8px_rgba(56,189,248,0.2)]"
+        className="group relative w-[280px] shrink-0 cursor-pointer overflow-hidden rounded-xl border border-rim bg-surface transition-all duration-300 hover:border-accent/50 hover:shadow-[0_8px_32px_-8px_rgba(56,189,248,0.2)]"
       >
         <div className="aspect-video overflow-hidden">
           <img
@@ -53,7 +53,7 @@ const MarqueeCard = memo(
         {(['tl', 'tr', 'bl', 'br'] as const).map((pos) => (
           <div
             key={pos}
-            className={`border-accent/50 pointer-events-none absolute z-10 h-3 w-3 opacity-0 transition-all duration-300 group-hover:opacity-100 ${pos === 'tl' ? 'left-1.5 top-1.5 border-l border-t' : ''} ${pos === 'tr' ? 'right-1.5 top-1.5 border-r border-t' : ''} ${pos === 'bl' ? 'bottom-1.5 left-1.5 border-b border-l' : ''} ${pos === 'br' ? 'bottom-1.5 right-1.5 border-b border-r' : ''}`}
+            className={`pointer-events-none absolute z-10 h-3 w-3 border-accent/50 opacity-0 transition-all duration-300 group-hover:opacity-100 ${pos === 'tl' ? 'left-1.5 top-1.5 border-l border-t' : ''} ${pos === 'tr' ? 'right-1.5 top-1.5 border-r border-t' : ''} ${pos === 'bl' ? 'bottom-1.5 left-1.5 border-b border-l' : ''} ${pos === 'br' ? 'bottom-1.5 right-1.5 border-b border-r' : ''}`}
           />
         ))}
       </div>
@@ -188,7 +188,7 @@ const MobileSlider = memo(({ projects }: { projects: ProjectItem[] }) => {
             {/* Gradient overlay */}
             <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-transparent" />
             {/* Live badge */}
-            <div className="border-accent/40 absolute left-3 top-3 flex items-center gap-1.5 rounded border bg-black/60 px-2 py-0.5 backdrop-blur-sm">
+            <div className="absolute left-3 top-3 flex items-center gap-1.5 rounded border border-accent/40 bg-black/60 px-2 py-0.5 backdrop-blur-sm">
               <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-accent" />
               <span className="font-mono text-[9px] uppercase tracking-widest text-accent">
                 Project
@@ -214,13 +214,13 @@ const MobileSlider = memo(({ projects }: { projects: ProjectItem[] }) => {
         <>
           <button
             onClick={prev}
-            className="border-accent/30 hover:border-accent/60 absolute left-2 top-[45%] z-20 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full border bg-black/50 text-white transition-all duration-200 hover:bg-black/70"
+            className="absolute left-2 top-[45%] z-20 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full border border-accent/30 bg-black/50 text-white transition-all duration-200 hover:border-accent/60 hover:bg-black/70"
           >
             <ReactIcon name="FiChevronLeft" size={16} />
           </button>
           <button
             onClick={next}
-            className="border-accent/30 hover:border-accent/60 absolute right-2 top-[45%] z-20 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full border bg-black/50 text-white transition-all duration-200 hover:bg-black/70"
+            className="absolute right-2 top-[45%] z-20 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full border border-accent/30 bg-black/50 text-white transition-all duration-200 hover:border-accent/60 hover:bg-black/70"
           >
             <ReactIcon name="FiChevronRight" size={16} />
           </button>
@@ -234,7 +234,7 @@ const MobileSlider = memo(({ projects }: { projects: ProjectItem[] }) => {
             <button
               key={i}
               onClick={() => go(i)}
-              className={`rounded-full transition-all duration-300 ${i === index ? 'h-1.5 w-6 bg-accent' : 'hover:bg-accent/40 h-1.5 w-1.5 bg-rim'}`}
+              className={`rounded-full transition-all duration-300 ${i === index ? 'h-1.5 w-6 bg-accent' : 'h-1.5 w-1.5 bg-rim hover:bg-accent/40'}`}
             />
           ))}
         </div>
@@ -315,7 +315,7 @@ const LatestProductSection: React.FC = memo(() => {
       >
         <a
           href="/services/all"
-          className="text-accent/70 inline-flex items-center gap-2 font-mono text-sm transition-colors duration-200 hover:text-accent"
+          className="inline-flex items-center gap-2 font-mono text-sm text-accent/70 transition-colors duration-200 hover:text-accent"
         >
           View all projects
           <ReactIcon name="FiArrowRight" size={13} />

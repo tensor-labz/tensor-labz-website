@@ -15,8 +15,6 @@ interface AdminSidebarProps {
   onClose: () => void;
 }
 
-const SIDEBAR_W = 224; // px — keep in sync with lg:ml-56 (56 × 4 = 224) in AdminDashboard
-
 const AdminSidebar = memo(({ open, onClose }: AdminSidebarProps) => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -54,12 +52,7 @@ const AdminSidebar = memo(({ open, onClose }: AdminSidebarProps) => {
     <motion.button
       onClick={onClick}
       whileTap={{ scale: 0.97 }}
-      className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm font-medium transition-colors"
-      style={
-        isActive
-          ? { backgroundColor: 'var(--accent)', color: '#fff' }
-          : { backgroundColor: 'transparent', color: 'var(--text-muted)' }
-      }
+      className={`flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm font-medium transition-colors ${isActive ? 'bg-accent text-white' : 'bg-transparent text-muted'}`}
     >
       <ReactIcon name={icon} size={15} className="shrink-0" />
       <span>{label}</span>
@@ -74,10 +67,7 @@ const AdminSidebar = memo(({ open, onClose }: AdminSidebarProps) => {
 
   const SidebarContent = () => (
     <nav className="flex flex-col gap-1 p-4">
-      <p
-        className="mb-2 px-3 text-[10px] font-semibold uppercase tracking-[0.25em]"
-        style={{ color: 'var(--text-muted)' }}
-      >
+      <p className="mb-2 px-3 text-[10px] font-semibold uppercase tracking-[0.25em] text-muted">
         Overview
       </p>
       <NavBtn
@@ -88,15 +78,9 @@ const AdminSidebar = memo(({ open, onClose }: AdminSidebarProps) => {
         layoutId="sidebar-indicator"
       />
 
-      <div
-        className="my-2"
-        style={{ borderTop: '1px solid var(--glass-border-subtle)' }}
-      />
+      <div className="my-2 border-t border-glass-rim-subtle" />
 
-      <p
-        className="mb-2 px-3 text-[10px] font-semibold uppercase tracking-[0.25em]"
-        style={{ color: 'var(--text-muted)' }}
-      >
+      <p className="mb-2 px-3 text-[10px] font-semibold uppercase tracking-[0.25em] text-muted">
         Modules
       </p>
       <NavBtn
@@ -127,15 +111,9 @@ const AdminSidebar = memo(({ open, onClose }: AdminSidebarProps) => {
         );
       })}
 
-      <div
-        className="my-2"
-        style={{ borderTop: '1px solid var(--glass-border-subtle)' }}
-      />
+      <div className="my-2 border-t border-glass-rim-subtle" />
 
-      <p
-        className="mb-2 px-3 text-[10px] font-semibold uppercase tracking-[0.25em]"
-        style={{ color: 'var(--text-muted)' }}
-      >
+      <p className="mb-2 px-3 text-[10px] font-semibold uppercase tracking-[0.25em] text-muted">
         Management
       </p>
       <NavBtn
@@ -163,15 +141,9 @@ const AdminSidebar = memo(({ open, onClose }: AdminSidebarProps) => {
         label="Billing"
       />
 
-      <div
-        className="my-2"
-        style={{ borderTop: '1px solid var(--glass-border-subtle)' }}
-      />
+      <div className="my-2 border-t border-glass-rim-subtle" />
 
-      <p
-        className="mb-2 px-3 text-[10px] font-semibold uppercase tracking-[0.25em]"
-        style={{ color: 'var(--text-muted)' }}
-      >
+      <p className="mb-2 px-3 text-[10px] font-semibold uppercase tracking-[0.25em] text-muted">
         System
       </p>
       <NavBtn
@@ -186,20 +158,7 @@ const AdminSidebar = memo(({ open, onClose }: AdminSidebarProps) => {
   return (
     <>
       {/* ── Desktop: fixed, never scrolls, never shifts ── */}
-      <aside
-        className="hidden flex-col lg:flex"
-        style={{
-          position: 'fixed',
-          top: 57, // header height
-          left: 0,
-          width: SIDEBAR_W,
-          height: 'calc(100vh - 57px)',
-          overflowY: 'auto',
-          borderRight: '1px solid var(--glass-border)',
-          backgroundColor: 'var(--glass-bg-subtle)',
-          zIndex: 40,
-        }}
-      >
+      <aside className="fixed left-0 top-[57px] z-40 hidden h-[calc(100vh-57px)] w-56 flex-col overflow-y-auto border-r border-glass-rim bg-glass-subtle lg:flex">
         <SidebarContent />
       </aside>
 
@@ -212,37 +171,20 @@ const AdminSidebar = memo(({ open, onClose }: AdminSidebarProps) => {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={onClose}
-              className="fixed inset-0 z-40 lg:hidden"
-              style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}
+              className="fixed inset-0 z-40 bg-black/50 lg:hidden"
             />
             <motion.aside
               initial={{ x: '-100%' }}
               animate={{ x: 0 }}
               exit={{ x: '-100%' }}
               transition={{ type: 'spring', damping: 30, stiffness: 300 }}
-              className="fixed left-0 top-0 z-50 flex h-full w-64 flex-col lg:hidden"
-              style={{
-                backgroundColor: 'var(--bg-surface)',
-                borderRight: '1px solid var(--glass-border)',
-              }}
+              className="fixed left-0 top-0 z-50 flex h-full w-64 flex-col border-r border-glass-rim bg-surface lg:hidden"
             >
-              <div
-                className="flex items-center justify-between px-4 py-4"
-                style={{ borderBottom: '1px solid var(--glass-border)' }}
-              >
-                <span
-                  className="text-base font-bold"
-                  style={{
-                    color: 'var(--text-primary)',
-                    fontFamily: '"Syne", sans-serif',
-                  }}
-                >
+              <div className="flex items-center justify-between border-b border-glass-rim px-4 py-4">
+                <span className="font-display text-base font-bold text-fg">
                   Menu
                 </span>
-                <button
-                  onClick={onClose}
-                  style={{ color: 'var(--text-muted)' }}
-                >
+                <button onClick={onClose} className="text-muted">
                   <ReactIcon name="FaTimes" size={16} />
                 </button>
               </div>

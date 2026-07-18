@@ -133,7 +133,7 @@ const AboutUs: React.FC = memo(() => {
                 .map((chip) => (
                   <span
                     key={chip}
-                    className="border-accent/30 bg-accent/5 rounded border px-3 py-1 font-mono text-[11px] uppercase tracking-wider text-accent"
+                    className="rounded border border-accent/30 bg-accent/5 px-3 py-1 font-mono text-[11px] uppercase tracking-wider text-accent"
                   >
                     {chip}
                   </span>

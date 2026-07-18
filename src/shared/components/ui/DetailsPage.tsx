@@ -242,7 +242,7 @@ const DetailsPage: React.FC<DetailsPageProps> = memo(
               {kicker && (
                 <div className="flex items-center gap-2">
                   <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-accent" />
-                  <p className="text-accent/80 font-mono text-[10px] uppercase tracking-[0.3em]">
+                  <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-accent/80">
                     {kicker}
                   </p>
                 </div>
@@ -253,7 +253,7 @@ const DetailsPage: React.FC<DetailsPageProps> = memo(
                   {tags.map((tag) => (
                     <span
                       key={tag}
-                      className="border-accent/40 bg-accent/10 rounded border px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider text-accent"
+                      className="rounded border border-accent/40 bg-accent/10 px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider text-accent"
                     >
                       {tag}
                     </span>
@@ -286,7 +286,7 @@ const DetailsPage: React.FC<DetailsPageProps> = memo(
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={platform}
-                    className="hover:border-accent/50 flex h-7 w-7 items-center justify-center rounded border border-white/15 bg-white/5 text-white/50 transition-all duration-200 hover:text-accent"
+                    className="flex h-7 w-7 items-center justify-center rounded border border-white/15 bg-white/5 text-white/50 transition-all duration-200 hover:border-accent/50 hover:text-accent"
                   >
                     <ReactIcon name={socialIcon(platform)} size={12} />
                   </a>
@@ -314,12 +314,12 @@ const DetailsPage: React.FC<DetailsPageProps> = memo(
             >
               {cover?.url ? (
                 <div className="relative">
-                  <div className="from-accent/20 to-accent/10 absolute -inset-px rounded-xl bg-gradient-to-br via-transparent blur-sm" />
-                  <div className="border-accent/30 relative overflow-hidden rounded-xl border bg-slate-900">
-                    <div className="border-accent/15 flex items-center justify-between border-b bg-slate-950/70 px-3 py-2">
+                  <div className="absolute -inset-px rounded-xl bg-gradient-to-br from-accent/20 via-transparent to-accent/10 blur-sm" />
+                  <div className="relative overflow-hidden rounded-xl border border-accent/30 bg-slate-900">
+                    <div className="flex items-center justify-between border-b border-accent/15 bg-slate-950/70 px-3 py-2">
                       <div className="flex items-center gap-2">
                         <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-accent" />
-                        <span className="text-accent/60 font-mono text-[9px] uppercase tracking-widest">
+                        <span className="font-mono text-[9px] uppercase tracking-widest text-accent/60">
                           {coverLabel}
                         </span>
                       </div>
@@ -343,7 +343,7 @@ const DetailsPage: React.FC<DetailsPageProps> = memo(
                         }}
                       />
                       <motion.div
-                        className="via-accent/60 pointer-events-none absolute left-0 right-0 h-px bg-gradient-to-r from-transparent to-transparent"
+                        className="pointer-events-none absolute left-0 right-0 h-px bg-gradient-to-r from-transparent via-accent/60 to-transparent"
                         animate={{ top: ['0%', '100%'] }}
                         transition={{
                           duration: 3.5,
@@ -354,7 +354,7 @@ const DetailsPage: React.FC<DetailsPageProps> = memo(
                       />
                     </div>
 
-                    <div className="border-accent/10 flex items-center justify-between border-t bg-slate-950/50 px-3 py-1.5">
+                    <div className="flex items-center justify-between border-t border-accent/10 bg-slate-950/50 px-3 py-1.5">
                       <span className="font-mono text-[9px] text-slate-600">
                         ● LIVE
                       </span>
@@ -362,7 +362,7 @@ const DetailsPage: React.FC<DetailsPageProps> = memo(
                         {[...Array(5)].map((_, i) => (
                           <div
                             key={i}
-                            className="bg-accent/30 h-0.5 w-4 rounded-full"
+                            className="h-0.5 w-4 rounded-full bg-accent/30"
                             style={{ opacity: 0.2 + i * 0.18 }}
                           />
                         ))}
@@ -373,12 +373,12 @@ const DetailsPage: React.FC<DetailsPageProps> = memo(
                   {(['tl', 'tr', 'bl', 'br'] as const).map((pos) => (
                     <div
                       key={pos}
-                      className={`border-accent/60 pointer-events-none absolute h-5 w-5 ${pos === 'tl' ? '-left-1.5 -top-1.5 border-l-2 border-t-2' : ''} ${pos === 'tr' ? '-right-1.5 -top-1.5 border-r-2 border-t-2' : ''} ${pos === 'bl' ? '-bottom-1.5 -left-1.5 border-b-2 border-l-2' : ''} ${pos === 'br' ? '-bottom-1.5 -right-1.5 border-b-2 border-r-2' : ''}`}
+                      className={`pointer-events-none absolute h-5 w-5 border-accent/60 ${pos === 'tl' ? '-left-1.5 -top-1.5 border-l-2 border-t-2' : ''} ${pos === 'tr' ? '-right-1.5 -top-1.5 border-r-2 border-t-2' : ''} ${pos === 'bl' ? '-bottom-1.5 -left-1.5 border-b-2 border-l-2' : ''} ${pos === 'br' ? '-bottom-1.5 -right-1.5 border-b-2 border-r-2' : ''}`}
                     />
                   ))}
                 </div>
               ) : (
-                <div className="border-accent/20 flex aspect-[16/10] flex-col items-center justify-center gap-3 rounded-xl border bg-slate-900/50">
+                <div className="flex aspect-[16/10] flex-col items-center justify-center gap-3 rounded-xl border border-accent/20 bg-slate-900/50">
                   <ReactIcon
                     name="FaNewspaper"
                     size={48}
@@ -435,7 +435,7 @@ const DetailsPage: React.FC<DetailsPageProps> = memo(
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={platform}
-                className="hover:border-accent/40 flex h-8 w-8 items-center justify-center rounded border border-rim bg-glass-bg text-muted transition-all duration-200 hover:bg-glass-raised hover:text-accent"
+                className="flex h-8 w-8 items-center justify-center rounded border border-rim bg-glass-bg text-muted transition-all duration-200 hover:border-accent/40 hover:bg-glass-raised hover:text-accent"
               >
                 <ReactIcon name={socialIcon(platform)} size={14} />
               </a>

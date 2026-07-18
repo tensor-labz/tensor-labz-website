@@ -35,12 +35,7 @@ const ServiceFilterDrawer: FC = memo(() => {
         whileHover={{ x: 3 }}
         whileTap={{ scale: 0.95 }}
         aria-label="Open service filter"
-        style={{
-          backgroundColor: 'var(--bg-surface)',
-          borderColor: 'var(--border)',
-          color: 'var(--accent)',
-        }}
-        className="fixed left-0 top-1/2 z-40 flex h-14 w-9 -translate-y-1/2 items-center justify-center rounded-r-xl border border-l-0 shadow-lg"
+        className="fixed left-0 top-1/2 z-40 flex h-14 w-9 -translate-y-1/2 items-center justify-center rounded-r-xl border border-l-0 border-rim bg-surface text-accent shadow-lg"
       >
         <motion.span
           className="flex"
@@ -98,17 +93,12 @@ const ServiceFilterDrawer: FC = memo(() => {
                         onClick={() => select(option.slug)}
                         className={`flex w-full items-center gap-2.5 px-5 py-3.5 text-left text-[11px] font-semibold uppercase tracking-wider transition-colors ${
                           isActive
-                            ? 'bg-white/[0.06] text-[var(--accent)]'
+                            ? 'bg-white/[0.06] text-accent'
                             : 'text-white/55 hover:bg-white/[0.04] hover:text-white'
                         }`}
                       >
                         <span
-                          className="h-4 w-1 shrink-0 rounded-full"
-                          style={{
-                            backgroundColor: isActive
-                              ? 'var(--accent)'
-                              : 'transparent',
-                          }}
+                          className={`h-4 w-1 shrink-0 rounded-full ${isActive ? 'bg-accent' : 'bg-transparent'}`}
                         />
                         {option.title}
                       </motion.button>

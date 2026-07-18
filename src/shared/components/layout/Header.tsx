@@ -1,17 +1,14 @@
 import React, { memo } from 'react';
 import { motion } from 'motion/react';
 import { Link } from 'react-router-dom';
-import ReactIcon from '../ui/ReactIcon';
 import logo from '../../../assets/images/logo.png';
 import useScroll from '../../hooks/useScroll';
-import { useTheme } from '../../hooks/useTheme';
 import { useCompanyInfo, resolveLogo } from '../../hooks/useCompanyInfo';
 import NavBar from './NavBar';
 import MobileNavigation from './MobileNavigation';
 
 const Header: React.FC<{ className?: string }> = memo(({ className = '' }) => {
   const isScrolled = useScroll();
-  const { theme, toggleTheme } = useTheme();
   const info = useCompanyInfo();
 
   return (
@@ -21,14 +18,14 @@ const Header: React.FC<{ className?: string }> = memo(({ className = '' }) => {
       transition={{ duration: 0.4, ease: 'easeOut' }}
       className={`fixed left-0 top-0 z-50 w-full border-b bg-canvas backdrop-blur-md transition-[border-color,box-shadow] duration-300 ${
         isScrolled
-          ? 'border-rim shadow-lg shadow-black/10 dark:shadow-black/40'
+          ? 'border-rim shadow-lg shadow-black/40'
           : 'border-transparent'
       } ${className}`}
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-3.5 lg:px-10">
         <Link to="/" className="shrink-0">
           <motion.img
-            src={resolveLogo(info, theme, logo)}
+            src={resolveLogo(info, logo)}
             alt={info.name}
             onError={(e) => {
               (e.currentTarget as HTMLImageElement).src = logo;
@@ -43,19 +40,6 @@ const Header: React.FC<{ className?: string }> = memo(({ className = '' }) => {
 
         <div className="flex items-center gap-3">
           <NavBar />
-          <motion.button
-            type="button"
-            whileTap={{ scale: 0.88 }}
-            onClick={toggleTheme}
-            aria-label="Toggle theme"
-            className="flex h-8 w-8 shrink-0 items-center justify-center rounded border border-rim bg-raised text-base text-muted transition-colors duration-200 hover:text-accent"
-          >
-            {theme === 'dark' ? (
-              <ReactIcon name="RiSunLine" size={16} />
-            ) : (
-              <ReactIcon name="RiMoonLine" size={16} />
-            )}
-          </motion.button>
           <MobileNavigation />
         </div>
       </div>

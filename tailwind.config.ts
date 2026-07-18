@@ -7,31 +7,30 @@ declare module '@tailwindcss/forms';
 
 export default {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
-  darkMode: 'class',
   theme: {
     extend: {
       colors: {
-        /* ── semantic theme tokens — follow CSS vars, auto light/dark ── */
-        fg: 'var(--text-primary)',
-        muted: 'var(--text-muted)',
-        accent: 'var(--accent)',
-        'accent-soft': 'var(--accent-soft)',
-        canvas: 'var(--bg-base)',
-        surface: 'var(--bg-surface)',
-        raised: 'var(--bg-raised)',
-        rim: 'var(--border)',
-        'glass-bg': 'var(--glass-bg)',
-        'glass-subtle': 'var(--glass-bg-subtle)',
-        'glass-rim': 'var(--glass-border)',
-        'glass-rim-strong': 'var(--glass-border-strong)',
-        'glass-rim-subtle': 'var(--glass-border-subtle)',
-        'glass-raised': 'var(--glass-bg-raised)',
-        'glass-hover': 'var(--glass-bg-hover)',
-        'footer-bg': 'var(--footer-bg)',
-        'header-bg': 'var(--header-bg)',
-        'input-bg': 'var(--input-bg)',
-        'input-border': 'var(--input-border)',
-        'grid-dot': 'var(--grid-dot)',
+        /* ── semantic theme tokens — dark palette (self-contained hex) ── */
+        fg: '#f8fafc', // slate-50
+        muted: '#94a3b8', // slate-400
+        accent: '#38bdf8', // sky-400
+        'accent-soft': '#0c4a6e', // sky-900
+        canvas: '#020617', // slate-950
+        surface: '#0f172a', // slate-900
+        raised: '#1e293b', // slate-800
+        rim: 'rgba(148, 163, 184, 0.12)',
+        'glass-bg': 'rgba(255, 255, 255, 0.04)',
+        'glass-subtle': 'rgba(255, 255, 255, 0.03)',
+        'glass-rim': 'rgba(255, 255, 255, 0.08)',
+        'glass-rim-strong': 'rgba(255, 255, 255, 0.12)',
+        'glass-rim-subtle': 'rgba(255, 255, 255, 0.07)',
+        'glass-raised': 'rgba(255, 255, 255, 0.06)',
+        'glass-hover': 'rgba(255, 255, 255, 0.06)',
+        'footer-bg': '#020617',
+        'header-bg': 'rgba(2, 6, 23, 0.88)',
+        'input-bg': 'rgba(255, 255, 255, 0.06)',
+        'input-border': 'rgba(255, 255, 255, 0.12)',
+        'grid-dot': 'rgba(56, 189, 248, 0.05)',
         /* ── legacy palette (backwards compat) ── */
         primary: {
           100: '#F0F0E4',

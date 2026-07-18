@@ -4,7 +4,6 @@ import { Routes, Route, Link, useNavigate } from 'react-router-dom';
 import ReactIcon from '../shared/components/ui/ReactIcon';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
 import { signOut, selectAuthUser } from '../store/authSlice';
-import { useTheme } from '../shared/hooks/useTheme';
 import AdminSidebar from '../features/admin/components/AdminSidebar';
 import AdminOverview from '../features/admin/components/AdminOverview';
 import AdminDataTable from '../features/admin/components/AdminDataTable';
@@ -21,9 +20,8 @@ const AdminDashboard = memo(() => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const user = useAppSelector(selectAuthUser);
-  const { theme, toggleTheme } = useTheme();
   const info = useCompanyInfo();
-  const logoSrc = resolveLogo(info, theme, logo);
+  const logoSrc = resolveLogo(info, logo);
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const handleSignOut = async () => {
@@ -36,26 +34,13 @@ const AdminDashboard = memo(() => {
       <HeaderHelmet title="Admin Dashboard" />
 
       {/* ── Top bar ── */}
-      <header
-        className="sticky top-0 z-50 flex shrink-0 items-center justify-between px-5 py-3.5"
-        style={{
-          backgroundColor: 'var(--header-bg)',
-          borderBottom: '1px solid var(--glass-border)',
-          backdropFilter: 'blur(16px)',
-          WebkitBackdropFilter: 'blur(16px)',
-        }}
-      >
+      <header className="sticky top-0 z-50 flex shrink-0 items-center justify-between border-b border-glass-rim bg-header-bg px-5 py-3.5 backdrop-blur-lg">
         <div className="flex items-center gap-3">
           {/* Hamburger — mobile only */}
           <motion.button
             whileTap={{ scale: 0.88 }}
             onClick={() => setSidebarOpen(true)}
-            className="flex h-8 w-8 items-center justify-center rounded-lg lg:hidden"
-            style={{
-              backgroundColor: 'var(--bg-raised)',
-              border: '1px solid var(--border)',
-              color: 'var(--text-muted)',
-            }}
+            className="flex h-8 w-8 items-center justify-center rounded-lg border border-rim bg-raised text-muted lg:hidden"
             aria-label="Open menu"
           >
             <ReactIcon name="FaBars" size={13} />
@@ -78,32 +63,9 @@ const AdminDashboard = memo(() => {
           </span>
 
           <motion.button
-            whileTap={{ scale: 0.88 }}
-            onClick={toggleTheme}
-            aria-label="Toggle theme"
-            className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-base"
-            style={{
-              backgroundColor: 'var(--bg-raised)',
-              border: '1px solid var(--border)',
-              color: 'var(--text-muted)',
-            }}
-          >
-            {theme === 'dark' ? (
-              <ReactIcon name="RiSunLine" size={16} />
-            ) : (
-              <ReactIcon name="RiMoonLine" size={16} />
-            )}
-          </motion.button>
-
-          <motion.button
             whileTap={{ scale: 0.96 }}
             onClick={handleSignOut}
-            className="flex items-center gap-2 rounded-lg px-3 py-2 text-xs font-medium"
-            style={{
-              backgroundColor: 'var(--glass-bg-raised)',
-              border: '1px solid var(--glass-border)',
-              color: 'var(--text-primary)',
-            }}
+            className="flex items-center gap-2 rounded-lg border border-glass-rim bg-glass-raised px-3 py-2 text-xs font-medium text-fg"
           >
             <ReactIcon name="FaSignOutAlt" size={12} />
             <span className="hidden sm:inline">Sign out</span>

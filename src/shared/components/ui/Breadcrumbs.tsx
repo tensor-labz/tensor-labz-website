@@ -19,29 +19,18 @@ const Breadcrumbs = ({ items }: BreadcrumbsProps) => (
             <ReactIcon
               name="FaChevronRight"
               size={9}
-              style={{
-                color: 'var(--text-muted)',
-                opacity: 0.5,
-                flexShrink: 0,
-              }}
+              className="shrink-0 text-muted opacity-50"
             />
           )}
           {isLast ? (
-            <span
-              className="truncate font-semibold"
-              style={{
-                color: 'var(--text-primary)',
-                fontFamily: '"Syne", sans-serif',
-              }}
-            >
+            <span className="truncate font-display font-semibold text-fg">
               {item.label}
             </span>
           ) : (
             <button
               type="button"
               onClick={item.onClick}
-              className="shrink-0 font-medium hover:underline"
-              style={{ color: 'var(--text-muted)' }}
+              className="shrink-0 font-medium text-muted hover:underline"
             >
               {item.label}
             </button>

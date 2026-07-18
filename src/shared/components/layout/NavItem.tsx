@@ -16,13 +16,13 @@ const NavItem: React.FC<NavItemType> = memo(({ nav, to, isButton = false }) => (
         return `rounded px-5 py-2 text-xs font-semibold uppercase tracking-widest transition-all duration-300 ${
           isActive
             ? 'bg-sky-500 text-white'
-            : 'border border-sky-500/30 bg-sky-500/10 text-sky-600 hover:border-sky-500 hover:bg-sky-500 hover:text-white dark:text-sky-400'
+            : 'border border-sky-500/30 bg-sky-500/10 text-sky-400 hover:border-sky-500 hover:bg-sky-500 hover:text-white'
         }`;
       }
-      return `relative text-xs font-medium uppercase tracking-widest transition-colors duration-300 after:absolute after:-bottom-1 after:left-0 after:h-px after:bg-[var(--accent)] after:transition-all after:duration-300 ${
+      return `relative text-xs font-medium uppercase tracking-widest transition-colors duration-300 after:absolute after:-bottom-1 after:left-0 after:h-px after:bg-accent after:transition-all after:duration-300 ${
         isActive
-          ? 'text-[var(--accent)] after:w-full'
-          : 'text-[var(--text-muted)] after:w-0 hover:text-[var(--text-primary)] hover:after:w-full'
+          ? 'text-accent after:w-full'
+          : 'text-muted after:w-0 hover:text-fg hover:after:w-full'
       }`;
     }}
   >

@@ -89,7 +89,7 @@ const Footer = () => {
           <div className="flex flex-col items-center gap-5 sm:items-start">
             <Link to="/">
               <img
-                src={info.logo_url || logo}
+                src={info.logo_url_dark || info.logo_url || logo}
                 alt={info.name}
                 className="h-10 w-auto object-contain"
                 loading="lazy"
@@ -110,7 +110,7 @@ const Footer = () => {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={platform}
-                    className="hover:border-accent/30 flex h-8 w-8 items-center justify-center rounded border border-glass-rim bg-glass-bg text-sm text-muted transition-all duration-200 hover:bg-glass-hover hover:text-accent"
+                    className="flex h-8 w-8 items-center justify-center rounded border border-glass-rim bg-glass-bg text-sm text-muted transition-all duration-200 hover:border-accent/30 hover:bg-glass-hover hover:text-accent"
                   >
                     <ReactIcon name={socialIconName(platform)} size={14} />
                   </a>

@@ -13,16 +13,12 @@ export type {
   SocialLink,
 } from '../../services/companyInfoService';
 
-/** Returns the correct logo URL for the given theme, falling back to local asset. */
+/** Returns the site logo URL (dark), falling back to the local asset. */
 export function resolveLogo(
   info: { logo_url: string; logo_url_dark: string },
-  theme: string,
   fallback: string
 ): string {
-  const light = info.logo_url;
-  const dark = info.logo_url_dark;
-  if (light && dark) return theme === 'dark' ? dark : light;
-  return light || dark || fallback;
+  return info.logo_url_dark || info.logo_url || fallback;
 }
 
 export function useCompanyInfo() {
