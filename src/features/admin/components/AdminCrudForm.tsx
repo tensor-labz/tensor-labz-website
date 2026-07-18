@@ -67,8 +67,7 @@ const DeleteModal = ({
     initial={{ opacity: 0 }}
     animate={{ opacity: 1 }}
     exit={{ opacity: 0 }}
-    className="fixed inset-0 z-50 flex items-center justify-center px-4"
-    style={{ backgroundColor: 'rgba(0,0,0,0.6)' }}
+    className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4"
     onClick={onCancel}
   >
     <motion.div
@@ -76,50 +75,28 @@ const DeleteModal = ({
       animate={{ scale: 1, opacity: 1 }}
       exit={{ scale: 0.92, opacity: 0 }}
       transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-      className="w-full max-w-sm rounded-2xl p-8"
-      style={{
-        backgroundColor: 'var(--bg-surface)',
-        border: '1px solid var(--glass-border)',
-      }}
+      className="w-full max-w-sm rounded-2xl border border-glass-rim bg-surface p-8"
       onClick={(e) => e.stopPropagation()}
     >
-      <div
-        className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full"
-        style={{ backgroundColor: 'rgba(239,68,68,0.12)' }}
-      >
-        <ReactIcon name="FaTrash" size={18} style={{ color: '#ef4444' }} />
+      <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-red-500/[0.12]">
+        <ReactIcon name="FaTrash" size={18} className="text-red-500" />
       </div>
-      <h3
-        className="mb-2 text-center text-lg font-bold"
-        style={{
-          color: 'var(--text-primary)',
-          fontFamily: '"Syne", sans-serif',
-        }}
-      >
+      <h3 className="mb-2 text-center font-display text-lg font-bold text-fg">
         Delete record?
       </h3>
-      <p
-        className="mb-6 text-center text-sm"
-        style={{ color: 'var(--text-muted)' }}
-      >
+      <p className="mb-6 text-center text-sm text-muted">
         This action cannot be undone.
       </p>
       <div className="flex gap-3">
         <button
           onClick={onCancel}
-          className="flex-1 rounded-lg border py-2.5 text-sm font-medium"
-          style={{
-            color: 'var(--text-muted)',
-            borderColor: 'var(--glass-border)',
-            backgroundColor: 'var(--glass-bg)',
-          }}
+          className="flex-1 rounded-lg border border-glass-rim bg-glass-bg py-2.5 text-sm font-medium text-muted"
         >
           Cancel
         </button>
         <button
           onClick={onConfirm}
-          className="flex-1 rounded-lg py-2.5 text-sm font-semibold"
-          style={{ backgroundColor: '#ef4444', color: '#fff' }}
+          className="flex-1 rounded-lg bg-red-500 py-2.5 text-sm font-semibold text-white"
         >
           Delete
         </button>
@@ -156,12 +133,8 @@ export const ImageField = ({
     if (!uploading) setPreview(String(value ?? ''));
   }, [value]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const inputStyle = {
-    backgroundColor: 'var(--input-bg)',
-    border: '1px solid var(--input-border)',
-    color: 'var(--text-primary)',
-    outline: 'none',
-  };
+  const inputCls =
+    'rounded-lg border border-input-border bg-input-bg text-fg outline-none';
 
   const handleFile = useCallback(
     async (file: File) => {
@@ -252,22 +225,13 @@ export const ImageField = ({
       {/* ── Input mode dropdown — hidden for Supabase Storage fields ── */}
       {storageBackend !== 'supabase' && (
         <div className="flex items-center gap-2">
-          <label
-            className="shrink-0 text-xs font-medium"
-            style={{ color: 'var(--text-muted)' }}
-          >
+          <label className="shrink-0 text-xs font-medium text-muted">
             Input via
           </label>
           <select
             value={mode}
             onChange={(e) => setMode(e.target.value as 'upload' | 'url')}
-            className="flex-1 cursor-pointer appearance-none rounded-lg px-3 py-1.5 text-xs font-medium"
-            style={{
-              backgroundColor: 'var(--bg-surface)',
-              border: '1px solid var(--input-border)',
-              color: 'var(--text-primary)',
-              outline: 'none',
-            }}
+            className="flex-1 cursor-pointer appearance-none rounded-lg border border-input-border bg-surface px-3 py-1.5 text-xs font-medium text-fg outline-none"
           >
             <option value="upload">S3 Upload (file)</option>
             <option value="url">
@@ -279,40 +243,17 @@ export const ImageField = ({
 
       {/* ── Preview card ── */}
       {preview && (
-        <div
-          className="relative w-full overflow-hidden rounded-xl"
-          style={{
-            aspectRatio: '16/9',
-            maxHeight: 200,
-            backgroundColor: 'var(--glass-bg-raised)',
-          }}
-        >
+        <div className="relative aspect-video max-h-[200px] w-full overflow-hidden rounded-xl bg-glass-raised">
           {renderPreview(preview)}
 
           {/* Upload progress overlay */}
           {uploading && (
-            <div
-              className="absolute inset-0 flex flex-col items-center justify-center gap-2"
-              style={{ backgroundColor: 'rgba(0,0,0,0.6)' }}
-            >
-              <p className="text-sm font-semibold" style={{ color: '#fff' }}>
-                {progress}%
-              </p>
-              <div
-                className="overflow-hidden rounded-full"
-                style={{
-                  width: '60%',
-                  height: 6,
-                  backgroundColor: 'rgba(255,255,255,0.25)',
-                }}
-              >
+            <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-black/60">
+              <p className="text-sm font-semibold text-white">{progress}%</p>
+              <div className="h-1.5 w-3/5 overflow-hidden rounded-full bg-white/25">
                 <div
-                  style={{
-                    width: `${progress}%`,
-                    height: '100%',
-                    backgroundColor: 'var(--accent)',
-                    transition: 'width 0.15s ease',
-                  }}
+                  className="h-full bg-accent transition-[width] duration-150"
+                  style={{ width: `${progress}%` }}
                 />
               </div>
             </div>
@@ -329,19 +270,12 @@ export const ImageField = ({
                   onChange('');
                   if (inputRef.current) inputRef.current.value = '';
                 }}
-                className="absolute right-2 top-2 flex h-7 w-7 items-center justify-center rounded-full shadow-lg"
-                style={{ backgroundColor: 'rgba(0,0,0,0.55)', color: '#fff' }}
+                className="absolute right-2 top-2 flex h-7 w-7 items-center justify-center rounded-full bg-black/55 text-white shadow-lg"
               >
                 <ReactIcon name="FaTimes" size={11} />
               </button>
               {fileName && (
-                <div
-                  className="absolute bottom-0 left-0 right-0 truncate px-3 py-1.5 text-xs"
-                  style={{
-                    backgroundColor: 'rgba(0,0,0,0.45)',
-                    color: 'rgba(255,255,255,0.85)',
-                  }}
-                >
+                <div className="absolute bottom-0 left-0 right-0 truncate bg-black/45 px-3 py-1.5 text-xs text-white/85">
                   {fileName}
                 </div>
               )}
@@ -377,22 +311,12 @@ export const ImageField = ({
               if (f) handleFile(f);
             }}
             onClick={() => inputRef.current?.click()}
-            className="relative flex w-full cursor-pointer flex-col items-center justify-center gap-2 rounded-xl transition-colors"
-            style={{
-              minHeight: preview ? 64 : 120,
-              border: `2px dashed ${dragging ? 'var(--accent)' : 'var(--glass-border-strong)'}`,
-              backgroundColor: dragging
-                ? 'var(--accent-soft)'
-                : 'var(--glass-bg-raised)',
-            }}
+            className={`relative flex w-full cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed transition-colors ${preview ? 'min-h-16' : 'min-h-[120px]'} ${dragging ? 'border-accent bg-accent-soft' : 'border-glass-rim-strong bg-glass-raised'}`}
           >
             {preview ? (
               /* Compact replace hint */
               <p
-                className="text-xs font-medium"
-                style={{
-                  color: dragging ? 'var(--accent)' : 'var(--text-muted)',
-                }}
+                className={`text-xs font-medium ${dragging ? 'text-accent' : 'text-muted'}`}
               >
                 {dragging
                   ? 'Drop to replace'
@@ -404,37 +328,22 @@ export const ImageField = ({
                 <ReactIcon
                   name="FaCloudUploadAlt"
                   size={22}
-                  style={{
-                    color: dragging ? 'var(--accent)' : 'var(--text-muted)',
-                  }}
+                  className={dragging ? 'text-accent' : 'text-muted'}
                 />
                 <div className="px-4 text-center">
                   <p
-                    className="text-sm font-medium"
-                    style={{
-                      color: dragging ? 'var(--accent)' : 'var(--text-primary)',
-                    }}
+                    className={`text-sm font-medium ${dragging ? 'text-accent' : 'text-fg'}`}
                   >
                     {dragging
                       ? 'Drop image here'
                       : 'Drag & drop or click to browse'}
                   </p>
-                  <p
-                    className="mt-0.5 text-xs"
-                    style={{ color: 'var(--text-muted)' }}
-                  >
+                  <p className="mt-0.5 text-xs text-muted">
                     PNG, JPG, WebP — max 10 MB
                   </p>
                 </div>
                 {fileName && (
-                  <span
-                    className="rounded-full px-2 py-0.5 text-xs"
-                    style={{
-                      backgroundColor: 'var(--glass-bg)',
-                      color: 'var(--text-muted)',
-                      border: '1px solid var(--glass-border)',
-                    }}
-                  >
+                  <span className="rounded-full border border-glass-rim bg-glass-bg px-2 py-0.5 text-xs text-muted">
                     {fileName}
                   </span>
                 )}
@@ -451,7 +360,7 @@ export const ImageField = ({
             <ReactIcon
               name="FaLink"
               size={12}
-              style={{ color: 'var(--text-muted)', flexShrink: 0 }}
+              className="shrink-0 text-muted"
             />
             <input
               type="url"
@@ -461,11 +370,10 @@ export const ImageField = ({
                 onChange(e.target.value);
               }}
               placeholder="https://youtube.com/... · drive.google.com/... · s3.amazonaws.com/..."
-              className="flex-1 rounded-lg px-3 py-2.5 text-sm"
-              style={inputStyle}
+              className={`flex-1 px-3 py-2.5 text-sm ${inputCls}`}
             />
           </div>
-          <p className="text-xs" style={{ color: 'var(--text-muted)' }}>
+          <p className="text-xs text-muted">
             Accepts image URLs, YouTube links, direct video URLs, or Google
             Drive links.
           </p>
@@ -474,27 +382,16 @@ export const ImageField = ({
 
       {/* Empty state placeholder */}
       {!preview && (
-        <div
-          className="flex items-center justify-center rounded-xl"
-          style={{
-            height: 60,
-            backgroundColor: 'var(--glass-bg-subtle)',
-            border: '1px solid var(--glass-border-subtle)',
-          }}
-        >
+        <div className="flex h-[60px] items-center justify-center rounded-xl border border-glass-rim-subtle bg-glass-subtle">
           <ReactIcon
             name="FaImage"
             size={20}
-            style={{ color: 'var(--text-muted)', opacity: 0.3 }}
+            className="text-muted opacity-30"
           />
         </div>
       )}
 
-      {uploadError && (
-        <p className="text-xs" style={{ color: '#ef4444' }}>
-          {uploadError}
-        </p>
-      )}
+      {uploadError && <p className="text-xs text-red-500">{uploadError}</p>}
     </div>
   );
 };
